@@ -1,6 +1,16 @@
 @import "tailwindcss";
 @import "tw-animate-css";
 
+/* app/globals.css  (keep as is) */
+@import '../styles/variables.css';
+@import '../styles/layout.css';
+@import '../styles/header.css';
+@import '../styles/hero.css';
+@import '../styles/features.css';
+@import '../styles/howItWorks.css';
+@import '../styles/mealPlan.css';
+
+
 @custom-variant dark (&:is(.dark *));
 
 @theme inline {
