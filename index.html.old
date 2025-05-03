@@ -1,0 +1,1080 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>SmartCart – Your groceries, but smarter.</title>
+  <!-- Import Montserrat -->
+  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700&display=swap" rel="stylesheet">
+
+  <!-- light-mode favicon -->
+  <link
+    rel="icon"
+    href="SmartCart_White.png"
+    type="image/png"
+    sizes="32x32"
+    media="(prefers-color-scheme: light)"
+  >
+  <!-- dark-mode favicon -->
+  <link
+    rel="icon"
+    href="SmartCart_Black.png"
+    type="image/png"
+    sizes="32x32"
+    media="(prefers-color-scheme: dark)"
+  >
+
+  <style>
+    /* VARIABLES & RESET */
+    :root {
+      --primary: #3CB18E;
+      --primary-dark: #2A9476;
+      --apricot:  #FFB47E;
+      --gray-light: #F5F5F5;
+      --gray: #E0E0E0;
+      --gray-dark: #666666;
+      --text-dark: #333333;
+    }
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: 'Montserrat', sans-serif;
+    }
+    body {
+      background: var(--gray-light);
+      color: var(--text-dark);
+    }
+
+    /* HEADER */
+    header {
+      background: var(--primary);
+      padding: 0.5rem 1rem;
+      box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+      position: sticky;
+      top: 0;
+      z-index: 100;
+    }
+    .container {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 0 1rem;
+    }
+    .navbar {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    .logo {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      color: #fff;
+      font-size: 2rem;
+      font-weight: 700;
+    }
+    .logo-icon {
+      width: 80px;
+      height: 80px;
+      object-fit: contain;
+    }
+    .nav-links {
+      display: flex;
+      gap: 2rem;
+    }
+    .nav-links a {
+      text-decoration: none;
+      color: #fff;
+      font-weight: 600;
+      transition: opacity 0.3s;
+    }
+    .nav-links a:hover {
+      opacity: 0.8;
+    }
+
+    /* BUTTONS */
+    .btn-primary {
+      background: #fff;
+      color: var(--primary);
+      border: none;
+      padding: 0.8rem 1.8rem;
+      border-radius: 2rem;
+      font-weight: 600;
+      font-size: 1rem;
+      cursor: pointer;
+      transition: all 0.3s;
+    }
+    .btn-primary:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+    }
+    .btn-secondary {
+      background: transparent;
+      color: #fff;
+      border: 2px solid #fff;
+      padding: 0.8rem 1.8rem;
+      border-radius: 2rem;
+      font-weight: 600;
+      font-size: 1rem;
+      cursor: pointer;
+      transition: all 0.3s;
+    }
+    .btn-secondary:hover {
+      background: rgba(255,255,255,0.1);
+      transform: translateY(-3px);
+      box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+    }
+
+    /* HERO */
+    .hero {
+      background: url("./hero_img.png") center/cover no-repeat;
+      min-height: 650px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      position: relative;
+      overflow: hidden;
+    }
+    .hero::before {
+      content: "";
+      position: absolute;
+      inset: 0;
+      background: rgba(255,255,255,0.3);
+      z-index: 0;
+    }
+    .hero-content {
+      position: relative;
+      z-index: 1;
+      max-width: 800px;
+      padding: 0 1rem;
+    }
+    .hero h1 {
+      font-size: 2.5rem;
+      margin-bottom: 1rem;
+    }
+    .hero p {
+      font-size: 1.2rem;
+      margin-bottom: 2rem;
+      opacity: 0.9;
+    }
+    .hero-btns {
+      display: flex;
+      gap: 1rem;
+      justify-content: center;
+      flex-wrap: wrap;
+      margin-bottom: 2rem;
+    }
+    .download-app {
+      display: flex;
+      justify-content: center;
+      gap: 1rem;
+      margin-top: 1rem;
+    }
+    .app-store-btn {
+      background: #000;
+      color: #fff;
+      border: none;
+      padding: 0.5rem 1.5rem;
+      border-radius: 0.5rem;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      cursor: pointer;
+      transition: all 0.3s;
+    }
+    .app-store-btn:hover {
+      opacity: 0.9;
+      transform: translateY(-2px);
+    }
+    .app-store-icon { font-size: 1.5rem; }
+    .app-store-text small { font-size: 0.7rem; display: block; }
+    .app-store-text strong { font-size: 1rem; }
+
+    /* SEAMLESS CAROUSEL */
+    .carousel {
+      overflow: hidden;
+      margin: 2rem 0;
+    }
+    .carousel-track {
+      display: flex;
+      animation: marquee 36s linear infinite;
+    }
+    @keyframes marquee {
+      from { transform: translateX(0); }
+      to   { transform: translateX(-50%); }
+    }
+    .carousel-slide {
+      flex: 0 0 33.333%;
+      padding: 0 0.5rem;
+      box-sizing: border-box;
+      position: relative;
+    }
+    .carousel-slide img {
+      width: 100%;
+      display: block;
+      border-radius: 0.5rem;
+    }
+    .carousel-slide h4 {
+      position: absolute;
+      bottom: 1rem;
+      left: 1rem;
+      margin: 0;
+      color: #fff;
+      background: rgba(0,0,0,0.5);
+      padding: 0.5rem 1rem;
+      border-radius: 0.3rem;
+      font-size: 1.1rem;
+    }
+
+
+    /* style the “View the Full Meal Plan” button again */
+    #weekly-meal-plan .view-full-menu {
+      background: var(--apricot);
+      color: #fff;
+      border: none;
+      padding: 0.8rem 2rem;
+      border-radius: 2rem;
+      font-weight: 600;
+      font-size: 1rem;
+      margin: 2rem auto 0;      /* center it horizontally */
+      display: block;           /* so auto-margins work */
+      width: max-content;       /* shrink-wrap to its content */
+      cursor: pointer;
+      transition: all 0.3s;
+    }
+    #weekly-meal-plan .view-full-menu:hover {
+      background: var(--primary-dark);
+      transform: translateY(-3px);
+    }
+
+    /* center the subheader and (optional) description */
+    #weekly-meal-plan .subheader,
+    #weekly-meal-plan .description {
+      text-align: center;
+    }
+
+
+    /* FEATURES */
+    .features {
+      padding: 4rem 0;
+      background: #fff;
+    }
+    .section-title {
+      text-align: center;
+      margin-bottom: 3rem;
+    }
+    .section-title h2 {
+      font-size: 2rem;
+      color: var(--text-dark);
+      margin-bottom: 0.5rem;
+    }
+    .section-title p {
+      color: var(--gray-dark);
+      max-width: 600px;
+      margin: 0 auto;
+    }
+    .features-grid {
+      display: grid;
+      grid-template-columns: repeat(2,1fr);
+      gap: 2rem;
+    }
+    @media(max-width:768px) {
+      .features-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+    .feature-card {
+      background: var(--gray-light);
+      border-radius: 0.5rem;
+      padding: 2rem;
+      text-align: center;
+      transition: transform 0.3s;
+    }
+    .feature-card:hover {
+      transform: translateY(-5px);
+    }
+    .feature-icon {
+      background: var(--primary);
+      color: #fff;
+      width: 60px;
+      height: 60px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      border-radius: 50%;
+      margin: 0 auto 1.5rem;
+      font-size: 1.5rem;
+    }
+    .feature-card h3 { margin-bottom: 1rem; }
+    .feature-card p { color: var(--gray-dark); }
+
+    /* GROCERY LIST PROMO */
+    .grocery-promo {
+      display: flex;
+      align-items: center;
+      gap: 2rem;
+      background: #fff;
+      border-radius: 0.5rem;
+      padding: 2rem;
+      box-shadow: 0 3px 10px rgba(0,0,0,0.1);
+      margin: 2rem auto;
+      max-width: 900px;
+    }
+    .grocery-promo__img {
+      flex: 0 0 50%;     /* take up half the container */
+      overflow: hidden;  /* hide the extra 200% overflow */
+    }
+
+    .grocery-promo__img img {
+      width: 100%;               /* keep double‐wide */
+      height: auto;
+      object-fit: cover;
+      object-position: left center;  /* anchor the left half into view */
+    }
+
+    .grocery-promo__content {
+      flex: 1;
+      padding-left: 2rem;       /* shove it a bit further right */
+    }
+
+    .grocery-promo__title {
+      font-size: 1.75rem;
+      margin-bottom: 0.75rem;
+      color: var(--text-dark);
+    }
+    .grocery-promo__blurb {
+      font-size: 1rem;
+      line-height: 1.5;
+      margin-bottom: 1.5rem;
+      color: var(--gray-dark);
+    }
+    .grocery-promo__savings {
+      color: var(--primary);
+      font-weight: 700;
+    }
+
+    .grocery-promo .btn-primary {
+      background: var(--apricot);
+      color: #fff;
+    }
+    .grocery-promo .btn-primary:hover {
+      background: var(--primary-dark);
+    }
+
+
+    /* EMAIL CTA */
+    .email-cta {
+      background: transparent;
+      padding: 0;
+      margin: 3rem 0;
+    }
+    .email-cta .container {
+      background: var(--primary);
+      border-radius: 1.5rem;
+      padding: 2rem 1rem;
+      display: flex;
+      align-items: center;
+      gap: 2rem;
+    }
+    .email-cta .cta-img {
+      flex: 0 0 200px;
+    }
+    .email-cta .cta-img img {
+      width: 100%;
+      border-radius: 50%;
+      display: block;
+    }
+    .email-cta .cta-content {
+      flex: 1;
+      color: #fff;
+    }
+    .email-cta .cta-content h2 {
+      font-size: 2rem;
+      margin-bottom: 0.5rem;
+    }
+    .email-cta .cta-content p {
+      font-size: 1rem;
+      opacity: 0.9;
+      line-height: 1.4;
+    }
+    .email-cta .cta-form {
+      margin-top: 1.5rem;
+      display: flex;
+      gap: 1rem;
+    }
+    .email-cta .cta-form input[type="email"] {
+      flex: 1;
+      padding: 0.8rem 1rem;
+      border-radius: 2rem;
+      border: none;
+      font-size: 1rem;
+    }
+    .email-cta .cta-form input[type="email"]::placeholder {
+      color: rgba(0,0,0,0.4);
+    }
+    .email-cta .cta-form button {
+      background: #fff;
+      color: var(--primary);
+      border: none;
+      padding: 0.8rem 1.8rem;
+      border-radius: 2rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: background 0.3s;
+    }
+    .email-cta .cta-form button:hover {
+      background: rgba(255,255,255,0.9);
+    }
+
+    /* HOW IT WORKS */
+    .how-it-works {
+      padding: 4rem 0;
+      background: var(--gray-light);
+    }
+    .steps-container {
+      display: flex;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      margin-top: 2rem;
+    }
+    .step {
+      flex: 1;
+      min-width: 250px;
+      margin: 1rem;
+      text-align: center;
+    }
+    .step-number {
+      background: var(--apricot);
+      color: #fff;
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: bold;
+      margin: 0 auto 1rem;
+    }
+    .step h3 { margin-bottom: 0.5rem; }
+    .step p  { color: var(--gray-dark); }
+
+    /* TESTIMONIALS */
+    .testimonials {
+      padding: 4rem 0;
+      background: #fff;
+    }
+    .testimonial-card {
+      background: var(--gray-light);
+      border-radius: 0.5rem;
+      padding: 2rem;
+      margin: 2rem 0;
+    }
+    .testimonial-text {
+      font-style: italic;
+      margin-bottom: 1.5rem;
+    }
+    .testimonial-author {
+      display: flex;
+      align-items: center;
+    }
+    .author-avatar {
+      width: 50px;
+      height: 50px;
+      border-radius: 50%;
+      overflow: hidden;
+      margin-right: 1rem;
+    }
+    .author-avatar img {
+      width: 100%;
+      height: 100%;
+      object-position: center top;
+      object-fit: cover;
+    }
+    .author-name { font-weight: 600; }
+    .author-title { font-size: 0.9rem; color: var(--gray-dark); }
+
+
+    /* ——— Banner Image Section ——— */
+    .banner-img {
+      width: 80%;
+      margin: 0 auto;
+      display: flex;
+      justify-content: center;
+      /* if you fixed height: align-items: center; */
+      overflow: hidden;
+    }
+    .banner-img img {
+      max-width: 100%;
+      height: auto;
+      object-fit: cover;
+    }
+
+
+    /* CTA SECTION */
+    .cta-section {
+      padding: 4rem 0;
+      background: #fff;             /* white background */
+      color: var(--text-dark);      /* charcoal text */
+      text-align: center;
+    }
+    .cta-section .savings-badge {
+      background: #fff;
+      color: var(--primary);
+      padding: 0.5rem 1rem;
+      border-radius: 2rem;
+      display: inline-block;
+      font-weight: 600;
+      margin-bottom: 2rem;
+    }
+
+    /* Limited Launch Panel inside CTA */
+    .limited-launch {
+      margin-top: 2rem;
+      background: #fff;
+      color: var(--text-dark);
+      border-radius: 0.5rem;
+      padding: 1.5rem;
+    }
+    .limited-launch h3,
+    .limited-launch p {
+      color: var(--text-dark);
+    }
+    .limited-launch .btn-primary {
+      background: var(--apricot);
+      color: var(--text-dark);
+    }
+    /* inside your existing CSS */
+    .limited-launch .btn-primary:hover {
+      background: var(--apricot);    /* spearmint green */
+      color: #fff;                    /* make sure the text stays white */
+      transform: translateY(-2px);    /* optional lift effect */
+    }
+
+
+    /* FOOTER */
+    footer {
+      background: var(--text-dark);
+      color: #fff;
+      padding: 3rem 0 1rem;
+    }
+    .footer-content {
+      display: grid;
+      grid-template-columns: repeat(auto-fit,minmax(200px,1fr));
+      gap: 2rem;
+      margin-bottom: 2rem;
+    }
+    .footer-column h3 {
+      margin-bottom: 1.5rem;
+      font-size: 1.2rem;
+    }
+    .footer-column ul {
+      list-style: none;
+    }
+    .footer-column ul li {
+      margin: 0.5rem 0;
+    }
+    .footer-column ul li a {
+      color: var(--gray);
+      text-decoration: none;
+      transition: color 0.3s;
+    }
+    .footer-column ul li a:hover {
+      color: #fff;
+    }
+    .copyright {
+      text-align: center;
+      padding-top: 2rem;
+      border-top: 1px solid rgba(255,255,255,0.1);
+      font-size: 0.9rem;
+      color: var(--gray);
+    }
+
+    #about-us {
+      background: #fff;
+      color: var(--text-dark);
+      padding: 3rem 0 2rem;
+    }
+    #about-us .about-avatar {
+      text-align: center;
+      margin-bottom: 1rem;
+    }
+    #about-us .about-avatar img {
+      width: 80px;
+      height: 80px;
+      border-radius: 50%;
+      object-fit: cover;
+      border: 2px solid var(--primary);
+    }
+    #about-us h2 {
+      text-align: center;
+      font-size: 2rem;
+      margin-bottom: 0.5rem;
+    }
+    #about-us p {
+      max-width: 600px;
+      text-align: center;
+      margin: 0 auto;
+      line-height: 1.5;
+    }
+
+    /* ─── Inverted Limited Launch panel ─── */
+.limited-launch {
+  background: var(--apricot);
+  color: var(--text-dark);
+  border-radius: 0.5rem;
+  padding: 1.5rem;
+  margin-top: 2rem;
+}
+.limited-launch h3,
+.limited-launch p {
+  color: var(--text-dark);
+  margin: 0.5rem 0;
+}
+/* white btn on peach */
+.limited-launch .btn-primary {
+  background: #fff;
+  color: var(--text-dark);
+  border: none;
+}
+.limited-launch .btn-primary:hover {
+  background: var(--primary);
+}
+
+
+    /* FEEDBACK SECTION */
+    .feedback-section {
+      background: var(--gray-light);
+      padding: 4rem 0;
+    }
+
+    .feedback-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      align-items: center;
+      gap: 2rem;
+    }
+
+    .feedback-content .savings-badge {
+      margin-bottom: 1rem;
+    }
+
+    .feedback-content h2 {
+      margin: 0.5rem 0 1rem;
+    }
+
+    .feedback-content p {
+      max-width: 500px;
+      line-height: 1.5;
+      margin-bottom: 1.5rem;
+    }
+
+    .feedback-image img {
+      width: 80%;
+      border-radius: 0.5rem;
+      display: block;
+    }
+
+    /* Reverse on mobile */
+    @media (max-width: 768px) {
+      .feedback-grid {
+        grid-template-columns: 1fr;
+      }
+      .feedback-image {
+        order: -1;
+        margin-bottom: 2rem;
+      }
+    }
+
+    /* a green “Feedback Form” button */
+    .btn-feedback {
+      display: inline-block;
+      background: var(--primary);
+      color: #fff;
+      text-decoration: none;
+      border: none;
+      padding: 0.8rem 1.8rem;
+      border-radius: 2rem;
+      font-weight: 600;
+      font-size: 1rem;
+      transition: background 0.3s, transform 0.3s;
+      margin-top: 1rem;
+    }
+    .btn-feedback:hover {
+      background: var(--primary-dark);
+      transform: translateY(-2px);
+    }
+
+
+  </style>
+</head>
+<body>
+
+  <!-- HEADER -->
+  <header>
+    <div class="container">
+      <nav class="navbar">
+        <div class="logo">
+          <img src="SmartCart_White.png" alt="SmartCart logo" class="logo-icon" />
+          <div>Smart<span>Cart</span></div>
+        </div>
+        <div class="nav-links">
+          <a href="#">How It Works</a>
+          <a href="#">Features</a>
+          <a href="#">Pricing</a>
+          <a href="#">Blog</a>
+        </div>
+      </nav>
+    </div>
+  </header>
+
+  <!-- HERO -->
+  <section class="hero">
+    <div class="hero-content">
+      <h1>Your groceries, but smarter.</h1>
+      <p>SmartCart uses AI to help Canadians save money on groceries during the cost of living crisis by creating meal plans based on this week's local deals and flyers.</p>
+      <div class="hero-btns">
+        <button class="btn-primary">Get My Free Meal Plan</button>
+        <button class="btn-secondary">Get This Week's Groceries</button>
+      </div>
+      <br></br>
+      <p><small><strong>We're coming to these platforms soon, stay tuned for launch day!</strong></small></p>
+      <div class="download-app">
+        <button class="app-store-btn">
+          <span class="app-store-icon">📱</span>
+          <div class="app-store-text"><small>Download on the</small><strong>App Store</strong></div>
+        </button>
+        <button class="app-store-btn">
+          <span class="app-store-icon">▶️</span>
+          <div class="app-store-text"><small>GET IT ON</small><strong>Google Play</strong></div>
+        </button>
+      </div>
+    </div>
+  </section>
+
+  <!-- GROCERY LIST PROMO -->
+  <section id="weekly-savings">
+    <div class="container grocery-promo">
+      <div class="grocery-promo__img">
+        <img src="Savings_Dude.png" alt="Preview of grocery savings">
+      </div>
+      <div class="grocery-promo__content">
+        <h3 class="grocery-promo__title">Your Free Grocery List</h3>
+        <p class="grocery-promo__blurb">
+          Plan 21 meals, save an estimated
+          <span class="grocery-promo__savings">$58.00</span> this week!
+          We’ll email you a fully AI-powered grocery list—tailored to the best deals—absolutely free.
+        </p>
+        <a href="/eCo-op/meal-planner/">
+          <button class="btn-primary">Get Your Free Grocery List</button>
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <!-- MEAL PLAN -->
+  <section id="weekly-meal-plan">
+    <div class="container">
+      <h2 class="section-title">This Week’s Meal Plan</h2>
+      <p class="subheader">Balanced, nutritious meals picked just for you! We update the plan weekly with fresh options.</p>
+      <div class="carousel">
+        <div class="carousel-track">
+          <div class="carousel-slide">
+            <img src="Meal1.png" alt="Ground Beef Tacos">
+            <h4>Ground Beef Tacos</h4>
+          </div>
+          <div class="carousel-slide">
+            <img src="Meal2.png" alt="Pork Stir-Fry">
+            <h4>Pork Stir-Fry</h4>
+          </div>
+          <div class="carousel-slide">
+            <img src="Meal3.png" alt="Tilapia &amp; Veg">
+            <h4>Tilapia &amp; Veg</h4>
+          </div>
+          <div class="carousel-slide">
+            <img src="Meal4.png" alt="Kale Soup &amp; Toast">
+            <h4>Kale Soup &amp; Toast</h4>
+          </div>
+          <div class="carousel-slide">
+            <img src="Meal5.png" alt="Egg Salad Sandwich">
+            <h4>Egg Salad Sandwich</h4>
+          </div>
+          <div class="carousel-slide">
+            <img src="Meal6.png" alt="Pasta &amp; Greens">
+            <h4>Pasta &amp; Greens</h4>
+          </div>
+          <!-- duplicate for seamless loop -->
+          <div class="carousel-slide">
+            <img src="Meal1.png" alt="Ground Beef Tacos">
+            <h4>Ground Beef Tacos</h4>
+          </div>
+          <div class="carousel-slide">
+            <img src="Meal2.png" alt="Pork Stir-Fry">
+            <h4>Pork Stir-Fry</h4>
+          </div>
+          <div class="carousel-slide">
+            <img src="Meal3.png" alt="Tilapia &amp; Veg">
+            <h4>Tilapia &amp; Veg</h4>
+          </div>
+          <div class="carousel-slide">
+            <img src="Meal4.jpg" alt="Kale Soup &amp; Toast">
+            <h4>Kale Soup &amp; Toast</h4>
+          </div>
+          <div class="carousel-slide">
+            <img src="Meal5.png" alt="Egg Salad Sandwich">
+            <h4>Egg Salad Sandwich</h4>
+          </div>
+          <div class="carousel-slide">
+            <img src="Meal6.png" alt="Pasta &amp; Greens">
+            <h4>Pasta &amp; Greens</h4>
+          </div>
+        </div>
+      </div>
+      <p class="description">Our AI-powered meal plans make it easy to enjoy healthy, affordable meals every day. Expertly balanced and designed to suit your grocery budget.</p>
+      <button class="view-full-menu">View the Full Meal Plan</button>
+    </div>
+  </section>
+
+  <!-- FEATURES -->
+  <section class="features">
+    <div class="container">
+      <div class="section-title">
+        <h2>Smarter Shopping, Smarter Eating</h2>
+        <p>Our AI-powered platform makes meal planning and grocery shopping easier, healthier, and more affordable.</p>
+      </div>
+      <div class="features-grid">
+        <div class="feature-card">
+          <div class="feature-icon">💰</div>
+          <h3>Save Money</h3>
+          <p>Our AI finds the best deals from local flyers and creates meal plans around them, helping Canadians save up to 40% during the cost of living crisis.</p>
+        </div>
+        <div class="feature-card">
+          <div class="feature-icon">🥦</div>
+          <h3>Eat Healthier</h3>
+          <p>Nutritionally balanced meal plans tailored to your dietary preferences and restrictions.</p>
+        </div>
+        <div class="feature-card">
+          <div class="feature-icon">⏱️</div>
+          <h3>Save Time</h3>
+          <p>No more hours spent planning meals or comparing prices. Get your meal plan and grocery list in seconds.</p>
+        </div>
+        <div class="feature-card">
+          <div class="feature-icon">📊</div>
+          <h3>Track Savings</h3>
+          <p>See how much you're saving each week and put that money toward what matters most to your family.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- EMAIL CTA -->
+  <section class="email-cta">
+    <div class="container">
+      <div class="cta-img">
+        <img src="CTA_img.png" alt="Preview of meal plan" />
+      </div>
+      <div class="cta-content">
+        <h2>Get Next Week’s Meal Plan &amp; Groceries 🛒</h2>
+        <p>Drop your email and we’ll send you a complete, AI-powered meal plan plus a smart grocery list—absolutely free—every Friday.</p>
+        <form class="cta-form">
+          <input type="email" placeholder="you@example.com" required />
+          <button type="submit">Send It My Way!</button>
+        </form>
+      </div>
+    </div>
+  </section>
+
+  <!-- HOW IT WORKS -->
+  <section class="how-it-works">
+    <div class="container">
+      <div class="section-title">
+        <h2>How It Works</h2>
+        <p>Three simple steps to smarter grocery shopping and meal planning.</p>
+      </div>
+      <div class="steps-container">
+        <div class="step">
+          <div class="step-number">1</div>
+          <h3>Scan Your Local Flyers</h3>
+          <p>Our AI automatically scans this week's grocery deals and finds the best savings.</p>
+        </div>
+        <div class="step">
+          <div class="step-number">2</div>
+          <h3>AI Creates Your Plan</h3>
+          <p>Get a personalized meal plan and grocery list optimized to maximize your savings during Canada's cost of living crisis.</p>
+        </div>
+        <div class="step">
+          <div class="step-number">3</div>
+          <h3>Shop &amp; Save</h3>
+          <p>Use your shopping list in-store or order online with one click through our partner stores.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- TESTIMONIALS -->
+  <section class="testimonials">
+    <div class="container">
+      <div class="section-title">
+        <h2>What Our Users Say</h2>
+        <p>Join thousands of satisfied SmartCart users who are saving money and eating better.</p>
+      </div>
+      <div class="testimonial-card">
+        <p class="testimonial-text">"I'm creating SmartCart because I've seen firsthand how difficult it is to eat well while staying on budget—especially for students, young families, or anyone hit hard by rising grocery costs."</p>
+        <div class="testimonial-author">
+          <div class="author-avatar"><img src="/api/placeholder/100/100" alt="User Avatar"></div>
+          <div>
+            <div class="author-name">Sarah J.</div>
+            <div class="author-title">Founder of SmartCart</div>
+          </div>
+        </div>
+      </div>
+      <div class="testimonial-card">
+        <p class="testimonial-text">"As a student, I was spending way too much on groceries and eating unhealthy fast food. SmartCart has helped me cut my food budget by $200/month while eating much better!"</p>
+        <div class="testimonial-author">
+          <div class="author-avatar"><img src="/api/placeholder/100/100" alt="User Avatar"></div>
+          <div>
+            <div class="author-name">Mark T.</div>
+            <div class="author-title">College Student</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ▼ BANNER IMAGE SECTION ▼ -->
+  <section class="banner-img">
+    <img src="Why_Banner.png" alt="Descriptive alt text">
+  </section>
+
+
+    <!-- ABOUT US / OUR STORY -->
+    <section id="about-us">
+      <div class="container">
+        <div class="about-avatar">
+          <img src="Henrietta_Headshot_small.jpg" alt="Founder Avatar">
+        </div>
+        <h2>Our Story</h2>
+        <p>Hi, I’m Henrietta, founder of SmartCart. I started this because I saw families and students struggling with grocery bills—and I knew AI could flip the script. Our mission is to deliver budget-friendly, nutritious meal plans every week so you can eat well without the sticker shock.</p>
+      </div>
+    </section>
+
+
+  <!-- …your “Our Story” section above… -->
+
+  <!-- FEEDBACK SECTION -->
+<section class="feedback-section">
+  <div class="container feedback-grid">
+    <!-- left column: content -->
+    <div class="feedback-content">
+      <div class="savings-badge">Average savings of $58 per week</div>
+      <h2>We’re On A Mission—Let’s Build This Together</h2>
+      <p>
+        SmartCart exists to help families eat well on a budget. Our AI has already saved you an average of
+        <strong>$58/week</strong>, but we want to do even more. Tell us what recipes, features, or local deals
+        you’d love to see next week.
+      </p>
+      <!-- inside your feedback-content, right after the <p>…</p> -->
+      <a
+        href="https://forms.gle/yourGoogleFormID"
+        target="_blank"
+        class="btn-feedback"
+      >
+        Feedback Form
+      </a>
+
+    </div>
+
+    <!-- right column: illustration -->
+    <div class="feedback-image">
+      <img src="Feedback_img.png" alt="Feedback illustration">
+    </div>
+  </div>
+</section>
+
+
+
+<!-- ★ Your main CTA section with inverted “Limited Launch” panel -->
+<section class="cta-section">
+  <div class="container">
+
+    <div class="limited-launch">
+      <h3>Stay in the Loop!</h3>
+      <p>Sign up to get email with next week’s meal plan and grocery list drop — <strong>always free</strong>, because cutting costs shouldn’t cost you a thing.</p>
+      <form style="display: flex; max-width: 500px; margin: 0 auto; gap: 0.5rem; flex-wrap: wrap;">
+        <input
+          type="email"
+          placeholder="Your email address"
+          required
+          style="flex: 1; min-width: 200px; padding: 0.8rem; border-radius: 2rem; border: none; font-size: 1rem;"
+        >
+        <button type="submit" class="btn-primary" style="min-width: 150px;">
+          Notify me
+        </button>
+      </form>
+    </div>
+  </div>
+</section>
+
+
+  <!-- FOOTER -->
+  <footer>
+    <div class="container">
+      <div class="footer-content">
+        <div class="footer-column">
+          <h3>SmartCart</h3>
+          <ul>
+            <li><a href="#">About Us</a></li>
+            <li><a href="#">Our Team</a></li>
+            <li><a href="#">Careers</a></li>
+            <li><a href="#">Press</a></li>
+          </ul>
+        </div>
+        <div class="footer-column">
+          <h3>Features</h3>
+          <ul>
+            <li><a href="#">Meal Planning</a></li>
+            <li><a href="#">Deal Finder</a></li>
+            <li><a href="#">Grocery Delivery</a></li>
+            <li><a href="#">Recipe Database</a></li>
+          </ul>
+        </div>
+        <div class="footer-column">
+          <h3>Support</h3>
+          <ul>
+            <li><a href="#">Help Center</a></li>
+            <li><a href="#">Contact Us</a></li>
+            <li><a href="#">FAQs</a></li>
+            <li><a href="#">Community</a></li>
+          </ul>
+        </div>
+        <div class="footer-column">
+          <h3>Legal</h3>
+          <ul>
+            <li><a href="#">Terms of Service</a></li>
+            <li><a href="#">Privacy Policy</a></li>
+            <li><a href="#">Cookie Policy</a></li>
+            <li><a href="#">GDPR Compliance</a></li>
+          </ul>
+        </div>
+      </div>
+      <div class="copyright">&copy; 2025 SmartCart. All rights reserved.</div>
+    </div>
+  </footer>
+
+  <script>
+    // grocery-item checkbox strike-through
+    document.querySelectorAll('.grocery-item input[type="checkbox"]').forEach(cb => {
+      cb.addEventListener('change', function() {
+        const lbl = this.nextElementSibling;
+        if (this.checked) {
+          lbl.style.textDecoration = 'line-through';
+          lbl.style.color = '#999';
+        } else {
+          lbl.style.textDecoration = 'none';
+          lbl.style.color = '';
+        }
+      });
+    });
+  </script>
+</body>
+</html>
