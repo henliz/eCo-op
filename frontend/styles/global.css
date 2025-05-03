@@ -1,0 +1,8 @@
+/* Base CSS - clean and simple */
+@import './variables.css';
+@import './layout.css';
+@import './header.css';
+@import './hero.css';
+@import './features.css';
+@import './howItWorks.css';
+@import './mealPlan.css';
