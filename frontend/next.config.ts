@@ -1,14 +1,10 @@
-// next.config.ts
-import type { NextConfig } from "next";
-
-const repo = "SmartCart";           //   ⬅  matches last path segment in URL above
-
-const nextConfig: NextConfig = {
-  output: "export",                          // emit static files into /out
-  basePath: process.env.NODE_ENV === "production" ? `/${repo}` : "",
-  assetPrefix:
-    process.env.NODE_ENV === "production" ? `/${repo}/` : "",
-  trailingSlash: true,                       // avoids 404s on client routes
+const nextConfig = {
+  // remove output:"export" – Vercel prefers the default hybrid output
+  // output: "export",
+  trailingSlash: true
+  //   ↓  delete these two lines
+  // basePath: "/eCo-op",
+  // assetPrefix: "/eCo-op/",
 };
 
 export default nextConfig;
