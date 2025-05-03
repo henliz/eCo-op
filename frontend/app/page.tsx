@@ -1,10 +1,20 @@
-"use client";
-import RecipeSelector from "@/components/RecipeSelector";   // see note ↓
+import Header from '@/components/layout/Header';
+import Hero from '@/components/sections/Hero';
+import Features from '@/components/sections/Features';
+import HowItWorks from '@/components/sections/HowItWorks';
+import MealPlan from '@/components/sections/MealPlan';
 
 export default function Home() {
   return (
-    <main className="min-h-screen bg-gray-50 p-6">
-      <RecipeSelector />
-    </main>
+    <>
+      <Header />
+      <main>
+        <Hero />
+        <Features />
+        <HowItWorks />
+        <MealPlan />
+        {/* Other sections will be added in subsequent steps */}
+      </main>
+    </>
   );
 }
