@@ -44,6 +44,7 @@ export interface AggregatedItem {
   lineCost: number;
   packsToBuy: number;
   isChecked: boolean;
+  savingsPercentage?: number;
 }
 
 interface Totals {
@@ -168,7 +169,8 @@ export const usePlannerStore = create<PlannerState>((set, get) => ({
             source: ing.source,
             lineCost: 0,
             packsToBuy: 0,
-            isChecked: state.groceryCheckedItems.has(packageId)
+            isChecked: state.groceryCheckedItems.has(packageId),
+            savingsPercentage: ing.savingsPercentage
           });
         }
       });

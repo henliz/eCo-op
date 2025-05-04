@@ -32,6 +32,11 @@ export function GroceryScreen() {
             </p>
             <p className="text-sm text-gray-500">
               {item.packsToBuy} × {item.unitSize}{item.unitType} packages
+              {item.packsToBuy > item.neededFraction && (
+                <span className="ml-2">
+                  (need {item.neededFraction.toFixed(2)})
+                </span>
+              )}
             </p>
           </div>
         </div>
@@ -39,9 +44,9 @@ export function GroceryScreen() {
           <p className={`font-medium ${isChecked ? 'line-through' : ''}`}>
             ${item.lineCost.toFixed(2)}
           </p>
-          {item.packsToBuy > item.neededFraction && (
-            <p className="text-sm text-gray-500">
-              (rounded up from {item.neededFraction.toFixed(2)})
+          {item.savingsPercentage && item.savingsPercentage > 0 && (
+            <p className="text-sm text-green-600">
+              {item.savingsPercentage.toFixed(1)}% off
             </p>
           )}
         </div>
