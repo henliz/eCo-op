@@ -70,11 +70,6 @@ interface PlannerState {
   mealSummary: () => { breakfast: number; lunch: number; dinner: number; total: number };
 }
 
-// Helper function for rounding logic
-function isWholeUnit(unitType: string): boolean {
-  return ["whole", "package", "each"].includes(unitType);
-}
-
 export const usePlannerStore = create<PlannerState>((set, get) => ({
   meals: {
     breakfast: [],
@@ -183,10 +178,9 @@ export const usePlannerStore = create<PlannerState>((set, get) => ({
         pkg.packsToBuy = 0;
         pkg.lineCost = 0;
       } else {
-        let packsToBuy = pkg.neededFraction;
-        if (isWholeUnit(pkg.unitType)) {
-          packsToBuy = Math.ceil(packsToBuy);
-        }
+        const packsToBuy = Math.ceil(pkg.neededFraction);
+
+        // Line cost is rounded quantity × price per pack
         pkg.packsToBuy = packsToBuy;
         pkg.lineCost = packsToBuy * pkg.packPrice;
       }
