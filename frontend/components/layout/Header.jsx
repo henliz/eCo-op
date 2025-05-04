@@ -43,6 +43,7 @@ export default function Header() {
             <Link href="/features">Features</Link>
             <Link href="/pricing">Pricing</Link>
             <Link href="/blog">Blog</Link>
+            <Link href="/plan" className="hover:underline">Meal Planner</Link>
             <Link href="/meal-planner" className="header-cta">Try It Free</Link>
           </div>
           

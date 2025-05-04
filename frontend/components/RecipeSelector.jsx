@@ -1,5 +1,5 @@
 import React, { useState, useMemo } from "react";
-import mealPlanData from "../data/data.json"; // <- place the uploaded JSON next to this file and rename accordingly
+import mealPlanData from "../public/data/data.json"; // <- place the uploaded JSON next to this file and rename accordingly
 import { Card, CardContent } from "@/components/ui/card";
 import { Button }             from "@/components/ui/button";
 import { Checkbox }           from "@/components/ui/checkbox";
