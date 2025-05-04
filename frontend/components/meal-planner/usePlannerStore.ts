@@ -173,17 +173,11 @@ export const usePlannerStore = create<PlannerState>((set, get) => ({
 
     // Step 3: Compute line costs
     aggregateMap.forEach(pkg => {
-      // Check if item is checked (pantry)
-      if (pkg.isChecked) {
-        pkg.packsToBuy = 0;
-        pkg.lineCost = 0;
-      } else {
-        const packsToBuy = Math.ceil(pkg.neededFraction);
+      const packsToBuy = Math.ceil(pkg.neededFraction);
 
-        // Line cost is rounded quantity × price per pack
-        pkg.packsToBuy = packsToBuy;
-        pkg.lineCost = packsToBuy * pkg.packPrice;
-      }
+      // Line cost is always calculated; checking just marks the item
+      pkg.packsToBuy = packsToBuy;
+      pkg.lineCost = packsToBuy * pkg.packPrice;
     });
 
     return aggregateMap;

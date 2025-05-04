@@ -1,20 +1,53 @@
 'use client';
 
-import React from 'react';
+import React, { useState } from 'react';
 import { usePlannerStore, type AggregatedItem } from './usePlannerStore';
 import { Card, CardHeader, CardContent, CardTitle } from '@/components/ui/card';
 import { Checkbox } from '@/components/ui/checkbox';
+import { Collapsible, CollapsibleTrigger, CollapsibleContent } from '@/components/ui/collapsible';
+import { ChevronDown, ChevronUp } from 'lucide-react';
 
 export function GroceryScreen() {
   const { aggregatedIngredients, groceryCheckedItems, toggleGroceryItem } = usePlannerStore();
+  const [showDiscretionary, setShowDiscretionary] = useState(false);
 
   // Get aggregated ingredients as an array for easier display
   const groceryItems = Array.from(aggregatedIngredients().values());
 
-  // Calculate grocery-specific totals (Qty × Each for purchase)
-  const groceryTotal = groceryItems
-    .filter(item => !groceryCheckedItems.has(item.packageId))
-    .reduce((sum, item) => sum + item.lineCost, 0);
+  // Separate items into essential and discretionary
+  const essentialItems = groceryItems
+    .filter(item => (item.neededFraction * 100) >= 5)
+    .sort((a, b) => {
+      const aChecked = groceryCheckedItems.has(a.packageId);
+      const bChecked = groceryCheckedItems.has(b.packageId);
+
+      // Sort by unchecked first, then by total cost descending
+      if (aChecked !== bChecked) {
+        return aChecked ? 1 : -1;
+      }
+      return b.lineCost - a.lineCost;
+    });
+
+  const discretionaryItems = groceryItems
+    .filter(item => (item.neededFraction * 100) < 5)
+    .sort((a, b) => {
+      const aChecked = groceryCheckedItems.has(a.packageId);
+      const bChecked = groceryCheckedItems.has(b.packageId);
+
+      // Sort by unchecked first, then by total cost descending
+      if (aChecked !== bChecked) {
+        return aChecked ? 1 : -1;
+      }
+      return b.lineCost - a.lineCost;
+    });
+
+  // Calculate grocery-specific totals
+  const groceryTotal = [
+    // Essential items always count
+    ...essentialItems,
+    // Optional items only count when checked
+    ...discretionaryItems.filter(item => groceryCheckedItems.has(item.packageId))
+  ].reduce((sum, item) => sum + item.lineCost, 0);
 
   const GroceryItem = ({ item }: { item: AggregatedItem }) => {
     const isChecked = groceryCheckedItems.has(item.packageId);
@@ -22,72 +55,85 @@ export function GroceryScreen() {
 
     return (
       <div
-        className={`flex items-center justify-between p-2 border-b last:border-0 ${isChecked ? 'opacity-50' : ''}`}
+        className={`cursor-pointer p-2 border-b last:border-0`}
         onClick={() => toggleGroceryItem(item.packageId)}
       >
-        <div className="flex items-center gap-2">
-          <Checkbox
-            checked={isChecked}
-            onCheckedChange={() => toggleGroceryItem(item.packageId)}
-            className="cursor-pointer"
-          />
-          <div className="min-w-0">
-            <p className={`font-medium text-sm ${isChecked ? 'line-through' : ''}`}>
-              {item.productName} <span className="text-gray-500">({item.unitSize}{item.unitType})</span>
-            </p>
-            <div className="text-xs text-gray-600">
-              {usagePercentage}% used
+        <div className="flex items-center justify-between">
+          <div className="flex items-center gap-2 min-w-0 flex-1">
+            <div className="min-w-0 flex-1">
+              <p className="font-medium text-sm">
+                {item.productName} <span className="text-gray-500">({item.unitSize}{item.unitType})</span>
+              </p>
+              <div className="text-xs text-gray-600">
+                {usagePercentage}% used
+              </div>
             </div>
           </div>
-        </div>
-        <div className="flex items-center gap-4 text-sm">
-          <div className="text-center min-w-[2rem]">
-            <span className={`font-medium ${isChecked ? 'line-through' : ''}`}>
-              {Math.ceil(item.neededFraction)}×
-            </span>
-          </div>
-          <div className="text-center min-w-[3rem]">
-            <span className={`${isChecked ? 'line-through' : ''}`}>
-              ${item.packPrice.toFixed(2)}
-            </span>
-          </div>
-          <div className="text-center min-w-[3rem]">
-            <span className={`font-medium ${isChecked ? 'line-through' : ''}`}>
-              ${item.lineCost.toFixed(2)}
-            </span>
-          </div>
-          <div className="text-center min-w-[3rem]">
-            {item.savingsPercentage && item.savingsPercentage > 0 ? (
-              <span className="text-green-600 font-medium">
-                {item.savingsPercentage.toFixed(0)}% off
+          <div className="flex items-center gap-4 text-sm ml-4">
+            <div className="text-center min-w-[2rem]">
+              <span className="font-medium">
+                {Math.ceil(item.neededFraction)}×
               </span>
-            ) : (
-              <span></span>
-            )}
+            </div>
+            <div className="text-center min-w-[3rem]">
+              <span>
+                ${item.packPrice.toFixed(2)}
+              </span>
+            </div>
+            <div className="text-center min-w-[3rem]">
+              <span className="font-medium">
+                ${item.lineCost.toFixed(2)}
+              </span>
+            </div>
+            <div className="text-center min-w-[3rem]">
+              {item.savingsPercentage && item.savingsPercentage > 0 ? (
+                <span className="text-green-600 font-medium">
+                  {item.savingsPercentage.toFixed(0)}% off
+                </span>
+              ) : (
+                <span></span>
+              )}
+            </div>
+            <div className="min-w-[1.5rem] flex justify-center">
+              <Checkbox
+                checked={isChecked}
+                onCheckedChange={() => {}}
+                className="pointer-events-none"
+              />
+            </div>
           </div>
         </div>
       </div>
     );
   };
 
+  // Calculate count of checked optional items
+  const checkedOptionalCount = discretionaryItems.filter(item =>
+    groceryCheckedItems.has(item.packageId)
+  ).length;
+
+  // Calculate total count for bottom summary
+  const totalItemCount = essentialItems.length + checkedOptionalCount;
+
   return (
-    <div className="container mx-auto p-4 pb-24">
-      <div className="space-y-6">
+    <div className="container mx-auto p-4" style={{ scrollPaddingTop: '80px', scrollPaddingBottom: '200px' }}>
+      <div className="space-y-6" style={{ paddingBottom: '200px' }}>
         <Card>
-          <CardHeader className="pb-2">
-            <CardTitle className="flex justify-between items-center">
-              <span>Shopping List</span>
-              <div className="flex items-center gap-4 text-sm font-normal text-gray-500">
+          <div className="sticky top-16 z-10 bg-white border-b">
+            <div className="flex justify-between items-center p-2">
+              <span className="text-sm font-medium">Shopping List</span>
+              <div className="flex items-center gap-4 text-xs font-normal text-gray-500">
                 <span className="min-w-[2rem] text-center">Qty</span>
                 <span className="min-w-[3rem] text-center">Each</span>
                 <span className="min-w-[3rem] text-center">Total</span>
                 <span className="min-w-[3rem] text-center"></span>
+                <span className="min-w-[1.5rem] text-center"></span>
               </div>
-            </CardTitle>
-          </CardHeader>
+            </div>
+          </div>
           <CardContent className="p-0">
-            {groceryItems.length > 0 ? (
-              groceryItems.map(item => (
+            {essentialItems.length > 0 ? (
+              essentialItems.map(item => (
                 <GroceryItem key={item.packageId} item={item} />
               ))
             ) : (
@@ -97,6 +143,46 @@ export function GroceryScreen() {
             )}
           </CardContent>
         </Card>
+
+        {discretionaryItems.length > 0 && (
+          <Card>
+            <CardHeader className="py-2">
+              <CardTitle>
+                <Collapsible open={showDiscretionary} onOpenChange={setShowDiscretionary}>
+                  <CollapsibleTrigger className="w-full">
+                    <div className="flex justify-between items-center">
+                      <div className="flex items-center gap-2">
+                        <span>Optional Items</span>
+                        <span className="text-sm font-normal text-gray-500">
+                          ({checkedOptionalCount}/{discretionaryItems.length} selected)
+                        </span>
+                      </div>
+                      <div className="flex items-center gap-4">
+                        <div className="flex items-center gap-4 text-sm font-normal text-gray-500">
+                          <span className="min-w-[2rem] text-center">Qty</span>
+                          <span className="min-w-[3rem] text-center">Each</span>
+                          <span className="min-w-[3rem] text-center">Total</span>
+                          <span className="min-w-[3rem] text-center"></span>
+                          <span className="min-w-[1.5rem] text-center"></span>
+                        </div>
+                        <div className="ml-2">
+                          {showDiscretionary ? <ChevronUp size={20} /> : <ChevronDown size={20} />}
+                        </div>
+                      </div>
+                    </div>
+                  </CollapsibleTrigger>
+                  <CollapsibleContent>
+                    <CardContent className="p-0">
+                      {discretionaryItems.map(item => (
+                        <GroceryItem key={item.packageId} item={item} />
+                      ))}
+                    </CardContent>
+                  </CollapsibleContent>
+                </Collapsible>
+              </CardTitle>
+            </CardHeader>
+          </Card>
+        )}
       </div>
 
       {/* Bottom summary bar */}
@@ -104,7 +190,7 @@ export function GroceryScreen() {
         <div className="container mx-auto flex justify-between items-center">
           <div className="text-sm">
             <p className="text-gray-500">
-              {groceryItems.filter(item => !groceryCheckedItems.has(item.packageId)).length} items
+              {totalItemCount} items to buy
             </p>
           </div>
           <div className="text-right">
