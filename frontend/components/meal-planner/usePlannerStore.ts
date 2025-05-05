@@ -56,6 +56,13 @@ export interface AggregatedItem {
   tags?: IngredientTags;
 }
 
+export interface Store {
+  id: string;
+  name: string;
+  logo?: string;
+  isAvailable: boolean;
+}
+
 interface Totals {
   regularTotal: number;
   saleTotal: number;
@@ -63,13 +70,23 @@ interface Totals {
 }
 
 interface PlannerState {
+  // Data state
   meals: MealCategory;
   selectedMeals: Set<string>;
   groceryCheckedItems: Set<string>;
   recipeMultipliers: Record<string, number>; // url -> multiplier (defaults to 1)
   ingredientTags: Record<string, IngredientTags>; // packageId -> tags
 
+  // Store state
+  selectedStore: string | null;
+  availableStores: Store[];
+  isLoading: boolean;
+  error: string | null;
+  isDataLoaded: boolean; // Flag to track if data has been loaded
+
   // Actions
+  setSelectedStore: (storeId: string) => void;
+  fetchMealData: () => Promise<void>;
   setMeals: (meals: MealCategory) => void;
   toggleMeal: (url: string) => void;
   toggleGroceryItem: (packageId: string) => void;
@@ -84,7 +101,13 @@ interface PlannerState {
   mealSummary: () => { breakfast: number; lunch: number; dinner: number; total: number };
 }
 
+// For debugging purposes
+const logMessage = (msg: string) => {
+  console.log(`[PlannerStore] ${msg}`);
+};
+
 export const usePlannerStore = create<PlannerState>((set, get) => ({
+  // Initial data state
   meals: {
     breakfast: [],
     lunch: [],
@@ -95,28 +118,159 @@ export const usePlannerStore = create<PlannerState>((set, get) => ({
   recipeMultipliers: {},
   ingredientTags: {},
 
+  // Initial store state
+  selectedStore: null,
+   availableStores: [
+    { id: 'acme', name: 'Zehrs', isAvailable: true },
+    { id: 'foodland', name: 'Walmart', isAvailable: false },
+    { id: 'saveways', name: 'Loblaws', isAvailable: false },
+    { id: 'costco', name: 'Costco', isAvailable: false },
+    { id: 'freshco', name: 'Freshco', isAvailable: false }
+  ],
+  isLoading: false,
+  error: null,
+  isDataLoaded: false,
+
+  // Set selected store
+  setSelectedStore: (storeId) => {
+    logMessage(`Setting store to: ${storeId}`);
+    const state = get();
+    const store = state.availableStores.find(s => s.id === storeId);
+
+    if (!store || !store.isAvailable) {
+      set({ error: 'Selected store is not available' });
+      return;
+    }
+
+    // Only reset data if changing stores or if data hasn't been loaded yet
+    if (state.selectedStore !== storeId || !state.isDataLoaded) {
+      set({
+        selectedStore: storeId,
+        isLoading: true,
+        error: null,
+        // Don't reset data and flags here - they'll be updated by fetchMealData
+      });
+    } else {
+      set({ selectedStore: storeId });
+    }
+  },
+
+  // Fetch meal data based on selected store
+  fetchMealData: async () => {
+    const state = get();
+
+    logMessage(`fetchMealData called. isDataLoaded: ${state.isDataLoaded}, selectedStore: ${state.selectedStore}`);
+
+    // Don't fetch if already loaded or no store selected
+    if (state.isDataLoaded) {
+      logMessage('Data already loaded, skipping fetch');
+      return;
+    }
+
+    if (!state.selectedStore) {
+      logMessage('No store selected, skipping fetch');
+      return;
+    }
+
+    try {
+      logMessage('Starting data fetch...');
+      set({ isLoading: true, error: null });
+
+      // Try to fetch from your public folder
+      const response = await fetch('/data/enhanced-meal-plan.json');
+
+      if (!response.ok) {
+        throw new Error(`Failed to fetch meal plan data: ${response.status}`);
+      }
+
+      logMessage('Data fetch successful, parsing...');
+      // Parse the meal data
+      const data = await response.json();
+
+      // Transform the JSON data to match our store structure
+      const mealCategories: MealCategory = {
+        breakfast: [],
+        lunch: [],
+        dinner: []
+      };
+
+      // Extract all meals by category from days
+      data.forEach((day: any) => {
+        if (day.meals.breakfast) {
+          mealCategories.breakfast.push(...day.meals.breakfast);
+        }
+        if (day.meals.lunch) {
+          mealCategories.lunch.push(...day.meals.lunch);
+        }
+        if (day.meals.dinner) {
+          mealCategories.dinner.push(...day.meals.dinner);
+        }
+      });
+
+      // Initialize default selections
+      const defaultSelectedMeals = new Set<string>();
+      const initialMultipliers: Record<string, number> = {};
+
+      Object.values(mealCategories).forEach((recipes: Recipe[]) => {
+        recipes.slice(0, 7).forEach(recipe => {
+          defaultSelectedMeals.add(recipe.url);
+          initialMultipliers[recipe.url] = 1; // Default multiplier
+        });
+
+        // Set zero multiplier for unselected recipes
+        recipes.slice(7).forEach(recipe => {
+          initialMultipliers[recipe.url] = 0;
+        });
+      });
+
+      logMessage('Data processed, updating store...');
+      set({
+        meals: mealCategories,
+        selectedMeals: defaultSelectedMeals,
+        recipeMultipliers: initialMultipliers,
+        isLoading: false,
+        isDataLoaded: true
+      });
+      logMessage('Store update complete');
+    } catch (err) {
+      console.error("Error fetching meal data:", err);
+      set({
+        isLoading: false,
+        error: err instanceof Error ? err.message : 'Failed to load meal plan',
+        isDataLoaded: false
+      });
+    }
+  },
+
+  // Original actions (slightly modified)
   setMeals: (meals) => {
-    // Select first 7 meals from each category by default
-    const defaultSelectedMeals = new Set<string>();
-    const initialMultipliers: Record<string, number> = {};
+    // Only initialize selections if they don't exist yet
+    const state = get();
+    if (state.selectedMeals.size === 0) {
+      const defaultSelectedMeals = new Set<string>();
+      const initialMultipliers: Record<string, number> = {};
 
-    Object.values(meals).forEach((recipes: Recipe[]) => {
-      recipes.slice(0, 7).forEach(recipe => {
-        defaultSelectedMeals.add(recipe.url);
-        initialMultipliers[recipe.url] = 1; // Default multiplier for selected recipes
+      Object.values(meals).forEach((recipes: Recipe[]) => {
+        recipes.slice(0, 7).forEach(recipe => {
+          defaultSelectedMeals.add(recipe.url);
+          initialMultipliers[recipe.url] = 1; // Default multiplier
+        });
+
+        // Set zero multiplier for unselected recipes
+        recipes.slice(7).forEach(recipe => {
+          initialMultipliers[recipe.url] = 0;
+        });
       });
 
-      // Set zero multiplier for unselected recipes
-      recipes.slice(7).forEach(recipe => {
-        initialMultipliers[recipe.url] = 0;
+      set({
+        meals,
+        selectedMeals: defaultSelectedMeals,
+        recipeMultipliers: initialMultipliers
       });
-    });
-
-    set({
-      meals,
-      selectedMeals: defaultSelectedMeals,
-      recipeMultipliers: initialMultipliers
-    });
+    } else {
+      // Just update meals, preserving selections
+      set({ meals });
+    }
   },
 
   toggleMeal: (url) => set((state) => {
@@ -202,6 +356,7 @@ export const usePlannerStore = create<PlannerState>((set, get) => ({
     return { ingredientTags: newTags };
   }),
 
+  // Computed values
   selectedRecipes: () => {
     const state = get();
     const recipes: Recipe[] = [];

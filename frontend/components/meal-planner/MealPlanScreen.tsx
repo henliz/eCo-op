@@ -1,75 +1,23 @@
 'use client';
 
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import { usePlannerStore, type Recipe, type MealCategory } from './usePlannerStore';
 import { Collapsible, CollapsibleTrigger, CollapsibleContent } from '@/components/ui/collapsible';
 import { ChevronDown, ChevronUp } from 'lucide-react';
 import { MealCard } from './MealCard';
 
-// Type for the JSON data structure
-interface JsonDay {
-  day: string;
-  meals: {
-    breakfast?: Recipe[];
-    lunch?: Recipe[];
-    dinner?: Recipe[];
-  };
-}
-
 export function MealPlanScreen() {
-  const [isLoading, setIsLoading] = useState(true);
-  const [error, setError] = useState<string | null>(null);
   const {
     meals,
     selectedMeals,
-    setMeals,
     toggleMeal,
     mealSummary,
     totals,
     recipeMultipliers,
-    setRecipeMultiplier
+    setRecipeMultiplier,
+    isLoading,
+    error
   } = usePlannerStore();
-
-  // Fetch meal data on mount
-  useEffect(() => {
-    const fetchMeals = async () => {
-      try {
-        const response = await fetch('/data/enhanced-meal-plan.json');
-        if (!response.ok) {
-          throw new Error('Failed to fetch meal plan data');
-        }
-        const data: JsonDay[] = await response.json();
-
-        // Transform the JSON data to match our store structure
-        const mealCategories: MealCategory = {
-          breakfast: [],
-          lunch: [],
-          dinner: []
-        };
-
-        // Extract all meals by category
-        data.forEach(day => {
-          if (day.meals.breakfast) {
-            mealCategories.breakfast.push(...day.meals.breakfast);
-          }
-          if (day.meals.lunch) {
-            mealCategories.lunch.push(...day.meals.lunch);
-          }
-          if (day.meals.dinner) {
-            mealCategories.dinner.push(...day.meals.dinner);
-          }
-        });
-
-        setMeals(mealCategories);
-        setIsLoading(false);
-      } catch (err) {
-        setError(err instanceof Error ? err.message : 'Failed to load meal plan');
-        setIsLoading(false);
-      }
-    };
-
-    fetchMeals();
-  }, [setMeals]);
 
   const MealSection = ({ title, recipes, mealType }: { title: string; recipes: Recipe[]; mealType: keyof MealCategory }) => {
     const [isOpen, setIsOpen] = useState(true);
