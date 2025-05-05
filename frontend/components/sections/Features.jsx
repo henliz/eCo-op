@@ -2,7 +2,8 @@ import React from "react";
 
 export default function Features() {
   return (
-    <section className="features">
+    <section id="features"
+      className="scroll-mt-35 py-50">
       <div className="container">
         <div className="section-title">
           <h2>Save Time, Money, and Food Waste</h2>

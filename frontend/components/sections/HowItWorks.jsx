@@ -58,7 +58,8 @@ const itemVariant = {
 ------------------------------------------------- */
 export default function HowItWorks() {
   return (
-    <section className="py-40">
+    <section id="how-it-works"
+      className="scroll-mt-35 py-50">
       <div className="container mx-auto text-center">
         <h2 className="text-4xl font-extrabold">How It Works</h2>
 

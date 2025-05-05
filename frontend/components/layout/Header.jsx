@@ -33,12 +33,9 @@ export default function Header() {
 
           {/* Desktop nav: hidden on mobile, flex from md up */}
           <div className="nav-links hidden md:flex items-center space-x-6">
-            <Link href="/how-it-works">How It Works</Link>
-            <Link href="/features">Features</Link>
-            <Link href="/pricing">Pricing</Link>
-            <Link href="/blog">Blog</Link>
-            <Link href="/plan" className="hover:underline">Meal Planner</Link>
-            <Link href="/meal-planner" className="header-cta">Try It Free</Link>
+            <Link href="/#how-it-works" scroll={true}>How It Works</Link>
+            <Link href="/#features" scroll={true}>Features</Link>
+            <Link href="/plan" className="header-cta">Try It Free</Link>
           </div>
 
           {/* Mobile toggle: only on small screens */}
@@ -56,11 +53,8 @@ export default function Header() {
           <nav className="md:hidden absolute top-full left-0 w-full bg-green-100 shadow-lg z-50">
             <div className="mx-auto max-w-md rounded-lg overflow-hidden mt-2">
               {[
-                ['How It Works',  '/how-it-works'],
-                ['Features',      '/features'],
-                ['Pricing',       '/pricing'],
-                ['Blog',          '/blog'],
-                ['Meal Planner',  '/plan'],
+                ['How It Works',  '/#how-it-works'],
+                ['Features',      '#features'],
               ].map(([label, href], i) => (
                 <Link
                   key={i}
