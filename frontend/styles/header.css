@@ -1,6 +1,6 @@
 /* HEADER */
 header {
-  background-color: #40E0D0; /* Aqua/turquoise color directly applied */
+  background-color: #45B08C; /* Aqua/turquoise color directly applied */
   padding: 0.5rem 1rem;
   box-shadow: 0 2px 5px rgba(0,0,0,0.1);
   position: sticky;
@@ -19,14 +19,14 @@ header {
 .logo {
   display: flex;
   align-items: center;
-  gap: 0.5rem;
+  gap: 0.0rem;
   font-size: 1.5rem;
   font-weight: 700;
   color: white;
 }
 
 .logo img {
-  height: 40px;
+  height: 50px;
 }
 
 .nav-links {

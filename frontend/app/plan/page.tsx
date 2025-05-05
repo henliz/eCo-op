@@ -1,6 +1,7 @@
 'use client';
 
 import React from 'react';
+import Header from '@/components/layout/Header';
 import { MealPlanScreen } from '@/components/meal-planner/MealPlanScreen';
 import { GroceryScreen } from '@/components/meal-planner/GroceryScreen';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
@@ -8,6 +9,8 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 export default function MealPlannerPage() {
 
   return (
+    <>
+    <Header/>
     <div className="container mx-auto p-4 min-h-screen">
       <Tabs defaultValue="plan" className="h-full">
         <div className="sticky top-0 z-20 bg-white">
@@ -24,5 +27,6 @@ export default function MealPlannerPage() {
         </TabsContent>
       </Tabs>
     </div>
+    </>
   );
 }

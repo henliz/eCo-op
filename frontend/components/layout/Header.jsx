@@ -34,7 +34,7 @@ export default function Header() {
               alt="SmartCart logo" 
               className="logo-icon" 
             />
-            <div>Smart<span>Cart</span></div>
+            <div><span>skrimp</span></div>
           </Link>
           
           {/* Desktop Navigation Links */}
