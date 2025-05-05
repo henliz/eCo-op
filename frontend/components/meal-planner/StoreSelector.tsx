@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useEffect } from 'react';
+import React from 'react';
 import Image from 'next/image';
 import { usePlannerStore } from './usePlannerStore';
 
@@ -14,14 +14,6 @@ export default function StoreSelector() {
     isDataLoaded,
     availableStores
   } = usePlannerStore();
-
-  // When component mounts, load data if a store is selected
-  useEffect(() => {
-    if (selectedStore && !isDataLoaded && !isLoading) {
-      fetchMealData();
-    }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
 
   // Handle store selection
   const handleStoreSelect = (storeId: string) => {
@@ -111,11 +103,11 @@ export default function StoreSelector() {
         {selectedStore && !isLoading && isDataLoaded && (
           <div className="text-center mt-6 p-4 bg-green-50 rounded-lg">
             <p className="text-gray-700">
-              You've selected <span className="font-bold">
+              You&apos;ve selected <span className="font-bold">
                 {availableStores.find(s => s.id === selectedStore)?.name}
               </span>.
               <br />
-              Now you can proceed to the "Pick Meals" tab to start planning your meals!
+              Now you can proceed to the &quot;Pick Meals&quot; tab to start planning your meals!
             </p>
           </div>
         )}
@@ -127,9 +119,17 @@ export default function StoreSelector() {
           </div>
         )}
 
+        {/* Debug info */}
+        {process.env.NODE_ENV !== 'production' && (
+          <div className="mt-8 text-xs text-gray-400 border-t pt-4">
+            <p>Debug: {selectedStore ? 'Store selected' : 'No store'} |
+              {isLoading ? 'Loading' : 'Not loading'} |
+              {isDataLoaded ? 'Data loaded' : 'No data'} |
+              {error ? `Error: ${error}` : 'No error'}
+            </p>
+          </div>
+        )}
       </div>
     </section>
   );
 }
-
-

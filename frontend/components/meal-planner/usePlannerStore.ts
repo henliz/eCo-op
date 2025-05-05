@@ -69,6 +69,7 @@ interface Totals {
   totalSavings: number;
 }
 
+
 interface PlannerState {
   // Data state
   meals: MealCategory;
@@ -195,7 +196,7 @@ export const usePlannerStore = create<PlannerState>((set, get) => ({
       };
 
       // Extract all meals by category from days
-      data.forEach((day: any) => {
+      data.forEach((day: { meals: Partial<MealCategory> }) => {
         if (day.meals.breakfast) {
           mealCategories.breakfast.push(...day.meals.breakfast);
         }
