@@ -2,9 +2,9 @@
 
 import React, { useEffect, useState } from 'react';
 import { usePlannerStore, type Recipe, type MealCategory } from './usePlannerStore';
-import { Card, CardHeader, CardContent, CardTitle } from '@/components/ui/card';
 import { Collapsible, CollapsibleTrigger, CollapsibleContent } from '@/components/ui/collapsible';
 import { ChevronDown, ChevronUp } from 'lucide-react';
+import { MealCard } from './MealCard';
 
 // Type for the JSON data structure
 interface JsonDay {
@@ -62,37 +62,6 @@ export function MealPlanScreen() {
     fetchMeals();
   }, [setMeals]);
 
-  const MealCard = ({ recipe, isSelected }: { recipe: Recipe; isSelected: boolean }) => (
-    <Card
-      className={`cursor-pointer transition-all ${isSelected ? 'ring-2 ring-primary' : ''}`}
-      onClick={() => toggleMeal(recipe.url)}
-    >
-      <CardHeader>
-        <CardTitle className="text-lg">{recipe.name}</CardTitle>
-      </CardHeader>
-      <CardContent>
-        <div className="flex justify-between items-center">
-          <div>
-            <p className="text-sm text-gray-500">
-              Servings: {recipe.servings}
-            </p>
-            <p className="text-sm">
-              Regular: <span className="line-through">${recipe.regularPrice.toFixed(2)}</span>
-            </p>
-            <p className="text-sm">
-              Sale: <span className="font-bold">${recipe.salePrice.toFixed(2)}</span>
-            </p>
-          </div>
-          <div className="text-right">
-            <p className="text-sm text-green-600 font-bold">
-              Save ${recipe.totalSavings.toFixed(2)}
-            </p>
-          </div>
-        </div>
-      </CardContent>
-    </Card>
-  );
-
   const MealSection = ({ title, recipes, mealType }: { title: string; recipes: Recipe[]; mealType: keyof MealCategory }) => {
     const [isOpen, setIsOpen] = useState(true);
     const summary = mealSummary();
@@ -133,6 +102,7 @@ export function MealPlanScreen() {
                 key={recipe.url + index}
                 recipe={recipe}
                 isSelected={selectedMeals.has(recipe.url)}
+                onToggle={toggleMeal}
               />
             ))}
           </div>

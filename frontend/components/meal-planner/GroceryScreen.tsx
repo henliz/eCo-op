@@ -1,11 +1,11 @@
 'use client';
 
 import React, { useState } from 'react';
-import { usePlannerStore, type AggregatedItem } from './usePlannerStore';
+import { usePlannerStore } from './usePlannerStore';
 import { Card, CardHeader, CardContent, CardTitle } from '@/components/ui/card';
-import { Checkbox } from '@/components/ui/checkbox';
 import { Collapsible, CollapsibleTrigger, CollapsibleContent } from '@/components/ui/collapsible';
 import { ChevronDown, ChevronUp } from 'lucide-react';
+import { GroceryItem } from './GroceryItem';
 
 export function GroceryScreen() {
   const { aggregatedIngredients, groceryCheckedItems, toggleGroceryItem } = usePlannerStore();
@@ -49,64 +49,6 @@ export function GroceryScreen() {
     ...discretionaryItems.filter(item => groceryCheckedItems.has(item.packageId))
   ].reduce((sum, item) => sum + item.lineCost, 0);
 
-  const GroceryItem = ({ item }: { item: AggregatedItem }) => {
-    const isChecked = groceryCheckedItems.has(item.packageId);
-    const usagePercentage = (item.neededFraction * 100).toFixed(0);
-
-    return (
-      <div
-        className={`cursor-pointer p-2 border-b last:border-0`}
-        onClick={() => toggleGroceryItem(item.packageId)}
-      >
-        <div className="flex items-center justify-between">
-          <div className="flex items-center gap-2 min-w-0 flex-1">
-            <div className="min-w-0 flex-1">
-              <p className="font-medium text-sm">
-                {item.productName} <span className="text-gray-500">({item.unitSize}{item.unitType})</span>
-              </p>
-              <div className="text-xs text-gray-600">
-                {usagePercentage}% used
-              </div>
-            </div>
-          </div>
-          <div className="flex items-center gap-4 text-sm ml-4">
-            <div className="text-center min-w-[2rem]">
-              <span className="font-medium">
-                {Math.ceil(item.neededFraction)}×
-              </span>
-            </div>
-            <div className="text-center min-w-[3rem]">
-              <span>
-                ${item.packPrice.toFixed(2)}
-              </span>
-            </div>
-            <div className="text-center min-w-[3rem]">
-              <span className="font-medium">
-                ${item.lineCost.toFixed(2)}
-              </span>
-            </div>
-            <div className="text-center min-w-[3rem]">
-              {item.savingsPercentage && item.savingsPercentage > 0 ? (
-                <span className="text-green-600 font-medium">
-                  {item.savingsPercentage.toFixed(0)}% off
-                </span>
-              ) : (
-                <span></span>
-              )}
-            </div>
-            <div className="min-w-[1.5rem] flex justify-center">
-              <Checkbox
-                checked={isChecked}
-                onCheckedChange={() => {}}
-                className="pointer-events-none"
-              />
-            </div>
-          </div>
-        </div>
-      </div>
-    );
-  };
-
   // Calculate count of checked optional items
   const checkedOptionalCount = discretionaryItems.filter(item =>
     groceryCheckedItems.has(item.packageId)
@@ -134,7 +76,12 @@ export function GroceryScreen() {
           <CardContent className="p-0">
             {essentialItems.length > 0 ? (
               essentialItems.map(item => (
-                <GroceryItem key={item.packageId} item={item} />
+                <GroceryItem
+                  key={item.packageId}
+                  item={item}
+                  isChecked={groceryCheckedItems.has(item.packageId)}
+                  onToggle={toggleGroceryItem}
+                />
               ))
             ) : (
               <p className="p-4 text-center text-gray-500">
@@ -174,7 +121,12 @@ export function GroceryScreen() {
                   <CollapsibleContent>
                     <CardContent className="p-0">
                       {discretionaryItems.map(item => (
-                        <GroceryItem key={item.packageId} item={item} />
+                        <GroceryItem
+                          key={item.packageId}
+                          item={item}
+                          isChecked={groceryCheckedItems.has(item.packageId)}
+                          onToggle={toggleGroceryItem}
+                        />
                       ))}
                     </CardContent>
                   </CollapsibleContent>
