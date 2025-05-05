@@ -19,7 +19,16 @@ interface JsonDay {
 export function MealPlanScreen() {
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
-  const { meals, selectedMeals, setMeals, toggleMeal, mealSummary, totals } = usePlannerStore();
+  const {
+    meals,
+    selectedMeals,
+    setMeals,
+    toggleMeal,
+    mealSummary,
+    totals,
+    recipeMultipliers,
+    setRecipeMultiplier
+  } = usePlannerStore();
 
   // Fetch meal data on mount
   useEffect(() => {
@@ -66,7 +75,15 @@ export function MealPlanScreen() {
     const [isOpen, setIsOpen] = useState(true);
     const summary = mealSummary();
     const selectedCount = summary[mealType];
-    const totalCount = recipes.length;
+
+    // Calculate section totals, considering multipliers
+    const sectionSaleTotal = recipes
+      .filter(r => selectedMeals.has(r.url))
+      .reduce((sum, r) => sum + (r.salePrice * (recipeMultipliers[r.url] || 1)), 0);
+
+    const sectionSavingsTotal = recipes
+      .filter(r => selectedMeals.has(r.url))
+      .reduce((sum, r) => sum + (r.totalSavings * (recipeMultipliers[r.url] || 1)), 0);
 
     return (
       <Collapsible open={isOpen} onOpenChange={setIsOpen}>
@@ -78,19 +95,13 @@ export function MealPlanScreen() {
             </div>
             <div className="flex items-center gap-4">
               <span className="text-sm">
-                {selectedCount} / {totalCount} selected
+                {selectedCount} meals selected
               </span>
               <div className="text-sm text-green-600">
-                Sale: ${recipes
-                  .filter(r => selectedMeals.has(r.url))
-                  .reduce((sum, r) => sum + r.salePrice, 0)
-                  .toFixed(2)}
+                Sale: ${sectionSaleTotal.toFixed(2)}
               </div>
               <div className="text-sm text-green-600 font-bold">
-                Save: ${recipes
-                  .filter(r => selectedMeals.has(r.url))
-                  .reduce((sum, r) => sum + r.totalSavings, 0)
-                  .toFixed(2)}
+                Save: ${sectionSavingsTotal.toFixed(2)}
               </div>
             </div>
           </div>
@@ -102,7 +113,9 @@ export function MealPlanScreen() {
                 key={recipe.url + index}
                 recipe={recipe}
                 isSelected={selectedMeals.has(recipe.url)}
+                multiplier={recipeMultipliers[recipe.url] || 0}
                 onToggle={toggleMeal}
+                onMultiplierChange={setRecipeMultiplier}
               />
             ))}
           </div>
