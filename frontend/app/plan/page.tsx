@@ -4,6 +4,7 @@ import React from 'react';
 import Header from '@/components/layout/Header';
 import { MealPlanScreen } from '@/components/meal-planner/MealPlanScreen';
 import { GroceryScreen } from '@/components/meal-planner/GroceryScreen';
+import StoreSelector from '@/components/meal-planner/StoreSelector';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 
 export default function MealPlannerPage() {
@@ -20,6 +21,7 @@ export default function MealPlannerPage() {
           </TabsList>
         </div>
         <TabsContent value="plan" className="overflow-y-auto">
+          <StoreSelector />
           <MealPlanScreen />
         </TabsContent>
         <TabsContent value="groceries" className="overflow-y-auto">
