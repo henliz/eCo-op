@@ -1,21 +1,76 @@
-import React from "react";
-import Link from "next/link";
+// components/sections/Hero.tsx
+'use client';
+
+import { motion } from 'framer-motion';
+import Link from 'next/link';
+
+const containerVariant = {
+  hidden: {},
+  show: {
+    transition: {
+      delayChildren: 2.5,    // wait 2.5s for headline to finish
+      staggerChildren: 0.5,  // half-second between each fade
+    },
+  },
+};
+
+const fadeUp = {
+  hidden: { opacity: 0, y: 40 },
+  show:   {
+    opacity: 1,
+    y: 0,
+    transition: {
+      duration: 1.5,        // slower fade
+      ease: [0.22, 1, 0.36, 1],
+    },
+  },
+};
 
 export default function Hero() {
   return (
     <section className="hero">
-      <div className="hero-content">
-        <h1>Your groceries, but smarter.</h1>
-        <p>SmartCart uses AI to help Canadians save money on groceries during the cost of living crisis by creating meal plans based on this week's local deals and flyers.</p>
-        <div className="hero-btns">
+      <motion.div
+        variants={containerVariant}
+        initial="hidden"
+        whileInView="show"
+        viewport={{ once: true, amount: 0.4 }}
+        className="hero-content"
+      >
+        {/* slow, gentle wipe-on */}
+        <motion.h1
+          className="relative inline-block"
+          initial={{ clipPath: 'inset(0 100% 0 0)' }}
+          animate={{ clipPath: 'inset(0 0% 0 0)' }}
+          transition={{ duration: 2.0, ease: [0.22, 1, 0.36, 1] }}
+        >
+          When inflation’s squeezing your wallet, scrimp on prices, not possibilities…
+          <strong>Skrimp it.</strong>
+        </motion.h1>
+
+        <motion.p variants={fadeUp} className="mt-6">
+          Skrimp uses AI to help Canadians save money on groceries during the
+          cost of living crisis by creating meal plans based on this week's local
+          deals and flyers. Start skrimping today.
+        </motion.p>
+
+        <motion.div variants={fadeUp} className="hero-btns mt-8">
           <Link href="/plan">
             <button className="btn-primary">Get My Free Meal Plan</button>
           </Link>
-          <button className="btn-secondary">Get This Week's Groceries</button>
-        </div>
-        <br />
-        <p><small><strong>We're coming to these platforms soon, stay tuned for launch day!</strong></small></p>
-        <div className="download-app">
+          <button className="btn-secondary inline-block">
+            Get This Week&apos;s Groceries
+          </button>
+        </motion.div>
+
+        <motion.p variants={fadeUp} className="mt-6">
+          <small>
+            <strong>
+              We&apos;re coming to these platforms soon, stay tuned for launch day!
+            </strong>
+          </small>
+        </motion.p>
+
+        <motion.div variants={fadeUp} className="download-app mt-6">
           <button className="app-store-btn">
             <span className="app-store-icon">📱</span>
             <div className="app-store-text">
@@ -30,8 +85,8 @@ export default function Hero() {
               <strong>Google Play</strong>
             </div>
           </button>
-        </div>
-      </div>
+        </motion.div>
+      </motion.div>
     </section>
   );
 }

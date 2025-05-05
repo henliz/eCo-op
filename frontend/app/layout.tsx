@@ -14,8 +14,8 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "SmartCart – Your groceries, but smarter.",
-  description: "SmartCart uses AI to help Canadians save money on groceries during the cost of living crisis by creating meal plans based on this week's local deals and flyers.",
+  title: "skrimp – Your groceries, but smarter. Start Skrimping today",
+  description: "Skrimp uses AI to help Canadians save money on groceries during the cost of living crisis by creating meal plans based on this week's local deals and flyers. Start skrimping today.",
 };
 
 export default function RootLayout({
