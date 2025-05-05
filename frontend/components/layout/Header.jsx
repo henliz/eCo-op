@@ -1,44 +1,38 @@
-"use client";
+// components/layout/Header.jsx
+'use client';
+
 import React, { useState, useEffect } from "react";
 import Link from "next/link";
 
 export default function Header() {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [isMobile, setIsMobile] = useState(false);
-  
-  // Check if we're on mobile on component mount and window resize
+
+  // detect mobile vs desktop
   useEffect(() => {
-    if (typeof window !== 'undefined') {
-      const checkMobile = () => {
-        setIsMobile(window.innerWidth < 768);
-      };
-      
-      // Initial check
-      checkMobile();
-      
-      // Listen for window resize
-      window.addEventListener("resize", checkMobile);
-      
-      // Cleanup
-      return () => window.removeEventListener("resize", checkMobile);
-    }
+    if (typeof window === 'undefined') return;
+    const checkMobile = () => setIsMobile(window.innerWidth < 768);
+    checkMobile(); 
+    window.addEventListener("resize", checkMobile);
+    return () => window.removeEventListener("resize", checkMobile);
   }, []);
 
   return (
     <header>
       <div className="container">
-        <nav className="navbar">
-          <Link href="/" className="logo">
+        <nav className="navbar flex items-center justify-between">
+          {/* logo */}
+          <Link href="/" className="logo flex items-center gap-2">
             <img 
               src="/SmartCart_White.png" 
               alt="SmartCart logo" 
-              className="logo-icon" 
+              className="logo-icon h-8 w-auto" 
             />
-            <div><span>skrimp</span></div>
+            <span className="font-bold text-xl">skrimp</span>
           </Link>
           
-          {/* Desktop Navigation Links */}
-          <div className="nav-links">
+          {/* Desktop nav: hidden on mobile, flex from md up */}
+          <div className="nav-links hidden md:flex items-center space-x-6">
             <Link href="/how-it-works">How It Works</Link>
             <Link href="/features">Features</Link>
             <Link href="/pricing">Pricing</Link>
@@ -47,32 +41,59 @@ export default function Header() {
             <Link href="/meal-planner" className="header-cta">Try It Free</Link>
           </div>
           
-          {/* Mobile Menu Button */}
+          {/* Mobile toggle: only on small screens */}
           <button 
-            className="mobile-menu-button"
-            onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
+            className="mobile-menu-button md:hidden text-2xl"
+            onClick={() => setIsMobileMenuOpen(open => !open)}
             aria-label={isMobileMenuOpen ? "Close menu" : "Open menu"}
           >
             {isMobileMenuOpen ? "✕" : "☰"}
           </button>
         </nav>
         
-        {/* Mobile Menu */}
-        {isMobileMenuOpen && (
-          <div className="mobile-nav-links">
-            <Link href="/how-it-works" onClick={() => setIsMobileMenuOpen(false)}>
+        {/* Mobile menu: only when on mobile AND toggled open */}
+        {isMobile && isMobileMenuOpen && (
+          <div className="mobile-nav-links md:hidden absolute top-full left-0 w-full bg-white shadow-lg flex flex-col z-50">
+            <Link 
+              href="/how-it-works" 
+              className="block w-full px-4 py-3 border-b last:border-0" 
+              onClick={() => setIsMobileMenuOpen(false)}
+            >
               How It Works
             </Link>
-            <Link href="/features" onClick={() => setIsMobileMenuOpen(false)}>
+            <Link 
+              href="/features" 
+              className="block w-full px-4 py-3 border-b last:border-0" 
+              onClick={() => setIsMobileMenuOpen(false)}
+            >
               Features
             </Link>
-            <Link href="/pricing" onClick={() => setIsMobileMenuOpen(false)}>
+            <Link 
+              href="/pricing" 
+              className="block w-full px-4 py-3 border-b last:border-0" 
+              onClick={() => setIsMobileMenuOpen(false)}
+            >
               Pricing
             </Link>
-            <Link href="/blog" onClick={() => setIsMobileMenuOpen(false)}>
+            <Link 
+              href="/blog" 
+              className="block w-full px-4 py-3 border-b last:border-0" 
+              onClick={() => setIsMobileMenuOpen(false)}
+            >
               Blog
             </Link>
-            <Link href="/meal-planner" onClick={() => setIsMobileMenuOpen(false)}>
+            <Link 
+              href="/plan" 
+              className="block w-full px-4 py-3 border-b last:border-0" 
+              onClick={() => setIsMobileMenuOpen(false)}
+            >
+              Meal Planner
+            </Link>
+            <Link 
+              href="/meal-planner" 
+              className="block w-full px-4 py-3 last:border-0 header-cta text-center" 
+              onClick={() => setIsMobileMenuOpen(false)}
+            >
               Try It Free
             </Link>
           </div>

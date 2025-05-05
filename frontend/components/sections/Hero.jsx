@@ -50,16 +50,13 @@ export default function Hero() {
         <motion.p variants={fadeUp} className="mt-6">
           Skrimp uses AI to help Canadians save money on groceries during the
           cost of living crisis by creating meal plans based on this week's local
-          deals and flyers. Start skrimping today.
+          deals and flyers.
         </motion.p>
 
         <motion.div variants={fadeUp} className="hero-btns mt-8">
           <Link href="/plan">
-            <button className="btn-primary">Get My Free Meal Plan</button>
+            <button className="btn-primary">Start skrimping today!</button>
           </Link>
-          <button className="btn-secondary inline-block">
-            Get This Week&apos;s Groceries
-          </button>
         </motion.div>
 
         <motion.p variants={fadeUp} className="mt-6">
