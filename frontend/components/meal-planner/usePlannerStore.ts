@@ -1,6 +1,12 @@
 import { create } from 'zustand';
 
 // Types
+export interface IngredientTags {
+  importance?: 'core' | 'optional';
+  status?: 'bought' | 'owned' | 'ignored';
+  storeSection?: string;
+}
+
 interface Ingredient {
   recipeIngredientName: string;
   saleUnitSize?: number;
@@ -14,6 +20,7 @@ interface Ingredient {
   productName?: string;
   packageId?: string;
   savingsPercentage?: number;
+  tags?: IngredientTags;
 }
 
 export interface Recipe {
@@ -25,6 +32,7 @@ export interface Recipe {
   regularPrice: number;
   totalSavings: number;
   ingredients: Ingredient[];
+  multiplier?: number; // How many times this recipe will be made
 }
 
 export interface MealCategory {
@@ -45,6 +53,7 @@ export interface AggregatedItem {
   packsToBuy: number;
   isChecked: boolean;
   savingsPercentage?: number;
+  tags?: IngredientTags;
 }
 
 interface Totals {
@@ -57,11 +66,16 @@ interface PlannerState {
   meals: MealCategory;
   selectedMeals: Set<string>;
   groceryCheckedItems: Set<string>;
+  recipeMultipliers: Record<string, number>; // url -> multiplier (defaults to 1)
+  ingredientTags: Record<string, IngredientTags>; // packageId -> tags
 
   // Actions
   setMeals: (meals: MealCategory) => void;
   toggleMeal: (url: string) => void;
   toggleGroceryItem: (packageId: string) => void;
+  setRecipeMultiplier: (url: string, multiplier: number) => void;
+  setIngredientTag: (packageId: string, tag: keyof IngredientTags, value: string | undefined) => void;
+  setIngredientTags: (packageId: string, tags: Partial<IngredientTags>) => void;
 
   // Computed values
   selectedRecipes: () => Recipe[];
@@ -78,31 +92,49 @@ export const usePlannerStore = create<PlannerState>((set, get) => ({
   },
   selectedMeals: new Set<string>(),
   groceryCheckedItems: new Set<string>(),
+  recipeMultipliers: {},
+  ingredientTags: {},
 
   setMeals: (meals) => {
     // Select first 7 meals from each category by default
     const defaultSelectedMeals = new Set<string>();
+    const initialMultipliers: Record<string, number> = {};
 
     Object.values(meals).forEach((recipes: Recipe[]) => {
       recipes.slice(0, 7).forEach(recipe => {
         defaultSelectedMeals.add(recipe.url);
+        initialMultipliers[recipe.url] = 1; // Default multiplier for selected recipes
+      });
+
+      // Set zero multiplier for unselected recipes
+      recipes.slice(7).forEach(recipe => {
+        initialMultipliers[recipe.url] = 0;
       });
     });
 
     set({
       meals,
-      selectedMeals: defaultSelectedMeals
+      selectedMeals: defaultSelectedMeals,
+      recipeMultipliers: initialMultipliers
     });
   },
 
   toggleMeal: (url) => set((state) => {
     const newSelectedMeals = new Set(state.selectedMeals);
+    const newMultipliers = { ...state.recipeMultipliers };
+
     if (newSelectedMeals.has(url)) {
       newSelectedMeals.delete(url);
+      newMultipliers[url] = 0; // Set multiplier to 0 when unselected
     } else {
       newSelectedMeals.add(url);
+      newMultipliers[url] = 1; // Set multiplier to 1 when selected
     }
-    return { selectedMeals: newSelectedMeals };
+
+    return {
+      selectedMeals: newSelectedMeals,
+      recipeMultipliers: newMultipliers
+    };
   }),
 
   toggleGroceryItem: (packageId) => set((state) => {
@@ -113,6 +145,61 @@ export const usePlannerStore = create<PlannerState>((set, get) => ({
       newCheckedItems.add(packageId);
     }
     return { groceryCheckedItems: newCheckedItems };
+  }),
+
+  setRecipeMultiplier: (url, multiplier) => set((state) => {
+    const newMultipliers = { ...state.recipeMultipliers };
+    const newSelectedMeals = new Set(state.selectedMeals);
+
+    // Ensure multiplier is a non-negative integer
+    const newMultiplier = Math.max(0, Math.round(multiplier));
+    newMultipliers[url] = newMultiplier;
+
+    // Update selection based on multiplier
+    if (newMultiplier > 0) {
+      newSelectedMeals.add(url);
+    } else {
+      newSelectedMeals.delete(url);
+    }
+
+    return {
+      recipeMultipliers: newMultipliers,
+      selectedMeals: newSelectedMeals
+    };
+  }),
+
+  setIngredientTag: (packageId, tag, value) => set((state) => {
+    const newTags = { ...state.ingredientTags };
+
+    // Initialize if no tags exist yet
+    if (!newTags[packageId]) {
+      newTags[packageId] = {};
+    }
+
+    // Update the specific tag
+    newTags[packageId] = {
+      ...newTags[packageId],
+      [tag]: value
+    };
+
+    return { ingredientTags: newTags };
+  }),
+
+  setIngredientTags: (packageId, tags) => set((state) => {
+    const newTags = { ...state.ingredientTags };
+
+    // Initialize if no tags exist yet
+    if (!newTags[packageId]) {
+      newTags[packageId] = {};
+    }
+
+    // Update all provided tags
+    newTags[packageId] = {
+      ...newTags[packageId],
+      ...tags
+    };
+
+    return { ingredientTags: newTags };
   }),
 
   selectedRecipes: () => {
@@ -126,10 +213,14 @@ export const usePlannerStore = create<PlannerState>((set, get) => ({
       ...state.meals.dinner
     ];
 
-    // Filter only selected meals
+    // Filter only selected meals and add multiplier
     allRecipes.forEach(recipe => {
       if (state.selectedMeals.has(recipe.url)) {
-        recipes.push(recipe);
+        const multiplier = state.recipeMultipliers[recipe.url] || 1;
+        recipes.push({
+          ...recipe,
+          multiplier
+        });
       }
     });
 
@@ -143,6 +234,9 @@ export const usePlannerStore = create<PlannerState>((set, get) => ({
 
     // Step 1 & 2: Aggregate ingredients
     selectedRecipes.forEach(recipe => {
+      // Use multiplier (default to 1 if not set)
+      const multiplier = recipe.multiplier || 1;
+
       recipe.ingredients.forEach(ing => {
         // Skip ingredients marked as 'skipped'
         if (ing.source === 'skipped') return;
@@ -152,11 +246,16 @@ export const usePlannerStore = create<PlannerState>((set, get) => ({
 
         const existing = aggregateMap.get(packageId);
         if (existing) {
-          existing.neededFraction += ing.saleFractionUsed || 0;
+          // Multiply by recipe multiplier
+          existing.neededFraction += (ing.saleFractionUsed || 0) * multiplier;
         } else {
+          // Get tags if they exist
+          const tags = state.ingredientTags[packageId];
+
           aggregateMap.set(packageId, {
             packageId,
-            neededFraction: ing.saleFractionUsed || 0,
+            // Multiply by recipe multiplier
+            neededFraction: (ing.saleFractionUsed || 0) * multiplier,
             unitSize: ing.saleUnitSize || 0,
             unitType: ing.saleUnitType || '',
             packPrice: ing.salePrice,
@@ -165,7 +264,8 @@ export const usePlannerStore = create<PlannerState>((set, get) => ({
             lineCost: 0,
             packsToBuy: 0,
             isChecked: state.groceryCheckedItems.has(packageId),
-            savingsPercentage: ing.savingsPercentage
+            savingsPercentage: ing.savingsPercentage,
+            tags
           });
         }
       });
@@ -186,24 +286,24 @@ export const usePlannerStore = create<PlannerState>((set, get) => ({
   totals: () => {
     const state = get();
     const selectedRecipes = state.selectedRecipes();
-    const aggregatedItems = state.aggregatedIngredients();
 
     let totalSale = 0;
     let totalRegular = 0;
 
-    aggregatedItems.forEach(item => {
-      totalSale += item.lineCost;
-      totalRegular += item.packsToBuy * item.packPrice;
+    // Calculate totals based on multipliers
+    selectedRecipes.forEach(recipe => {
+      const multiplier = recipe.multiplier || 1;
+      totalSale += recipe.salePrice * multiplier;
+      totalRegular += recipe.regularPrice * multiplier;
     });
 
-    // For total savings from recipe selections
-    const recipeSavings = selectedRecipes.reduce((sum, recipe) => sum + recipe.totalSavings, 0);
-    const grocerySavings = totalRegular - totalSale;
+    // For total savings
+    const totalSavings = totalRegular - totalSale;
 
     return {
       regularTotal: totalRegular,
       saleTotal: totalSale,
-      totalSavings: recipeSavings + grocerySavings
+      totalSavings
     };
   },
 
@@ -216,12 +316,13 @@ export const usePlannerStore = create<PlannerState>((set, get) => ({
       total: 0
     };
 
-    // Count selected meals by category
+    // Count selected meals by category, considering multipliers
     (['breakfast', 'lunch', 'dinner'] as const).forEach(category => {
       state.meals[category].forEach(recipe => {
         if (state.selectedMeals.has(recipe.url)) {
-          summary[category]++;
-          summary.total++;
+          const multiplier = state.recipeMultipliers[recipe.url] || 1;
+          summary[category] += multiplier;
+          summary.total += multiplier;
         }
       });
     });
