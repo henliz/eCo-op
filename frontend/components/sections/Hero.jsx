@@ -28,7 +28,10 @@ const fadeUp = {
 
 export default function Hero() {
   return (
-    <section className="hero">
+    <section
+     className="hero py-16 md:py-0"
+     style={{ minHeight: 'calc(100vh - 4rem)' }}
+   >
       <motion.div
         variants={containerVariant}
         initial="hidden"
