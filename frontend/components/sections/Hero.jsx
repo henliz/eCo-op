@@ -8,7 +8,7 @@ export default function Hero() {
         <h1>Your groceries, but smarter.</h1>
         <p>SmartCart uses AI to help Canadians save money on groceries during the cost of living crisis by creating meal plans based on this week's local deals and flyers.</p>
         <div className="hero-btns">
-          <Link href="/meal-planner">
+          <Link href="/plan">
             <button className="btn-primary">Get My Free Meal Plan</button>
           </Link>
           <button className="btn-secondary">Get This Week's Groceries</button>
