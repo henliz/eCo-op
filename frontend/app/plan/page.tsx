@@ -41,7 +41,7 @@ export default function MealPlannerPage() {
                   flex-1 z-10 rounded-full px-4 py-2
                   text-center font-medium transition
                   ${view === tab.value
-                    ? 'bg-orange-400 text-white'
+                    ? 'bg-orange-300 text-white'
                     : 'text-gray-900'}
                 `}
               >
@@ -54,7 +54,7 @@ export default function MealPlannerPage() {
           <motion.div
             layoutId="tabHighlight"
             transition={{ type: 'spring', stiffness: 300, damping: 30 }}
-            className="absolute inset-0 bg-orange-400 rounded-full"
+            className="absolute inset-0 bg-orange-300 rounded-full"
             style={{
               width: `calc(100% / ${tabs.length})`,
               left:  `calc((100% / ${tabs.length}) * ${tabs.findIndex(t => t.value === view)})`,
