@@ -16,6 +16,24 @@ const geistMono = Geist_Mono({
 export const metadata: Metadata = {
   title: "skrimp – Your groceries, but smarter. Start Skrimping today",
   description: "Skrimp uses AI to help Canadians save money on groceries during the cost of living crisis by creating meal plans based on this week's local deals and flyers. Start skrimping today.",
+  icons: {
+    icon: [
+      {
+        url: "/SmartCart_Black.png",
+        type: "image/png",
+        sizes: "any",
+        media: "(prefers-color-scheme: dark)",
+      },
+      {
+        url: "/SmartCart_White.png",
+        type: "image/png",
+        sizes: "any",
+        media: "(prefers-color-scheme: light)",
+      },
+    ],
+    // fallback for older browsers:
+    shortcut: "/favicon-dark.png",
+  },
 };
 
 export default function RootLayout({
