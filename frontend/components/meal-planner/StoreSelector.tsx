@@ -2,6 +2,7 @@
 
 import React from 'react';
 import Image from 'next/image';
+import { motion, AnimatePresence } from 'framer-motion';
 import { usePlannerStore } from './usePlannerStore';
 
 export default function StoreSelector() {
@@ -21,8 +22,48 @@ export default function StoreSelector() {
   };
 
   return (
-    <section className="py-16 bg-gray-50">
+    <motion.section
+      className="py-16 bg-gray-50"
+      initial={{ opacity: 0, y: 20 }}
+      animate={{ opacity: 1, y: 0 }}
+      transition={{ duration: 0.5, ease: 'easeOut' }}
+    >
       <div className="container mx-auto">
+
+        {/* Cross‐fade between prompt & selection banner */}
+        <AnimatePresence initial={false} mode="wait">
+          {selectedStore && !isLoading && isDataLoaded ? (
+            <motion.div
+              key="selected"
+              className="text-center mb-6 p-4 bg-green-50 rounded-lg"
+              initial={{ opacity: 0, y: -10 }}
+              animate={{ opacity: 1, y: 0 }}
+              exit={{ opacity: 0, y: -10 }}
+              transition={{ duration: 0.3 }}
+            >
+              <p className="text-gray-700">
+                You&apos;ve selected{' '}
+                <span className="font-bold">
+                  {availableStores.find(s => s.id === selectedStore)?.name}
+                </span>.
+                <br />
+                Now you can proceed to the &quot;Pick Meals&quot; tab to start planning your meals!
+              </p>
+            </motion.div>
+          ) : !isLoading ? (
+            <motion.div
+              key="prompt"
+              className="text-center mb-6 p-4 bg-orange-50 rounded-lg text-gray-700"
+              initial={{ opacity: 0, y: -10 }}
+              animate={{ opacity: 1, y: 0 }}
+              exit={{ opacity: 0, y: -10 }}
+              transition={{ duration: 0.3 }}
+            >
+              Please select a store to view available meal plans
+            </motion.div>
+          ) : null}
+        </AnimatePresence>
+
         {/* Header */}
         <div className="bg-[#5BC4B4] rounded-lg px-6 py-4 mb-8">
           <h2 className="font-bold text-xs sm:text-sm md:text-lg lg:text-xl xl:text-2xl leading-snug">
@@ -37,8 +78,8 @@ export default function StoreSelector() {
           </div>
         )}
 
-        {/* 🔥 MOBILE-ONLY: flex-row below md; desktop still flex-col→md:flex-row */}
-        <div className="flex flex-row md:flex-col md:flex-row items-start gap-8 py-8">
+        {/* MOBILE-ONLY: flex-row below md; desktop still flex-col→md:flex-row */}
+        <div className="flex flex-row md:flex-col md:flex-row items-start gap-5 py-8">
           {/* Robot image */}
           <div className="w-1/3 text-center flex-shrink-0">
             <Image
@@ -52,7 +93,7 @@ export default function StoreSelector() {
             <div className="mt-4 text-center">
               <button
                 className="
-                  px-6 py-3 rounded-full text-lg font-medium
+                  px-5 py-3 rounded-full text-lg font-medium
                   bg-gray-200 text-gray-500 opacity-70 cursor-default
                 "
               >
@@ -64,15 +105,17 @@ export default function StoreSelector() {
             </div>
           </div>
 
-          {/* Store buttons: NO top margin on mobile so they sit side-by-side */}
-          <div className="">
+          {/* Store buttons */}
+          <div>
             <div className="grid grid-cols-2 gap-3">
               {availableStores.map(store => (
                 <button
                   key={store.id}
                   onClick={() => store.isAvailable && handleStoreSelect(store.id)}
+                  disabled={!store.isAvailable}
                   className={`
-                    px-6 py-3 rounded-[30px] text-center text-lg font-medium transition text-center
+                    flex items-center justify-center w-full
+                    px-6 py-3 rounded-[30px] text-lg font-medium transition
                     ${selectedStore === store.id
                       ? 'bg-[#5BC4B4] text-white'
                       : store.isAvailable
@@ -80,7 +123,6 @@ export default function StoreSelector() {
                         : 'bg-gray-200 text-gray-500'}
                     ${!store.isAvailable ? 'opacity-70 cursor-not-allowed' : ''}
                   `}
-                  disabled={!store.isAvailable}
                 >
                   {store.name}
                 </button>
@@ -97,27 +139,6 @@ export default function StoreSelector() {
           </div>
         )}
 
-        {/* Selected store info */}
-        {selectedStore && !isLoading && isDataLoaded && (
-          <div className="text-center mt-6 p-4 bg-green-50 rounded-lg">
-            <p className="text-gray-700">
-              You&apos;ve selected{' '}
-              <span className="font-bold">
-                {availableStores.find(s => s.id === selectedStore)?.name}
-              </span>.
-              <br />
-              Now you can proceed to the &quot;Pick Meals&quot; tab to start planning your meals!
-            </p>
-          </div>
-        )}
-
-        {/* No store selected prompt */}
-        {!selectedStore && !isLoading && (
-          <div className="text-center mt-6 p-4 bg-orange-50 rounded-lg text-gray-700">
-            Please select a store to view available meal plans
-          </div>
-        )}
-
         {/* Debug info */}
         {process.env.NODE_ENV !== 'production' && (
           <div className="mt-8 text-xs text-gray-400 border-t pt-4">
@@ -130,6 +151,7 @@ export default function StoreSelector() {
           </div>
         )}
       </div>
-    </section>
+    </motion.section>
   );
 }
+
