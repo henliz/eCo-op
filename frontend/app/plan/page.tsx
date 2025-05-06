@@ -4,18 +4,20 @@ import { useState } from 'react';
 import { motion } from 'framer-motion';
 
 import Header from '@/components/layout/Header';
-import Footer        from '@/components/layout/Footer';
+import Footer from '@/components/layout/Footer';
 import StoreSelector from '@/components/meal-planner/StoreSelector';
 import { MealPlanScreen } from '@/components/meal-planner/MealPlanScreen';
 import { GroceryScreen } from '@/components/meal-planner/GroceryScreen';
+import { CookScreen } from '@/components/meal-planner/CookScreen'; // NEW
 import { usePlannerStore } from '@/components/meal-planner/usePlannerStore';
 
-type View = 'store' | 'plan' | 'groceries';
+type View = 'store' | 'plan' | 'groceries' | 'cook'; // UPDATED
 
 const tabs: { label: string; value: View }[] = [
-  { label: '1. Store', value: 'store' },
-  { label: '2. Plan',   value: 'plan' },
-  { label: '3. Shop', value: 'groceries' },
+  { label: '1. Store',    value: 'store' },
+  { label: '2. Plan',     value: 'plan' },
+  { label: '3. Shop',     value: 'groceries' },
+  { label: '4. Cook',     value: 'cook' },        // NEW
 ];
 
 export default function MealPlannerPage() {
@@ -24,16 +26,13 @@ export default function MealPlannerPage() {
 
   // Helper to determine if tabs should be enabled
   const isTabEnabled = (tabId: View) => {
-    // Store tab is always enabled
     if (tabId === 'store') return true;
-
-    // Other tabs are only enabled if a store is selected and data is loaded
+    // Other tabs only enabled once store is selected and data is loaded
     return !!selectedStore && isDataLoaded;
   };
 
   // Handle tab change
   const handleViewChange = (newView: View) => {
-    // Only allow changing to tabs that are enabled
     if (isTabEnabled(newView)) {
       setView(newView);
     }
@@ -45,10 +44,7 @@ export default function MealPlannerPage() {
       <div className="container mx-auto p-2 min-h-screen">
         {/* --- OVERSIZED PILL TOGGLE --- */}
         <div className="relative mx-auto mt-2 mb-2 w-full max-w-md h-12">
-          {/* background track */}
           <div className="absolute inset-0 bg-teal-100 rounded-full" />
-
-          {/* buttons */}
           <div className="absolute inset-0 flex">
             {tabs.map((tab) => (
               <button
@@ -68,8 +64,6 @@ export default function MealPlannerPage() {
               </button>
             ))}
           </div>
-
-          {/* sliding highlight */}
           <motion.div
             layoutId="tabHighlight"
             transition={{ type: 'spring', stiffness: 300, damping: 30 }}
@@ -83,13 +77,11 @@ export default function MealPlannerPage() {
 
         {/* --- Content Panels --- */}
         {view === 'store' && <StoreSelector />}
-
         {view === 'plan' && isTabEnabled('plan') && <MealPlanScreen />}
-
         {view === 'groceries' && isTabEnabled('groceries') && <GroceryScreen />}
-
+        {view === 'cook' && isTabEnabled('cook') && <CookScreen />} {/* NEW */}
       </div>
-      <br></br>
+
       <Footer />
     </>
   );
