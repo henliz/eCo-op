@@ -13,6 +13,13 @@ interface GroupedItems {
   items: AggregatedItem[];
 }
 
+interface GroceryTotals {
+  mealCost: number;     // Cost of the portions used in recipes
+  leftoverCost: number; // Cost of the unused portions
+  totalCost: number;    // Total cost to purchase all selected items
+  totalSavings: number; // Savings on selected items
+}
+
 /* ------------------------------- screen -------------------------------- */
 export function GroceryScreen() {
   const {
@@ -20,7 +27,7 @@ export function GroceryScreen() {
     groceryCheckedItems,
     toggleGroceryItem,
     setIngredientTags,
-    totals // Add this to access meal totals
+    totals // Access meal totals
   } = usePlannerStore();
 
   const [showDiscretionary, setShowDiscretionary] = useState(false);
@@ -44,12 +51,50 @@ export function GroceryScreen() {
     .sort(sortLogic(groupBySection, groceryCheckedItems));
 
   /* ------------------------------ totals ----------------------------------- */
-  const groceryTotal = [
-    ...essentialItems.filter(i => i.tags?.status !== 'owned'),
-    ...discretionaryItems.filter(
-      i => groceryCheckedItems.has(i.packageId) && i.tags?.status !== 'owned'
-    )
-  ].reduce((sum, i) => sum + i.lineCost, 0);
+  // Calculate the new grocery totals
+  const calculateGroceryTotals = (): GroceryTotals => {
+    const allItems = [...essentialItems, ...discretionaryItems];
+    let mealCost = 0;
+    let leftoverCost = 0;
+    let totalCost = 0;
+    let totalSavings = 0;
+
+    // Only consider items that are checked
+    const selectedItems = allItems.filter(item =>
+      groceryCheckedItems.has(item.packageId) &&
+      item.tags?.status !== 'owned'
+    );
+
+    selectedItems.forEach(item => {
+      // Calculate cost of portion used in recipes
+      const usedFraction = Math.min(item.neededFraction, 1);
+      const usedCost = item.packPrice * usedFraction;
+      mealCost += usedCost;
+
+      // Calculate cost of leftover portion
+      const leftoverFraction = Math.max(0, 1 - item.neededFraction);
+      const unusedCost = item.packPrice * leftoverFraction;
+      leftoverCost += unusedCost;
+
+      // Calculate total cost (full package price)
+      totalCost += item.packPrice;
+
+      // Calculate savings based on savings percentage
+      if (item.savingsPercentage) {
+        const regularPrice = item.packPrice / (1 - item.savingsPercentage / 100);
+        totalSavings += regularPrice - item.packPrice;
+      }
+    });
+
+    return {
+      mealCost,
+      leftoverCost,
+      totalCost,
+      totalSavings
+    };
+  };
+
+  const groceryTotals = calculateGroceryTotals();
 
   /* ----------------------------- handlers ---------------------------------- */
   const handleUpdateTags = (packageId: string, tags: Partial<IngredientTags>) =>
@@ -223,7 +268,7 @@ export function GroceryScreen() {
             </Card>
         )}
 
-        {/* Bottom summary bar */}
+        {/* Bottom summary bar with enhanced totals */}
         <div className="fixed bottom-0 left-0 right-0 bg-gray-200 border-t py-2 px-3 shadow-lg pb-4">
           <div className="container mx-auto">
             {/* TOTALS header */}
@@ -231,16 +276,24 @@ export function GroceryScreen() {
               <span className="font-bold text-lg">TOTALS</span>
             </div>
 
-            {/* Stats row */}
-            <div className="flex justify-around items-center">
-              <div className="flex items-center gap-8">
-                <div>
-                  <span>Meal Cost: </span>
-                  <span className="font-bold">${totals().saleTotal.toFixed(2)}</span>
+            {/* Enhanced stats row with 4 metrics - ledger style */}
+            <div className="flex justify-center items-center">
+              <div className="grid grid-cols-4 gap-4 w-full max-w-2xl">
+                <div className="flex flex-col items-end">
+                  <span className="text-sm text-gray-600 text-right">Meal Cost</span>
+                  <span className="font-bold text-right">${groceryTotals.mealCost.toFixed(2)}</span>
                 </div>
-                <div>
-                  <span>Grocery Cost: </span>
-                  <span className="font-bold">${groceryTotal.toFixed(2)}</span>
+                <div className="flex flex-col items-end">
+                  <span className="text-sm text-gray-600 text-right">Future Use</span>
+                  <span className="font-bold text-amber-600 text-right">${groceryTotals.leftoverCost.toFixed(2)}</span>
+                </div>
+                <div className="flex flex-col items-end">
+                  <span className="text-sm text-gray-600 text-right">Grocery Bill</span>
+                  <span className="font-bold text-right">${groceryTotals.totalCost.toFixed(2)}</span>
+                </div>
+                <div className="flex flex-col items-end">
+                  <span className="text-sm text-gray-600 text-right">Savings</span>
+                  <span className="font-bold text-green-600 text-right">${groceryTotals.totalSavings.toFixed(2)}</span>
                 </div>
               </div>
             </div>
@@ -274,3 +327,4 @@ function sortLogic(
     return b.lineCost - a.lineCost;
   };
 }
+
