@@ -67,7 +67,7 @@ export default function StoreSelector() {
 
           {/* Store buttons - in a separate container with explicit spacing */}
           <div className="mt-8 md:mt-0">
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
+            <div className="grid grid-cols-2 md:grid-cols-2 gap-3">
               {availableStores.map(store => (
                 <button
                   key={store.id}

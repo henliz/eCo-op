@@ -122,7 +122,7 @@ export const usePlannerStore = create<PlannerState>((set, get) => ({
   // Initial store state
   selectedStore: null,
    availableStores: [
-    { id: 'acme', name: 'Zehrs', isAvailable: true },
+    { id: 'acme', name: 'Zehrs, Hespeler', isAvailable: true },
     { id: 'foodland', name: 'Walmart', isAvailable: false },
     { id: 'saveways', name: 'Loblaws', isAvailable: false },
     { id: 'costco', name: 'Costco', isAvailable: false },
