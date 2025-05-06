@@ -42,11 +42,9 @@ export default function MealPlannerPage() {
   return (
     <>
       <Header />
-      <small><br></br></small>
-
-      <div className="container mx-auto p-4 min-h-screen">
+      <div className="container mx-auto p-2 min-h-screen">
         {/* --- OVERSIZED PILL TOGGLE --- */}
-        <div className="relative mx-auto mb-8 w-full max-w-md h-12">
+        <div className="relative mx-auto mt-2 mb-2 w-full max-w-md h-12">
           {/* background track */}
           <div className="absolute inset-0 bg-teal-100 rounded-full" />
 
@@ -82,8 +80,6 @@ export default function MealPlannerPage() {
             }}
           />
         </div>
-
-        <small><br></br></small>
 
         {/* --- Content Panels --- */}
         {view === 'store' && <StoreSelector />}
