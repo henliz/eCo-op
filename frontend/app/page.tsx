@@ -6,6 +6,7 @@ import HowItWorks    from '@/components/sections/HowItWorks';
 import FreeListPromo from '@/components/sections/FreeListPromo';
 import Features      from '@/components/sections/Features';
 import MealPlan      from '@/components/sections/MealPlan';
+import EmailSignupBanner from '@/components/sections/EmailSignupBanner';
 
 export default function Home() {
   return (
@@ -15,19 +16,15 @@ export default function Home() {
       <main>
         <Hero />
 
-        {/* guaranteed 10 rem gap */}
-        <div className="h-40" />
-
         <HowItWorks />
 
-        {/* another gap if you want it */}
-        <div className="h-40" />
         <FreeListPromo />
 
-        <div className="h-40" />
+        <div className="h-35" aria-hidden="true" />
+        <EmailSignupBanner />
+
         <Features />
 
-        <div className="h-40" />
         <MealPlan />
       </main>
     </>
