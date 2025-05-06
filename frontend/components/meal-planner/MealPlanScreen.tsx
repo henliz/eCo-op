@@ -47,7 +47,7 @@ export function MealPlanScreen() {
               <h2 className="text-xl font-semibold">{title}</h2>
               {isOpen ? <ChevronUp size={20} /> : <ChevronDown size={20} />}
             </div>
-            <div className="flex items-center gap-4">
+            <div className="flex items-center gap-2">
               <span className="text-sm">{summary[mealType]} meals selected</span>
               <div className="text-sm text-green-600">
                 Sale: ${sectionSaleTotal.toFixed(2)}
@@ -60,7 +60,7 @@ export function MealPlanScreen() {
         </CollapsibleTrigger>
 
         <CollapsibleContent>
-          <div className="grid grid-cols-2 md:grid-cols-2 lg:grid-cols-3 gap-4 p-4">
+          <div className="grid grid-cols-2 md:grid-cols-2 lg:grid-cols-3 gap-0 p-1"> {/* Reduced from gap-4 p-4 */}
             {recipes.map((recipe, idx) => (
               <MealCard
                 key={recipe.url + idx}
@@ -88,8 +88,8 @@ export function MealPlanScreen() {
   const summaryTotals = totals();
 
   return (
-    <div className="container mx-auto p-4 pb-24">
-      <div className="space-y-6">
+    <div className="mx-auto px-0 sm:px-0 pb-10"> {/* Remove "container" class here */}
+      <div className="space-y-0"> {/* Reduced from space-y-6 */}
         <MealSection title="Breakfast" recipes={meals.breakfast} mealType="breakfast" />
         <MealSection title="Lunch"       recipes={meals.lunch}     mealType="lunch" />
         <MealSection title="Dinner"      recipes={meals.dinner}    mealType="dinner" />
