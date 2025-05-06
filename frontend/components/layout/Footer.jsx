@@ -25,11 +25,6 @@ export default function Footer() {
               </Link>
             </li>
             <li>
-              <Link href="/#features" className="hover:underline" scroll={true}>
-                Features
-              </Link>
-            </li>
-            <li>
               <span className="opacity-60">Careers (coming soon)</span>
             </li>
             <li>

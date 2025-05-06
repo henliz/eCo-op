@@ -20,7 +20,7 @@ export default function Header() {
   // only this block changed:
   const mobileNavItems = [
     { label: 'How It Works',   href: '/#how-it-works', external: false },
-    { label: 'Features',       href: '#features',       external: false },
+    { label: 'About',       href: '#about',       external: false },
     {
       label:    'Feedback Form',
       href:     'https://docs.google.com/forms/d/e/1FAIpQLSeaWg3pAelFtLZTBslhFiI_wxldA6muBfeidd_eTpIYTs5ZQQ/viewform?usp=header',

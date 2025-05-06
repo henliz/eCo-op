@@ -5,7 +5,6 @@ import Footer        from '@/components/layout/Footer';
 import Hero          from '@/components/sections/Hero';
 import HowItWorks    from '@/components/sections/HowItWorks';
 import FreeListPromo from '@/components/sections/FreeListPromo';
-import Features      from '@/components/sections/Features';
 import MealPlan      from '@/components/sections/MealPlan';
 import EmailSignupBanner from '@/components/sections/EmailSignupBanner';
 import AboutandFeedback from '@/components/sections/AboutandFeedback';
@@ -24,8 +23,6 @@ export default function Home() {
 
         <div className="h-35" aria-hidden="true" />
         <EmailSignupBanner />
-
-        <Features />
 
         <MealPlan />
 

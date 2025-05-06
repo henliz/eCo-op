@@ -11,14 +11,14 @@ const steps = [
   {
     id: 1,
     img: '/Flyer_Graphic.png',
-    title: 'Tell Us Your Preferences',
-    desc: 'Let us know your dietary preferences, allergies, and favorite stores.',
+    title: 'Pick Your Store',
+    desc: 'Let us know your store, so we find the deals that match its location.',
   },
   {
     id: 2,
     img: '/Robo_Research.png',
     title: 'We Find The Deals',
-    desc: 'Our system scans local flyers to find the best sales in your area.',
+    desc: 'Our system scans local flyers to find the best sales in your stores and area.',
   },
   {
     id: 3,
@@ -65,7 +65,7 @@ export default function HowItWorks() {
 
         <p className="mx-auto mt-6 flex justify-center">
           <span className="max-w-4xl text-lg text-gray-600">
-            SmartCart makes grocery shopping easier, faster, and more affordable in just a few simple steps.
+            Skrimp makes grocery shopping easier, faster, and more affordable in just a few simple steps.
           </span>
         </p>
 

@@ -36,10 +36,10 @@ export default function FreeListPromo() {
             </h2>
 
             <p className="text-lg text-gray-700">
-              Plan&nbsp;21 meals, save an estimated&nbsp;
+              Save an estimated&nbsp;
               <span className="font-semibold text-emerald-600">$58.00</span>
               &nbsp;this week! We’ll email you a fully AI‑powered grocery list—tailored
-              to the best deals—absolutely free.
+              to the best deals, absolutely free.
             </p>
 
             <Link
