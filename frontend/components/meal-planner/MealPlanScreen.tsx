@@ -94,28 +94,26 @@ export function MealPlanScreen() {
       </div>
 
       {/* Bottom summary bar */}
-      <div className="fixed bottom-0 left-0 right-0 bg-white border-t p-4 shadow-lg">
-        <div className="container mx-auto flex justify-between items-center">
-          <div className="text-sm">
-            <p className="text-gray-500">Total meals: {mealSummary().total}</p>
+      <div className="fixed bottom-0 left-0 right-0 bg-gray-200 border-t py-2 px-3 shadow-lg">
+        <div className="container mx-auto">
+          {/* TOTALS header */}
+          <div className="text-center mb-1">
+            <span className="font-bold text-lg">TOTALS</span>
           </div>
-          <div className="text-right">
-            <p className="text-lg">
-              Regular total:{' '}
-              <span className="line-through">
-                ${summaryTotals.regularTotal.toFixed(2)}
-              </span>
-            </p>
-            <p className="text-lg">
-              Sale total:{' '}
-              <span className="font-bold">
-                ${summaryTotals.saleTotal.toFixed(2)}
-              </span>
-            </p>
-            <p className="text-lg text-green-600 font-bold">
-              Total savings:{' '}
-              ${summaryTotals.totalSavings.toFixed(2)}
-            </p>
+
+          {/* Stats row */}
+          <div className="flex justify-around items-center">
+            <div className="flex items-center gap-8">
+              <p className="text-gray-500 !mb-0">Meals: <span className="font-bold">{mealSummary().total}</span></p>
+              <div>
+                <span>Cost: </span>
+                <span className="font-bold">${summaryTotals.saleTotal.toFixed(2)}</span>
+              </div>
+              <div>
+                <span>Savings: </span>
+                <span className="font-bold text-green-600">${summaryTotals.totalSavings.toFixed(2)}</span>
+              </div>
+            </div>
           </div>
         </div>
       </div>
