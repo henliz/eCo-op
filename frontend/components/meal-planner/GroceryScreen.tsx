@@ -27,7 +27,6 @@ export function GroceryScreen() {
     groceryCheckedItems,
     toggleGroceryItem,
     setIngredientTags,
-    totals // Access meal totals
   } = usePlannerStore();
 
   const [showDiscretionary, setShowDiscretionary] = useState(false);
