@@ -45,7 +45,7 @@ export default function Header() {
           {/* Desktop nav: hidden on mobile, flex from md up */}
           <div className="nav-links hidden md:flex items-center space-x-6">
             <Link href="/#how-it-works" scroll={true}>How It Works</Link>
-            <Link href="/#features"      scroll={true}>Features</Link>
+            <Link href="/#about"      scroll={true}>About</Link>
             <a
               href="https://docs.google.com/forms/d/e/1FAIpQLSeaWg3pAelFtLZTBslhFiI_wxldA6muBfeidd_eTpIYTs5ZQQ/viewform?usp=header"
               target="_blank"
