@@ -7,6 +7,7 @@ import FreeListPromo from '@/components/sections/FreeListPromo';
 import Features      from '@/components/sections/Features';
 import MealPlan      from '@/components/sections/MealPlan';
 import EmailSignupBanner from '@/components/sections/EmailSignupBanner';
+import AboutandFeedback from '@/components/sections/AboutandFeedback';
 
 export default function Home() {
   return (
@@ -26,6 +27,9 @@ export default function Home() {
         <Features />
 
         <MealPlan />
+
+        <AboutandFeedback />
+
       </main>
     </>
   );
