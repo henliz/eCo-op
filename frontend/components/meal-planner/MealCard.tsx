@@ -8,7 +8,8 @@ import {
   CardTitle,
 } from '@/components/ui/card';
 import { type Recipe } from './usePlannerStore';
-import { Plus, Minus } from 'lucide-react';
+import { Plus, Minus, ExternalLink } from 'lucide-react';
+import { RecipeViewer } from './RecipeViewer'; // Add this import
 
 interface MealCardProps {
   recipe: Recipe;
@@ -50,13 +51,29 @@ export function MealCard({
         className={`
           transition-colors
           w-full flex flex-col gap-0
-          min-h-[10rem] max-h-[10rem] overflow-hidden
+          min-h-[10rem] max-h-[10rem] overflow-hidden relative
           ${isSelected ? 'bg-teal-100' : 'bg-gray-100 hover:bg-gray-200'}
         `}
       >
         <CardHeader className="!pl-3 !pr-2 !mb-0">
           <CardTitle className="text-sm sm:text-lg font-semibold leading-snug break-words">
-            {recipe.name}
+            <div className="flex justify-between items-start">
+              <span>{recipe.name}</span>
+              {recipe.url && (
+                <span
+                  onClick={(e) => e.stopPropagation()}
+                  className="flex shrink-0 ml-1 text-gray-500 hover:text-teal-600"
+                >
+                  <RecipeViewer
+                    title={recipe.name}
+                    url={recipe.url}
+                    trigger={
+                      <ExternalLink size={16} className="cursor-pointer" />
+                    }
+                  />
+                </span>
+              )}
+            </div>
             <div className="flex justify-between items-center text-xs sm:text-sm !ml-1 !mr-3 !mt-2">
               <p className="text-gray-500 !mb-0">
                 Servings: {recipe.servings}
@@ -67,7 +84,7 @@ export function MealCard({
             </div>
             {/* Savings below Cost, right-aligned */}
             {hasSavings && (
-                <div className="flex justify-end text-xs sm:text-sm !mr-3">
+              <div className="flex justify-end text-xs sm:text-sm !mr-3">
                 <p className="text-green-600 font-bold !mb-0">
                   Save: ${recipe.totalSavings.toFixed(2)}
                 </p>
@@ -78,27 +95,26 @@ export function MealCard({
 
         {/* Fixed bottom multiplier controls */}
         {isSelected && (
-
-            <div className="absolute bottom-2 left-0 right-0 flex items-center justify-center">
-              <button
-                  onClick={dec}
-                  className="bg-gray-200 hover:bg-gray-400 w-12 h-10 flex items-center justify-center rounded-l"
-              >
-                <Minus size={20}/>
-              </button>
-              <div
-                  className="w-16 h-10 flex items-center justify-center font-bold text-lg"
-                  style={{backgroundColor: '#FFE6D9'}}
-              >
-                x{multiplier}
-              </div>
-              <button
-                  onClick={inc}
-                  className="bg-gray-200 hover:bg-gray-400 w-12 h-10 flex items-center justify-center rounded-r"
-              >
-                <Plus size={20}/>
-              </button>
+          <div className="absolute bottom-2 left-0 right-0 flex items-center justify-center">
+            <button
+              onClick={dec}
+              className="bg-gray-200 hover:bg-gray-400 w-12 h-10 flex items-center justify-center rounded-l"
+            >
+              <Minus size={20}/>
+            </button>
+            <div
+              className="w-16 h-10 flex items-center justify-center font-bold text-lg"
+              style={{backgroundColor: '#FFE6D9'}}
+            >
+              x{multiplier}
             </div>
+            <button
+              onClick={inc}
+              className="bg-gray-200 hover:bg-gray-400 w-12 h-10 flex items-center justify-center rounded-r"
+            >
+              <Plus size={20}/>
+            </button>
+          </div>
         )}
       </Card>
     </motion.div>
