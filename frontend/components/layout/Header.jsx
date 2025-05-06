@@ -76,7 +76,7 @@ export default function Header() {
 
               {/* Full-width apricot “Try It Free” row */}
               <Link
-                href="/meal-planner"
+                href="/plan"
                 onClick={() => setIsMobileMenuOpen(false)}
                 className="
                   block w-full

@@ -4,6 +4,7 @@ import { useState } from 'react';
 import { motion } from 'framer-motion';
 
 import Header from '@/components/layout/Header';
+import Footer        from '@/components/layout/Footer';
 import StoreSelector from '@/components/meal-planner/StoreSelector';
 import { MealPlanScreen } from '@/components/meal-planner/MealPlanScreen';
 import { GroceryScreen } from '@/components/meal-planner/GroceryScreen';
@@ -103,6 +104,8 @@ export default function MealPlannerPage() {
           </div>
         )}
       </div>
+      <br></br>
+      <Footer />
     </>
   );
 }

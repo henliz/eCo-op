@@ -85,7 +85,7 @@ export default function MealPlan() {
         </div>
         
         <div className="view-all-meals">
-          <Link href="/meal-planner">
+          <Link href="/plan">
             <button className="btn-primary">View Full Menu</button>
           </Link>
         </div>

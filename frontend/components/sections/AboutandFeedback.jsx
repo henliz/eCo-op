@@ -15,7 +15,7 @@ const sectionVariants = {
 
 export default function AboutAndFeedback() {
   return (
-    <div className="space-y-16">
+    <div className="scroll-mt-15 py-20" id="about">
       {/* --- Our Story --- */}
       <motion.section
         className="pt-16"
