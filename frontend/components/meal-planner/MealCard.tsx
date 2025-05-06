@@ -13,7 +13,6 @@ import { type Recipe } from './usePlannerStore';
 import { Plus, Minus } from 'lucide-react';
 
 interface MealCardProps {
-  /** single recipe to render */
   recipe: Recipe;
   isSelected: boolean;
   multiplier: number;
@@ -41,49 +40,50 @@ export function MealCard({
     <motion.div
       key={recipe.url}
       initial={false}
-      animate={{ scale: isSelected ? 1.05 : 1 }}
+      animate={{ scale: isSelected ? 1.03 : 1 }}
       transition={{ type: 'spring', stiffness: 300, damping: 25 }}
       onClick={() => onToggle(recipe.url)}
-      className="cursor-pointer h-full"
+      className="cursor-pointer w-full"
     >
       <Card
         className={`
           transition-colors
-          w-86 h-56
-          flex flex-col h-full
+          w-full flex flex-col
+          min-h-[14rem] max-h-[18rem] overflow-hidden
           ${isSelected
-            ? 'bg-orange-300 ring-2 ring-primary'
-            : 'bg-teal-100 hover:bg-teal-200'}
+            ? 'bg-teal-100'
+            : 'bg-gray-100 hover:bg-gray-200'}
         `}
       >
-        {/* header + multiplier */}
-        <CardHeader className="!pt-2 !px-3 !pb-1">
-          <CardTitle className="text-lg leading-snug truncate">
+        {/* Header + multiplier (mobile: stacked; desktop: inline) */}
+        <CardHeader className="!pt-1 !pb-1 !px-2 sm:!px-3 flex flex-col md:flex-row md:items-center md:justify-between">
+          <CardTitle className="text-sm sm:text-lg font-semibold leading-snug break-words">
             {recipe.name}
           </CardTitle>
-          <div className="bg-gray-100 rounded-md p-1 w-48 mx-auto flex items-center justify-center gap-2 mt-1">
+          <div className="mt-1 md:mt-0 bg-gray-100 rounded-md px-1 sm:px-2 py-0 flex items-center justify-center gap-1 sm:gap-2 w-full md:w-auto">
             <button
               onClick={dec}
               disabled={multiplier === 0}
-              className="w-6 h-6 flex items-center justify-center rounded-md hover:bg-gray-200 disabled:opacity-50"
+              className="w-5 h-7 sm:w-6 sm:h-6 flex items-center justify-center rounded hover:bg-gray-200 disabled:opacity-50"
             >
-              <Minus size={16} />
+              <Minus size={14} />
             </button>
-            <span className="text-sm font-medium text-center w-6">
-              {multiplier}×
-            </span>
+            <span className="text-xs sm:text-sm font-medium">{multiplier}×</span>
             <button
               onClick={inc}
-              className="w-6 h-6 flex items-center justify-center rounded-md hover:bg-gray-200"
+              className="w-5 h-5 sm:w-6 sm:h-6 flex items-center justify-center rounded hover:bg-gray-200"
             >
-              <Plus size={16} />
+              <Plus size={14} />
             </button>
           </div>
         </CardHeader>
 
-        {/* two‑column body: left=details, right=Save */}
-        <CardContent className="!p-3 grid grid-cols-[1fr_auto] items-center gap-4">
-          <div className="space-y-1 text-sm">
+        {/* Body */}
+        <CardContent
+          className="!p-1 sm:!p-3 flex flex-col sm:grid sm:grid-cols-[1fr_auto] gap-1 sm:gap-4 text-xs sm:text-sm"
+          style={{ overflowY: 'auto' }}
+        >
+          <div className="space-y-0.5">
             <p className="text-gray-500">Servings: {recipe.servings}</p>
             <p>
               Regular:{' '}
@@ -98,8 +98,8 @@ export function MealCard({
               </span>
             </p>
           </div>
-          <div className="flex items-center justify-center">
-            <p className="text-green-600 font-bold text-lg">
+          <div className="mt-1 sm:mt-0 flex items-center justify-center">
+            <p className="text-green-600 font-bold text-sm sm:text-lg">
               Save ${(recipe.totalSavings * multiplier).toFixed(2)}
             </p>
           </div>

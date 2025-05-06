@@ -13,9 +13,9 @@ import { usePlannerStore } from '@/components/meal-planner/usePlannerStore';
 type View = 'store' | 'plan' | 'groceries';
 
 const tabs: { label: string; value: View }[] = [
-  { label: '1. Select Store', value: 'store' },
-  { label: '2. Pick Meals',   value: 'plan' },
-  { label: '3. Buy Groceries', value: 'groceries' },
+  { label: '1. Store', value: 'store' },
+  { label: '2. Meals',   value: 'plan' },
+  { label: '3. Buy', value: 'groceries' },
 ];
 
 export default function MealPlannerPage() {

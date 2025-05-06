@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useState } from 'react';
+import React from 'react';
 import { usePlannerStore, type Recipe, type MealCategory } from './usePlannerStore';
 import { Collapsible, CollapsibleTrigger, CollapsibleContent } from '@/components/ui/collapsible';
 import { ChevronDown, ChevronUp } from 'lucide-react';
@@ -19,19 +19,25 @@ export function MealPlanScreen() {
     error
   } = usePlannerStore();
 
-  const MealSection = ({ title, recipes, mealType }: { title: string; recipes: Recipe[]; mealType: keyof MealCategory }) => {
-    const [isOpen, setIsOpen] = useState(true);
+  const MealSection = ({
+    title,
+    recipes,
+    mealType,
+  }: {
+    title: string;
+    recipes: Recipe[];
+    mealType: keyof MealCategory;
+  }) => {
+    const [isOpen, setIsOpen] = React.useState(true);
     const summary = mealSummary();
-    const selectedCount = summary[mealType];
 
-    // Calculate section totals, considering multipliers
     const sectionSaleTotal = recipes
       .filter(r => selectedMeals.has(r.url))
-      .reduce((sum, r) => sum + (r.salePrice * (recipeMultipliers[r.url] || 1)), 0);
+      .reduce((sum, r) => sum + r.salePrice * (recipeMultipliers[r.url] || 1), 0);
 
     const sectionSavingsTotal = recipes
       .filter(r => selectedMeals.has(r.url))
-      .reduce((sum, r) => sum + (r.totalSavings * (recipeMultipliers[r.url] || 1)), 0);
+      .reduce((sum, r) => sum + r.totalSavings * (recipeMultipliers[r.url] || 1), 0);
 
     return (
       <Collapsible open={isOpen} onOpenChange={setIsOpen}>
@@ -42,9 +48,7 @@ export function MealPlanScreen() {
               {isOpen ? <ChevronUp size={20} /> : <ChevronDown size={20} />}
             </div>
             <div className="flex items-center gap-4">
-              <span className="text-sm">
-                {selectedCount} meals selected
-              </span>
+              <span className="text-sm">{summary[mealType]} meals selected</span>
               <div className="text-sm text-green-600">
                 Sale: ${sectionSaleTotal.toFixed(2)}
               </div>
@@ -54,11 +58,12 @@ export function MealPlanScreen() {
             </div>
           </div>
         </CollapsibleTrigger>
+
         <CollapsibleContent>
-          <div className="grid gap-4 p-4 md:grid-cols-2 lg:grid-cols-3">
-            {recipes.map((recipe, index) => (
+          <div className="grid grid-cols-2 md:grid-cols-2 lg:grid-cols-3 gap-4 p-4">
+            {recipes.map((recipe, idx) => (
               <MealCard
-                key={recipe.url + index}
+                key={recipe.url + idx}
                 recipe={recipe}
                 isSelected={selectedMeals.has(recipe.url)}
                 multiplier={recipeMultipliers[recipe.url] || 0}
@@ -86,8 +91,8 @@ export function MealPlanScreen() {
     <div className="container mx-auto p-4 pb-24">
       <div className="space-y-6">
         <MealSection title="Breakfast" recipes={meals.breakfast} mealType="breakfast" />
-        <MealSection title="Lunch" recipes={meals.lunch} mealType="lunch" />
-        <MealSection title="Dinner" recipes={meals.dinner} mealType="dinner" />
+        <MealSection title="Lunch"       recipes={meals.lunch}     mealType="lunch" />
+        <MealSection title="Dinner"      recipes={meals.dinner}    mealType="dinner" />
       </div>
 
       {/* Bottom summary bar */}
@@ -98,13 +103,20 @@ export function MealPlanScreen() {
           </div>
           <div className="text-right">
             <p className="text-lg">
-              Regular total: <span className="line-through">${summaryTotals.regularTotal.toFixed(2)}</span>
+              Regular total:{' '}
+              <span className="line-through">
+                ${summaryTotals.regularTotal.toFixed(2)}
+              </span>
             </p>
             <p className="text-lg">
-              Sale total: <span className="font-bold">${summaryTotals.saleTotal.toFixed(2)}</span>
+              Sale total:{' '}
+              <span className="font-bold">
+                ${summaryTotals.saleTotal.toFixed(2)}
+              </span>
             </p>
             <p className="text-lg text-green-600 font-bold">
-              Total savings: ${summaryTotals.totalSavings.toFixed(2)}
+              Total savings:{' '}
+              ${summaryTotals.totalSavings.toFixed(2)}
             </p>
           </div>
         </div>
