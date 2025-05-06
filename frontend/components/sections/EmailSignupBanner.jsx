@@ -39,7 +39,7 @@ export default function EmailSignupBanner() {
       className="py-8"
       initial="hidden"
       whileInView="visible"
-      viewport={{ once: true, amount: 0.3 }}
+      viewport={{ once: true, amount: 0.1 }}
       variants={containerVariants}
     >
       <div className="max-w-[1200px] mx-auto px-4">

@@ -8,7 +8,7 @@ const containerVariant = {
   hidden: {},
   show: {
     transition: {
-      delayChildren: 2.5,    // wait 2.5s for headline to finish
+      delayChildren: 1.75,    // wait 2.5s for headline to finish
       staggerChildren: 0.5,  // half-second between each fade
     },
   },
