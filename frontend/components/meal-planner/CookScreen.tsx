@@ -1,5 +1,9 @@
+'use client';
+
 import React, { useState, useMemo, useEffect } from 'react';
+import Image from 'next/image';
 import { usePlannerStore, type Recipe } from './usePlannerStore';
+import { Combobox } from '@headlessui/react';
 import { AlertCircle, ExternalLink } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 
@@ -7,6 +11,7 @@ const placeholderImage = '/Robo_Research.png';
 
 export function CookScreen() {
   const [choice, setChoice] = useState<string>('');
+  const [searchQuery, setSearchQuery] = useState<string>('');
   const [iframeError, setIframeError] = useState<boolean>(false);
   const [iframeLoaded, setIframeLoaded] = useState<boolean>(false);
   const { selectedMeals, meals } = usePlannerStore();
@@ -17,8 +22,15 @@ export function CookScreen() {
     return all.filter(r => selectedMeals.has(r.url));
   }, [selectedMeals, meals]);
 
-  // Dropdown options (recipe names)
+  // Recipe names
   const options = useMemo<string[]>(() => selectedRecipes.map(r => r.name), [selectedRecipes]);
+
+  // Filtered by search query
+  const filteredOptions = useMemo<string[]>(() => {
+    return options.filter(name =>
+      name.toLowerCase().includes(searchQuery.toLowerCase())
+    );
+  }, [options, searchQuery]);
 
   // Selected recipe object
   const chosenRecipe = useMemo<Recipe | undefined>(
@@ -32,7 +44,7 @@ export function CookScreen() {
     setIframeLoaded(false);
   }, [choice]);
 
-  // HEAD request to check embedding policy (optional but useful)
+  // HEAD request to check embedding policy
   useEffect(() => {
     if (!chosenRecipe) return;
     fetch(chosenRecipe.url, { method: 'HEAD' })
@@ -53,26 +65,48 @@ export function CookScreen() {
 
   return (
     <div className="flex flex-col items-center mt-8 space-y-6">
-      {/* Chef avatar and selector */}
+      {/* Avatar and searchable combobox */}
       <div className="flex items-start space-x-4">
-        <img src={placeholderImage} alt="Chef" className="w-45 h-45 object-cover rounded-full" />
-        <div className="relative bg-blue-100 border border-blue-200 p-4 rounded-xl max-w-xs">
+        <Image
+          src={placeholderImage}
+          alt="Chef"
+          width={45}
+          height={45}
+          className="rounded-full"
+        />
+        <div className="relative bg-blue-100 border border-blue-200 p-4 rounded-xl max-w-xs w-full">
           {/* Bubble tail */}
           <div className="absolute -left-3 top-8 w-0 h-0 border-t-6 border-t-transparent border-b-6 border-b-transparent border-r-6 border-r-blue-100" />
-          <label htmlFor="recipe" className="block text-gray-700 font-medium mb-2">
-            {choice ? `Cooking: ${choice}` : 'What are we cooking today?'}
-          </label>
-          <input
-            id="recipe"
-            list="recipes"
-            value={choice}
-            onChange={e => setChoice(e.target.value)}
-            placeholder={options.length ? 'Search or select a meal...' : 'No recipes selected'}
-            className="w-full border border-blue-300 rounded px-3 py-2 focus:outline-none focus:ring focus:border-blue-400"
-          />
-          <datalist id="recipes">
-            {options.map(name => <option key={name} value={name} />)}
-          </datalist>
+          <Combobox value={choice} onChange={(val) => setChoice(val ?? '')} nullable>
+            <Combobox.Label className="block text-gray-700 font-medium mb-2">
+              {choice ? `Cooking: ${choice}` : 'What are we cooking today?'}
+            </Combobox.Label>
+            <Combobox.Input
+              className="w-full border border-blue-300 rounded px-3 py-2 focus:outline-none focus:ring focus:border-blue-400"
+              displayValue={(name: string) => name}
+              onChange={e => setSearchQuery(e.target.value)}
+              placeholder={options.length ? 'Type or select a meal...' : 'No recipes selected'}
+            />
+            <Combobox.Options className="absolute z-10 mt-1 w-full bg-white border border-gray-200 rounded-md max-h-60 overflow-auto">
+              {filteredOptions.length > 0 ? (
+                filteredOptions.map(name => (
+                  <Combobox.Option
+                    key={name}
+                    value={name}
+                    className={({ active }) =>
+                      `cursor-pointer select-none px-3 py-2 ${
+                        active ? 'bg-blue-200' : ''
+                      }`
+                    }
+                  >
+                    {name}
+                  </Combobox.Option>
+                ))
+              ) : (
+                <div className="px-3 py-2 text-gray-500">No matches found.</div>
+              )}
+            </Combobox.Options>
+          </Combobox>
         </div>
       </div>
 
@@ -88,21 +122,17 @@ export function CookScreen() {
               onError={() => setIframeError(true)}
             />
           )}
-
-          {/* Loader while waiting */}
           {!iframeLoaded && !iframeError && (
             <div className="absolute inset-0 flex items-center justify-center bg-white">
-              <p className="text-gray-500">Loading recipe preview…</p>
+              <p className="text-gray-500">Loading recipe preview...</p>
             </div>
           )}
-
-          {/* Fallback panel */}
           {iframeError && (
             <div className="bg-amber-50 p-6 rounded-md flex flex-col gap-4">
               <div className="flex items-start gap-3 text-amber-700">
-                <AlertCircle size={24} className="flex-shrink-0" />
+                <AlertCircle size={24} />
                 <span className="text-sm">
-                  Oops! We couldn’t embed this recipe here. You can still use this recipe at the home cook's page below.
+                  Oops! We couldn&apos;t embed this recipe here. You can still support the home cook below.
                 </span>
               </div>
               <Button
