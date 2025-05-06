@@ -19,7 +19,8 @@ export function GroceryScreen() {
     aggregatedIngredients,
     groceryCheckedItems,
     toggleGroceryItem,
-    setIngredientTags
+    setIngredientTags,
+    totals // Add this to access meal totals
   } = usePlannerStore();
 
   const [showDiscretionary, setShowDiscretionary] = useState(false);
@@ -31,14 +32,14 @@ export function GroceryScreen() {
   const essentialItems = groceryItems
     .filter(item => {
       if (item.tags?.status === 'ignored') return false;
-      return item.tags?.importance === 'core' || item.neededFraction * 100 >= 5;
+      return item.tags?.importance === 'core' || item.neededFraction * 100 >= 20;
     })
     .sort(sortLogic(groupBySection, groceryCheckedItems));
 
   const discretionaryItems = groceryItems
     .filter(item => {
       if (item.tags?.status === 'ignored') return false;
-      return item.tags?.importance === 'optional' || item.neededFraction * 100 < 5;
+      return item.tags?.importance === 'optional' || item.neededFraction * 100 < 20;
     })
     .sort(sortLogic(groupBySection, groceryCheckedItems));
 
@@ -49,16 +50,6 @@ export function GroceryScreen() {
       i => groceryCheckedItems.has(i.packageId) && i.tags?.status !== 'owned'
     )
   ].reduce((sum, i) => sum + i.lineCost, 0);
-
-  const checkedOptionalCount = discretionaryItems.filter(i =>
-    groceryCheckedItems.has(i.packageId)
-  ).length;
-
-  const totalItemCount =
-    essentialItems.filter(i => i.tags?.status !== 'owned').length +
-    discretionaryItems.filter(
-      i => groceryCheckedItems.has(i.packageId) && i.tags?.status !== 'owned'
-    ).length;
 
   /* ----------------------------- handlers ---------------------------------- */
   const handleUpdateTags = (packageId: string, tags: Partial<IngredientTags>) =>
@@ -117,8 +108,8 @@ export function GroceryScreen() {
           className="container mx-0 p-0 !px-0"
           style={{scrollPaddingTop: '80px', scrollPaddingBottom: '200px'}}
       >
-        {/* combined sticky header */}
-        <div className="sticky top-0 z-30 bg-white flex justify-between items-center mb-2 px-2">
+        {/* header */}
+        <div className="bg-white flex justify-between items-center mb-2 px-2">
           <span className="text-xl font-bold">Shopping List</span>
           <button
               onClick={() => setGroupBySection(!groupBySection)}
@@ -133,34 +124,52 @@ export function GroceryScreen() {
 
         {/* ---------------- Essential Card ---------------- */}
         <Card>
-          {/* enlarged sticky header */}
-          <div className="sticky top-0 z-20 bg-white border-b shadow-sm !px-0 !py-2">
-            {/* Row 1: Title only */}
-            <div className="flex justify-center items-center !py-0">
-              <span className="text-lg font-bold">Essential Items</span>
-            </div>
+          <CardHeader className="p-0">
+            <CardTitle>
+              <div className="w-full bg-gray-200">
+                {/* Row 1: Similar to discretionary */}
+                <div className="flex justify-between items-center py-2 px-4">
+                  <div className="flex items-center gap-2">
+                    {/* Empty to match structure */}
+                  </div>
+                  {/* No chevron since this doesn't collapse */}
+                </div>
 
-            {/* Row 2: Column headers */}
-            <div className="flex justify-end items-center px-4 py-2 border-b">
-              <div className="flex items-center gap-6 text-sm font-semibold text-gray-600">
-                <span className="min-w-[2rem] text-center">Qty</span>
-                <span className="min-w-[3rem] text-center">Each</span>
-                <span className="min-w-[3rem] text-center">Total</span>
-                <span className="min-w-[3rem] text-center">Savings</span>
-                <span className="min-w-[1.5rem] text-center"/>
+                {/* Row 2: Column headers */}
+                <div className="flex justify-between items-center px-4 py-2 border-b">
+                  <div className="flex-1">
+                    <span className="text-lg font-bold">Essentials</span>
+                  </div>
+
+                  <div className="flex items-center">
+                    {/* Qty column header */}
+                    <div className="w-16 text-right font-semibold text-sm text-gray-600">
+                      Qty
+                    </div>
+
+                    {/* Each column header */}
+                    <div className="w-20 text-right font-semibold text-sm text-gray-600">
+                      Each
+                    </div>
+
+                    {/* Total column header */}
+                    <div className="w-20 text-right font-semibold text-sm text-gray-600">
+                      Total
+                    </div>
+                  </div>
+                </div>
               </div>
-            </div>
-          </div>
-
-          <CardContent className="!p-0">
-            {essentialItems.length ? (
-                renderItems(essentialItems)
-            ) : (
-                <p className="p-2 text-center text-gray-500">
-                  Select some meals to generate your shopping list
-                </p>
-            )}
-          </CardContent>
+              <CardContent className="!p-0">
+                {essentialItems.length ? (
+                  renderItems(essentialItems)
+                ) : (
+                  <p className="p-2 text-center text-gray-500">
+                    Select some meals to generate your shopping list
+                  </p>
+                )}
+              </CardContent>
+            </CardTitle>
+          </CardHeader>
         </Card>
 
         {/* ---------------- Optional Card ---------------- */}
@@ -169,26 +178,36 @@ export function GroceryScreen() {
               <CardHeader className="p-0">
                 <CardTitle>
                   <Collapsible open={showDiscretionary} onOpenChange={setShowDiscretionary}>
-                    <CollapsibleTrigger className="w-full">
+                    <CollapsibleTrigger className="w-full bg-gray-200">
                       {/* Row 1: Title and selection count */}
-                      <div className="flex justify-between items-center py-2  px-4">
+                      <div className="flex justify-between items-center py-2 px-4">
                         <div className="flex items-center gap-2">
-                          <span className="text-lg font-bold">Optional Items</span>
-                          <span className="text-sm font-normal text-gray-500">
-                            ({checkedOptionalCount}/{discretionaryItems.length} selected)
-                          </span>
+
                         </div>
                         {showDiscretionary ? <ChevronUp size={20}/> : <ChevronDown size={20}/>}
                       </div>
 
                       {/* Row 2: Column headers */}
-                      <div className="flex justify-end items-center px-4 py-2 border-b">
-                        <div className="flex items-center gap-6 text-sm font-semibold text-gray-600">
-                          <span className="min-w-[2rem] text-center">Qty</span>
-                          <span className="min-w-[3rem] text-center">Each</span>
-                          <span className="min-w-[3rem] text-center">Total</span>
-                          <span className="min-w-[3rem] text-center">Savings</span>
-                          <span className="min-w-[1.5rem] text-center"/>
+                      <div className="flex justify-between items-center px-4 py-2 border-b">
+                        <div className="flex-1">
+                          <span className="text-lg font-bold">Discretionary</span>
+                        </div>
+
+                        <div className="flex items-center">
+                          {/* Qty column header - exactly matching width */}
+                          <div className="w-16 text-right font-semibold text-sm text-gray-600">
+                          Qty
+                          </div>
+
+                          {/* Each column header - exactly matching width */}
+                          <div className="w-20 text-right font-semibold text-sm text-gray-600">
+                            Each
+                          </div>
+
+                          {/* Total column header - exactly matching width */}
+                          <div className="w-20 text-right font-semibold text-sm text-gray-600">
+                            Total
+                          </div>
                         </div>
                       </div>
                     </CollapsibleTrigger>
@@ -204,13 +223,27 @@ export function GroceryScreen() {
             </Card>
         )}
 
-        {/* bottom summary */}
-        <div className="fixed bottom-0 left-0 right-0 bg-white border-t p-4 shadow-lg">
-          <div className="container mx-auto flex justify-between items-center">
-            <p className="text-sm text-gray-500">{totalItemCount} items to buy</p>
-            <p className="text-lg">
-              Total: <span className="font-bold">${groceryTotal.toFixed(2)}</span>
-            </p>
+        {/* Bottom summary bar */}
+        <div className="fixed bottom-0 left-0 right-0 bg-gray-200 border-t py-2 px-3 shadow-lg pb-4">
+          <div className="container mx-auto">
+            {/* TOTALS header */}
+            <div className="text-center mb-1">
+              <span className="font-bold text-lg">TOTALS</span>
+            </div>
+
+            {/* Stats row */}
+            <div className="flex justify-around items-center">
+              <div className="flex items-center gap-8">
+                <div>
+                  <span>Meal Cost: </span>
+                  <span className="font-bold">${totals().saleTotal.toFixed(2)}</span>
+                </div>
+                <div>
+                  <span>Grocery Cost: </span>
+                  <span className="font-bold">${groceryTotal.toFixed(2)}</span>
+                </div>
+              </div>
+            </div>
           </div>
         </div>
       </div>
