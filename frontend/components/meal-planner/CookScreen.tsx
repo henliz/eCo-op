@@ -1,21 +1,29 @@
-import React, { useState } from 'react';
+import React, { useState, useMemo } from 'react';
+import { usePlannerStore, type Recipe } from './usePlannerStore';
 
 const placeholderImage = '/Robo_Research.png'; // replace with your image path
-const sampleRecipes = [
-  'Spaghetti Bolognese',
-  'Chicken Stir Fry',
-  'Veggie Tacos',
-  'Grilled Salmon',
-];
 
 export function CookScreen() {
   const [choice, setChoice] = useState<string>('');
+  const { selectedMeals, meals } = usePlannerStore();
+
+  // Derive selected recipe names
+  const options = useMemo<string[]>(() => {
+    const all: Recipe[] = [
+      ...meals.breakfast,
+      ...meals.lunch,
+      ...meals.dinner,
+    ];
+    return all
+      .filter((r) => selectedMeals.has(r.url))
+      .map((r) => r.name);
+  }, [selectedMeals, meals]);
 
   return (
     <div className="flex flex-col items-center mt-8 space-y-6">
       {/* Avatar + persistent speech bubble */}
       <div className="flex items-start space-x-4">
-        {/* Robot/Chef image */}
+        {/* Chef image */}
         <img
           src={placeholderImage}
           alt="Chef"
@@ -40,20 +48,21 @@ export function CookScreen() {
             list="recipes"
             value={choice}
             onChange={(e) => setChoice(e.target.value)}
-            placeholder="Search or select a meal..."
+            placeholder={
+              options.length > 0 ? 'Search or select a meal...' : 'No recipes selected'
+            }
             className="w-full border border-blue-300 rounded px-3 py-2 focus:outline-none focus:ring focus:border-blue-400"
           />
           <datalist id="recipes">
-            {sampleRecipes.map((r) => (
+            {options.map((r) => (
               <option key={r} value={r} />
             ))}
           </datalist>
         </div>
       </div>
 
-      {/* Conditional content below bubble */}
       {choice ? (
-        /* Show iframe when a choice is made */
+        // Show iframe when a choice is made
         <div className="w-full max-w-3xl h-[60vh] border rounded overflow-hidden">
           <iframe
             src={choice} /* replace with actual link/pdf */
@@ -62,7 +71,7 @@ export function CookScreen() {
           />
         </div>
       ) : (
-        /* Prompt when no choice */
+        // Prompt when no choice
         <p className="text-gray-600 text-center">
           Select a recipe to begin cooking.
         </p>
