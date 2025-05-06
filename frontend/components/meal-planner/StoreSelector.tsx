@@ -23,7 +23,7 @@ export default function StoreSelector() {
 
   return (
     <motion.section
-      className="py-16 bg-gray-50"
+      className="py-2 bg-gray-50"
       initial={{ opacity: 0, y: 20 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.5, ease: 'easeOut' }}
@@ -35,7 +35,7 @@ export default function StoreSelector() {
           {selectedStore && !isLoading && isDataLoaded ? (
             <motion.div
               key="selected"
-              className="text-center mb-6 p-4 bg-green-50 rounded-lg"
+              className="text-center mb-2 p-2 bg-green-50 rounded-lg"
               initial={{ opacity: 0, y: -10 }}
               animate={{ opacity: 1, y: 0 }}
               exit={{ opacity: 0, y: -10 }}
@@ -53,33 +53,33 @@ export default function StoreSelector() {
           ) : !isLoading ? (
             <motion.div
               key="prompt"
-              className="text-center mb-6 p-4 bg-orange-50 rounded-lg text-gray-700"
+              className="text-center mb-2 p-2 bg-orange-50 rounded-lg text-gray-700"
               initial={{ opacity: 0, y: -10 }}
               animate={{ opacity: 1, y: 0 }}
               exit={{ opacity: 0, y: -10 }}
               transition={{ duration: 0.3 }}
             >
-              Please select a store to view available meal plans
+              Please select a store to continue
             </motion.div>
           ) : null}
         </AnimatePresence>
 
         {/* Header */}
-        <div className="bg-[#5BC4B4] rounded-lg px-6 py-4 mb-8">
-          <h2 className="font-bold text-xs sm:text-sm md:text-lg lg:text-xl xl:text-2xl leading-snug">
+        <div className="bg-[#5BC4B4] rounded-lg px-3 py-4 mt-2 flex items-center justify-center min-h-[70px]">
+          <span className="font-bold text-xl sm:text-2xl md:text-3xl lg:text-4xl">
             Where are you shopping today?
-          </h2>
+          </span>
         </div>
 
         {/* Error message */}
         {error && (
-          <div className="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded mb-6">
-            {error}
-          </div>
+            <div className="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded mb-6">
+              {error}
+            </div>
         )}
 
         {/* MOBILE-ONLY: flex-row below md; desktop still flex-col→md:flex-row */}
-        <div className="flex flex-row md:flex-col md:flex-row items-start gap-5 py-8">
+        <div className="flex flex-row md:flex-col md:flex-row items-start gap-5 py-4">
           {/* Robot image */}
           <div className="w-1/3 text-center flex-shrink-0">
             <Image
@@ -139,17 +139,6 @@ export default function StoreSelector() {
           </div>
         )}
 
-        {/* Debug info */}
-        {process.env.NODE_ENV !== 'production' && (
-          <div className="mt-8 text-xs text-gray-400 border-t pt-4">
-            <p>
-              Debug: {selectedStore ? 'Store selected' : 'No store'} |{' '}
-              {isLoading ? 'Loading' : 'Not loading'} |{' '}
-              {isDataLoaded ? 'Data loaded' : 'No data'} |{' '}
-              {error ? `Error: ${error}` : 'No error'}
-            </p>
-          </div>
-        )}
       </div>
     </motion.section>
   );

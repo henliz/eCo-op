@@ -14,8 +14,8 @@ type View = 'store' | 'plan' | 'groceries';
 
 const tabs: { label: string; value: View }[] = [
   { label: '1. Store', value: 'store' },
-  { label: '2. Meals',   value: 'plan' },
-  { label: '3. Buy', value: 'groceries' },
+  { label: '2. Plan',   value: 'plan' },
+  { label: '3. Shop', value: 'groceries' },
 ];
 
 export default function MealPlannerPage() {
@@ -86,19 +86,8 @@ export default function MealPlannerPage() {
 
         {view === 'plan' && isTabEnabled('plan') && <MealPlanScreen />}
 
-        {view === 'plan' && !isTabEnabled('plan') && (
-          <div className="text-center p-8 text-gray-500">
-            Please select a store first to view available meal plans.
-          </div>
-        )}
-
         {view === 'groceries' && isTabEnabled('groceries') && <GroceryScreen />}
 
-        {view === 'groceries' && !isTabEnabled('groceries') && (
-          <div className="text-center p-8 text-gray-500">
-            Please select a store first to view grocery lists.
-          </div>
-        )}
       </div>
       <br></br>
       <Footer />
