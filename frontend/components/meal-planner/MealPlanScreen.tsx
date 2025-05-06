@@ -42,18 +42,16 @@ export function MealPlanScreen() {
     return (
       <Collapsible open={isOpen} onOpenChange={setIsOpen}>
         <CollapsibleTrigger className="w-full">
-          <div className="flex items-center justify-between p-1 bg-gray-50 rounded-lg">
-            <div className="flex items-center gap-2">
-              <h2 className="text-xl font-semibold">{title}</h2>
-            </div>
-            <div className="flex items-center gap-2">
+          <div className="flex items-center justify-between p-2 bg-gray-200 rounded-lg">
+            <span className="text-xl font-semibold">{title}</span>
+            <div className="flex items-center gap-3">
               <span className="text-sm">Meals: {summary[mealType]}</span>
-              <div className="text-sm text-green-600">
+              <span className="text-sm text-green-600">
                 Cost: ${sectionSaleTotal.toFixed(2)}
-              </div>
-              <div className="text-sm text-green-600 font-bold">
+              </span>
+              <span className="text-sm text-green-600 font-bold">
                 Save: ${sectionSavingsTotal.toFixed(2)}
-              </div>
+              </span>
               {isOpen ? <ChevronUp size={20} /> : <ChevronDown size={20} />}
             </div>
           </div>

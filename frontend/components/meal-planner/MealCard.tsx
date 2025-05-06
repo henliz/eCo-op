@@ -79,23 +79,26 @@ export function MealCard({
         {/* Fixed bottom multiplier controls */}
         {isSelected && (
 
-          <div className="absolute bottom-2 left-0 right-0 flex items-center justify-center">
-            <button
-              onClick={dec}
-              className="bg-gray-300 hover:bg-gray-400 w-12 h-10 flex items-center justify-center rounded-l"
-            >
-              <Minus size={20} />
-            </button>
-            <div className="bg-yellow-200 w-16 h-10 flex items-center justify-center font-bold text-lg">
-              x{multiplier}
+            <div className="absolute bottom-2 left-0 right-0 flex items-center justify-center">
+              <button
+                  onClick={dec}
+                  className="bg-gray-200 hover:bg-gray-400 w-12 h-10 flex items-center justify-center rounded-l"
+              >
+                <Minus size={20}/>
+              </button>
+              <div
+                  className="w-16 h-10 flex items-center justify-center font-bold text-lg"
+                  style={{backgroundColor: '#FFE6D9'}}
+              >
+                x{multiplier}
+              </div>
+              <button
+                  onClick={inc}
+                  className="bg-gray-200 hover:bg-gray-400 w-12 h-10 flex items-center justify-center rounded-r"
+              >
+                <Plus size={20}/>
+              </button>
             </div>
-            <button
-              onClick={inc}
-              className="bg-gray-300 hover:bg-gray-400 w-12 h-10 flex items-center justify-center rounded-r"
-            >
-              <Plus size={20} />
-            </button>
-          </div>
         )}
       </Card>
     </motion.div>
