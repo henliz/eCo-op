@@ -311,7 +311,7 @@ p {
 /* GRID */
 .grid {
   display: grid;
-  gap: 2rem;
+  gap: 1rem;
 }
 
 .grid-2 {
