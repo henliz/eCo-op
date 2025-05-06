@@ -44,8 +44,8 @@ export default function StoreSelector() {
             <Image
               src="/Robo_Chef.png"
               alt="Friendly chef robot"
-              width={180}
-              height={180}
+              width={190}
+              height={190}
               className="mx-auto"
             />
             {/* Legend */}
@@ -72,7 +72,7 @@ export default function StoreSelector() {
                   key={store.id}
                   onClick={() => store.isAvailable && handleStoreSelect(store.id)}
                   className={`
-                    px-6 py-3 rounded-full text-center text-lg font-medium transition
+                    px-6 py-3 rounded-[30px] text-center text-lg font-medium transition text-center
                     ${selectedStore === store.id
                       ? 'bg-[#5BC4B4] text-white'
                       : store.isAvailable
