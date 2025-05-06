@@ -17,6 +17,17 @@ export default function Header() {
     return () => window.removeEventListener("resize", checkMobile);
   }, []);
 
+  // only this block changed:
+  const mobileNavItems = [
+    { label: 'How It Works',   href: '/#how-it-works', external: false },
+    { label: 'Features',       href: '#features',       external: false },
+    {
+      label:    'Feedback Form',
+      href:     'https://docs.google.com/forms/d/e/1FAIpQLSeaWg3pAelFtLZTBslhFiI_wxldA6muBfeidd_eTpIYTs5ZQQ/viewform?usp=header',
+      external: true,
+    },
+  ];
+
   return (
     <header>
       <div className="container">
@@ -34,7 +45,14 @@ export default function Header() {
           {/* Desktop nav: hidden on mobile, flex from md up */}
           <div className="nav-links hidden md:flex items-center space-x-6">
             <Link href="/#how-it-works" scroll={true}>How It Works</Link>
-            <Link href="/#features" scroll={true}>Features</Link>
+            <Link href="/#features"      scroll={true}>Features</Link>
+            <a
+              href="https://docs.google.com/forms/d/e/1FAIpQLSeaWg3pAelFtLZTBslhFiI_wxldA6muBfeidd_eTpIYTs5ZQQ/viewform?usp=header"
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              Feedback Form
+            </a>
             <Link href="/plan" className="header-cta">Try It Free</Link>
           </div>
 
@@ -52,27 +70,47 @@ export default function Header() {
         {isMobile && isMobileMenuOpen && (
           <nav className="md:hidden absolute top-full left-0 w-full bg-green-100 shadow-lg z-50">
             <div className="mx-auto max-w-md rounded-lg overflow-hidden mt-2">
-              {[
-                ['How It Works',  '/#how-it-works'],
-                ['Features',      '#features'],
-              ].map(([label, href], i) => (
-                <Link
-                  key={i}
-                  href={href}
-                  onClick={() => setIsMobileMenuOpen(false)}
-                  className="
-                    block w-full
-                    px-6 py-6         /* extra vertical padding */
-                    text-lg font-medium
-                    text-gray-800
-                    hover:bg-green-200
-                    border-b last:border-0
-                    text-center
-                  "
-                >
-                  {label}
-                </Link>
-              ))}
+              {mobileNavItems.map((item, i) =>
+                item.external ? (
+                  // external link opens new tab
+                  <a
+                    key={i}
+                    href={item.href}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    onClick={() => setIsMobileMenuOpen(false)}
+                    className="
+                      block w-full
+                      px-6 py-6
+                      text-lg font-medium
+                      text-gray-800
+                      hover:bg-green-200
+                      border-b last:border-0
+                      text-center
+                    "
+                  >
+                    {item.label}
+                  </a>
+                ) : (
+                  // internal Next.js link
+                  <Link
+                    key={i}
+                    href={item.href}
+                    onClick={() => setIsMobileMenuOpen(false)}
+                    className="
+                      block w-full
+                      px-6 py-6
+                      text-lg font-medium
+                      text-gray-800
+                      hover:bg-green-200
+                      border-b last:border-0
+                      text-center
+                    "
+                  >
+                    {item.label}
+                  </Link>
+                )
+              )}
 
               {/* Full-width apricot “Try It Free” row */}
               <Link
@@ -80,7 +118,7 @@ export default function Header() {
                 onClick={() => setIsMobileMenuOpen(false)}
                 className="
                   block w-full
-                  px-6 py-6         /* match the others */
+                  px-6 py-6
                   text-lg font-semibold
                   text-white
                   bg-orange-300 hover:bg-orange-400
@@ -92,8 +130,6 @@ export default function Header() {
             </div>
           </nav>
         )}
-
-
       </div>
     </header>
   );
