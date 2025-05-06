@@ -15,12 +15,9 @@ export default function StoreSelector() {
     availableStores
   } = usePlannerStore();
 
-  // Handle store selection
   const handleStoreSelect = (storeId: string) => {
     setSelectedStore(storeId);
-    if (!isDataLoaded) {
-      fetchMealData();
-    }
+    if (!isDataLoaded) fetchMealData();
   };
 
   return (
@@ -40,10 +37,10 @@ export default function StoreSelector() {
           </div>
         )}
 
-        {/* Content with image and buttons - with clear spacing */}
-        <div className="flex flex-col md:flex-row items-start gap-8 py-8">
+        {/* 🔥 MOBILE-ONLY: flex-row below md; desktop still flex-col→md:flex-row */}
+        <div className="flex flex-row md:flex-col md:flex-row items-start gap-8 py-8">
           {/* Robot image */}
-          <div className="text-center">
+          <div className="w-1/3 text-center flex-shrink-0">
             <Image
               src="/Robo_Chef.png"
               alt="Friendly chef robot"
@@ -51,32 +48,33 @@ export default function StoreSelector() {
               height={180}
               className="mx-auto"
             />
-            {/* Legend button showing what grey means */}
+            {/* Legend */}
             <div className="mt-4 text-center">
               <button
                 className="
-                  px-6 py-3 rounded-full text-center text-lg font-medium
+                  px-6 py-3 rounded-full text-lg font-medium
                   bg-gray-200 text-gray-500 opacity-70 cursor-default
                 "
               >
                 Coming Soon
               </button>
-              <p className="mt-2 text-gray-600">Greyed stores are not yet available</p>
+              <p className="mt-2 text-gray-600">
+                Greyed stores are not yet available
+              </p>
             </div>
           </div>
 
-          {/* Store buttons - in a separate container with explicit spacing */}
-          <div className="mt-8 md:mt-0">
-            <div className="grid grid-cols-2 md:grid-cols-2 gap-3">
+          {/* Store buttons: NO top margin on mobile so they sit side-by-side */}
+          <div className="">
+            <div className="grid grid-cols-2 gap-3">
               {availableStores.map(store => (
                 <button
                   key={store.id}
                   onClick={() => store.isAvailable && handleStoreSelect(store.id)}
                   className={`
-                    px-6 py-3 rounded-full text-center text-lg font-medium
-                    transition
+                    px-6 py-3 rounded-full text-center text-lg font-medium transition
                     ${selectedStore === store.id
-                      ? 'bg-blue-600 text-white'
+                      ? 'bg-[#5BC4B4] text-white'
                       : store.isAvailable
                         ? 'bg-orange-200 text-gray-800 hover:bg-orange-300'
                         : 'bg-gray-200 text-gray-500'}
@@ -103,7 +101,8 @@ export default function StoreSelector() {
         {selectedStore && !isLoading && isDataLoaded && (
           <div className="text-center mt-6 p-4 bg-green-50 rounded-lg">
             <p className="text-gray-700">
-              You&apos;ve selected <span className="font-bold">
+              You&apos;ve selected{' '}
+              <span className="font-bold">
                 {availableStores.find(s => s.id === selectedStore)?.name}
               </span>.
               <br />
@@ -122,9 +121,10 @@ export default function StoreSelector() {
         {/* Debug info */}
         {process.env.NODE_ENV !== 'production' && (
           <div className="mt-8 text-xs text-gray-400 border-t pt-4">
-            <p>Debug: {selectedStore ? 'Store selected' : 'No store'} |
-              {isLoading ? 'Loading' : 'Not loading'} |
-              {isDataLoaded ? 'Data loaded' : 'No data'} |
+            <p>
+              Debug: {selectedStore ? 'Store selected' : 'No store'} |{' '}
+              {isLoading ? 'Loading' : 'Not loading'} |{' '}
+              {isDataLoaded ? 'Data loaded' : 'No data'} |{' '}
               {error ? `Error: ${error}` : 'No error'}
             </p>
           </div>
