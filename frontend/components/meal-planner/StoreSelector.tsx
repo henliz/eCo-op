@@ -47,7 +47,7 @@ export default function StoreSelector() {
                   {availableStores.find(s => s.id === selectedStore)?.name}
                 </span>.
                 <br />
-                Now you can proceed to the &quot;Pick Meals&quot; tab to start planning your meals!
+                Now you can proceed to the &quot;Plan&quot; tab to start planning your meals!
               </p>
             </motion.div>
           ) : !isLoading ? (

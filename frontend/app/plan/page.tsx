@@ -41,7 +41,7 @@ export default function MealPlannerPage() {
   return (
     <>
       <Header />
-      <div className="container mx-auto p-2 min-h-screen">
+      <div className="container mx-auto p-1 min-h-screen">
         {/* --- OVERSIZED PILL TOGGLE --- */}
         <div className="relative mx-auto mt-2 mb-2 w-full max-w-md h-12">
           <div className="absolute inset-0 bg-teal-100 rounded-full" />

@@ -83,7 +83,7 @@ export function GroceryScreen() {
     if (groupBySection) {
       return getGroupedItems(items).map(g => (
         <div key={g.section} className="mb-2">
-          <div className="bg-gray-100 p-2 font-medium text-sm flex items-center">
+          <div className="bg-gray-100 p-0 font-medium text-sm flex items-center">
             <Tag size={14} className="mr-1" />
             {g.section}
           </div>
@@ -113,109 +113,117 @@ export function GroceryScreen() {
 
   /* ----------------------------- JSX --------------------------------------- */
   return (
-    <div
-      className="container mx-auto p-4"
-      style={{ scrollPaddingTop: '80px', scrollPaddingBottom: '200px' }}
-    >
-      {/* combined sticky header */}
-      <div className="sticky top-0 z-30 bg-white flex justify-between items-center mb-4">
-        <h1 className="text-xl font-bold">Shopping List</h1>
-        <button
-          onClick={() => setGroupBySection(!groupBySection)}
-          className={`flex items-center gap-1 px-3 py-1 rounded-md text-sm ${
-            groupBySection ? 'bg-blue-100 text-blue-700' : 'bg-gray-100'
-          }`}
-        >
-          <Tag size={16} />
-          {groupBySection ? 'Grouped by Section' : 'Group by Section'}
-        </button>
-      </div>
+      <div
+          className="container mx-0 p-0 !px-0"
+          style={{scrollPaddingTop: '80px', scrollPaddingBottom: '200px'}}
+      >
+        {/* combined sticky header */}
+        <div className="sticky top-0 z-30 bg-white flex justify-between items-center mb-2 px-2">
+          <span className="text-xl font-bold">Shopping List</span>
+          <button
+              onClick={() => setGroupBySection(!groupBySection)}
+              className={`flex items-center gap-0 px-0 py-0 rounded-md text-sm ${
+                  groupBySection ? 'bg-blue-100 text-blue-700' : 'bg-gray-100'
+              }`}
+          >
+            <Tag size={16}/>
+            {groupBySection ? 'Grouped by Section' : 'Group by Section'}
+          </button>
+        </div>
 
-      {/* ---------------- Essential Card ---------------- */}
-      <Card>
-        {/* enlarged sticky header */}
-        <div className="sticky top-16 z-20 bg-white border-b shadow-sm">
-          <div className="flex justify-between items-center px-4 py-4">
-            <span className="text-lg font-bold">Essential Items</span>
-            <div className="flex items-center gap-6 text-sm font-semibold text-gray-600">
-              <span className="min-w-[2rem] text-center">Qty</span>
-              <span className="min-w-[3rem] text-center">Each</span>
-              <span className="min-w-[3rem] text-center">Total</span>
-              <span className="min-w-[3rem] text-center">Savings</span>
-              <span className="min-w-[1.5rem] text-center" />
+        {/* ---------------- Essential Card ---------------- */}
+        <Card>
+          {/* enlarged sticky header */}
+          <div className="sticky top-0 z-20 bg-white border-b shadow-sm !px-0 !py-2">
+            {/* Row 1: Title only */}
+            <div className="flex justify-center items-center !py-0">
+              <span className="text-lg font-bold">Essential Items</span>
+            </div>
+
+            {/* Row 2: Column headers */}
+            <div className="flex justify-end items-center px-4 py-2 border-b">
+              <div className="flex items-center gap-6 text-sm font-semibold text-gray-600">
+                <span className="min-w-[2rem] text-center">Qty</span>
+                <span className="min-w-[3rem] text-center">Each</span>
+                <span className="min-w-[3rem] text-center">Total</span>
+                <span className="min-w-[3rem] text-center">Savings</span>
+                <span className="min-w-[1.5rem] text-center"/>
+              </div>
             </div>
           </div>
-        </div>
 
-        <CardContent className="p-0">
-          {essentialItems.length ? (
-            renderItems(essentialItems)
-          ) : (
-            <p className="p-4 text-center text-gray-500">
-              Select some meals to generate your shopping list
-            </p>
-          )}
-        </CardContent>
-      </Card>
-
-      {/* ---------------- Optional Card ---------------- */}
-      {discretionaryItems.length > 0 && (
-        <Card>
-          <CardHeader className="py-2">
-            <CardTitle>
-              <Collapsible open={showDiscretionary} onOpenChange={setShowDiscretionary}>
-                <CollapsibleTrigger className="w-full">
-                  <div className="flex justify-between items-center px-4 py-4">
-                    <div className="flex items-center gap-2">
-                      <span className="text-lg font-bold">Optional Items</span>
-                      <span className="text-sm font-normal text-gray-500">
-                        ({checkedOptionalCount}/{discretionaryItems.length} selected)
-                      </span>
-                    </div>
-                    <div className="flex items-center gap-6">
-                      <div className="flex items-center gap-6 text-sm font-semibold text-gray-600">
-                        <span className="min-w-[2rem] text-center">Qty</span>
-                        <span className="min-w-[3rem] text-center">Each</span>
-                        <span className="min-w-[3rem] text-center">Total</span>
-                        <span className="min-w-[3rem] text-center">Savings</span>
-                        <span className="min-w-[1.5rem] text-center" />
-                      </div>
-                      {showDiscretionary ? <ChevronUp size={20} /> : <ChevronDown size={20} />}
-                    </div>
-                  </div>
-                </CollapsibleTrigger>
-
-                <CollapsibleContent>
-                  <CardContent className="p-0">
-                    {renderItems(discretionaryItems)}
-                  </CardContent>
-                </CollapsibleContent>
-              </Collapsible>
-            </CardTitle>
-          </CardHeader>
+          <CardContent className="!p-0">
+            {essentialItems.length ? (
+                renderItems(essentialItems)
+            ) : (
+                <p className="p-2 text-center text-gray-500">
+                  Select some meals to generate your shopping list
+                </p>
+            )}
+          </CardContent>
         </Card>
-      )}
 
-      {/* bottom summary */}
-      <div className="fixed bottom-0 left-0 right-0 bg-white border-t p-4 shadow-lg">
-        <div className="container mx-auto flex justify-between items-center">
-          <p className="text-sm text-gray-500">{totalItemCount} items to buy</p>
-          <p className="text-lg">
-            Total: <span className="font-bold">${groceryTotal.toFixed(2)}</span>
-          </p>
+        {/* ---------------- Optional Card ---------------- */}
+        {discretionaryItems.length > 0 && (
+            <Card>
+              <CardHeader className="p-0">
+                <CardTitle>
+                  <Collapsible open={showDiscretionary} onOpenChange={setShowDiscretionary}>
+                    <CollapsibleTrigger className="w-full">
+                      {/* Row 1: Title and selection count */}
+                      <div className="flex justify-between items-center py-2  px-4">
+                        <div className="flex items-center gap-2">
+                          <span className="text-lg font-bold">Optional Items</span>
+                          <span className="text-sm font-normal text-gray-500">
+                            ({checkedOptionalCount}/{discretionaryItems.length} selected)
+                          </span>
+                        </div>
+                        {showDiscretionary ? <ChevronUp size={20}/> : <ChevronDown size={20}/>}
+                      </div>
+
+                      {/* Row 2: Column headers */}
+                      <div className="flex justify-end items-center px-4 py-2 border-b">
+                        <div className="flex items-center gap-6 text-sm font-semibold text-gray-600">
+                          <span className="min-w-[2rem] text-center">Qty</span>
+                          <span className="min-w-[3rem] text-center">Each</span>
+                          <span className="min-w-[3rem] text-center">Total</span>
+                          <span className="min-w-[3rem] text-center">Savings</span>
+                          <span className="min-w-[1.5rem] text-center"/>
+                        </div>
+                      </div>
+                    </CollapsibleTrigger>
+
+                    <CollapsibleContent>
+                      <CardContent className="p-0">
+                        {renderItems(discretionaryItems)}
+                      </CardContent>
+                    </CollapsibleContent>
+                  </Collapsible>
+                </CardTitle>
+              </CardHeader>
+            </Card>
+        )}
+
+        {/* bottom summary */}
+        <div className="fixed bottom-0 left-0 right-0 bg-white border-t p-4 shadow-lg">
+          <div className="container mx-auto flex justify-between items-center">
+            <p className="text-sm text-gray-500">{totalItemCount} items to buy</p>
+            <p className="text-lg">
+              Total: <span className="font-bold">${groceryTotal.toFixed(2)}</span>
+            </p>
+          </div>
         </div>
       </div>
-    </div>
   );
 }
 
 /* ----------------------------- helpers ---------------------------------- */
 function sortLogic(
-  groupBy: boolean,
-  checked: Set<string>
+    groupBy: boolean,
+    checked: Set<string>
 ): (a: AggregatedItem, b: AggregatedItem) => number {
   return (a, b) => {
-    const statusOrder: Record<'bought' | 'owned' | 'ignored', number> = { bought: 2, owned: 1, ignored: 0 };
+    const statusOrder: Record<'bought' | 'owned' | 'ignored', number> = {bought: 2, owned: 1, ignored: 0};
     const aStatus = a.tags?.status || 'bought';
     const bStatus = b.tags?.status || 'bought';
     if (aStatus !== bStatus) return statusOrder[aStatus] - statusOrder[bStatus];

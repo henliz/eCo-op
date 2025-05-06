@@ -277,7 +277,7 @@ p {
 /* CARDS */
 .card {
   background: white;
-  border-radius: 10px;
+  border-radius: 0px;
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
   overflow: hidden;
   transition: transform 0.3s, box-shadow 0.3s;
@@ -299,7 +299,7 @@ p {
 }
 
 .card-title {
-  font-size: 0.5rem;
+  font-size: 0rem;
   margin-bottom: 0rem;
 }
 
