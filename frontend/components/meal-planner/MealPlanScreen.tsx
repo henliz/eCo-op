@@ -94,7 +94,7 @@ export function MealPlanScreen() {
       </div>
 
       {/* Bottom summary bar */}
-      <div className="fixed bottom-0 left-0 right-0 bg-gray-200 border-t py-2 px-3 shadow-lg">
+      <div className="fixed bottom-0 left-0 right-0 bg-gray-200 border-t py-2 px-3 shadow-lg pb-4">
         <div className="container mx-auto">
           {/* TOTALS header */}
           <div className="text-center mb-1">
