@@ -47,9 +47,9 @@ export function MealPlanScreen() {
               <h2 className="text-xl font-semibold">{title}</h2>
             </div>
             <div className="flex items-center gap-2">
-              <span className="text-sm">{summary[mealType]} meals selected</span>
+              <span className="text-sm">Meals: {summary[mealType]}</span>
               <div className="text-sm text-green-600">
-                Sale: ${sectionSaleTotal.toFixed(2)}
+                Cost: ${sectionSaleTotal.toFixed(2)}
               </div>
               <div className="text-sm text-green-600 font-bold">
                 Save: ${sectionSavingsTotal.toFixed(2)}

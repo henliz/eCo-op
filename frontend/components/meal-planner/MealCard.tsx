@@ -1,12 +1,10 @@
-// components/meal-planner/MealCard.tsx
 'use client';
 
 import React from 'react';
-import { motion } from 'framer-motion';
+import { motion } from 'framer-motion'; // Make sure this import is correct
 import {
   Card,
   CardHeader,
-  CardContent,
   CardTitle,
 } from '@/components/ui/card';
 import { type Recipe } from './usePlannerStore';
@@ -36,6 +34,9 @@ export function MealCard({
     onMultiplierChange(recipe.url, multiplier + 1);
   };
 
+  // Calculate savings
+  const hasSavings = recipe.totalSavings > 0;
+
   return (
     <motion.div
       key={recipe.url}
@@ -48,62 +49,54 @@ export function MealCard({
       <Card
         className={`
           transition-colors
-          w-full flex flex-col
-          min-h-[14rem] max-h-[18rem] overflow-hidden
-          ${isSelected
-            ? 'bg-teal-100'
-            : 'bg-gray-100 hover:bg-gray-200'}
+          w-full flex flex-col gap-0
+          min-h-[10rem] max-h-[10rem] overflow-hidden
+          ${isSelected ? 'bg-teal-100' : 'bg-gray-100 hover:bg-gray-200'}
         `}
       >
-        {/* Header + multiplier (mobile: stacked; desktop: inline) */}
-        <CardHeader className="!pt-1 !pb-1 !px-2 sm:!px-3 flex flex-col md:flex-row md:items-center md:justify-between">
+        <CardHeader className="!pl-3 !pr-2 !mb-0">
           <CardTitle className="text-sm sm:text-lg font-semibold leading-snug break-words">
             {recipe.name}
+            <div className="flex justify-between items-center text-xs sm:text-sm !ml-1 !mr-3 !mt-2">
+              <p className="text-gray-500 !mb-0">
+                Servings: {recipe.servings}
+              </p>
+              <p className="text-gray-500 !mb-0">
+                Cost: <span className="font-bold">${recipe.salePrice.toFixed(2)}</span>
+              </p>
+            </div>
+            {/* Savings below Cost, right-aligned */}
+            {hasSavings && (
+                <div className="flex justify-end text-xs sm:text-sm !mr-3">
+                <p className="text-green-600 font-bold !mb-0">
+                  Save: ${recipe.totalSavings.toFixed(2)}
+                </p>
+              </div>
+            )}
           </CardTitle>
-          <div className="mt-1 md:mt-0 bg-gray-100 rounded-md px-1 sm:px-2 py-0 flex items-center justify-center gap-1 sm:gap-2 w-full md:w-auto">
-            <button
-              onClick={dec}
-              disabled={multiplier === 0}
-              className="w-5 h-7 sm:w-6 sm:h-6 flex items-center justify-center rounded hover:bg-gray-200 disabled:opacity-50"
-            >
-              <Minus size={14} />
-            </button>
-            <span className="text-xs sm:text-sm font-medium">{multiplier}×</span>
-            <button
-              onClick={inc}
-              className="w-5 h-5 sm:w-6 sm:h-6 flex items-center justify-center rounded hover:bg-gray-200"
-            >
-              <Plus size={14} />
-            </button>
-          </div>
         </CardHeader>
 
-        {/* Body */}
-        <CardContent
-          className="!p-1 sm:!p-3 flex flex-col sm:grid sm:grid-cols-[1fr_auto] gap-1 sm:gap-4 text-xs sm:text-sm"
-          style={{ overflowY: 'auto' }}
-        >
-          <div className="space-y-0.5">
-            <p className="text-gray-500">Servings: {recipe.servings}</p>
-            <p>
-              Regular:{' '}
-              <span className="line-through">
-                ${(recipe.regularPrice * multiplier).toFixed(2)}
-              </span>
-            </p>
-            <p>
-              Sale:{' '}
-              <span className="font-bold">
-                ${(recipe.salePrice * multiplier).toFixed(2)}
-              </span>
-            </p>
+        {/* Fixed bottom multiplier controls */}
+        {isSelected && (
+
+          <div className="absolute bottom-2 left-0 right-0 flex items-center justify-center">
+            <button
+              onClick={dec}
+              className="bg-gray-300 hover:bg-gray-400 w-12 h-10 flex items-center justify-center rounded-l"
+            >
+              <Minus size={20} />
+            </button>
+            <div className="bg-yellow-200 w-16 h-10 flex items-center justify-center font-bold text-lg">
+              x{multiplier}
+            </div>
+            <button
+              onClick={inc}
+              className="bg-gray-300 hover:bg-gray-400 w-12 h-10 flex items-center justify-center rounded-r"
+            >
+              <Plus size={20} />
+            </button>
           </div>
-          <div className="mt-1 sm:mt-0 flex items-center justify-center">
-            <p className="text-green-600 font-bold text-sm sm:text-lg">
-              Save ${(recipe.totalSavings * multiplier).toFixed(2)}
-            </p>
-          </div>
-        </CardContent>
+        )}
       </Card>
     </motion.div>
   );
