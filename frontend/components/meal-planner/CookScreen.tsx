@@ -70,8 +70,8 @@ export function CookScreen() {
         <Image
           src={placeholderImage}
           alt="Chef"
-          width={45}
-          height={45}
+          width={200}
+          height={200}
           className="rounded-full"
         />
         <div className="relative bg-blue-100 border border-blue-200 p-4 rounded-xl max-w-xs w-full">
