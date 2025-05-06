@@ -5,88 +5,88 @@ export default function MealPlan() {
   return (
     <section id="weekly-meal-plan">
       <div className="container">
-        <h2 className="section-title">This Week's Meal Plan</h2>
-        <p className="section-subtitle">Based on local grocery deals and your preferences</p>
+        <h2 className="section-title">This is What Your Meal Plan Could Look Like</h2>
+        <p className="section-subtitle">Based on local grocery deals and prior meals we've served</p>
         
         <div className="meal-carousel">
           <div className="meal-track">
             {/* First set of meals */}
             <div className="meal-card">
               <div className="meal-image">
-                <img src="/Meal1.png" alt="Teriyaki Chicken" />
+                <img src="/Meal1.png" alt="Ground Beef Tacos" />
               </div>
-              <h3>Teriyaki Chicken</h3>
+              <h3>Ground Beef Tacos</h3>
             </div>
             
             <div className="meal-card">
               <div className="meal-image">
-                <img src="/Meal2.png" alt="Veggie Pasta" />
+                <img src="/Meal2.png" alt="Pork Stir Fry" />
               </div>
-              <h3>Veggie Pasta</h3>
+              <h3>Pork Stir Fry</h3>
             </div>
             
             <div className="meal-card">
               <div className="meal-image">
-                <img src="/Meal3.png" alt="Fish Tacos" />
+                <img src="/Meal3.png" alt="Tilapia and Veggies" />
               </div>
-              <h3>Fish Tacos</h3>
+              <h3>Tilapia and Veggies</h3>
             </div>
             
             <div className="meal-card">
               <div className="meal-image">
-                <img src="/Meal4.png" alt="Beef Stir Fry" />
+                <img src="/Meal4.png" alt="Kale Soup and Toast" />
               </div>
-              <h3>Beef Stir Fry</h3>
+              <h3>Kale Soup and Toast</h3>
             </div>
             
             <div className="meal-card">
               <div className="meal-image">
-                <img src="/Meal5.png" alt="Vegetable Curry" />
+                <img src="/Meal5.png" alt="Egg Salad Sandwich" />
               </div>
-              <h3>Vegetable Curry</h3>
+              <h3>Egg Salad Sandwich</h3>
             </div>
             
             {/* Duplicate meals for seamless looping */}
             <div className="meal-card">
               <div className="meal-image">
-                <img src="/Meal1.png" alt="Teriyaki Chicken" />
+                <img src="/Meal1.png" alt="Ground Beef Tacos" />
               </div>
-              <h3>Teriyaki Chicken</h3>
+              <h3>Ground Beef Tacos</h3>
             </div>
             
             <div className="meal-card">
               <div className="meal-image">
-                <img src="/Meal2.png" alt="Veggie Pasta" />
+                <img src="/Meal2.png" alt="Pork Stir Fry" />
               </div>
-              <h3>Veggie Pasta</h3>
+              <h3>Pork Stir Fry</h3>
             </div>
             
             <div className="meal-card">
               <div className="meal-image">
-                <img src="/Meal3.png" alt="Fish Tacos" />
+                <img src="/Meal3.png" alt="Tilapia and Veggies" />
               </div>
-              <h3>Fish Tacos</h3>
+              <h3>Tilapia and Veggies</h3>
             </div>
             
             <div className="meal-card">
               <div className="meal-image">
-                <img src="/Meal4.png" alt="Beef Stir Fry" />
+                <img src="/Meal4.png" alt="Kale Soup and Toast" />
               </div>
-              <h3>Beef Stir Fry</h3>
+              <h3>Kale Soup and Toast</h3>
             </div>
             
             <div className="meal-card">
               <div className="meal-image">
-                <img src="/Meal5.png" alt="Vegetable Curry" />
+                <img src="/Meal5.png" alt="Egg Salad Sandwich" />
               </div>
-              <h3>Vegetable Curry</h3>
+              <h3>Egg Salad Sandwich</h3>
             </div>
           </div>
         </div>
         
         <div className="view-all-meals">
           <Link href="/plan">
-            <button className="btn-primary">View Full Menu</button>
+            <button className="btn-primary">View This Week's Menu</button>
           </Link>
         </div>
       </div>
