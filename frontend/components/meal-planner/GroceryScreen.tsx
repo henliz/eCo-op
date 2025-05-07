@@ -15,8 +15,8 @@ interface GroupedItems {
 
 interface GroceryTotals {
   mealCost: number;     // Cost of the portions used in recipes
-  leftoverCost: number; // Cost of the unused portions
-  totalCost: number;    // Total cost to purchase all selected items
+  futureUseCost: number; // Cost of the unused portions
+  groceryBill: number;  // Total cost to purchase all selected items
   totalSavings: number; // Savings on selected items
 }
 
@@ -50,45 +50,50 @@ export function GroceryScreen() {
     .sort(sortLogic(groupBySection, groceryCheckedItems));
 
   /* ------------------------------ totals ----------------------------------- */
-  // Calculate the new grocery totals
+  // Calculate the new grocery totals with corrected math
   const calculateGroceryTotals = (): GroceryTotals => {
     const allItems = [...essentialItems, ...discretionaryItems];
     let mealCost = 0;
-    let leftoverCost = 0;
-    let totalCost = 0;
+    let futureUseCost = 0;
+    let groceryBill = 0;
     let totalSavings = 0;
 
-    // Only consider items that are checked
+    // Only consider items that are checked and not owned
     const selectedItems = allItems.filter(item =>
       groceryCheckedItems.has(item.packageId) &&
       item.tags?.status !== 'owned'
     );
 
     selectedItems.forEach(item => {
-      // Calculate cost of portion used in recipes
-      const usedFraction = Math.min(item.neededFraction, 1);
-      const usedCost = item.packPrice * usedFraction;
+      // Quantity to purchase is always rounded up
+      const quantityToBuy = Math.ceil(item.neededFraction - 0.05);
+
+      // Calculate meal cost (portion actually used in recipes)
+      const usedCost = item.packPrice * item.neededFraction;
       mealCost += usedCost;
 
-      // Calculate cost of leftover portion
-      const leftoverFraction = Math.max(0, 1 - item.neededFraction);
-      const unusedCost = item.packPrice * leftoverFraction;
-      leftoverCost += unusedCost;
+      // Calculate future use cost (portion not used in current recipes)
+      const unusedCost = item.packPrice * Math.max(0, quantityToBuy - item.neededFraction);
+      futureUseCost += unusedCost;
 
-      // Calculate total cost (full package price)
-      totalCost += item.packPrice;
+      // Calculate total grocery bill (full packages purchased)
+      const totalItemCost = item.packPrice * quantityToBuy;
+      groceryBill += totalItemCost;
 
       // Calculate savings based on savings percentage
       if (item.savingsPercentage) {
-        const regularPrice = item.packPrice / (1 - item.savingsPercentage / 100);
-        totalSavings += regularPrice - item.packPrice;
+        // If we're saving 20%, then the sale price is 80% of regular price
+        // So regularPrice = salePrice / (1 - savingsPercentage/100)
+        const salePrice = totalItemCost; // totalItemCost is already using the sale price
+        const regularPrice = salePrice / (1 - item.savingsPercentage / 100);
+        totalSavings += (regularPrice - salePrice);
       }
     });
 
     return {
       mealCost,
-      leftoverCost,
-      totalCost,
+      futureUseCost,
+      groceryBill,
       totalSavings
     };
   };
@@ -284,11 +289,11 @@ export function GroceryScreen() {
                 </div>
                 <div className="flex flex-col items-end">
                   <span className="text-sm text-gray-600 text-right">Future Use</span>
-                  <span className="font-bold text-amber-600 text-right">${groceryTotals.leftoverCost.toFixed(2)}</span>
+                  <span className="font-bold text-amber-600 text-right">${groceryTotals.futureUseCost.toFixed(2)}</span>
                 </div>
                 <div className="flex flex-col items-end">
                   <span className="text-sm text-gray-600 text-right">Grocery Bill</span>
-                  <span className="font-bold text-right">${groceryTotals.totalCost.toFixed(2)}</span>
+                  <span className="font-bold text-right">${groceryTotals.groceryBill.toFixed(2)}</span>
                 </div>
                 <div className="flex flex-col items-end">
                   <span className="text-sm text-gray-600 text-right">Savings</span>

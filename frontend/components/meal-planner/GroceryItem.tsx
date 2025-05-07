@@ -13,7 +13,10 @@ interface GroceryItemProps {
 }
 
 export function GroceryItem({ item, isChecked, onToggle }: GroceryItemProps) {
-  const usagePercentage = (item.neededFraction * 100).toFixed(0);
+  // Calculate the correct usage percentage based on how much of the purchased quantity is used
+  const quantityToBuy = Math.ceil(item.neededFraction - 0.05);
+  const usagePercentage = ((item.neededFraction / quantityToBuy) * 100).toFixed(0);
+
   const status = item.tags?.status || 'bought';
   const storeSection = item.tags?.storeSection;
 
@@ -75,14 +78,14 @@ export function GroceryItem({ item, isChecked, onToggle }: GroceryItemProps) {
       <div className="flex items-center justify-between text-sm text-gray-700">
         {/* Usage percentage */}
         <div className="flex-1">
-          <span className="text-sm">{usagePercentage}% used up in meals</span>
+          <span className="text-sm">{usagePercentage}% used in meals</span>
         </div>
 
         {/* Right-aligned numeric data with consistent width */}
         <div className="flex items-center">
           {/* Quantity */}
           <div className="w-16 text-right font-medium">
-            {Math.ceil(item.neededFraction)}×
+            {quantityToBuy}×
           </div>
 
           {/* Each price */}
@@ -92,7 +95,7 @@ export function GroceryItem({ item, isChecked, onToggle }: GroceryItemProps) {
 
           {/* Total price */}
           <div className="w-20 text-right font-medium">
-            ${item.lineCost.toFixed(2)}
+            ${(quantityToBuy * item.packPrice).toFixed(2)}
           </div>
         </div>
       </div>
