@@ -13,7 +13,7 @@ const containerVariants = {
       when: 'beforeChildren',
       staggerChildren: 0.2,
       delayChildren: 0.2,
-      duration: 0.8,
+      duration: 0.2,
       ease: 'easeOut',
     },
   },
@@ -21,7 +21,7 @@ const containerVariants = {
 
 const childVariants = {
   hidden: { opacity: 0, y: 20 },
-  visible: { opacity: 1, y: 0, transition: { duration: 0.6, ease: 'easeOut' } },
+  visible: { opacity: 1, y: 0, transition: { duration: 0.2, ease: 'easeOut' } },
 };
 
 export default function EmailSignupBanner() {
