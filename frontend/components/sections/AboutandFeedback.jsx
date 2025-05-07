@@ -54,9 +54,6 @@ export default function AboutAndFeedback() {
 
           {/* Left text column */}
           <div className="md:basis-1/2 space-y-4">
-            <p className="text-gray-600">
-              Average savings of <span className="font-semibold">$58</span> per week
-            </p>
             <h3 className="text-3xl md:text-4xl font-bold text-gray-900">
               We’re On A Mission—Let’s Build This Together
             </h3>
