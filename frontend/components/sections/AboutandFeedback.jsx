@@ -15,21 +15,17 @@ const sectionVariants = {
 
 export default function AboutAndFeedback() {
   return (
-    <div className="scroll-mt-15 py-20" id="about">
+    <div className="scroll-mt-10 py-0" id="about">
       {/* --- Our Story --- */}
       <motion.section
-        className="pt-16"
+        className="pt-8"
         initial="hidden"
         whileInView="visible"
         viewport={{ once: true, amount: 0.3 }}
         variants={sectionVariants}
       >
         <div className="max-w-3xl mx-auto text-center px-4">
-          <img
-            src="/Henrietta_Headshot_small.jpg"
-            alt="Henrietta, founder of SmartCart"
-            className="mx-auto w-24 h-24 rounded-full border-2 border-[#4FD1C5] mb-6"
-          />
+
           <h2 className="text-4xl font-bold text-gray-900 mb-4">Our Story</h2>
           <p className="text-gray-700 leading-relaxed">
             Hi, I’m Henrietta! I started this because I saw families
@@ -37,28 +33,30 @@ export default function AboutAndFeedback() {
             Our mission is to deliver budget‑friendly, nutritious meal plans every week
             so you can eat well without the sticker shock.
           </p>
+          <img
+              src="/Henrietta_Headshot_small.jpg"
+              alt="Henrietta, founder of SmartCart"
+              className="mx-auto w-24 h-24 rounded-full border-2 border-[#4FD1C5] mb-6"
+          />
         </div>
       </motion.section>
 
       {/* --- Mission & Feedback Invite --- */}
       {/* slight minor delay on this section */}
       <motion.section
-        className="py-16"
-        initial="hidden"
-        whileInView="visible"
+          className="py-8"
+          initial="hidden"
+          whileInView="visible"
         viewport={{ once: true, amount: 0.3 }}
         variants={sectionVariants}
         transition={{ delay: 0.1 }}
       >
-        <div className="max-w-7xl mx-auto px-4 flex flex-col md:flex-row items-center justify-center gap-12">
+        <div className="max-w-7xl mx-auto px-4 flex flex-col md:flex-row items-center justify-center gap-6">
 
           {/* Left text column */}
-          <div className="md:basis-1/2 space-y-4">
-            <p className="text-gray-600">
-              Average savings of <span className="font-semibold">$58</span> per week
-            </p>
+          <div className="md:basis-1/2 space-y-1">
             <h3 className="text-3xl md:text-4xl font-bold text-gray-900">
-              We’re On A Mission—Let’s Build This Together
+              We’re On A Mission—<br></br>Let’s Build This Together
             </h3>
             <p className="text-gray-700 leading-relaxed">
               Skrimp exists to help families eat well on a budget. Our AI has already
