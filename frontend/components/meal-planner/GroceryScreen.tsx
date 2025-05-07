@@ -240,6 +240,9 @@ export function GroceryScreen() {
                       <div className="flex justify-between items-center px-4 py-2 border-b">
                         <div className="flex-1">
                           <span className="text-lg font-bold">Discretionary</span>
+                          <p className="font-normal">
+                              Most people will have these at home, but please check if you want to buy any optional items.
+                            </p>
                         </div>
 
                         <div className="flex items-center">
