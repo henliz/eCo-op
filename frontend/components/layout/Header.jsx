@@ -39,7 +39,7 @@ export default function Header() {
               alt="SmartCart logo"
               className="logo-icon h-8 w-auto"
             />
-            <span className="font-bold text-xl">skrimp</span>
+            <span className="font-bold text-xl">skrimp.ai</span>
           </Link>
 
           {/* Desktop nav: hidden on mobile, flex from md up */}

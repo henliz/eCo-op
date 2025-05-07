@@ -13,7 +13,7 @@ export default function FreeListPromo() {
        ▸  my‑40  = 10 rem top+bottom gap so it never hugs the hero
        ▸  container centers it like your other sections
        ▸  z‑20 lifts it above the hero background */
-    <section className="relative z-20 container mx-auto my-40">
+    <section className="relative z-20 container mx-auto my-20">
       <Card className="overflow-hidden shadow-lg">
         {/* gap‑8 adds breathing room between the image and the copy */}
         <div className="flex flex-col gap-8 md:flex-row">
@@ -30,7 +30,7 @@ export default function FreeListPromo() {
           </div>
 
           {/* ── Right: headline, copy, CTA ── */}
-          <CardContent className="flex w-full flex-col justify-center gap-6 p-8 md:w-1/2">
+          <CardContent className="flex w-full flex-col justify-center gap-1 px-8 md:w-1/2">
             <h2 className="text-3xl sm:text-4xl font-extrabold leading-tight text-gray-900">
               Your Free Grocery List
             </h2>

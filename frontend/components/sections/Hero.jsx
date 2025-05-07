@@ -28,7 +28,7 @@ const fadeUp = {
 export default function Hero() {
   return (
     <section
-      className="hero pt-4 pb-12 overflow-hidden md:overflow-visible md:py-0"
+      className="hero pt-0 pb-60 px-10 overflow-hidden md:overflow-visible md:py-0"
       style={{ minHeight: 'calc(100vh - 4rem)' }}
     >
       <motion.div
@@ -40,13 +40,15 @@ export default function Hero() {
       >
         {/* slow, gentle wipe-on */}
         <motion.h1
-          className="relative inline-block"
-          initial={{ clipPath: 'inset(0 100% 0 0)' }}
-          animate={{ clipPath: 'inset(0 0% 0 0)' }}
-          transition={{ duration: 2.0, ease: [0.22, 1, 0.36, 1] }}
+            className="relative inline-block"
+            initial={{clipPath: 'inset(0 100% 0 0)'}}
+            animate={{clipPath: 'inset(0 0% 0 0)'}}
+            transition={{duration: 1.0, ease: [0.22, 1, 0.36, 1]}}
         >
-          When inflation&rsquo;s squeezing your wallet, scrimp on prices, not possibilities…{' '}
-          <strong className="font-bold">Skrimp it.</strong>
+          Inflation squeezing your budget? <br></br>
+          Keep the meals, lose the cost. <br ></br>
+          <strong className="font-bold block mt-4">Skrimp it!</strong>
+
         </motion.h1>
 
         <motion.p variants={fadeUp} className="mt-6">

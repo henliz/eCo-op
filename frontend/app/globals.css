@@ -645,8 +645,7 @@ header {
 .steps-container {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-  gap: 2rem;
-  margin-top: 3rem;
+  gap: 1rem;
 }
 
 .step {
@@ -705,7 +704,7 @@ header {
 /* MEAL PLAN STYLES                         */
 /* ---------------------------------------- */
 #weekly-meal-plan {
-  padding: 4rem 0;
+  padding: 1rem 0;
   background: var(--gray-light);
   overflow: hidden;
 }

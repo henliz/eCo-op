@@ -35,8 +35,8 @@ const containerVariant = {
   hidden: {},
   show: {
     transition: {
-      delayChildren: 0.5,
-      staggerChildren: 0.7,
+      delayChildren: 0.2,
+      staggerChildren: 0.3,
     },
   },
 };
@@ -59,7 +59,7 @@ const itemVariant = {
 export default function HowItWorks() {
   return (
     <section id="how-it-works"
-      className="scroll-mt-15 py-30">
+      className="scroll-mt-15 py-10">
       <div className="container mx-auto text-center">
         <h2 className="text-4xl font-extrabold">How It Works</h2>
 
@@ -74,7 +74,7 @@ export default function HowItWorks() {
           initial="hidden"
           whileInView="show"
           viewport={{ once: true, amount: 0.3 }}
-          className="mt-20 grid gap-12 md:grid-cols-3"
+          className="mt-10 grid gap-12 md:grid-cols-3"
         >
           {steps.map(({ id, img, title, desc }) => (
             <motion.div

@@ -21,7 +21,6 @@ export default function Home() {
 
         <FreeListPromo />
 
-        <div className="h-35" aria-hidden="true" />
         <EmailSignupBanner />
 
         <MealPlan />
