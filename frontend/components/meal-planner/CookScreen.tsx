@@ -1,153 +1,193 @@
 'use client';
 
-import React, { useState, useMemo, useEffect } from 'react';
+import React, { useState, useMemo } from 'react';
 import Image from 'next/image';
 import { usePlannerStore, type Recipe } from './usePlannerStore';
-import { Combobox } from '@headlessui/react';
-import { AlertCircle, ExternalLink } from 'lucide-react';
+import { ExternalLink, Mail, Search } from 'lucide-react';
 import { Button } from '@/components/ui/button';
+import { Card, CardHeader, CardTitle } from '@/components/ui/card';
+import { motion } from 'framer-motion';
 
 const placeholderImage = '/Robo_Research.png';
 
 export function CookScreen() {
-  const [choice, setChoice] = useState<string>('');
   const [searchQuery, setSearchQuery] = useState<string>('');
-  const [iframeError, setIframeError] = useState<boolean>(false);
-  const [iframeLoaded, setIframeLoaded] = useState<boolean>(false);
-  const { selectedMeals, meals } = usePlannerStore();
+  const [selectedRecipe, setSelectedRecipe] = useState<Recipe | null>(null);
+  const { selectedMeals, meals, recipeMultipliers } = usePlannerStore();
 
-  // Gather selected recipes
-  const selectedRecipes = useMemo<Recipe[]>(() => {
-    const all: Recipe[] = [...meals.breakfast, ...meals.lunch, ...meals.dinner];
-    return all.filter(r => selectedMeals.has(r.url));
+  // Gather selected recipes and organize by meal type
+  const selectedRecipesByType = useMemo(() => {
+    const byType = {
+      breakfast: [] as Recipe[],
+      lunch: [] as Recipe[],
+      dinner: [] as Recipe[]
+    };
+
+    meals.breakfast.forEach(recipe => {
+      if (selectedMeals.has(recipe.url)) {
+        byType.breakfast.push(recipe);
+      }
+    });
+
+    meals.lunch.forEach(recipe => {
+      if (selectedMeals.has(recipe.url)) {
+        byType.lunch.push(recipe);
+      }
+    });
+
+    meals.dinner.forEach(recipe => {
+      if (selectedMeals.has(recipe.url)) {
+        byType.dinner.push(recipe);
+      }
+    });
+
+    return byType;
   }, [selectedMeals, meals]);
 
-  // Recipe names
-  const options = useMemo<string[]>(() => selectedRecipes.map(r => r.name), [selectedRecipes]);
+  // Get all selected recipes as a flat array
+  const allSelectedRecipes = useMemo(() => [
+    ...selectedRecipesByType.breakfast,
+    ...selectedRecipesByType.lunch,
+    ...selectedRecipesByType.dinner
+  ], [selectedRecipesByType]);
 
-  // Filtered by search query
-  const filteredOptions = useMemo<string[]>(() => {
-    return options.filter(name =>
-      name.toLowerCase().includes(searchQuery.toLowerCase())
+  // Determine recipe type
+  const getRecipeType = (recipe: Recipe): 'breakfast' | 'lunch' | 'dinner' => {
+    if (selectedRecipesByType.breakfast.some(r => r.url === recipe.url)) return 'breakfast';
+    if (selectedRecipesByType.lunch.some(r => r.url === recipe.url)) return 'lunch';
+    return 'dinner';
+  };
+
+  // Filtered recipes by search query
+  const filteredRecipes = useMemo<Recipe[]>(() => {
+    if (!searchQuery) return allSelectedRecipes;
+    return allSelectedRecipes.filter(recipe =>
+      recipe.name.toLowerCase().includes(searchQuery.toLowerCase())
     );
-  }, [options, searchQuery]);
+  }, [allSelectedRecipes, searchQuery]);
 
-  // Selected recipe object
-  const chosenRecipe = useMemo<Recipe | undefined>(
-    () => selectedRecipes.find(r => r.name === choice),
-    [choice, selectedRecipes]
-  );
-
-  // Reset error/loading when choice changes
-  useEffect(() => {
-    setIframeError(false);
-    setIframeLoaded(false);
-  }, [choice]);
-
-  // HEAD request to check embedding policy
-  useEffect(() => {
-    if (!chosenRecipe) return;
-    fetch(chosenRecipe.url, { method: 'HEAD' })
-      .then(res => {
-        const xfo = res.headers.get('x-frame-options') || '';
-        const csp = res.headers.get('content-security-policy') || '';
-        if (/deny|sameorigin/i.test(xfo) || /frame-ancestors\s+'none'/i.test(csp)) {
-          setIframeError(true);
-        }
-      })
-      .catch(() => setIframeError(true));
-  }, [chosenRecipe]);
-
-  // Proxy URL for iframe
-  const iframeSrc = chosenRecipe
-    ? `/api/proxy?url=${encodeURIComponent(chosenRecipe.url)}`
-    : '';
+  // Handle email recipes
+  const handleEmailRecipes = () => {
+    alert('Your recipes have been emailed to you!');
+    // In a real implementation, this would send a request to your backend
+  };
 
   return (
-    <div className="flex flex-col items-center mt-8 space-y-6">
-      {/* Avatar and searchable combobox */}
-      <div className="flex items-start space-x-4">
-        <Image
-          src={placeholderImage}
-          alt="Chef"
-          width={200}
-          height={200}
-          className="rounded-full"
-        />
-        <div className="relative bg-blue-100 border border-blue-200 p-4 rounded-xl max-w-xs w-full">
-          {/* Bubble tail */}
-          <div className="absolute -left-3 top-8 w-0 h-0 border-t-6 border-t-transparent border-b-6 border-b-transparent border-r-6 border-r-blue-100" />
-          <Combobox value={choice} onChange={(val) => setChoice(val ?? '')} nullable>
-            <Combobox.Label className="block text-gray-700 font-medium mb-2">
-              {choice ? `Cooking: ${choice}` : 'What are we cooking today?'}
-            </Combobox.Label>
-            <Combobox.Input
-              className="w-full border border-blue-300 rounded px-3 py-2 focus:outline-none focus:ring focus:border-blue-400"
-              displayValue={(name: string) => name}
-              onChange={e => setSearchQuery(e.target.value)}
-              placeholder={options.length ? 'Type or select a meal...' : 'No recipes selected'}
+    <div className="flex flex-col pb-20">
+      {/* Search and filter header */}
+      <div className="sticky top-0 bg-white z-10 p-4 shadow-md">
+        <div className="flex flex-col items-start gap-4">
+          <div className="flex items-center gap-4 w-full">
+            <Image
+              src={placeholderImage}
+              alt="Chef"
+              width={50}
+              height={50}
+              className="rounded-full"
             />
-            <Combobox.Options className="absolute z-10 mt-1 w-full bg-white border border-gray-200 rounded-md max-h-60 overflow-auto">
-              {filteredOptions.length > 0 ? (
-                filteredOptions.map(name => (
-                  <Combobox.Option
-                    key={name}
-                    value={name}
-                    className={({ active }) =>
-                      `cursor-pointer select-none px-3 py-2 ${
-                        active ? 'bg-blue-200' : ''
-                      }`
-                    }
-                  >
-                    {name}
-                  </Combobox.Option>
-                ))
-              ) : (
-                <div className="px-3 py-2 text-gray-500">No matches found.</div>
-              )}
-            </Combobox.Options>
-          </Combobox>
+            <h2 className="text-xl font-bold">Your Recipes</h2>
+          </div>
+
+          <div className="flex flex-col sm:flex-row w-full items-start sm:items-center gap-4">
+            <div className="relative w-full sm:w-64">
+              <Search className="absolute left-2 top-2.5 text-gray-400" size={18} />
+              <input
+                type="text"
+                placeholder="Search recipes..."
+                value={searchQuery}
+                onChange={(e) => setSearchQuery(e.target.value)}
+                className="pl-8 pr-4 py-2 w-full border rounded-md focus:outline-none focus:ring-2 focus:ring-teal-500"
+              />
+            </div>
+
+            <Button
+              onClick={handleEmailRecipes}
+              className="flex items-center gap-2 bg-teal-600 hover:bg-teal-700 w-full sm:w-auto"
+            >
+              <Mail size={18} />
+              <span>Email My Recipes</span>
+            </Button>
+          </div>
         </div>
       </div>
 
-      {/* Display iframe or fallback */}
-      {choice && chosenRecipe ? (
-        <div className="w-full max-w-3xl relative">
-          {!iframeError && (
-            <iframe
-              src={iframeSrc}
-              title={chosenRecipe.name}
-              className="w-full h-[60vh] border rounded overflow-hidden"
-              onLoad={() => setIframeLoaded(true)}
-              onError={() => setIframeError(true)}
-            />
-          )}
-          {!iframeLoaded && !iframeError && (
-            <div className="absolute inset-0 flex items-center justify-center bg-white">
-              <p className="text-gray-500">Loading recipe preview...</p>
-            </div>
-          )}
-          {iframeError && (
-            <div className="bg-amber-50 p-6 rounded-md flex flex-col gap-4">
-              <div className="flex items-start gap-3 text-amber-700">
-                <AlertCircle size={24} />
-                <span className="text-sm">
-                  Oops! We couldn&apos;t embed this recipe here. You can still support the home cook below.
-                </span>
-              </div>
-              <Button
-                onClick={() => window.open(chosenRecipe.url, '_blank')}
-                className="w-full bg-teal-600 hover:bg-teal-700 text-white font-semibold py-3 flex items-center justify-center gap-2"
+      {/* Main content: Recipe cards grid */}
+      <div className="grid grid-cols-1 lg:grid-cols-3 gap-1 px-0 py-2">
+        {/* Recipe cards */}
+        <div className="lg:col-span-3 space-y-2">
+          {filteredRecipes.length > 0 ? (
+            filteredRecipes.map((recipe) => (
+              <motion.div
+                key={recipe.url}
+                onClick={() => setSelectedRecipe(recipe)}
+                initial={false}
+                animate={{ scale: selectedRecipe?.url === recipe.url ? 1.03 : 1 }}
+                transition={{ type: 'spring', stiffness: 300, damping: 25 }}
+                className="cursor-pointer"
               >
-                <ExternalLink size={20} />
-                Visit Full Recipe
-              </Button>
+                <Card className={`
+                  transition-colors
+                  hover:bg-gray-100
+                  ${selectedRecipe?.url === recipe.url ? 'bg-teal-100 border-teal-300' : 'bg-white'}
+                `}>
+                  <CardHeader className="px-2">
+                    <CardTitle className="flex flex-col gap-0">
+                      {/* Row 1: Recipe name (left) and meal type (right) */}
+                      <div className="flex justify-between items-center">
+                        <span className="text-lg font-semibold">{recipe.name}</span>
+
+                        {/* Meal Type Badge */}
+                        <span className={`text-xs px-2 py-1 rounded ${
+                          getRecipeType(recipe) === 'breakfast' 
+                            ? 'bg-amber-100 text-amber-800' 
+                            : getRecipeType(recipe) === 'lunch'
+                            ? 'bg-green-100 text-green-800'
+                            : 'bg-blue-100 text-blue-800'
+                        }`}>
+                          {getRecipeType(recipe).charAt(0).toUpperCase() + getRecipeType(recipe).slice(1)}
+                        </span>
+                      </div>
+
+                      {/* Row 2: Servings (left) and multiplier (right) */}
+                      <div className="flex justify-between items-center">
+                        {/* Show servings if available */}
+                        <div className="text-xs text-gray-500">
+                          Serves: {recipe.servings * (recipeMultipliers[recipe.url] || 1)}
+                        </div>
+
+                        {/* Multiplier */}
+                        {(recipeMultipliers[recipe.url] || 0) > 0 && (
+                          <span className="bg-purple-100 text-purple-800 px-2 py-1 rounded text-xs font-bold">
+                            ×{recipeMultipliers[recipe.url] || 1}
+                          </span>
+                        )}
+                      </div>
+
+                      {/* Row 3: View recipe link */}
+                      <a
+                        href={recipe.url}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        onClick={(e) => e.stopPropagation()}
+                        className="text-sm text-teal-600 hover:text-teal-800 flex items-center gap-1 mt-1"
+                      >
+                        <ExternalLink size={14} />
+                        View Original Recipe
+                      </a>
+                    </CardTitle>
+                  </CardHeader>
+                </Card>
+              </motion.div>
+            ))
+          ) : (
+            <div className="text-center p-8 bg-gray-50 rounded-lg">
+              <p className="text-gray-500">No recipes found. Try adjusting your search.</p>
             </div>
           )}
         </div>
-      ) : (
-        <p className="text-gray-600 text-center">Select a recipe to begin cooking.</p>
-      )}
+      </div>
     </div>
   );
 }
+
+
