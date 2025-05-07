@@ -28,7 +28,7 @@ const fadeUp = {
 export default function Hero() {
   return (
     <section
-      className="hero pt-8 pb-12 md:py-0"
+      className="hero pt-4 pb-12 overflow-hidden md:overflow-visible md:py-0"
       style={{ minHeight: 'calc(100vh - 4rem)' }}
     >
       <motion.div
