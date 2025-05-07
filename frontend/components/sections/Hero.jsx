@@ -1,4 +1,3 @@
-// components/sections/Hero.tsx
 'use client';
 
 import { motion } from 'framer-motion';
@@ -29,7 +28,7 @@ const fadeUp = {
 export default function Hero() {
   return (
     <section
-      className="hero py-16 md:py-0"
+      className="hero pt-8 pb-12 md:py-0"
       style={{ minHeight: 'calc(100vh - 4rem)' }}
     >
       <motion.div
@@ -46,12 +45,12 @@ export default function Hero() {
           animate={{ clipPath: 'inset(0 0% 0 0)' }}
           transition={{ duration: 2.0, ease: [0.22, 1, 0.36, 1] }}
         >
-          When inflation’s squeezing your wallet, scrimp on prices, not possibilities…{' '}
+          When inflation&rsquo;s squeezing your wallet, scrimp on prices, not possibilities…{' '}
           <strong className="font-bold">Skrimp it.</strong>
         </motion.h1>
 
         <motion.p variants={fadeUp} className="mt-6">
-          Skrimp uses AI to help Canadians save money on groceries by creating meal plans from this week's local deals.
+          Skrimp uses AI to help Canadians save money on groceries by creating meal plans from this week&rsquo;s local deals.
         </motion.p>
 
         <motion.div variants={fadeUp} className="hero-btns mt-8">
@@ -62,8 +61,7 @@ export default function Hero() {
 
         <motion.p variants={fadeUp} className="mt-6">
           <small>
-            <strong>
-            </strong>
+            {/* Optional smaller note */}
           </small>
         </motion.p>
       </motion.div>
