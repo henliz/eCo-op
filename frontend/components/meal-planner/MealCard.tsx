@@ -38,6 +38,10 @@ export function MealCard({
   // Calculate savings
   const hasSavings = recipe.totalSavings > 0;
 
+  // Calculate flyer items count
+  // We need to ensure the recipe.flyerItemsCount is available in the Recipe type
+  const hasFlyerItems = recipe.flyerItemsCount > 0;
+
   return (
     <motion.div
       key={recipe.url}
@@ -82,14 +86,18 @@ export function MealCard({
                 Cost: <span className="font-bold">${recipe.salePrice.toFixed(2)}</span>
               </p>
             </div>
-            {/* Savings below Cost, right-aligned */}
-            {hasSavings && (
-              <div className="flex justify-end text-xs sm:text-sm !mr-3">
+            {/* Savings or Flyer Items display - show one or the other, not both */}
+            <div className="flex justify-end text-xs sm:text-sm !mr-3">
+              {hasSavings ? (
                 <p className="text-green-600 font-bold !mb-0">
-                  Save: ${recipe.totalSavings.toFixed(2)}
+                  Deals: ${recipe.totalSavings.toFixed(2)}
                 </p>
-              </div>
-            )}
+              ) : hasFlyerItems ? (
+                <p className="text-blue-600 font-bold !mb-0">
+                  {recipe.flyerItemsCount} flyer items
+                </p>
+              ) : null}
+            </div>
           </CardTitle>
         </CardHeader>
 

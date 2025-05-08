@@ -49,6 +49,7 @@ export interface Recipe {
   salePrice: number;
   regularPrice: number;
   totalSavings: number;
+  flyerItemsCount: number; // Add this property to track number of flyer items
   ingredients: Ingredient[];
   multiplier?: number; // How many times this recipe will be made
 }
@@ -115,6 +116,7 @@ interface PlannerState {
   totals: () => Totals;
   mealSummary: () => { breakfast: number; lunch: number; dinner: number; total: number };
 }
+
 
 // For debugging purposes
 const logMessage = (msg: string) => {
@@ -212,12 +214,30 @@ export const usePlannerStore = create<PlannerState>((set, get) => ({
       dinnerCount: mealData.dinner?.length || 0
     });
 
+    // Calculate flyerItemsCount for each recipe
+    const calculateFlyerItemsCount = (recipe: Recipe) => {
+      if (!recipe.ingredients) return 0;
+
+      return recipe.ingredients.filter(ingredient =>
+        //ingredient.type === 'core' &&
+        ingredient.source === 'flyer'
+      ).length;
+    };
+
+    // Process each recipe to add the flyerItemsCount
+    const processRecipes = (recipes: Recipe[]): Recipe[] => {
+      return recipes.map(recipe => ({
+        ...recipe,
+        flyerItemsCount: calculateFlyerItemsCount(recipe)
+      }));
+    };
+
     // Create the meal categories using the data directly
     // The structure already matches your frontend model
     const mealCategories = {
-      breakfast: mealData.breakfast || [],
-      lunch: mealData.lunch || [],
-      dinner: mealData.dinner || []
+      breakfast: processRecipes(mealData.breakfast || []),
+      lunch: processRecipes(mealData.lunch || []),
+      dinner: processRecipes(mealData.dinner || [])
     };
 
     // Initialize default selections

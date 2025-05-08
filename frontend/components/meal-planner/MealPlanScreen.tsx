@@ -50,7 +50,7 @@ export function MealPlanScreen() {
                 Cost: ${sectionSaleTotal.toFixed(2)}
               </span>
               <span className="text-sm text-green-600 font-bold">
-                Save: ${sectionSavingsTotal.toFixed(2)}
+                Deals: ${sectionSavingsTotal.toFixed(2)}
               </span>
               {isOpen ? <ChevronUp size={20} /> : <ChevronDown size={20} />}
             </div>
@@ -110,7 +110,7 @@ export function MealPlanScreen() {
                 <span className="font-bold">${summaryTotals.saleTotal.toFixed(2)}</span>
               </div>
               <div>
-                <span>Deals</span>
+                <span>Deals: </span>
                 <span className="font-bold text-green-600">${summaryTotals.totalSavings.toFixed(2)}</span>
               </div>
             </div>
