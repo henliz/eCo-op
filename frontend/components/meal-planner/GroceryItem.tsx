@@ -31,6 +31,35 @@ export function GroceryItem({ item, isChecked, onToggle }: GroceryItemProps) {
     }
   };
 
+  // Helper function to determine price source display
+  const getPriceSourceDisplay = () => {
+    if (item.savingsPercentage && item.savingsPercentage > 0) {
+      // Case 1: Show discount percentage when available
+      return (
+        <span className="text-green-600 font-medium text-center text-xs">
+          <strong>{item.savingsPercentage.toFixed(0)}% off</strong>
+        </span>
+      );
+    } else if (item.source === 'flyer') {
+      // Case 2: Show "flyer item" when source is flyer but no discount
+      return (
+        <span className="text-blue-600 font-medium text-center text-xs">
+          <strong>flyer</strong>
+        </span>
+      );
+    } else if (item.source === 'database') {
+      // Case 3: Show "price est" for database/estimated prices
+      return (
+        <span className="text-gray-500 font-medium text-center text-xs">
+          est
+        </span>
+      );
+    }
+
+    // Default case: no indicator
+    return null;
+  };
+
   return (
     <div
       className={`cursor-pointer border-b last:border-0 px-4 pt-3 pb-3 ${getStatusStyle()}`}
@@ -56,12 +85,8 @@ export function GroceryItem({ item, isChecked, onToggle }: GroceryItemProps) {
             </span>
           )}
 
-          {/* Discount on same line as product name */}
-          {item.savingsPercentage && item.savingsPercentage > 0 ? (
-            <span className="text-green-600 font-medium whitespace-nowrap">
-              {item.savingsPercentage.toFixed(0)}% off
-            </span>
-          ) :null}
+          {/* Price source indicator (discount %, flyer, or est) */}
+          {getPriceSourceDisplay()}
 
           {/* Checkbox on same line as product name */}
           <div className="flex justify-center">
