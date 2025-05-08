@@ -14,12 +14,13 @@
           "saleUnitType": "g",
           "salePrice": 4.99,
           "saleFractionUsed": 0.10627245445707764,
-          "regularPrice": 0.5302995477408174,
+          "regularPrice": 4.99,
           "regularFractionUsed": 0.10627245445707764,
           "source": "database",
           "sourceDate": "2025-04-22",
           "productName": "chia seeds",
-          "savingsPercentage": 0
+          "savingsPercentage": 0,
+          "type": "core"
         },
         {
           "recipeIngredientName": "almond milk",
@@ -27,26 +28,29 @@
           "saleUnitType": "ml",
           "salePrice": 4.97,
           "saleFractionUsed": 0.06258994708994708,
-          "regularPrice": 0.311072037037037,
+          "regularPrice": 4.97,
           "regularFractionUsed": 0.06258994708994708,
           "source": "database",
           "sourceDate": "2025-04-22",
           "productName": "almond milk",
-          "savingsPercentage": 0
+          "savingsPercentage": 0,
+          "type": "core"
         },
         {
           "recipeIngredientName": "honey",
           "salePrice": 0,
           "regularPrice": 0,
           "source": "skipped",
-          "savingsPercentage": 0
+          "savingsPercentage": 0,
+          "type": "optional"
         },
         {
           "recipeIngredientName": "strawberries",
           "salePrice": 0,
           "regularPrice": 0,
           "source": "skipped",
-          "savingsPercentage": 0
+          "savingsPercentage": 0,
+          "type": "garnish"
         }
       ]
     },
@@ -64,12 +68,13 @@
           "saleUnitType": "whole",
           "salePrice": 2.88,
           "saleFractionUsed": 0.05,
-          "regularPrice": 0.25,
+          "regularPrice": 5,
           "regularFractionUsed": 0.05,
           "source": "flyer",
           "sourceDate": "2025-05-14",
           "productName": "AVOCADOS",
-          "savingsPercentage": 42.400000000000006
+          "savingsPercentage": 42.400000000000006,
+          "type": "core"
         },
         {
           "recipeIngredientName": "whole grain bread",
@@ -77,12 +82,13 @@
           "saleUnitType": "g",
           "salePrice": 5.99,
           "saleFractionUsed": 0.06333333333333334,
-          "regularPrice": 0.3793666666666667,
+          "regularPrice": 5.99,
           "regularFractionUsed": 0.06333333333333334,
           "source": "flyer",
           "sourceDate": "2025-05-07",
           "productName": "Dempster's 100% Whole Grains 12 Grain",
-          "savingsPercentage": 0
+          "savingsPercentage": 0,
+          "type": "core"
         },
         {
           "recipeIngredientName": "sea salt",
@@ -90,12 +96,13 @@
           "saleUnitType": "g",
           "salePrice": 1.49,
           "saleFractionUsed": 0.000888859683418572,
-          "regularPrice": 0.0013244009282936723,
+          "regularPrice": 1.49,
           "regularFractionUsed": 0.000888859683418572,
           "source": "flyer",
           "sourceDate": "2025-05-07",
           "productName": "Tata Sea Salt",
-          "savingsPercentage": 0
+          "savingsPercentage": 0,
+          "type": "core"
         },
         {
           "recipeIngredientName": "black pepper",
@@ -103,12 +110,13 @@
           "saleUnitType": "g",
           "salePrice": 6.49,
           "saleFractionUsed": 0.002923661962354577,
-          "regularPrice": 0.018974566135681204,
+          "regularPrice": 6.49,
           "regularFractionUsed": 0.002923661962354577,
           "source": "database",
           "sourceDate": "2025-04-16",
           "productName": "pepper",
-          "savingsPercentage": 0
+          "savingsPercentage": 0,
+          "type": "core"
         },
         {
           "recipeIngredientName": "butter",
@@ -116,12 +124,13 @@
           "saleUnitType": "g",
           "salePrice": 6.69,
           "saleFractionUsed": 0.01562830212604083,
-          "regularPrice": 0.10455334122321316,
+          "regularPrice": 6.69,
           "regularFractionUsed": 0.01562830212604083,
           "source": "database",
           "sourceDate": "2025-04-22",
           "productName": "unsalted butter",
-          "savingsPercentage": 0
+          "savingsPercentage": 0,
+          "type": "core"
         },
         {
           "recipeIngredientName": "egg",
@@ -129,19 +138,21 @@
           "saleUnitType": "dozen",
           "salePrice": 4.49,
           "saleFractionUsed": 0.08333333333333333,
-          "regularPrice": 0.37416666666666665,
+          "regularPrice": 4.49,
           "regularFractionUsed": 0.08333333333333333,
           "source": "database",
           "sourceDate": "2025-04-16",
           "productName": "egg",
-          "savingsPercentage": 0
+          "savingsPercentage": 0,
+          "type": "core"
         },
         {
           "recipeIngredientName": "white vinegar",
           "salePrice": 0,
           "regularPrice": 0,
           "source": "skipped",
-          "savingsPercentage": 0
+          "savingsPercentage": 0,
+          "type": "optional"
         }
       ]
     },
@@ -159,12 +170,13 @@
           "saleUnitType": "g",
           "salePrice": 3.27,
           "saleFractionUsed": 0.045,
-          "regularPrice": 0.14715,
+          "regularPrice": 3.27,
           "regularFractionUsed": 0.045,
           "source": "database",
           "sourceDate": "2025-04-22",
           "productName": "rolled oats",
-          "savingsPercentage": 0
+          "savingsPercentage": 0,
+          "type": "core"
         },
         {
           "recipeIngredientName": "milk",
@@ -177,7 +189,8 @@
           "source": "flyer",
           "sourceDate": "2025-05-07",
           "productName": "Beatrice 2% Milk",
-          "savingsPercentage": 0
+          "savingsPercentage": 0,
+          "type": "core"
         },
         {
           "recipeIngredientName": "Greek yogurt",
@@ -185,12 +198,13 @@
           "saleUnitType": "g",
           "salePrice": 2.99,
           "saleFractionUsed": 0.153125,
-          "regularPrice": 0.765625,
+          "regularPrice": 5,
           "regularFractionUsed": 0.153125,
           "source": "flyer",
           "sourceDate": "2025-05-14",
           "productName": "LIBERTÉ GREEK YOGURT (4x100)",
-          "savingsPercentage": 40.19999999999999
+          "savingsPercentage": 40.19999999999999,
+          "type": "core"
         },
         {
           "recipeIngredientName": "chia seeds",
@@ -198,12 +212,13 @@
           "saleUnitType": "g",
           "salePrice": 4.99,
           "saleFractionUsed": 0.05313622722853882,
-          "regularPrice": 0.2651497738704087,
+          "regularPrice": 4.99,
           "regularFractionUsed": 0.05313622722853882,
           "source": "database",
           "sourceDate": "2025-04-22",
           "productName": "chia seeds",
-          "savingsPercentage": 0
+          "savingsPercentage": 0,
+          "type": "core"
         },
         {
           "recipeIngredientName": "maple syrup",
@@ -211,12 +226,13 @@
           "saleUnitType": "ml",
           "salePrice": 10,
           "saleFractionUsed": 0.02958,
-          "regularPrice": 0.2958,
+          "regularPrice": 10,
           "regularFractionUsed": 0.02958,
           "source": "database",
           "sourceDate": "2025-04-22",
           "productName": "maple syrup",
-          "savingsPercentage": 0
+          "savingsPercentage": 0,
+          "type": "core"
         },
         {
           "recipeIngredientName": "vanilla extract",
@@ -224,180 +240,205 @@
           "saleUnitType": "ml",
           "salePrice": 11.97,
           "saleFractionUsed": 0.009859999999999999,
-          "regularPrice": 0.1180242,
+          "regularPrice": 11.97,
           "regularFractionUsed": 0.009859999999999999,
           "source": "database",
           "sourceDate": "2025-04-22",
           "productName": "vanilla extract",
-          "savingsPercentage": 0
+          "savingsPercentage": 0,
+          "type": "core"
         },
         {
           "recipeIngredientName": "strawberry jam",
           "salePrice": 0,
           "regularPrice": 0,
           "source": "skipped",
-          "savingsPercentage": 0
+          "savingsPercentage": 0,
+          "type": "optional"
         },
         {
           "recipeIngredientName": "peanut butter",
           "salePrice": 0,
           "regularPrice": 0,
           "source": "skipped",
-          "savingsPercentage": 0
+          "savingsPercentage": 0,
+          "type": "optional"
         },
         {
           "recipeIngredientName": "strawberries",
           "salePrice": 0,
           "regularPrice": 0,
           "source": "skipped",
-          "savingsPercentage": 0
+          "savingsPercentage": 0,
+          "type": "optional"
         },
         {
           "recipeIngredientName": "peanuts",
           "salePrice": 0,
           "regularPrice": 0,
           "source": "skipped",
-          "savingsPercentage": 0
+          "savingsPercentage": 0,
+          "type": "optional"
         },
         {
           "recipeIngredientName": "apple",
           "salePrice": 0,
           "regularPrice": 0,
           "source": "skipped",
-          "savingsPercentage": 0
+          "savingsPercentage": 0,
+          "type": "optional"
         },
         {
           "recipeIngredientName": "pecans",
           "salePrice": 0,
           "regularPrice": 0,
           "source": "skipped",
-          "savingsPercentage": 0
+          "savingsPercentage": 0,
+          "type": "optional"
         },
         {
           "recipeIngredientName": "maple syrup",
           "salePrice": 0,
           "regularPrice": 0,
           "source": "skipped",
-          "savingsPercentage": 0
+          "savingsPercentage": 0,
+          "type": "optional"
         },
         {
           "recipeIngredientName": "cinnamon",
           "salePrice": 0,
           "regularPrice": 0,
           "source": "skipped",
-          "savingsPercentage": 0
+          "savingsPercentage": 0,
+          "type": "optional"
         },
         {
           "recipeIngredientName": "banana",
           "salePrice": 0,
           "regularPrice": 0,
           "source": "skipped",
-          "savingsPercentage": 0
+          "savingsPercentage": 0,
+          "type": "optional"
         },
         {
           "recipeIngredientName": "Nutella",
           "salePrice": 0,
           "regularPrice": 0,
           "source": "skipped",
-          "savingsPercentage": 0
+          "savingsPercentage": 0,
+          "type": "optional"
         },
         {
           "recipeIngredientName": "hazelnuts",
           "salePrice": 0,
           "regularPrice": 0,
           "source": "skipped",
-          "savingsPercentage": 0
+          "savingsPercentage": 0,
+          "type": "optional"
         },
         {
           "recipeIngredientName": "chocolate chips",
           "salePrice": 0,
           "regularPrice": 0,
           "source": "skipped",
-          "savingsPercentage": 0
+          "savingsPercentage": 0,
+          "type": "optional"
         },
         {
           "recipeIngredientName": "shredded coconut",
           "salePrice": 0,
           "regularPrice": 0,
           "source": "skipped",
-          "savingsPercentage": 0
+          "savingsPercentage": 0,
+          "type": "optional"
         },
         {
           "recipeIngredientName": "almonds",
           "salePrice": 0,
           "regularPrice": 0,
           "source": "skipped",
-          "savingsPercentage": 0
+          "savingsPercentage": 0,
+          "type": "optional"
         },
         {
           "recipeIngredientName": "chocolate chips",
           "salePrice": 0,
           "regularPrice": 0,
           "source": "skipped",
-          "savingsPercentage": 0
+          "savingsPercentage": 0,
+          "type": "optional"
         },
         {
           "recipeIngredientName": "maple syrup",
           "salePrice": 0,
           "regularPrice": 0,
           "source": "skipped",
-          "savingsPercentage": 0
+          "savingsPercentage": 0,
+          "type": "optional"
         },
         {
           "recipeIngredientName": "blueberries",
           "salePrice": 0,
           "regularPrice": 0,
           "source": "skipped",
-          "savingsPercentage": 0
+          "savingsPercentage": 0,
+          "type": "optional"
         },
         {
           "recipeIngredientName": "lemon zest",
           "salePrice": 0,
           "regularPrice": 0,
           "source": "skipped",
-          "savingsPercentage": 0
+          "savingsPercentage": 0,
+          "type": "optional"
         },
         {
           "recipeIngredientName": "honey",
           "salePrice": 0,
           "regularPrice": 0,
           "source": "skipped",
-          "savingsPercentage": 0
+          "savingsPercentage": 0,
+          "type": "optional"
         },
         {
           "recipeIngredientName": "salt",
           "salePrice": 0,
           "regularPrice": 0,
           "source": "skipped",
-          "savingsPercentage": 0
+          "savingsPercentage": 0,
+          "type": "optional"
         },
         {
           "recipeIngredientName": "brown sugar",
           "salePrice": 0,
           "regularPrice": 0,
           "source": "skipped",
-          "savingsPercentage": 0
+          "savingsPercentage": 0,
+          "type": "optional"
         },
         {
           "recipeIngredientName": "maple syrup",
           "salePrice": 0,
           "regularPrice": 0,
           "source": "skipped",
-          "savingsPercentage": 0
+          "savingsPercentage": 0,
+          "type": "optional"
         },
         {
           "recipeIngredientName": "cinnamon",
           "salePrice": 0,
           "regularPrice": 0,
           "source": "skipped",
-          "savingsPercentage": 0
+          "savingsPercentage": 0,
+          "type": "optional"
         },
         {
           "recipeIngredientName": "salt",
           "salePrice": 0,
           "regularPrice": 0,
           "source": "skipped",
-          "savingsPercentage": 0
+          "savingsPercentage": 0,
+          "type": "optional"
         }
       ]
     },
@@ -415,12 +456,13 @@
           "saleUnitType": "ml",
           "salePrice": 22.99,
           "saleFractionUsed": 0.01479,
-          "regularPrice": 0.34002209999999994,
+          "regularPrice": 22.99,
           "regularFractionUsed": 0.01479,
           "source": "database",
           "sourceDate": "2025-04-22",
           "productName": "extra virgin olive oil",
-          "savingsPercentage": 0
+          "savingsPercentage": 0,
+          "type": "core"
         },
         {
           "recipeIngredientName": "red onion",
@@ -428,12 +470,13 @@
           "saleUnitType": "lb",
           "salePrice": 5,
           "saleFractionUsed": 0.022046244201837775,
-          "regularPrice": 0.1754881038466287,
+          "regularPrice": 7.960000000000001,
           "regularFractionUsed": 0.022046244201837775,
           "source": "flyer",
           "sourceDate": "2025-05-14",
           "productName": "YELLOW ONIONS",
-          "savingsPercentage": 37.185929648241206
+          "savingsPercentage": 37.185929648241206,
+          "type": "core"
         },
         {
           "recipeIngredientName": "red bell pepper",
@@ -441,12 +484,13 @@
           "saleUnitType": "whole",
           "salePrice": 2.88,
           "saleFractionUsed": 0.10416666666666667,
-          "regularPrice": 0.3,
+          "regularPrice": 2.88,
           "regularFractionUsed": 0.10416666666666667,
           "source": "flyer",
           "sourceDate": "2025-05-07",
           "productName": "Sweet Assorted Peppers",
-          "savingsPercentage": 0
+          "savingsPercentage": 0,
+          "type": "core"
         },
         {
           "recipeIngredientName": "mushrooms",
@@ -454,12 +498,13 @@
           "saleUnitType": "g",
           "salePrice": 3.98,
           "saleFractionUsed": 0.039647577092511016,
-          "regularPrice": 0.19823788546255508,
+          "regularPrice": 5,
           "regularFractionUsed": 0.039647577092511016,
           "source": "flyer",
           "sourceDate": "2025-05-14",
           "productName": "CREMINI MUSHROOMS",
-          "savingsPercentage": 20.4
+          "savingsPercentage": 20.4,
+          "type": "core"
         },
         {
           "recipeIngredientName": "baby spinach",
@@ -467,12 +512,13 @@
           "saleUnitType": "g",
           "salePrice": 3.98,
           "saleFractionUsed": 0.09615384615384616,
-          "regularPrice": 0.3826923076923077,
+          "regularPrice": 3.98,
           "regularFractionUsed": 0.09615384615384616,
           "source": "database",
           "sourceDate": "2025-04-22",
           "productName": "baby spinach",
-          "savingsPercentage": 0
+          "savingsPercentage": 0,
+          "type": "core"
         },
         {
           "recipeIngredientName": "salt",
@@ -480,12 +526,13 @@
           "saleUnitType": "g",
           "salePrice": 1.49,
           "saleFractionUsed": 0.000888859683418572,
-          "regularPrice": 0.0013244009282936723,
+          "regularPrice": 1.49,
           "regularFractionUsed": 0.000888859683418572,
           "source": "flyer",
           "sourceDate": "2025-05-07",
           "productName": "Tata Sea Salt",
-          "savingsPercentage": 0
+          "savingsPercentage": 0,
+          "type": "core"
         },
         {
           "recipeIngredientName": "black pepper",
@@ -493,12 +540,13 @@
           "saleUnitType": "g",
           "salePrice": 6.49,
           "saleFractionUsed": 0.002923661962354577,
-          "regularPrice": 0.018974566135681204,
+          "regularPrice": 6.49,
           "regularFractionUsed": 0.002923661962354577,
           "source": "database",
           "sourceDate": "2025-04-16",
           "productName": "pepper",
-          "savingsPercentage": 0
+          "savingsPercentage": 0,
+          "type": "core"
         },
         {
           "recipeIngredientName": "egg",
@@ -506,12 +554,13 @@
           "saleUnitType": "dozen",
           "salePrice": 4.49,
           "saleFractionUsed": 0.25,
-          "regularPrice": 1.1225,
+          "regularPrice": 4.49,
           "regularFractionUsed": 0.25,
           "source": "database",
           "sourceDate": "2025-04-16",
           "productName": "egg",
-          "savingsPercentage": 0
+          "savingsPercentage": 0,
+          "type": "core"
         },
         {
           "recipeIngredientName": "water",
@@ -519,7 +568,8 @@
           "regularPrice": 0,
           "source": "free",
           "sourceDate": "2025-05-08",
-          "savingsPercentage": 0
+          "savingsPercentage": 0,
+          "type": "core"
         },
         {
           "recipeIngredientName": "cheddar cheese",
@@ -527,19 +577,21 @@
           "saleUnitType": "g",
           "salePrice": 4.98,
           "saleFractionUsed": 0.05232587082200338,
-          "regularPrice": 0.26058283669357685,
+          "regularPrice": 4.98,
           "regularFractionUsed": 0.05232587082200338,
           "source": "flyer",
           "sourceDate": "2025-05-07",
           "productName": "Black Diamond Old Fort Cheddar Cheese",
-          "savingsPercentage": 0
+          "savingsPercentage": 0,
+          "type": "core"
         },
         {
           "recipeIngredientName": "parsley",
           "salePrice": 0,
           "regularPrice": 0,
           "source": "skipped",
-          "savingsPercentage": 0
+          "savingsPercentage": 0,
+          "type": "garnish"
         }
       ]
     },
@@ -557,12 +609,13 @@
           "saleUnitType": "g",
           "salePrice": 3.79,
           "saleFractionUsed": 0.05,
-          "regularPrice": 0.1895,
+          "regularPrice": 3.79,
           "regularFractionUsed": 0.05,
           "source": "database",
           "sourceDate": "2025-04-22",
           "productName": "all-purpose flour",
-          "savingsPercentage": 0
+          "savingsPercentage": 0,
+          "type": "core"
         },
         {
           "recipeIngredientName": "granulated sugar",
@@ -570,12 +623,13 @@
           "saleUnitType": "kg",
           "salePrice": 1.19,
           "saleFractionUsed": 0.012502641700832665,
-          "regularPrice": 0.01487814362399087,
+          "regularPrice": 1.19,
           "regularFractionUsed": 0.012502641700832665,
           "source": "database",
           "sourceDate": "2024-10-25",
           "productName": "white sugar",
-          "savingsPercentage": 0
+          "savingsPercentage": 0,
+          "type": "core"
         },
         {
           "recipeIngredientName": "baking powder",
@@ -583,12 +637,13 @@
           "saleUnitType": "g",
           "salePrice": 4.47,
           "saleFractionUsed": 0.06390239091536695,
-          "regularPrice": 0.28564368739169027,
+          "regularPrice": 4.47,
           "regularFractionUsed": 0.06390239091536695,
           "source": "database",
           "sourceDate": "2025-04-22",
           "productName": "baking powder",
-          "savingsPercentage": 0
+          "savingsPercentage": 0,
+          "type": "core"
         },
         {
           "recipeIngredientName": "salt",
@@ -596,12 +651,13 @@
           "saleUnitType": "g",
           "salePrice": 1.49,
           "saleFractionUsed": 0.001777719366837144,
-          "regularPrice": 0.0026488018565873446,
+          "regularPrice": 1.49,
           "regularFractionUsed": 0.001777719366837144,
           "source": "flyer",
           "sourceDate": "2025-05-07",
           "productName": "Tata Sea Salt",
-          "savingsPercentage": 0
+          "savingsPercentage": 0,
+          "type": "core"
         },
         {
           "recipeIngredientName": "egg",
@@ -609,12 +665,13 @@
           "saleUnitType": "dozen",
           "salePrice": 4.49,
           "saleFractionUsed": 0.08333333333333333,
-          "regularPrice": 0.37416666666666665,
+          "regularPrice": 4.49,
           "regularFractionUsed": 0.08333333333333333,
           "source": "database",
           "sourceDate": "2025-04-16",
           "productName": "egg",
-          "savingsPercentage": 0
+          "savingsPercentage": 0,
+          "type": "core"
         },
         {
           "recipeIngredientName": "milk",
@@ -627,7 +684,8 @@
           "source": "flyer",
           "sourceDate": "2025-05-07",
           "productName": "Beatrice 2% Milk",
-          "savingsPercentage": 0
+          "savingsPercentage": 0,
+          "type": "core"
         },
         {
           "recipeIngredientName": "unsalted butter",
@@ -635,12 +693,13 @@
           "saleUnitType": "g",
           "salePrice": 6.69,
           "saleFractionUsed": 0.06251320850416332,
-          "regularPrice": 0.41821336489285266,
+          "regularPrice": 6.69,
           "regularFractionUsed": 0.06251320850416332,
           "source": "database",
           "sourceDate": "2025-04-22",
           "productName": "unsalted butter",
-          "savingsPercentage": 0
+          "savingsPercentage": 0,
+          "type": "core"
         },
         {
           "recipeIngredientName": "vanilla extract",
@@ -648,12 +707,13 @@
           "saleUnitType": "ml",
           "salePrice": 11.97,
           "saleFractionUsed": 0.039439999999999996,
-          "regularPrice": 0.4720968,
+          "regularPrice": 11.97,
           "regularFractionUsed": 0.039439999999999996,
           "source": "database",
           "sourceDate": "2025-04-22",
           "productName": "vanilla extract",
-          "savingsPercentage": 0
+          "savingsPercentage": 0,
+          "type": "core"
         },
         {
           "recipeIngredientName": "strawberries",
@@ -661,12 +721,13 @@
           "saleUnitType": "g",
           "salePrice": 3.98,
           "saleFractionUsed": 0.3303964757709251,
-          "regularPrice": 1.314977973568282,
+          "regularPrice": 3.98,
           "regularFractionUsed": 0.3303964757709251,
           "source": "flyer",
           "sourceDate": "2025-05-07",
           "productName": "Strawberries",
-          "savingsPercentage": 0
+          "savingsPercentage": 0,
+          "type": "core"
         },
         {
           "recipeIngredientName": "nonstick cooking spray",
@@ -674,33 +735,37 @@
           "saleUnitType": "g",
           "salePrice": 4.49,
           "saleFractionUsed": 0.017441276968856136,
-          "regularPrice": 0.07831133359016405,
+          "regularPrice": 4.49,
           "regularFractionUsed": 0.017441276968856136,
           "source": "database",
           "sourceDate": "2025-04-16",
           "productName": "cooking spray",
-          "savingsPercentage": 0
+          "savingsPercentage": 0,
+          "type": "core"
         },
         {
           "recipeIngredientName": "butter",
           "salePrice": 0,
           "regularPrice": 0,
           "source": "skipped",
-          "savingsPercentage": 0
+          "savingsPercentage": 0,
+          "type": "optional"
         },
         {
           "recipeIngredientName": "maple syrup",
           "salePrice": 0,
           "regularPrice": 0,
           "source": "skipped",
-          "savingsPercentage": 0
+          "savingsPercentage": 0,
+          "type": "optional"
         },
         {
           "recipeIngredientName": "strawberries",
           "salePrice": 0,
           "regularPrice": 0,
           "source": "skipped",
-          "savingsPercentage": 0
+          "savingsPercentage": 0,
+          "type": "optional"
         }
       ]
     },
@@ -708,8 +773,8 @@
       "name": "Delicious Egg Salad",
       "url": "https://www.allrecipes.com/recipe/147103/delicious-egg-salad-for-sandwiches/",
       "salePrice": 3.2506440333333333,
-      "regularPrice": 3.738444763670412,
-      "totalSavings": 0.4878007303370788,
+      "regularPrice": 3.2506440333333333,
+      "totalSavings": 0,
       "servings": 4,
       "ingredients": [
         {
@@ -718,12 +783,13 @@
           "saleUnitType": "dozen",
           "salePrice": 4.49,
           "saleFractionUsed": 0.6666666666666666,
-          "regularPrice": 2.993333333333333,
+          "regularPrice": 4.49,
           "regularFractionUsed": 0.6666666666666666,
           "source": "database",
           "sourceDate": "2025-04-16",
           "productName": "egg",
-          "savingsPercentage": 0
+          "savingsPercentage": 0,
+          "type": "core"
         },
         {
           "recipeIngredientName": "mayonnaise",
@@ -731,12 +797,13 @@
           "saleUnitType": "ml",
           "salePrice": 5.99,
           "saleFractionUsed": null,
-          "regularPrice": 0.48780073033707866,
-          "regularFractionUsed": 0.13291573033707865,
+          "regularPrice": 5.99,
+          "regularFractionUsed": null,
           "source": "flyer",
           "sourceDate": "2025-05-14",
           "productName": "HELLMANN'S MAYONNAISE",
-          "savingsPercentage": 0
+          "savingsPercentage": 0,
+          "type": "core"
         },
         {
           "recipeIngredientName": "green onion",
@@ -744,12 +811,13 @@
           "saleUnitType": "bunch",
           "salePrice": 0.99,
           "saleFractionUsed": 0.25,
-          "regularPrice": 0.2475,
+          "regularPrice": 0.99,
           "regularFractionUsed": 0.25,
           "source": "database",
           "sourceDate": "2024-09-01",
           "productName": "scallions",
-          "savingsPercentage": 0
+          "savingsPercentage": 0,
+          "type": "core"
         },
         {
           "recipeIngredientName": "yellow mustard",
@@ -757,33 +825,37 @@
           "saleUnitType": "l",
           "salePrice": 1.99,
           "saleFractionUsed": 0.0049299999999999995,
-          "regularPrice": 0.009810699999999999,
+          "regularPrice": 1.99,
           "regularFractionUsed": 0.0049299999999999995,
           "source": "database",
           "sourceDate": "2024-07-29",
           "productName": "mustard",
-          "savingsPercentage": 0
+          "savingsPercentage": 0,
+          "type": "core"
         },
         {
           "recipeIngredientName": "paprika",
           "salePrice": 0,
           "regularPrice": 0,
           "source": "skipped",
-          "savingsPercentage": 0
+          "savingsPercentage": 0,
+          "type": "optional"
         },
         {
           "recipeIngredientName": "salt",
           "salePrice": 0,
           "regularPrice": 0,
           "source": "skipped",
-          "savingsPercentage": 0
+          "savingsPercentage": 0,
+          "type": "to taste"
         },
         {
           "recipeIngredientName": "black pepper",
           "salePrice": 0,
           "regularPrice": 0,
           "source": "skipped",
-          "savingsPercentage": 0
+          "savingsPercentage": 0,
+          "type": "to taste"
         }
       ]
     },
@@ -801,12 +873,13 @@
           "saleUnitType": "g",
           "salePrice": 4,
           "saleFractionUsed": 0.2857142857142857,
-          "regularPrice": 1.1428571428571428,
+          "regularPrice": 4,
           "regularFractionUsed": 0.2857142857142857,
           "source": "database",
           "sourceDate": "2025-04-30",
           "productName": "baguette",
-          "savingsPercentage": 0
+          "savingsPercentage": 0,
+          "type": "core"
         },
         {
           "recipeIngredientName": "butter",
@@ -814,12 +887,13 @@
           "saleUnitType": "g",
           "salePrice": 6.69,
           "saleFractionUsed": 0.125,
-          "regularPrice": 0.83625,
+          "regularPrice": 6.69,
           "regularFractionUsed": 0.125,
           "source": "database",
           "sourceDate": "2025-04-22",
           "productName": "unsalted butter",
-          "savingsPercentage": 0
+          "savingsPercentage": 0,
+          "type": "core"
         },
         {
           "recipeIngredientName": "brown sugar",
@@ -827,12 +901,13 @@
           "saleUnitType": "kg",
           "salePrice": 2.2,
           "saleFractionUsed": 0.11,
-          "regularPrice": 0.24200000000000002,
+          "regularPrice": 2.2,
           "regularFractionUsed": 0.11,
           "source": "database",
           "sourceDate": "2024-10-01",
           "productName": "brown sugar",
-          "savingsPercentage": 0
+          "savingsPercentage": 0,
+          "type": "core"
         },
         {
           "recipeIngredientName": "egg",
@@ -840,12 +915,13 @@
           "saleUnitType": "dozen",
           "salePrice": 4.49,
           "saleFractionUsed": 0.25,
-          "regularPrice": 1.1225,
+          "regularPrice": 4.49,
           "regularFractionUsed": 0.25,
           "source": "database",
           "sourceDate": "2025-04-16",
           "productName": "egg",
-          "savingsPercentage": 0
+          "savingsPercentage": 0,
+          "type": "core"
         },
         {
           "recipeIngredientName": "milk",
@@ -858,7 +934,8 @@
           "source": "flyer",
           "sourceDate": "2025-05-07",
           "productName": "Beatrice 2% Milk",
-          "savingsPercentage": 0
+          "savingsPercentage": 0,
+          "type": "core"
         },
         {
           "recipeIngredientName": "vanilla extract",
@@ -866,12 +943,13 @@
           "saleUnitType": "ml",
           "salePrice": 11.97,
           "saleFractionUsed": 0.039439999999999996,
-          "regularPrice": 0.4720968,
+          "regularPrice": 11.97,
           "regularFractionUsed": 0.039439999999999996,
           "source": "database",
           "sourceDate": "2025-04-22",
           "productName": "vanilla extract",
-          "savingsPercentage": 0
+          "savingsPercentage": 0,
+          "type": "core"
         },
         {
           "recipeIngredientName": "cinnamon",
@@ -879,12 +957,13 @@
           "saleUnitType": "g",
           "salePrice": 6.99,
           "saleFractionUsed": 0.01667018893444355,
-          "regularPrice": 0.11652462065176042,
+          "regularPrice": 6.99,
           "regularFractionUsed": 0.01667018893444355,
           "source": "database",
           "sourceDate": "2025-04-22",
           "productName": "ground cinnamon",
-          "savingsPercentage": 0
+          "savingsPercentage": 0,
+          "type": "core"
         },
         {
           "recipeIngredientName": "brown sugar",
@@ -892,19 +971,21 @@
           "saleUnitType": "kg",
           "salePrice": 2.2,
           "saleFractionUsed": 0.006876452935457965,
-          "regularPrice": 0.015128196458007524,
+          "regularPrice": 2.2,
           "regularFractionUsed": 0.006876452935457965,
           "source": "database",
           "sourceDate": "2024-10-01",
           "productName": "brown sugar",
-          "savingsPercentage": 0
+          "savingsPercentage": 0,
+          "type": "core"
         },
         {
           "recipeIngredientName": "powdered sugar",
           "salePrice": 0,
           "regularPrice": 0,
           "source": "skipped",
-          "savingsPercentage": 0
+          "savingsPercentage": 0,
+          "type": "optional"
         }
       ]
     },
@@ -922,12 +1003,13 @@
           "saleUnitType": "g",
           "salePrice": 6.69,
           "saleFractionUsed": 0.03125660425208166,
-          "regularPrice": 0.20910668244642633,
+          "regularPrice": 6.69,
           "regularFractionUsed": 0.03125660425208166,
           "source": "database",
           "sourceDate": "2025-04-22",
           "productName": "unsalted butter",
-          "savingsPercentage": 0
+          "savingsPercentage": 0,
+          "type": "core"
         },
         {
           "recipeIngredientName": "egg",
@@ -935,12 +1017,13 @@
           "saleUnitType": "dozen",
           "salePrice": 4.49,
           "saleFractionUsed": 0.3333333333333333,
-          "regularPrice": 1.4966666666666666,
+          "regularPrice": 4.49,
           "regularFractionUsed": 0.3333333333333333,
           "source": "database",
           "sourceDate": "2025-04-16",
           "productName": "egg",
-          "savingsPercentage": 0
+          "savingsPercentage": 0,
+          "type": "core"
         },
         {
           "recipeIngredientName": "milk",
@@ -953,7 +1036,8 @@
           "source": "flyer",
           "sourceDate": "2025-05-07",
           "productName": "Beatrice 2% Milk",
-          "savingsPercentage": 0
+          "savingsPercentage": 0,
+          "type": "core"
         },
         {
           "recipeIngredientName": "dark brown sugar",
@@ -961,12 +1045,13 @@
           "saleUnitType": "kg",
           "salePrice": 2.2,
           "saleFractionUsed": 0.020629358806373895,
-          "regularPrice": 0.04538458937402257,
+          "regularPrice": 2.2,
           "regularFractionUsed": 0.020629358806373895,
           "source": "database",
           "sourceDate": "2024-10-01",
           "productName": "brown sugar",
-          "savingsPercentage": 0
+          "savingsPercentage": 0,
+          "type": "core"
         },
         {
           "recipeIngredientName": "cinnamon",
@@ -974,12 +1059,13 @@
           "saleUnitType": "g",
           "salePrice": 6.99,
           "saleFractionUsed": 0.008335094467221775,
-          "regularPrice": 0.05826231032588021,
+          "regularPrice": 6.99,
           "regularFractionUsed": 0.008335094467221775,
           "source": "database",
           "sourceDate": "2025-04-22",
           "productName": "ground cinnamon",
-          "savingsPercentage": 0
+          "savingsPercentage": 0,
+          "type": "core"
         },
         {
           "recipeIngredientName": "nutmeg",
@@ -987,12 +1073,13 @@
           "saleUnitType": "g",
           "salePrice": 4.47,
           "saleFractionUsed": 0.005209434042013609,
-          "regularPrice": 0.023286170167800834,
+          "regularPrice": 4.47,
           "regularFractionUsed": 0.005209434042013609,
           "source": "database",
           "sourceDate": "2025-04-22",
           "productName": "ground nutmeg",
-          "savingsPercentage": 0
+          "savingsPercentage": 0,
+          "type": "core"
         },
         {
           "recipeIngredientName": "white bread",
@@ -1000,26 +1087,29 @@
           "saleUnitType": "g",
           "salePrice": 5.99,
           "saleFractionUsed": 0.4,
-          "regularPrice": 2.3960000000000004,
+          "regularPrice": 5.99,
           "regularFractionUsed": 0.4,
           "source": "flyer",
           "sourceDate": "2025-05-07",
           "productName": "Dempster's 100% Whole Grains 12 Grain",
-          "savingsPercentage": 0
+          "savingsPercentage": 0,
+          "type": "core"
         },
         {
           "recipeIngredientName": "maple syrup",
           "salePrice": 0,
           "regularPrice": 0,
           "source": "skipped",
-          "savingsPercentage": 0
+          "savingsPercentage": 0,
+          "type": "optional"
         },
         {
           "recipeIngredientName": "berries",
           "salePrice": 0,
           "regularPrice": 0,
           "source": "skipped",
-          "savingsPercentage": 0
+          "savingsPercentage": 0,
+          "type": "optional"
         }
       ]
     },
@@ -1037,12 +1127,13 @@
           "saleUnitType": "kg",
           "salePrice": 2.96,
           "saleFractionUsed": 0.34019399999999994,
-          "regularPrice": 1.00697424,
+          "regularPrice": 2.96,
           "regularFractionUsed": 0.34019399999999994,
           "source": "database",
           "sourceDate": "2025-04-22",
           "productName": "sweet potato",
-          "savingsPercentage": 0
+          "savingsPercentage": 0,
+          "type": "core"
         },
         {
           "recipeIngredientName": "avocado oil",
@@ -1050,12 +1141,13 @@
           "saleUnitType": "ml",
           "salePrice": 12.97,
           "saleFractionUsed": 0.05916,
-          "regularPrice": 0.7673052,
+          "regularPrice": 12.97,
           "regularFractionUsed": 0.05916,
           "source": "database",
           "sourceDate": "2025-04-22",
           "productName": "avocado oil",
-          "savingsPercentage": 0
+          "savingsPercentage": 0,
+          "type": "core"
         },
         {
           "recipeIngredientName": "salt",
@@ -1063,12 +1155,13 @@
           "saleUnitType": "g",
           "salePrice": 1.49,
           "saleFractionUsed": 0.003555438733674288,
-          "regularPrice": 0.005297603713174689,
+          "regularPrice": 1.49,
           "regularFractionUsed": 0.003555438733674288,
           "source": "flyer",
           "sourceDate": "2025-05-07",
           "productName": "Tata Sea Salt",
-          "savingsPercentage": 0
+          "savingsPercentage": 0,
+          "type": "core"
         },
         {
           "recipeIngredientName": "garlic powder",
@@ -1076,12 +1169,13 @@
           "saleUnitType": "kg",
           "salePrice": 9.99,
           "saleFractionUsed": 0.0017086943657804638,
-          "regularPrice": 0.017069856714146833,
+          "regularPrice": 9.99,
           "regularFractionUsed": 0.0017086943657804638,
           "source": "database",
           "sourceDate": "2024-09-11",
           "productName": "garlic powder",
-          "savingsPercentage": 0
+          "savingsPercentage": 0,
+          "type": "core"
         },
         {
           "recipeIngredientName": "paprika",
@@ -1089,12 +1183,13 @@
           "saleUnitType": "g",
           "salePrice": 4.49,
           "saleFractionUsed": 0.013023585105034024,
-          "regularPrice": 0.05847589712160277,
+          "regularPrice": 4.49,
           "regularFractionUsed": 0.013023585105034024,
           "source": "database",
           "sourceDate": "2024-06-29",
           "productName": "paprika",
-          "savingsPercentage": 0
+          "savingsPercentage": 0,
+          "type": "core"
         },
         {
           "recipeIngredientName": "red onion",
@@ -1102,12 +1197,13 @@
           "saleUnitType": "lb",
           "salePrice": 5,
           "saleFractionUsed": 0.04133670787844583,
-          "regularPrice": 0.3290401947124288,
+          "regularPrice": 7.959999999999999,
           "regularFractionUsed": 0.04133670787844583,
           "source": "flyer",
           "sourceDate": "2025-05-14",
           "productName": "YELLOW ONIONS",
-          "savingsPercentage": 37.1859296482412
+          "savingsPercentage": 37.1859296482412,
+          "type": "core"
         },
         {
           "recipeIngredientName": "kale",
@@ -1115,12 +1211,13 @@
           "saleUnitType": "bunch",
           "salePrice": 2.49,
           "saleFractionUsed": 0.42,
-          "regularPrice": 1.0458,
+          "regularPrice": 2.49,
           "regularFractionUsed": 0.42,
           "source": "database",
           "sourceDate": "2025-04-22",
           "productName": "kale",
-          "savingsPercentage": 0
+          "savingsPercentage": 0,
+          "type": "core"
         },
         {
           "recipeIngredientName": "eggs",
@@ -1128,12 +1225,13 @@
           "saleUnitType": "dozen",
           "salePrice": 4.49,
           "saleFractionUsed": 0.3333333333333333,
-          "regularPrice": 1.4966666666666666,
+          "regularPrice": 4.49,
           "regularFractionUsed": 0.3333333333333333,
           "source": "database",
           "sourceDate": "2025-04-16",
           "productName": "egg",
-          "savingsPercentage": 0
+          "savingsPercentage": 0,
+          "type": "core"
         },
         {
           "recipeIngredientName": "Parmesan cheese",
@@ -1141,19 +1239,21 @@
           "saleUnitType": "g",
           "salePrice": 7.49,
           "saleFractionUsed": 0.060012680163996794,
-          "regularPrice": 0.449494974428336,
+          "regularPrice": 7.49,
           "regularFractionUsed": 0.060012680163996794,
           "source": "flyer",
           "sourceDate": "2025-05-07",
           "productName": "Kraft Parmesan",
-          "savingsPercentage": 0
+          "savingsPercentage": 0,
+          "type": "core"
         },
         {
           "recipeIngredientName": "crushed red pepper",
           "salePrice": 0,
           "regularPrice": 0,
           "source": "skipped",
-          "savingsPercentage": 0
+          "savingsPercentage": 0,
+          "type": "optional"
         }
       ]
     },
@@ -1171,12 +1271,13 @@
           "saleUnitType": "g",
           "salePrice": 3.49,
           "saleFractionUsed": 0.9,
-          "regularPrice": 3.1410000000000005,
+          "regularPrice": 3.49,
           "regularFractionUsed": 0.9,
           "source": "database",
           "sourceDate": "2025-04-30",
           "productName": "cottage cheese",
-          "savingsPercentage": 0
+          "savingsPercentage": 0,
+          "type": "core"
         },
         {
           "recipeIngredientName": "fresh berries",
@@ -1184,12 +1285,13 @@
           "saleUnitType": "g",
           "salePrice": 3.98,
           "saleFractionUsed": 0.3303964757709251,
-          "regularPrice": 1.314977973568282,
+          "regularPrice": 3.98,
           "regularFractionUsed": 0.3303964757709251,
           "source": "flyer",
           "sourceDate": "2025-05-07",
           "productName": "Strawberries",
-          "savingsPercentage": 0
+          "savingsPercentage": 0,
+          "type": "core"
         },
         {
           "recipeIngredientName": "honey",
@@ -1197,12 +1299,13 @@
           "saleUnitType": "l",
           "salePrice": 5.88,
           "saleFractionUsed": 0.05916,
-          "regularPrice": 0.34786079999999997,
+          "regularPrice": 5.88,
           "regularFractionUsed": 0.05916,
           "source": "flyer",
           "sourceDate": "2025-05-07",
           "productName": "Casablanca Honey",
-          "savingsPercentage": 0
+          "savingsPercentage": 0,
+          "type": "core"
         },
         {
           "recipeIngredientName": "granola",
@@ -1210,12 +1313,13 @@
           "saleUnitType": "g",
           "salePrice": 4.77,
           "saleFractionUsed": 0.2079002079002079,
-          "regularPrice": 0.9916839916839917,
+          "regularPrice": 4.77,
           "regularFractionUsed": 0.2079002079002079,
           "source": "database",
           "sourceDate": "2025-04-22",
           "productName": "granola",
-          "savingsPercentage": 0
+          "savingsPercentage": 0,
+          "type": "core"
         }
       ]
     }
@@ -1235,12 +1339,13 @@
           "saleUnitType": "g",
           "salePrice": 0.98,
           "saleFractionUsed": 0.16789500000000002,
-          "regularPrice": 0.4180585500000001,
+          "regularPrice": 2.4899999999999998,
           "regularFractionUsed": 0.16789500000000002,
           "source": "flyer",
           "sourceDate": "2025-05-14",
           "productName": "PRIMO PASTA",
-          "savingsPercentage": 60.6425702811245
+          "savingsPercentage": 60.6425702811245,
+          "type": "core"
         },
         {
           "recipeIngredientName": "English cucumber",
@@ -1248,12 +1353,13 @@
           "saleUnitType": "whole",
           "salePrice": 3,
           "saleFractionUsed": 0.125,
-          "regularPrice": 0.375,
+          "regularPrice": 3,
           "regularFractionUsed": 0.125,
           "source": "flyer",
           "sourceDate": "2025-05-14",
           "productName": "SEEDLESS CUCUMBERS",
-          "savingsPercentage": 0
+          "savingsPercentage": 0,
+          "type": "core"
         },
         {
           "recipeIngredientName": "grape tomatoes",
@@ -1261,12 +1367,13 @@
           "saleUnitType": "lb",
           "salePrice": 2.88,
           "saleFractionUsed": 0.14550521173212932,
-          "regularPrice": 0.8686661140408121,
+          "regularPrice": 5.97,
           "regularFractionUsed": 0.14550521173212932,
           "source": "flyer",
           "sourceDate": "2025-05-14",
           "productName": "GRAPE TOMATOES",
-          "savingsPercentage": 51.75879396984925
+          "savingsPercentage": 51.75879396984925,
+          "type": "core"
         },
         {
           "recipeIngredientName": "red bell pepper",
@@ -1274,12 +1381,13 @@
           "saleUnitType": "whole",
           "salePrice": 2.88,
           "saleFractionUsed": 0.11,
-          "regularPrice": 0.31679999999999997,
+          "regularPrice": 2.88,
           "regularFractionUsed": 0.11,
           "source": "flyer",
           "sourceDate": "2025-05-07",
           "productName": "Sweet Assorted Peppers",
-          "savingsPercentage": 0
+          "savingsPercentage": 0,
+          "type": "core"
         },
         {
           "recipeIngredientName": "sliced pitted olives",
@@ -1287,12 +1395,13 @@
           "saleUnitType": "ml",
           "salePrice": 6.49,
           "saleFractionUsed": 0.10094506666666667,
-          "regularPrice": 0.6551334826666667,
+          "regularPrice": 6.49,
           "regularFractionUsed": 0.10094506666666667,
           "source": "database",
           "sourceDate": "2025-04-22",
           "productName": "kalamata olives",
-          "savingsPercentage": 0
+          "savingsPercentage": 0,
+          "type": "core"
         },
         {
           "recipeIngredientName": "feta cheese",
@@ -1300,12 +1409,13 @@
           "saleUnitType": "g",
           "salePrice": 6.49,
           "saleFractionUsed": 0.05973333333333334,
-          "regularPrice": 0.38766933333333337,
+          "regularPrice": 6.49,
           "regularFractionUsed": 0.05973333333333334,
           "source": "flyer",
           "sourceDate": "2025-05-07",
           "productName": "Selection Feta (2x150)",
-          "savingsPercentage": 0
+          "savingsPercentage": 0,
+          "type": "core"
         },
         {
           "recipeIngredientName": "red onion",
@@ -1313,12 +1423,13 @@
           "saleUnitType": "lb",
           "salePrice": 5,
           "saleFractionUsed": 0.011023122100918888,
-          "regularPrice": 0.08774405192331435,
+          "regularPrice": 7.960000000000001,
           "regularFractionUsed": 0.011023122100918888,
           "source": "flyer",
           "sourceDate": "2025-05-14",
           "productName": "YELLOW ONIONS",
-          "savingsPercentage": 37.185929648241206
+          "savingsPercentage": 37.185929648241206,
+          "type": "core"
         },
         {
           "recipeIngredientName": "Greek dressing",
@@ -1326,12 +1437,13 @@
           "saleUnitType": "ml",
           "salePrice": 2.53,
           "saleFractionUsed": 0.16436778947368422,
-          "regularPrice": 0.41585050736842105,
+          "regularPrice": 2.53,
           "regularFractionUsed": 0.16436778947368422,
           "source": "database",
           "sourceDate": "2025-04-22",
           "productName": "greek dressing",
-          "savingsPercentage": 0
+          "savingsPercentage": 0,
+          "type": "core"
         },
         {
           "recipeIngredientName": "red wine vinegar",
@@ -1339,12 +1451,13 @@
           "saleUnitType": "ml",
           "salePrice": 3.97,
           "saleFractionUsed": 0.0591475,
-          "regularPrice": 0.234815575,
+          "regularPrice": 3.97,
           "regularFractionUsed": 0.0591475,
           "source": "database",
           "sourceDate": "2025-04-22",
           "productName": "red wine vinegar",
-          "savingsPercentage": 0
+          "savingsPercentage": 0,
+          "type": "core"
         },
         {
           "recipeIngredientName": "olive oil",
@@ -1352,12 +1465,13 @@
           "saleUnitType": "ml",
           "salePrice": 22.99,
           "saleFractionUsed": 0.02957375,
-          "regularPrice": 0.6799005124999999,
+          "regularPrice": 22.99,
           "regularFractionUsed": 0.02957375,
           "source": "database",
           "sourceDate": "2025-04-22",
           "productName": "extra virgin olive oil",
-          "savingsPercentage": 0
+          "savingsPercentage": 0,
+          "type": "core"
         },
         {
           "recipeIngredientName": "garlic powder",
@@ -1365,12 +1479,13 @@
           "saleUnitType": "kg",
           "salePrice": 9.99,
           "saleFractionUsed": 0.000567286529439114,
-          "regularPrice": 0.005667192429096749,
+          "regularPrice": 9.99,
           "regularFractionUsed": 0.000567286529439114,
           "source": "database",
           "sourceDate": "2024-09-11",
           "productName": "garlic powder",
-          "savingsPercentage": 0
+          "savingsPercentage": 0,
+          "type": "core"
         },
         {
           "recipeIngredientName": "dried oregano",
@@ -1378,26 +1493,29 @@
           "saleUnitType": "g",
           "salePrice": 3.99,
           "saleFractionUsed": 0.02750581174183186,
-          "regularPrice": 0.10974818884990914,
+          "regularPrice": 3.99,
           "regularFractionUsed": 0.02750581174183186,
           "source": "database",
           "sourceDate": "2025-01-07",
           "productName": "dried oregano",
-          "savingsPercentage": 0
+          "savingsPercentage": 0,
+          "type": "core"
         },
         {
           "recipeIngredientName": "salt",
           "salePrice": 0,
           "regularPrice": 0,
           "source": "skipped",
-          "savingsPercentage": 0
+          "savingsPercentage": 0,
+          "type": "to taste"
         },
         {
           "recipeIngredientName": "black pepper",
           "salePrice": 0,
           "regularPrice": 0,
           "source": "skipped",
-          "savingsPercentage": 0
+          "savingsPercentage": 0,
+          "type": "to taste"
         }
       ]
     },
@@ -1415,12 +1533,13 @@
           "saleUnitType": "whole",
           "salePrice": 3,
           "saleFractionUsed": 0.5,
-          "regularPrice": 1.5,
+          "regularPrice": 3,
           "regularFractionUsed": 0.5,
           "source": "flyer",
           "sourceDate": "2025-05-14",
           "productName": "SEEDLESS CUCUMBERS",
-          "savingsPercentage": 0
+          "savingsPercentage": 0,
+          "type": "core"
         },
         {
           "recipeIngredientName": "tomato",
@@ -1428,12 +1547,13 @@
           "saleUnitType": "lb",
           "salePrice": 1.98,
           "saleFractionUsed": 0.6889451313074305,
-          "regularPrice": 1.7154733769555022,
+          "regularPrice": 2.49,
           "regularFractionUsed": 0.6889451313074305,
           "source": "flyer",
           "sourceDate": "2025-05-14",
           "productName": "HOTHOUSE TOMATOES",
-          "savingsPercentage": 20.48192771084338
+          "savingsPercentage": 20.48192771084338,
+          "type": "core"
         },
         {
           "recipeIngredientName": "red onion",
@@ -1441,19 +1561,21 @@
           "saleUnitType": "lb",
           "salePrice": 5,
           "saleFractionUsed": 0.04133670787844583,
-          "regularPrice": 0.3290401947124288,
+          "regularPrice": 7.959999999999999,
           "regularFractionUsed": 0.04133670787844583,
           "source": "flyer",
           "sourceDate": "2025-05-14",
           "productName": "YELLOW ONIONS",
-          "savingsPercentage": 37.1859296482412
+          "savingsPercentage": 37.1859296482412,
+          "type": "core"
         },
         {
           "recipeIngredientName": "fresh herbs",
           "salePrice": 0,
           "regularPrice": 0,
           "source": "skipped",
-          "savingsPercentage": 0
+          "savingsPercentage": 0,
+          "type": "optional"
         },
         {
           "recipeIngredientName": "olive oil",
@@ -1461,12 +1583,13 @@
           "saleUnitType": "ml",
           "salePrice": 22.99,
           "saleFractionUsed": 0.02958,
-          "regularPrice": 0.6800441999999999,
+          "regularPrice": 22.99,
           "regularFractionUsed": 0.02958,
           "source": "database",
           "sourceDate": "2025-04-22",
           "productName": "extra virgin olive oil",
-          "savingsPercentage": 0
+          "savingsPercentage": 0,
+          "type": "core"
         },
         {
           "recipeIngredientName": "red wine vinegar",
@@ -1474,26 +1597,29 @@
           "saleUnitType": "ml",
           "salePrice": 3.97,
           "saleFractionUsed": 0.02958,
-          "regularPrice": 0.1174326,
+          "regularPrice": 3.97,
           "regularFractionUsed": 0.02958,
           "source": "database",
           "sourceDate": "2025-04-22",
           "productName": "red wine vinegar",
-          "savingsPercentage": 0
+          "savingsPercentage": 0,
+          "type": "core"
         },
         {
           "recipeIngredientName": "salt",
           "salePrice": 0,
           "regularPrice": 0,
           "source": "skipped",
-          "savingsPercentage": 0
+          "savingsPercentage": 0,
+          "type": "to taste"
         },
         {
           "recipeIngredientName": "black pepper",
           "salePrice": 0,
           "regularPrice": 0,
           "source": "skipped",
-          "savingsPercentage": 0
+          "savingsPercentage": 0,
+          "type": "to taste"
         }
       ]
     },
@@ -1501,8 +1627,8 @@
       "name": "Cucumber Turkey Sub Sandwich",
       "url": "https://www.eatingwell.com/recipe/261898/cucumber-turkey-sub-sandwich/",
       "salePrice": 5.312651999659802,
-      "regularPrice": 6.0196583823457415,
-      "totalSavings": 0.7070063826859396,
+      "regularPrice": 5.978999730660349,
+      "totalSavings": 0.6663477310005472,
       "servings": 1,
       "ingredients": [
         {
@@ -1511,12 +1637,13 @@
           "saleUnitType": "whole",
           "salePrice": 3,
           "saleFractionUsed": 0.5,
-          "regularPrice": 1.5,
+          "regularPrice": 3,
           "regularFractionUsed": 0.5,
           "source": "flyer",
           "sourceDate": "2025-05-14",
           "productName": "SEEDLESS CUCUMBERS",
-          "savingsPercentage": 0
+          "savingsPercentage": 0,
+          "type": "core"
         },
         {
           "recipeIngredientName": "yellow mustard",
@@ -1524,12 +1651,13 @@
           "saleUnitType": "l",
           "salePrice": 1.99,
           "saleFractionUsed": 0.009859999999999999,
-          "regularPrice": 0.019621399999999997,
+          "regularPrice": 1.99,
           "regularFractionUsed": 0.009859999999999999,
           "source": "database",
           "sourceDate": "2024-07-29",
           "productName": "mustard",
-          "savingsPercentage": 0
+          "savingsPercentage": 0,
+          "type": "core"
         },
         {
           "recipeIngredientName": "mayonnaise",
@@ -1537,12 +1665,13 @@
           "saleUnitType": "ml",
           "salePrice": 5.99,
           "saleFractionUsed": null,
-          "regularPrice": 0.04065865168539325,
-          "regularFractionUsed": 0.011078651685393258,
+          "regularPrice": 5.99,
+          "regularFractionUsed": null,
           "source": "flyer",
           "sourceDate": "2025-05-14",
           "productName": "HELLMANN'S MAYONNAISE",
-          "savingsPercentage": 0
+          "savingsPercentage": 0,
+          "type": "core"
         },
         {
           "recipeIngredientName": "deli turkey breast",
@@ -1550,12 +1679,13 @@
           "saleUnitType": "kg",
           "salePrice": 24.23,
           "saleFractionUsed": 0.0567,
-          "regularPrice": 1.373841,
+          "regularPrice": 24.23,
           "regularFractionUsed": 0.0567,
           "source": "database",
           "sourceDate": "2024-10-10",
           "productName": "deli turkey",
-          "savingsPercentage": 0
+          "savingsPercentage": 0,
+          "type": "core"
         },
         {
           "recipeIngredientName": "Cheddar cheese",
@@ -1563,12 +1693,13 @@
           "saleUnitType": "g",
           "salePrice": 4.98,
           "saleFractionUsed": 0.07407407407407407,
-          "regularPrice": 0.3688888888888889,
+          "regularPrice": 4.98,
           "regularFractionUsed": 0.07407407407407407,
           "source": "flyer",
           "sourceDate": "2025-05-07",
           "productName": "Black Diamond Old Fort Cheddar Cheese",
-          "savingsPercentage": 0
+          "savingsPercentage": 0,
+          "type": "core"
         },
         {
           "recipeIngredientName": "tomato",
@@ -1576,12 +1707,13 @@
           "saleUnitType": "lb",
           "salePrice": 1.98,
           "saleFractionUsed": 0.8267341575689166,
-          "regularPrice": 2.0585680523466023,
+          "regularPrice": 2.49,
           "regularFractionUsed": 0.8267341575689166,
           "source": "flyer",
           "sourceDate": "2025-05-14",
           "productName": "HOTHOUSE TOMATOES",
-          "savingsPercentage": 20.48192771084338
+          "savingsPercentage": 20.48192771084338,
+          "type": "core"
         },
         {
           "recipeIngredientName": "red onion",
@@ -1589,19 +1721,21 @@
           "saleUnitType": "lb",
           "salePrice": 5,
           "saleFractionUsed": 0.08267341575689166,
-          "regularPrice": 0.6580803894248576,
+          "regularPrice": 7.959999999999999,
           "regularFractionUsed": 0.08267341575689166,
           "source": "flyer",
           "sourceDate": "2025-05-14",
           "productName": "YELLOW ONIONS",
-          "savingsPercentage": 37.1859296482412
+          "savingsPercentage": 37.1859296482412,
+          "type": "core"
         },
         {
           "recipeIngredientName": "black pepper",
           "salePrice": 0,
           "regularPrice": 0,
           "source": "skipped",
-          "savingsPercentage": 0
+          "savingsPercentage": 0,
+          "type": "to taste"
         }
       ]
     },
@@ -1619,7 +1753,8 @@
           "regularPrice": 0,
           "source": "free",
           "sourceDate": "2025-05-08",
-          "savingsPercentage": 0
+          "savingsPercentage": 0,
+          "type": "core"
         },
         {
           "recipeIngredientName": "kosher salt",
@@ -1627,12 +1762,13 @@
           "saleUnitType": "g",
           "salePrice": 3.49,
           "saleFractionUsed": 0.0033046630046253732,
-          "regularPrice": 0.011533273886142554,
+          "regularPrice": 3.49,
           "regularFractionUsed": 0.0033046630046253732,
           "source": "database",
           "sourceDate": "2025-04-30",
           "productName": "kosher salt",
-          "savingsPercentage": 0
+          "savingsPercentage": 0,
+          "type": "core"
         },
         {
           "recipeIngredientName": "extra-virgin olive oil",
@@ -1640,12 +1776,13 @@
           "saleUnitType": "ml",
           "salePrice": 22.99,
           "saleFractionUsed": 0.049250699999999994,
-          "regularPrice": 1.1322735929999999,
+          "regularPrice": 22.99,
           "regularFractionUsed": 0.049250699999999994,
           "source": "database",
           "sourceDate": "2025-04-22",
           "productName": "extra virgin olive oil",
-          "savingsPercentage": 0
+          "savingsPercentage": 0,
+          "type": "core"
         },
         {
           "recipeIngredientName": "instant couscous",
@@ -1653,12 +1790,13 @@
           "saleUnitType": "g",
           "salePrice": 4.99,
           "saleFractionUsed": 0.1655857142857143,
-          "regularPrice": 0.8262727142857145,
+          "regularPrice": 4.99,
           "regularFractionUsed": 0.1655857142857143,
           "source": "database",
           "sourceDate": "2025-04-22",
           "productName": "instant couscous",
-          "savingsPercentage": 0
+          "savingsPercentage": 0,
+          "type": "core"
         },
         {
           "recipeIngredientName": "roma tomato",
@@ -1666,12 +1804,13 @@
           "saleUnitType": "g",
           "salePrice": 3.99,
           "saleFractionUsed": 0.08735294117647059,
-          "regularPrice": 0.3485382352941177,
+          "regularPrice": 3.99,
           "regularFractionUsed": 0.08735294117647059,
           "source": "database",
           "sourceDate": "2025-04-22",
           "productName": "plum tomatoes",
-          "savingsPercentage": 0
+          "savingsPercentage": 0,
+          "type": "core"
         },
         {
           "recipeIngredientName": "english cucumber",
@@ -1679,12 +1818,13 @@
           "saleUnitType": "whole",
           "salePrice": 3,
           "saleFractionUsed": 0.066,
-          "regularPrice": 0.198,
+          "regularPrice": 3,
           "regularFractionUsed": 0.066,
           "source": "flyer",
           "sourceDate": "2025-05-14",
           "productName": "SEEDLESS CUCUMBERS",
-          "savingsPercentage": 0
+          "savingsPercentage": 0,
+          "type": "core"
         },
         {
           "recipeIngredientName": "red bell pepper",
@@ -1692,12 +1832,13 @@
           "saleUnitType": "whole",
           "salePrice": 2.88,
           "saleFractionUsed": 0.13749999999999998,
-          "regularPrice": 0.39599999999999996,
+          "regularPrice": 2.88,
           "regularFractionUsed": 0.13749999999999998,
           "source": "flyer",
           "sourceDate": "2025-05-07",
           "productName": "Sweet Assorted Peppers",
-          "savingsPercentage": 0
+          "savingsPercentage": 0,
+          "type": "core"
         },
         {
           "recipeIngredientName": "canned garbanzo beans",
@@ -1705,12 +1846,13 @@
           "saleUnitType": "ml",
           "salePrice": 1.29,
           "saleFractionUsed": 0.14458277777777778,
-          "regularPrice": 0.18651178333333335,
+          "regularPrice": 1.29,
           "regularFractionUsed": 0.14458277777777778,
           "source": "database",
           "sourceDate": "2025-04-30",
           "productName": "canned chickpeas",
-          "savingsPercentage": 0
+          "savingsPercentage": 0,
+          "type": "core"
         },
         {
           "recipeIngredientName": "red onion",
@@ -1718,12 +1860,13 @@
           "saleUnitType": "lb",
           "salePrice": 5,
           "saleFractionUsed": 0.01499144605724969,
-          "regularPrice": 0.11933191061570753,
+          "regularPrice": 7.959999999999999,
           "regularFractionUsed": 0.01499144605724969,
           "source": "flyer",
           "sourceDate": "2025-05-14",
           "productName": "YELLOW ONIONS",
-          "savingsPercentage": 37.1859296482412
+          "savingsPercentage": 37.1859296482412,
+          "type": "core"
         },
         {
           "recipeIngredientName": "kalamata olives",
@@ -1731,12 +1874,13 @@
           "saleUnitType": "ml",
           "salePrice": 6.49,
           "saleFractionUsed": 0.20819920000000003,
-          "regularPrice": 1.3512128080000003,
+          "regularPrice": 6.49,
           "regularFractionUsed": 0.20819920000000003,
           "source": "database",
           "sourceDate": "2025-04-22",
           "productName": "kalamata olives",
-          "savingsPercentage": 0
+          "savingsPercentage": 0,
+          "type": "core"
         },
         {
           "recipeIngredientName": "feta cheese",
@@ -1744,12 +1888,13 @@
           "saleUnitType": "g",
           "salePrice": 6.49,
           "saleFractionUsed": 0.031039891795933895,
-          "regularPrice": 0.20144889775561098,
+          "regularPrice": 6.49,
           "regularFractionUsed": 0.031039891795933895,
           "source": "flyer",
           "sourceDate": "2025-05-07",
           "productName": "Selection Feta (2x150)",
-          "savingsPercentage": 0
+          "savingsPercentage": 0,
+          "type": "core"
         },
         {
           "recipeIngredientName": "fresh parsley",
@@ -1757,12 +1902,13 @@
           "saleUnitType": "bunch",
           "salePrice": 1.99,
           "saleFractionUsed": 0.018615044310128632,
-          "regularPrice": 0.037043938177155976,
+          "regularPrice": 1.99,
           "regularFractionUsed": 0.018615044310128632,
           "source": "database",
           "sourceDate": "2024-07-15",
           "productName": "parsley",
-          "savingsPercentage": 0
+          "savingsPercentage": 0,
+          "type": "core"
         },
         {
           "recipeIngredientName": "fresh mint",
@@ -1770,12 +1916,13 @@
           "saleUnitType": "g",
           "salePrice": 1.79,
           "saleFractionUsed": 0.010109894754638827,
-          "regularPrice": 0.043831448708736634,
-          "regularFractionUsed": 0.014659347394226299,
+          "regularPrice": 4.335500000000001,
+          "regularFractionUsed": 0.010109894754638827,
           "source": "flyer",
           "sourceDate": "2025-05-14",
           "productName": "TIC TAC MINTS",
-          "savingsPercentage": 58.71295121669935
+          "savingsPercentage": 58.71295121669935,
+          "type": "core"
         },
         {
           "recipeIngredientName": "fresh basil",
@@ -1783,12 +1930,13 @@
           "saleUnitType": "g",
           "salePrice": 2,
           "saleFractionUsed": 0.03988938066456135,
-          "regularPrice": 0.0797787613291227,
+          "regularPrice": 2,
           "regularFractionUsed": 0.03988938066456135,
           "source": "database",
           "sourceDate": "2025-04-30",
           "productName": "fresh basil",
-          "savingsPercentage": 0
+          "savingsPercentage": 0,
+          "type": "core"
         },
         {
           "recipeIngredientName": "dried oregano",
@@ -1796,12 +1944,13 @@
           "saleUnitType": "g",
           "salePrice": 3.99,
           "saleFractionUsed": 0.01416966059427702,
-          "regularPrice": 0.05653694577116532,
+          "regularPrice": 3.99,
           "regularFractionUsed": 0.01416966059427702,
           "source": "database",
           "sourceDate": "2025-01-07",
           "productName": "dried oregano",
-          "savingsPercentage": 0
+          "savingsPercentage": 0,
+          "type": "core"
         },
         {
           "recipeIngredientName": "lemon",
@@ -1809,12 +1958,13 @@
           "saleUnitType": "whole",
           "salePrice": 4.88,
           "saleFractionUsed": 0.16666666666666666,
-          "regularPrice": 0.8133333333333332,
+          "regularPrice": 4.88,
           "regularFractionUsed": 0.16666666666666666,
           "source": "flyer",
           "sourceDate": "2025-05-07",
           "productName": "Lemons",
-          "savingsPercentage": 0
+          "savingsPercentage": 0,
+          "type": "core"
         },
         {
           "recipeIngredientName": "red wine vinegar",
@@ -1822,12 +1972,13 @@
           "saleUnitType": "ml",
           "salePrice": 3.97,
           "saleFractionUsed": 0.0198186,
-          "regularPrice": 0.078679842,
+          "regularPrice": 3.97,
           "regularFractionUsed": 0.0198186,
           "source": "database",
           "sourceDate": "2025-04-22",
           "productName": "red wine vinegar",
-          "savingsPercentage": 0
+          "savingsPercentage": 0,
+          "type": "core"
         },
         {
           "recipeIngredientName": "black pepper",
@@ -1835,12 +1986,13 @@
           "saleUnitType": "g",
           "salePrice": 6.49,
           "saleFractionUsed": 0.0039761802688022254,
-          "regularPrice": 0.025805409944526445,
+          "regularPrice": 6.49,
           "regularFractionUsed": 0.0039761802688022254,
           "source": "database",
           "sourceDate": "2025-04-16",
           "productName": "pepper",
-          "savingsPercentage": 0
+          "savingsPercentage": 0,
+          "type": "core"
         }
       ]
     },
@@ -1858,12 +2010,13 @@
           "saleUnitType": "g",
           "salePrice": 1.97,
           "saleFractionUsed": 0.16789500000000002,
-          "regularPrice": 0.33075315000000005,
+          "regularPrice": 1.97,
           "regularFractionUsed": 0.16789500000000002,
           "source": "database",
           "sourceDate": "2025-04-22",
           "productName": "fusilli pasta",
-          "savingsPercentage": 0
+          "savingsPercentage": 0,
+          "type": "core"
         },
         {
           "recipeIngredientName": "English cucumber",
@@ -1871,12 +2024,13 @@
           "saleUnitType": "whole",
           "salePrice": 3,
           "saleFractionUsed": 0.335,
-          "regularPrice": 1.0050000000000001,
+          "regularPrice": 3,
           "regularFractionUsed": 0.335,
           "source": "flyer",
           "sourceDate": "2025-05-14",
           "productName": "SEEDLESS CUCUMBERS",
-          "savingsPercentage": 0
+          "savingsPercentage": 0,
+          "type": "core"
         },
         {
           "recipeIngredientName": "cherry tomatoes",
@@ -1884,12 +2038,13 @@
           "saleUnitType": "lb",
           "salePrice": 2.88,
           "saleFractionUsed": 0.2954196723046262,
-          "regularPrice": 1.7636554436586183,
+          "regularPrice": 5.97,
           "regularFractionUsed": 0.2954196723046262,
           "source": "flyer",
           "sourceDate": "2025-05-14",
           "productName": "GRAPE TOMATOES",
-          "savingsPercentage": 51.75879396984925
+          "savingsPercentage": 51.75879396984925,
+          "type": "core"
         },
         {
           "recipeIngredientName": "baby spinach",
@@ -1897,12 +2052,13 @@
           "saleUnitType": "g",
           "salePrice": 3.98,
           "saleFractionUsed": 0.06442307692307693,
-          "regularPrice": 0.2564038461538462,
+          "regularPrice": 3.98,
           "regularFractionUsed": 0.06442307692307693,
           "source": "database",
           "sourceDate": "2025-04-22",
           "productName": "baby spinach",
-          "savingsPercentage": 0
+          "savingsPercentage": 0,
+          "type": "core"
         },
         {
           "recipeIngredientName": "red onion",
@@ -1910,12 +2066,13 @@
           "saleUnitType": "lb",
           "salePrice": 5,
           "saleFractionUsed": 0.02728222719977425,
-          "regularPrice": 0.21716652851020302,
+          "regularPrice": 7.959999999999999,
           "regularFractionUsed": 0.02728222719977425,
           "source": "flyer",
           "sourceDate": "2025-05-14",
           "productName": "YELLOW ONIONS",
-          "savingsPercentage": 37.1859296482412
+          "savingsPercentage": 37.1859296482412,
+          "type": "core"
         },
         {
           "recipeIngredientName": "feta cheese",
@@ -1923,12 +2080,13 @@
           "saleUnitType": "g",
           "salePrice": 6.49,
           "saleFractionUsed": 0.1232,
-          "regularPrice": 0.7995680000000001,
+          "regularPrice": 6.49,
           "regularFractionUsed": 0.1232,
           "source": "flyer",
           "sourceDate": "2025-05-07",
           "productName": "Selection Feta (2x150)",
-          "savingsPercentage": 0
+          "savingsPercentage": 0,
+          "type": "core"
         },
         {
           "recipeIngredientName": "kalamata olives",
@@ -1936,12 +2094,13 @@
           "saleUnitType": "ml",
           "salePrice": 6.49,
           "saleFractionUsed": 0.10725413333333333,
-          "regularPrice": 0.6960793253333334,
+          "regularPrice": 6.49,
           "regularFractionUsed": 0.10725413333333333,
           "source": "database",
           "sourceDate": "2025-04-22",
           "productName": "kalamata olives",
-          "savingsPercentage": 0
+          "savingsPercentage": 0,
+          "type": "core"
         },
         {
           "recipeIngredientName": "olive oil",
@@ -1949,12 +2108,13 @@
           "saleUnitType": "ml",
           "salePrice": 22.99,
           "saleFractionUsed": 0.0402203,
-          "regularPrice": 0.924664697,
+          "regularPrice": 22.99,
           "regularFractionUsed": 0.0402203,
           "source": "database",
           "sourceDate": "2025-04-22",
           "productName": "extra virgin olive oil",
-          "savingsPercentage": 0
+          "savingsPercentage": 0,
+          "type": "core"
         },
         {
           "recipeIngredientName": "red wine vinegar",
@@ -1962,12 +2122,13 @@
           "saleUnitType": "ml",
           "salePrice": 3.97,
           "saleFractionUsed": 0.05916,
-          "regularPrice": 0.2348652,
+          "regularPrice": 3.97,
           "regularFractionUsed": 0.05916,
           "source": "database",
           "sourceDate": "2025-04-22",
           "productName": "red wine vinegar",
-          "savingsPercentage": 0
+          "savingsPercentage": 0,
+          "type": "core"
         },
         {
           "recipeIngredientName": "Dijon mustard",
@@ -1975,12 +2136,13 @@
           "saleUnitType": "l",
           "salePrice": 1.99,
           "saleFractionUsed": 0.0033031000000000002,
-          "regularPrice": 0.006573169,
+          "regularPrice": 1.99,
           "regularFractionUsed": 0.0033031000000000002,
           "source": "database",
           "sourceDate": "2024-07-29",
           "productName": "mustard",
-          "savingsPercentage": 0
+          "savingsPercentage": 0,
+          "type": "core"
         },
         {
           "recipeIngredientName": "dried oregano",
@@ -1988,12 +2150,13 @@
           "saleUnitType": "g",
           "salePrice": 3.99,
           "saleFractionUsed": 0.05584513293038589,
-          "regularPrice": 0.22282208039223972,
+          "regularPrice": 3.99,
           "regularFractionUsed": 0.05584513293038589,
           "source": "database",
           "sourceDate": "2025-01-07",
           "productName": "dried oregano",
-          "savingsPercentage": 0
+          "savingsPercentage": 0,
+          "type": "core"
         },
         {
           "recipeIngredientName": "dried mint",
@@ -2001,12 +2164,13 @@
           "saleUnitType": "g",
           "salePrice": 2.49,
           "saleFractionUsed": 0.03350707975823154,
-          "regularPrice": 0.08343262859799655,
+          "regularPrice": 2.49,
           "regularFractionUsed": 0.03350707975823154,
           "source": "database",
           "sourceDate": "2025-04-30",
           "productName": "dried mint",
-          "savingsPercentage": 0
+          "savingsPercentage": 0,
+          "type": "core"
         },
         {
           "recipeIngredientName": "garlic",
@@ -2014,26 +2178,29 @@
           "saleUnitType": "whole",
           "salePrice": 0.5,
           "saleFractionUsed": 0.67,
-          "regularPrice": 0.335,
+          "regularPrice": 0.5,
           "regularFractionUsed": 0.67,
           "source": "database",
           "sourceDate": "2024-12-12",
           "productName": "garlic",
-          "savingsPercentage": 0
+          "savingsPercentage": 0,
+          "type": "core"
         },
         {
           "recipeIngredientName": "salt",
           "salePrice": 0,
           "regularPrice": 0,
           "source": "skipped",
-          "savingsPercentage": 0
+          "savingsPercentage": 0,
+          "type": "to taste"
         },
         {
           "recipeIngredientName": "black pepper",
           "salePrice": 0,
           "regularPrice": 0,
           "source": "skipped",
-          "savingsPercentage": 0
+          "savingsPercentage": 0,
+          "type": "to taste"
         }
       ]
     },
@@ -2051,12 +2218,13 @@
           "saleUnitType": "g",
           "salePrice": 7.48,
           "saleFractionUsed": 0.28114663726571115,
-          "regularPrice": 2.1029768467475196,
+          "regularPrice": 7.48,
           "regularFractionUsed": 0.28114663726571115,
           "source": "database",
           "sourceDate": "2025-04-22",
           "productName": "white quinoa",
-          "savingsPercentage": 0
+          "savingsPercentage": 0,
+          "type": "core"
         },
         {
           "recipeIngredientName": "salt",
@@ -2064,12 +2232,13 @@
           "saleUnitType": "g",
           "salePrice": 1.49,
           "saleFractionUsed": 0.010666316201022867,
-          "regularPrice": 0.015892811139524073,
+          "regularPrice": 1.49,
           "regularFractionUsed": 0.010666316201022867,
           "source": "flyer",
           "sourceDate": "2025-05-07",
           "productName": "Tata Sea Salt",
-          "savingsPercentage": 0
+          "savingsPercentage": 0,
+          "type": "core"
         },
         {
           "recipeIngredientName": "water",
@@ -2077,7 +2246,8 @@
           "regularPrice": 0,
           "source": "free",
           "sourceDate": "2025-05-08",
-          "savingsPercentage": 0
+          "savingsPercentage": 0,
+          "type": "core"
         },
         {
           "recipeIngredientName": "red onion",
@@ -2085,12 +2255,13 @@
           "saleUnitType": "lb",
           "salePrice": 5,
           "saleFractionUsed": 0.08267341575689166,
-          "regularPrice": 0.6580803894248576,
+          "regularPrice": 7.959999999999999,
           "regularFractionUsed": 0.08267341575689166,
           "source": "flyer",
           "sourceDate": "2025-05-14",
           "productName": "YELLOW ONIONS",
-          "savingsPercentage": 37.1859296482412
+          "savingsPercentage": 37.1859296482412,
+          "type": "core"
         },
         {
           "recipeIngredientName": "red pepper",
@@ -2098,12 +2269,13 @@
           "saleUnitType": "whole",
           "salePrice": 2.88,
           "saleFractionUsed": 0.3333333333333333,
-          "regularPrice": 0.96,
+          "regularPrice": 2.88,
           "regularFractionUsed": 0.3333333333333333,
           "source": "flyer",
           "sourceDate": "2025-05-07",
           "productName": "Sweet Assorted Peppers",
-          "savingsPercentage": 0
+          "savingsPercentage": 0,
+          "type": "core"
         },
         {
           "recipeIngredientName": "sweet potato",
@@ -2111,12 +2283,13 @@
           "saleUnitType": "kg",
           "salePrice": 2.96,
           "saleFractionUsed": 0.18,
-          "regularPrice": 0.5327999999999999,
+          "regularPrice": 2.96,
           "regularFractionUsed": 0.18,
           "source": "database",
           "sourceDate": "2025-04-22",
           "productName": "sweet potato",
-          "savingsPercentage": 0
+          "savingsPercentage": 0,
+          "type": "core"
         },
         {
           "recipeIngredientName": "yellow squash",
@@ -2124,12 +2297,13 @@
           "saleUnitType": "kg",
           "salePrice": 4.39,
           "saleFractionUsed": 0.2,
-          "regularPrice": 0.878,
+          "regularPrice": 4.39,
           "regularFractionUsed": 0.2,
           "source": "database",
           "sourceDate": "2025-04-22",
           "productName": "yellow squash",
-          "savingsPercentage": 0
+          "savingsPercentage": 0,
+          "type": "core"
         },
         {
           "recipeIngredientName": "green pepper",
@@ -2137,12 +2311,13 @@
           "saleUnitType": "whole",
           "salePrice": 2.88,
           "saleFractionUsed": 0.3333333333333333,
-          "regularPrice": 0.96,
+          "regularPrice": 2.88,
           "regularFractionUsed": 0.3333333333333333,
           "source": "flyer",
           "sourceDate": "2025-05-07",
           "productName": "Sweet Assorted Peppers",
-          "savingsPercentage": 0
+          "savingsPercentage": 0,
+          "type": "core"
         },
         {
           "recipeIngredientName": "olive oil",
@@ -2150,12 +2325,13 @@
           "saleUnitType": "ml",
           "salePrice": 22.99,
           "saleFractionUsed": 0.04437,
-          "regularPrice": 1.0200662999999999,
+          "regularPrice": 22.99,
           "regularFractionUsed": 0.04437,
           "source": "database",
           "sourceDate": "2025-04-22",
           "productName": "extra virgin olive oil",
-          "savingsPercentage": 0
+          "savingsPercentage": 0,
+          "type": "core"
         },
         {
           "recipeIngredientName": "black pepper",
@@ -2163,12 +2339,13 @@
           "saleUnitType": "g",
           "salePrice": 6.49,
           "saleFractionUsed": 0.011694647849418307,
-          "regularPrice": 0.07589826454272482,
+          "regularPrice": 6.49,
           "regularFractionUsed": 0.011694647849418307,
           "source": "database",
           "sourceDate": "2025-04-16",
           "productName": "pepper",
-          "savingsPercentage": 0
+          "savingsPercentage": 0,
+          "type": "core"
         },
         {
           "recipeIngredientName": "garlic powder",
@@ -2176,12 +2353,13 @@
           "saleUnitType": "kg",
           "salePrice": 9.99,
           "saleFractionUsed": 0.0017086943657804638,
-          "regularPrice": 0.017069856714146833,
+          "regularPrice": 9.99,
           "regularFractionUsed": 0.0017086943657804638,
           "source": "database",
           "sourceDate": "2024-09-11",
           "productName": "garlic powder",
-          "savingsPercentage": 0
+          "savingsPercentage": 0,
+          "type": "core"
         },
         {
           "recipeIngredientName": "oregano",
@@ -2189,26 +2367,29 @@
           "saleUnitType": "g",
           "salePrice": 3.99,
           "saleFractionUsed": 0.041675472336108875,
-          "regularPrice": 0.16628513462107442,
+          "regularPrice": 3.99,
           "regularFractionUsed": 0.041675472336108875,
           "source": "database",
           "sourceDate": "2025-01-07",
           "productName": "dried oregano",
-          "savingsPercentage": 0
+          "savingsPercentage": 0,
+          "type": "core"
         },
         {
           "recipeIngredientName": "parsley",
           "salePrice": 0,
           "regularPrice": 0,
           "source": "skipped",
-          "savingsPercentage": 0
+          "savingsPercentage": 0,
+          "type": "garnish"
         },
         {
           "recipeIngredientName": "tahini sauce",
           "salePrice": 0,
           "regularPrice": 0,
           "source": "skipped",
-          "savingsPercentage": 0
+          "savingsPercentage": 0,
+          "type": "optional"
         }
       ]
     },
@@ -2226,12 +2407,13 @@
           "saleUnitType": "g",
           "salePrice": 0.98,
           "saleFractionUsed": 0.252,
-          "regularPrice": 0.62748,
+          "regularPrice": 2.4900000000000007,
           "regularFractionUsed": 0.252,
           "source": "flyer",
           "sourceDate": "2025-05-14",
           "productName": "PRIMO PASTA",
-          "savingsPercentage": 60.642570281124506
+          "savingsPercentage": 60.642570281124506,
+          "type": "core"
         },
         {
           "recipeIngredientName": "olive oil",
@@ -2239,12 +2421,13 @@
           "saleUnitType": "ml",
           "salePrice": 22.99,
           "saleFractionUsed": 0.02958,
-          "regularPrice": 0.6800441999999999,
+          "regularPrice": 22.99,
           "regularFractionUsed": 0.02958,
           "source": "database",
           "sourceDate": "2025-04-22",
           "productName": "extra virgin olive oil",
-          "savingsPercentage": 0
+          "savingsPercentage": 0,
+          "type": "core"
         },
         {
           "recipeIngredientName": "garlic",
@@ -2252,12 +2435,13 @@
           "saleUnitType": "whole",
           "salePrice": 0.5,
           "saleFractionUsed": 3,
-          "regularPrice": 1.5,
+          "regularPrice": 0.5,
           "regularFractionUsed": 3,
           "source": "database",
           "sourceDate": "2024-12-12",
           "productName": "garlic",
-          "savingsPercentage": 0
+          "savingsPercentage": 0,
+          "type": "core"
         },
         {
           "recipeIngredientName": "canned tuna",
@@ -2265,12 +2449,13 @@
           "saleUnitType": "g",
           "salePrice": 1.88,
           "saleFractionUsed": 1.6676470588235295,
-          "regularPrice": 3.1351764705882355,
+          "regularPrice": 1.88,
           "regularFractionUsed": 1.6676470588235295,
           "source": "flyer",
           "sourceDate": "2025-05-07",
           "productName": "Clover Leaf Albacore or Yellowfin Tuna",
-          "savingsPercentage": 0
+          "savingsPercentage": 0,
+          "type": "core"
         },
         {
           "recipeIngredientName": "lemon",
@@ -2278,26 +2463,29 @@
           "saleUnitType": "whole",
           "salePrice": 4.88,
           "saleFractionUsed": 0.16666666666666666,
-          "regularPrice": 0.8133333333333332,
+          "regularPrice": 4.88,
           "regularFractionUsed": 0.16666666666666666,
           "source": "flyer",
           "sourceDate": "2025-05-07",
           "productName": "Lemons",
-          "savingsPercentage": 0
+          "savingsPercentage": 0,
+          "type": "core"
         },
         {
           "recipeIngredientName": "salt",
           "salePrice": 0,
           "regularPrice": 0,
           "source": "skipped",
-          "savingsPercentage": 0
+          "savingsPercentage": 0,
+          "type": "to taste"
         },
         {
           "recipeIngredientName": "black pepper",
           "salePrice": 0,
           "regularPrice": 0,
           "source": "skipped",
-          "savingsPercentage": 0
+          "savingsPercentage": 0,
+          "type": "to taste"
         },
         {
           "recipeIngredientName": "capers",
@@ -2305,12 +2493,13 @@
           "saleUnitType": "ml",
           "salePrice": 2.47,
           "saleFractionUsed": 0.6571944444444444,
-          "regularPrice": 1.6232702777777779,
+          "regularPrice": 2.47,
           "regularFractionUsed": 0.6571944444444444,
           "source": "database",
           "sourceDate": "2025-04-30",
           "productName": "capers",
-          "savingsPercentage": 0
+          "savingsPercentage": 0,
+          "type": "core"
         },
         {
           "recipeIngredientName": "fresh parsley",
@@ -2318,19 +2507,21 @@
           "saleUnitType": "bunch",
           "salePrice": 1.99,
           "saleFractionUsed": 0.16670188934443553,
-          "regularPrice": 0.3317367597954267,
+          "regularPrice": 1.99,
           "regularFractionUsed": 0.16670188934443553,
           "source": "database",
           "sourceDate": "2024-07-15",
           "productName": "parsley",
-          "savingsPercentage": 0
+          "savingsPercentage": 0,
+          "type": "core"
         },
         {
           "recipeIngredientName": "Parmesan cheese",
           "salePrice": 0,
           "regularPrice": 0,
           "source": "skipped",
-          "savingsPercentage": 0
+          "savingsPercentage": 0,
+          "type": "garnish"
         }
       ]
     },
@@ -2348,12 +2539,13 @@
           "saleUnitType": "g",
           "salePrice": 6.69,
           "saleFractionUsed": 0.06251320850416332,
-          "regularPrice": 0.41821336489285266,
+          "regularPrice": 6.69,
           "regularFractionUsed": 0.06251320850416332,
           "source": "database",
           "sourceDate": "2025-04-22",
           "productName": "unsalted butter",
-          "savingsPercentage": 0
+          "savingsPercentage": 0,
+          "type": "core"
         },
         {
           "recipeIngredientName": "onion",
@@ -2361,19 +2553,21 @@
           "saleUnitType": "lb",
           "salePrice": 5,
           "saleFractionUsed": 0.020668353939222915,
-          "regularPrice": 0.1645200973562144,
+          "regularPrice": 7.959999999999999,
           "regularFractionUsed": 0.020668353939222915,
           "source": "flyer",
           "sourceDate": "2025-05-14",
           "productName": "YELLOW ONIONS",
-          "savingsPercentage": 37.1859296482412
+          "savingsPercentage": 37.1859296482412,
+          "type": "core"
         },
         {
           "recipeIngredientName": "fresh mushrooms",
           "salePrice": 0,
           "regularPrice": 0,
           "source": "skipped",
-          "savingsPercentage": 0
+          "savingsPercentage": 0,
+          "type": "optional"
         },
         {
           "recipeIngredientName": "green bell pepper",
@@ -2381,12 +2575,13 @@
           "saleUnitType": "whole",
           "salePrice": 2.88,
           "saleFractionUsed": 0.08333333333333333,
-          "regularPrice": 0.24,
+          "regularPrice": 2.88,
           "regularFractionUsed": 0.08333333333333333,
           "source": "flyer",
           "sourceDate": "2025-05-07",
           "productName": "Sweet Assorted Peppers",
-          "savingsPercentage": 0
+          "savingsPercentage": 0,
+          "type": "core"
         },
         {
           "recipeIngredientName": "beef steak",
@@ -2394,12 +2589,13 @@
           "saleUnitType": "lb",
           "salePrice": 10.99,
           "saleFractionUsed": 0.5,
-          "regularPrice": 5.495,
+          "regularPrice": 10.99,
           "regularFractionUsed": 0.5,
           "source": "flyer",
           "sourceDate": "2025-05-07",
           "productName": "Fresh Boneless Eye of Round Steaks or Roast",
-          "savingsPercentage": 0
+          "savingsPercentage": 0,
+          "type": "core"
         },
         {
           "recipeIngredientName": "pickled hot peppers",
@@ -2407,12 +2603,13 @@
           "saleUnitType": "ml",
           "salePrice": 2.47,
           "saleFractionUsed": 0.11832,
-          "regularPrice": 0.2922504,
+          "regularPrice": 2.47,
           "regularFractionUsed": 0.11832,
           "source": "database",
           "sourceDate": "2025-05-02",
           "productName": "pickled hot peppers",
-          "savingsPercentage": 0
+          "savingsPercentage": 0,
+          "type": "core"
         },
         {
           "recipeIngredientName": "hot pepper sauce",
@@ -2420,26 +2617,29 @@
           "saleUnitType": "ml",
           "salePrice": 2.99,
           "saleFractionUsed": 0.03471830985915493,
-          "regularPrice": 0.10380774647887325,
+          "regularPrice": 2.99,
           "regularFractionUsed": 0.03471830985915493,
           "source": "database",
           "sourceDate": "2025-05-02",
           "productName": "hot pepper sauce",
-          "savingsPercentage": 0
+          "savingsPercentage": 0,
+          "type": "core"
         },
         {
           "recipeIngredientName": "salt",
           "salePrice": 0,
           "regularPrice": 0,
           "source": "skipped",
-          "savingsPercentage": 0
+          "savingsPercentage": 0,
+          "type": "to taste"
         },
         {
           "recipeIngredientName": "black pepper",
           "salePrice": 0,
           "regularPrice": 0,
           "source": "skipped",
-          "savingsPercentage": 0
+          "savingsPercentage": 0,
+          "type": "to taste"
         },
         {
           "recipeIngredientName": "Cheddar cheese",
@@ -2447,12 +2647,13 @@
           "saleUnitType": "g",
           "salePrice": 4.98,
           "saleFractionUsed": 0.14814814814814814,
-          "regularPrice": 0.7377777777777778,
+          "regularPrice": 4.98,
           "regularFractionUsed": 0.14814814814814814,
           "source": "flyer",
           "sourceDate": "2025-05-07",
           "productName": "Black Diamond Old Fort Cheddar Cheese",
-          "savingsPercentage": 0
+          "savingsPercentage": 0,
+          "type": "core"
         },
         {
           "recipeIngredientName": "French baguette",
@@ -2460,12 +2661,13 @@
           "saleUnitType": "g",
           "salePrice": 4,
           "saleFractionUsed": 0.2357142857142857,
-          "regularPrice": 0.9428571428571428,
+          "regularPrice": 4,
           "regularFractionUsed": 0.2357142857142857,
           "source": "database",
           "sourceDate": "2025-04-30",
           "productName": "baguette",
-          "savingsPercentage": 0
+          "savingsPercentage": 0,
+          "type": "core"
         }
       ]
     },
@@ -2483,12 +2685,13 @@
           "saleUnitType": "ml",
           "salePrice": 22.99,
           "saleFractionUsed": 0.0591475,
-          "regularPrice": 1.3598010249999999,
+          "regularPrice": 22.99,
           "regularFractionUsed": 0.0591475,
           "source": "database",
           "sourceDate": "2025-04-22",
           "productName": "extra virgin olive oil",
-          "savingsPercentage": 0
+          "savingsPercentage": 0,
+          "type": "core"
         },
         {
           "recipeIngredientName": "yellow onion",
@@ -2496,12 +2699,13 @@
           "saleUnitType": "lb",
           "salePrice": 5,
           "saleFractionUsed": 0.08267341575689166,
-          "regularPrice": 0.6580803894248576,
+          "regularPrice": 7.959999999999999,
           "regularFractionUsed": 0.08267341575689166,
           "source": "flyer",
           "sourceDate": "2025-05-14",
           "productName": "YELLOW ONIONS",
-          "savingsPercentage": 37.1859296482412
+          "savingsPercentage": 37.1859296482412,
+          "type": "core"
         },
         {
           "recipeIngredientName": "carrot",
@@ -2509,12 +2713,13 @@
           "saleUnitType": "g",
           "salePrice": 2.97,
           "saleFractionUsed": 0.08823529411764706,
-          "regularPrice": 0.2620588235294118,
+          "regularPrice": 2.97,
           "regularFractionUsed": 0.08823529411764706,
           "source": "database",
           "sourceDate": "2025-04-22",
           "productName": "carrots",
-          "savingsPercentage": 0
+          "savingsPercentage": 0,
+          "type": "core"
         },
         {
           "recipeIngredientName": "garlic",
@@ -2522,12 +2727,13 @@
           "saleUnitType": "whole",
           "salePrice": 0.5,
           "saleFractionUsed": 4,
-          "regularPrice": 2,
+          "regularPrice": 0.5,
           "regularFractionUsed": 4,
           "source": "database",
           "sourceDate": "2024-12-12",
           "productName": "garlic",
-          "savingsPercentage": 0
+          "savingsPercentage": 0,
+          "type": "core"
         },
         {
           "recipeIngredientName": "ground cumin",
@@ -2535,12 +2741,13 @@
           "saleUnitType": "g",
           "salePrice": 4.49,
           "saleFractionUsed": 0.10418868084027219,
-          "regularPrice": 0.46780717697282215,
+          "regularPrice": 4.49,
           "regularFractionUsed": 0.10418868084027219,
           "source": "database",
           "sourceDate": "2025-01-10",
           "productName": "ground cumin",
-          "savingsPercentage": 0
+          "savingsPercentage": 0,
+          "type": "core"
         },
         {
           "recipeIngredientName": "curry powder",
@@ -2548,12 +2755,13 @@
           "saleUnitType": "g",
           "salePrice": 3.79,
           "saleFractionUsed": 0.04053886854512409,
-          "regularPrice": 0.1536423117860203,
+          "regularPrice": 3.79,
           "regularFractionUsed": 0.04053886854512409,
           "source": "database",
           "sourceDate": "2025-04-22",
           "productName": "curry powder",
-          "savingsPercentage": 0
+          "savingsPercentage": 0,
+          "type": "core"
         },
         {
           "recipeIngredientName": "dried thyme",
@@ -2561,12 +2769,13 @@
           "saleUnitType": "g",
           "salePrice": 3.99,
           "saleFractionUsed": 0.05556729644814517,
-          "regularPrice": 0.22171351282809923,
+          "regularPrice": 3.99,
           "regularFractionUsed": 0.05556729644814517,
           "source": "database",
           "sourceDate": "2025-01-03",
           "productName": "dried thyme",
-          "savingsPercentage": 0
+          "savingsPercentage": 0,
+          "type": "core"
         },
         {
           "recipeIngredientName": "canned diced tomatoes",
@@ -2574,12 +2783,13 @@
           "saleUnitType": "ml",
           "salePrice": 1.27,
           "saleFractionUsed": 1.0401507537688444,
-          "regularPrice": 1.3209914572864323,
+          "regularPrice": 1.27,
           "regularFractionUsed": 1.0401507537688444,
           "source": "database",
           "sourceDate": "2025-04-30",
           "productName": "canned diced tomatoes",
-          "savingsPercentage": 0
+          "savingsPercentage": 0,
+          "type": "core"
         },
         {
           "recipeIngredientName": "brown lentils",
@@ -2587,12 +2797,13 @@
           "saleUnitType": "g",
           "salePrice": 2.99,
           "saleFractionUsed": 0.21168687982359427,
-          "regularPrice": 0.6329437706725469,
+          "regularPrice": 2.99,
           "regularFractionUsed": 0.21168687982359427,
           "source": "database",
           "sourceDate": "2025-04-30",
           "productName": "brown lentils",
-          "savingsPercentage": 0
+          "savingsPercentage": 0,
+          "type": "core"
         },
         {
           "recipeIngredientName": "vegetable broth",
@@ -2600,12 +2811,13 @@
           "saleUnitType": "l",
           "salePrice": 2.49,
           "saleFractionUsed": 0.94636,
-          "regularPrice": 2.3564364,
+          "regularPrice": 2.49,
           "regularFractionUsed": 0.94636,
           "source": "database",
           "sourceDate": "2024-08-21",
           "productName": "vegetable broth",
-          "savingsPercentage": 0
+          "savingsPercentage": 0,
+          "type": "core"
         },
         {
           "recipeIngredientName": "water",
@@ -2613,7 +2825,8 @@
           "regularPrice": 0,
           "source": "free",
           "sourceDate": "2025-05-08",
-          "savingsPercentage": 0
+          "savingsPercentage": 0,
+          "type": "core"
         },
         {
           "recipeIngredientName": "salt",
@@ -2621,26 +2834,29 @@
           "saleUnitType": "g",
           "salePrice": 1.49,
           "saleFractionUsed": 0.007110877467348576,
-          "regularPrice": 0.010595207426349378,
+          "regularPrice": 1.49,
           "regularFractionUsed": 0.007110877467348576,
           "source": "flyer",
           "sourceDate": "2025-05-07",
           "productName": "Tata Sea Salt",
-          "savingsPercentage": 0
+          "savingsPercentage": 0,
+          "type": "core"
         },
         {
           "recipeIngredientName": "red pepper flakes",
           "salePrice": 0,
           "regularPrice": 0,
           "source": "skipped",
-          "savingsPercentage": 0
+          "savingsPercentage": 0,
+          "type": "to taste"
         },
         {
           "recipeIngredientName": "black pepper",
           "salePrice": 0,
           "regularPrice": 0,
           "source": "skipped",
-          "savingsPercentage": 0
+          "savingsPercentage": 0,
+          "type": "to taste"
         },
         {
           "recipeIngredientName": "fresh kale",
@@ -2648,19 +2864,21 @@
           "saleUnitType": "bunch",
           "salePrice": 2.49,
           "saleFractionUsed": 0.105,
-          "regularPrice": 0.26145,
+          "regularPrice": 2.49,
           "regularFractionUsed": 0.105,
           "source": "database",
           "sourceDate": "2025-04-22",
           "productName": "kale",
-          "savingsPercentage": 0
+          "savingsPercentage": 0,
+          "type": "core"
         },
         {
           "recipeIngredientName": "lemon juice",
           "salePrice": 0,
           "regularPrice": 0,
           "source": "skipped",
-          "savingsPercentage": 0
+          "savingsPercentage": 0,
+          "type": "to taste"
         }
       ]
     },
@@ -2678,12 +2896,13 @@
           "saleUnitType": "whole",
           "salePrice": 5,
           "saleFractionUsed": 0.91,
-          "regularPrice": 4.55,
+          "regularPrice": 5,
           "regularFractionUsed": 0.91,
           "source": "flyer",
           "sourceDate": "2025-05-07",
           "productName": "Broccoli Crowns",
-          "savingsPercentage": 0
+          "savingsPercentage": 0,
+          "type": "core"
         },
         {
           "recipeIngredientName": "white rice",
@@ -2691,12 +2910,13 @@
           "saleUnitType": "kg",
           "salePrice": 5.88,
           "saleFractionUsed": 0.185,
-          "regularPrice": 1.0877999999999999,
+          "regularPrice": 5.88,
           "regularFractionUsed": 0.185,
           "source": "flyer",
           "sourceDate": "2025-05-07",
           "productName": "Arjun Premium Basmati Rice",
-          "savingsPercentage": 0
+          "savingsPercentage": 0,
+          "type": "core"
         },
         {
           "recipeIngredientName": "butter",
@@ -2704,12 +2924,13 @@
           "saleUnitType": "g",
           "salePrice": 6.69,
           "saleFractionUsed": 0.04688490637812249,
-          "regularPrice": 0.31366002366963947,
+          "regularPrice": 6.69,
           "regularFractionUsed": 0.04688490637812249,
           "source": "database",
           "sourceDate": "2025-04-22",
           "productName": "unsalted butter",
-          "savingsPercentage": 0
+          "savingsPercentage": 0,
+          "type": "core"
         },
         {
           "recipeIngredientName": "onion",
@@ -2717,12 +2938,13 @@
           "saleUnitType": "lb",
           "salePrice": 5,
           "saleFractionUsed": 0.03306936630275666,
-          "regularPrice": 0.263232155769943,
+          "regularPrice": 7.959999999999999,
           "regularFractionUsed": 0.03306936630275666,
           "source": "flyer",
           "sourceDate": "2025-05-14",
           "productName": "YELLOW ONIONS",
-          "savingsPercentage": 37.1859296482412
+          "savingsPercentage": 37.1859296482412,
+          "type": "core"
         },
         {
           "recipeIngredientName": "all-purpose flour",
@@ -2730,12 +2952,13 @@
           "saleUnitType": "g",
           "salePrice": 3.79,
           "saleFractionUsed": 0.004688490637812248,
-          "regularPrice": 0.01776937951730842,
+          "regularPrice": 3.79,
           "regularFractionUsed": 0.004688490637812248,
           "source": "database",
           "sourceDate": "2025-04-22",
           "productName": "all-purpose flour",
-          "savingsPercentage": 0
+          "savingsPercentage": 0,
+          "type": "core"
         },
         {
           "recipeIngredientName": "milk",
@@ -2748,7 +2971,8 @@
           "source": "flyer",
           "sourceDate": "2025-05-07",
           "productName": "Beatrice 2% Milk",
-          "savingsPercentage": 0
+          "savingsPercentage": 0,
+          "type": "core"
         },
         {
           "recipeIngredientName": "garlic powder",
@@ -2756,19 +2980,21 @@
           "saleUnitType": "kg",
           "salePrice": 9.99,
           "saleFractionUsed": 0.00042717359144511596,
-          "regularPrice": 0.004267464178536708,
+          "regularPrice": 9.99,
           "regularFractionUsed": 0.00042717359144511596,
           "source": "database",
           "sourceDate": "2024-09-11",
           "productName": "garlic powder",
-          "savingsPercentage": 0
+          "savingsPercentage": 0,
+          "type": "core"
         },
         {
           "recipeIngredientName": "black pepper",
           "salePrice": 0,
           "regularPrice": 0,
           "source": "skipped",
-          "savingsPercentage": 0
+          "savingsPercentage": 0,
+          "type": "to taste"
         },
         {
           "recipeIngredientName": "dry mustard powder",
@@ -2776,12 +3002,13 @@
           "saleUnitType": "g",
           "salePrice": 6.49,
           "saleFractionUsed": 0.006807783123085967,
-          "regularPrice": 0.04418251246882793,
+          "regularPrice": 6.49,
           "regularFractionUsed": 0.006807783123085967,
           "source": "database",
           "sourceDate": "2025-04-29",
           "productName": "dry mustard powder",
-          "savingsPercentage": 0
+          "savingsPercentage": 0,
+          "type": "core"
         },
         {
           "recipeIngredientName": "paprika",
@@ -2789,19 +3016,21 @@
           "saleUnitType": "g",
           "salePrice": 4.49,
           "saleFractionUsed": 0.013023585105034024,
-          "regularPrice": 0.05847589712160277,
+          "regularPrice": 4.49,
           "regularFractionUsed": 0.013023585105034024,
           "source": "database",
           "sourceDate": "2024-06-29",
           "productName": "paprika",
-          "savingsPercentage": 0
+          "savingsPercentage": 0,
+          "type": "core"
         },
         {
           "recipeIngredientName": "salt",
           "salePrice": 0,
           "regularPrice": 0,
           "source": "skipped",
-          "savingsPercentage": 0
+          "savingsPercentage": 0,
+          "type": "to taste"
         },
         {
           "recipeIngredientName": "cream cheese",
@@ -2809,12 +3038,13 @@
           "saleUnitType": "g",
           "salePrice": 2.77,
           "saleFractionUsed": 0.09294364700508864,
-          "regularPrice": 0.27790150454521506,
+          "regularPrice": 2.99,
           "regularFractionUsed": 0.09294364700508864,
           "source": "flyer",
           "sourceDate": "2025-05-14",
           "productName": "LACTANTIA CREAM CHEESE",
-          "savingsPercentage": 7.3578595317725854
+          "savingsPercentage": 7.3578595317725854,
+          "type": "core"
         },
         {
           "recipeIngredientName": "cheddar cheese",
@@ -2822,412 +3052,95 @@
           "saleUnitType": "g",
           "salePrice": 4.98,
           "saleFractionUsed": 0.6277777777777778,
-          "regularPrice": 3.1263333333333336,
+          "regularPrice": 4.98,
           "regularFractionUsed": 0.6277777777777778,
           "source": "flyer",
           "sourceDate": "2025-05-07",
           "productName": "Black Diamond Old Fort Cheddar Cheese",
-          "savingsPercentage": 0
+          "savingsPercentage": 0,
+          "type": "core"
         }
       ]
     }
   ],
   "dinner": [
     {
-      "name": "Perfect Baked Potato",
-      "url": "https://www.loveandlemons.com/baked-potato/",
-      "salePrice": 1.5439364135834241,
-      "regularPrice": 1.846763623939868,
-      "totalSavings": 0.3028272103564438,
+      "name": "The Best Baked Salmon",
+      "url": "https://www.foodnetwork.com/recipes/food-network-kitchen/the-best-baked-salmon-1-8081733",
+      "salePrice": 15.596484305049048,
+      "regularPrice": 26.12648430504905,
+      "totalSavings": 10.530000000000003,
       "servings": 4,
       "ingredients": [
         {
-          "recipeIngredientName": "russet potato",
-          "saleUnitSize": 5,
-          "saleUnitType": "lb",
-          "salePrice": 3.98,
-          "saleFractionUsed": 0.2998289211449937,
-          "regularPrice": 1.4961463165135187,
-          "regularFractionUsed": 0.2998289211449937,
-          "source": "flyer",
-          "sourceDate": "2025-05-14",
-          "productName": "RED CANADIAN POTATOES",
-          "savingsPercentage": 20.240480961923854
-        },
-        {
-          "recipeIngredientName": "extra virgin olive oil",
-          "saleUnitSize": 1000,
-          "saleUnitType": "ml",
-          "salePrice": 22.99,
-          "saleFractionUsed": 0.01479,
-          "regularPrice": 0.34002209999999994,
-          "regularFractionUsed": 0.01479,
-          "source": "database",
-          "sourceDate": "2025-04-22",
-          "productName": "extra virgin olive oil",
-          "savingsPercentage": 0
-        },
-        {
-          "recipeIngredientName": "sea salt",
-          "saleUnitSize": 800,
-          "saleUnitType": "g",
-          "salePrice": 1.49,
-          "saleFractionUsed": 0.007110877467348576,
-          "regularPrice": 0.010595207426349378,
-          "regularFractionUsed": 0.007110877467348576,
-          "source": "flyer",
-          "sourceDate": "2025-05-07",
-          "productName": "Tata Sea Salt",
-          "savingsPercentage": 0
-        }
-      ]
-    },
-    {
-      "name": "Golden Sweet Cornbread",
-      "url": "https://www.allrecipes.com/recipe/17891/golden-sweet-cornbread/",
-      "salePrice": 1.8640486457166547,
-      "regularPrice": 1.8640486457166547,
-      "totalSavings": 0,
-      "servings": 12,
-      "ingredients": [
-        {
-          "recipeIngredientName": "all-purpose flour",
-          "saleUnitSize": 2500,
-          "saleUnitType": "g",
-          "salePrice": 3.79,
-          "saleFractionUsed": 0.05,
-          "regularPrice": 0.1895,
-          "regularFractionUsed": 0.05,
-          "source": "database",
-          "sourceDate": "2025-04-22",
-          "productName": "all-purpose flour",
-          "savingsPercentage": 0
-        },
-        {
-          "recipeIngredientName": "yellow cornmeal",
+          "recipeIngredientName": "light brown sugar",
           "saleUnitSize": 1,
           "saleUnitType": "kg",
-          "salePrice": 3.99,
-          "saleFractionUsed": 0.138,
-          "regularPrice": 0.5506200000000001,
-          "regularFractionUsed": 0.138,
+          "salePrice": 2.2,
+          "saleFractionUsed": 0.02750581174183186,
+          "regularPrice": 2.2,
+          "regularFractionUsed": 0.02750581174183186,
           "source": "database",
-          "sourceDate": "2024-08-18",
-          "productName": "cornmeal",
-          "savingsPercentage": 0
+          "sourceDate": "2024-10-01",
+          "productName": "brown sugar",
+          "savingsPercentage": 0,
+          "type": "core"
         },
         {
-          "recipeIngredientName": "white sugar",
-          "saleUnitSize": 1,
-          "saleUnitType": "kg",
-          "salePrice": 1.19,
-          "saleFractionUsed": 0.134,
-          "regularPrice": 0.15946,
-          "regularFractionUsed": 0.134,
-          "source": "database",
-          "sourceDate": "2024-10-25",
-          "productName": "white sugar",
-          "savingsPercentage": 0
-        },
-        {
-          "recipeIngredientName": "baking powder",
-          "saleUnitSize": 225,
+          "recipeIngredientName": "paprika",
+          "saleUnitSize": 40,
           "saleUnitType": "g",
-          "salePrice": 4.47,
-          "saleFractionUsed": 0.07455278940126145,
-          "regularPrice": 0.3332509686236387,
-          "regularFractionUsed": 0.07455278940126145,
-          "source": "database",
-          "sourceDate": "2025-04-22",
-          "productName": "baking powder",
-          "savingsPercentage": 0
-        },
-        {
-          "recipeIngredientName": "salt",
-          "saleUnitSize": 800,
-          "saleUnitType": "g",
-          "salePrice": 1.49,
-          "saleFractionUsed": 0.007110877467348576,
-          "regularPrice": 0.010595207426349378,
-          "regularFractionUsed": 0.007110877467348576,
-          "source": "flyer",
-          "sourceDate": "2025-05-07",
-          "productName": "Tata Sea Salt",
-          "savingsPercentage": 0
-        },
-        {
-          "recipeIngredientName": "milk",
-          "saleUnitSize": 4,
-          "saleUnitType": "l",
-          "salePrice": 0,
-          "saleFractionUsed": 0.0591475,
-          "regularPrice": 0,
-          "regularFractionUsed": 0.0591475,
-          "source": "flyer",
-          "sourceDate": "2025-05-07",
-          "productName": "Beatrice 2% Milk",
-          "savingsPercentage": 0
-        },
-        {
-          "recipeIngredientName": "vegetable oil",
-          "saleUnitSize": 3000,
-          "saleUnitType": "ml",
-          "salePrice": 9.47,
-          "saleFractionUsed": 0.026024900000000004,
-          "regularPrice": 0.24645580300000006,
-          "regularFractionUsed": 0.026024900000000004,
-          "source": "database",
-          "sourceDate": "2025-04-22",
-          "productName": "vegetable oil",
-          "savingsPercentage": 0
-        },
-        {
-          "recipeIngredientName": "eggs",
-          "saleUnitSize": 1,
-          "saleUnitType": "dozen",
           "salePrice": 4.49,
-          "saleFractionUsed": 0.08333333333333333,
-          "regularPrice": 0.37416666666666665,
-          "regularFractionUsed": 0.08333333333333333,
+          "saleFractionUsed": 0.026047170210068048,
+          "regularPrice": 4.49,
+          "regularFractionUsed": 0.026047170210068048,
           "source": "database",
-          "sourceDate": "2025-04-16",
-          "productName": "egg",
-          "savingsPercentage": 0
-        }
-      ]
-    },
-    {
-      "name": "Crispy Baked Sweet Potato Fries",
-      "url": "https://cookieandkate.com/baked-sweet-potato-fries/",
-      "salePrice": 3.395963044242859,
-      "regularPrice": 3.395963044242859,
-      "totalSavings": 0,
-      "servings": 4,
-      "ingredients": [
+          "sourceDate": "2024-06-29",
+          "productName": "paprika",
+          "savingsPercentage": 0,
+          "type": "core"
+        },
         {
-          "recipeIngredientName": "sweet potato",
+          "recipeIngredientName": "garlic powder",
           "saleUnitSize": 1,
           "saleUnitType": "kg",
-          "salePrice": 2.96,
-          "saleFractionUsed": 0.907184,
-          "regularPrice": 2.6852646399999998,
-          "regularFractionUsed": 0.907184,
+          "salePrice": 9.99,
+          "saleFractionUsed": 0.0017086943657804638,
+          "regularPrice": 9.99,
+          "regularFractionUsed": 0.0017086943657804638,
           "source": "database",
-          "sourceDate": "2025-04-22",
-          "productName": "sweet potato",
-          "savingsPercentage": 0
-        },
-        {
-          "recipeIngredientName": "cornstarch",
-          "saleUnitSize": 2.2,
-          "saleUnitType": "kg",
-          "salePrice": 8.99,
-          "saleFractionUsed": 0.003409811372954363,
-          "regularPrice": 0.030654204242859726,
-          "regularFractionUsed": 0.003409811372954363,
-          "source": "flyer",
-          "sourceDate": "2025-05-07",
-          "productName": "Maseca Corn Meal",
-          "savingsPercentage": 0
-        },
-        {
-          "recipeIngredientName": "sea salt",
-          "salePrice": 0,
-          "regularPrice": 0,
-          "source": "skipped",
-          "savingsPercentage": 0
-        },
-        {
-          "recipeIngredientName": "extra-virgin olive oil",
-          "saleUnitSize": 1000,
-          "saleUnitType": "ml",
-          "salePrice": 22.99,
-          "saleFractionUsed": 0.02958,
-          "regularPrice": 0.6800441999999999,
-          "regularFractionUsed": 0.02958,
-          "source": "database",
-          "sourceDate": "2025-04-22",
-          "productName": "extra virgin olive oil",
-          "savingsPercentage": 0
-        },
-        {
-          "recipeIngredientName": "black pepper",
-          "salePrice": 0,
-          "regularPrice": 0,
-          "source": "skipped",
-          "savingsPercentage": 0
+          "sourceDate": "2024-09-11",
+          "productName": "garlic powder",
+          "savingsPercentage": 0,
+          "type": "core"
         },
         {
           "recipeIngredientName": "cayenne pepper",
-          "salePrice": 0,
-          "regularPrice": 0,
-          "source": "skipped",
-          "savingsPercentage": 0
-        },
-        {
-          "recipeIngredientName": "garlic powder",
-          "salePrice": 0,
-          "regularPrice": 0,
-          "source": "skipped",
-          "savingsPercentage": 0
-        }
-      ]
-    },
-    {
-      "name": "Garlic Mashed Potatoes",
-      "url": "https://www.lecremedelacrumb.com/garlic-mashed-potatoes/",
-      "salePrice": 4.727126592370661,
-      "regularPrice": 4.727126592370661,
-      "totalSavings": 0,
-      "servings": 4,
-      "ingredients": [
-        {
-          "recipeIngredientName": "red potatoes",
-          "saleUnitSize": 2.27,
-          "saleUnitType": "kg",
-          "salePrice": 3.49,
-          "saleFractionUsed": 0.3996405286343612,
-          "regularPrice": 1.3947454449339207,
-          "regularFractionUsed": 0.3996405286343612,
+          "saleUnitSize": 35,
+          "saleUnitType": "g",
+          "salePrice": 3.99,
+          "saleFractionUsed": 0.013842210454493305,
+          "regularPrice": 3.99,
+          "regularFractionUsed": 0.013842210454493305,
           "source": "database",
-          "sourceDate": "2025-04-22",
-          "productName": "red potatoes",
-          "savingsPercentage": 0
+          "sourceDate": "2024-07-04",
+          "productName": "cayenne pepper",
+          "savingsPercentage": 0,
+          "type": "core"
         },
         {
-          "recipeIngredientName": "butter",
+          "recipeIngredientName": "kosher salt",
           "saleUnitSize": 454,
           "saleUnitType": "g",
-          "salePrice": 6.69,
-          "saleFractionUsed": 0.08345513335305803,
-          "regularPrice": 0.5583148421319583,
-          "regularFractionUsed": 0.08345513335305803,
+          "salePrice": 3.49,
+          "saleFractionUsed": 0.008261657511563434,
+          "regularPrice": 3.49,
+          "regularFractionUsed": 0.008261657511563434,
           "source": "database",
-          "sourceDate": "2025-04-22",
-          "productName": "unsalted butter",
-          "savingsPercentage": 0
-        },
-        {
-          "recipeIngredientName": "sour cream",
-          "saleUnitSize": 500,
-          "saleUnitType": "ml",
-          "salePrice": 2.49,
-          "saleFractionUsed": 0.3108700021304348,
-          "regularPrice": 0.7740663053047827,
-          "regularFractionUsed": 0.3108700021304348,
-          "source": "flyer",
-          "sourceDate": "2025-05-07",
-          "productName": "Selection or Life Smart Sour Cream",
-          "savingsPercentage": 0
-        },
-        {
-          "recipeIngredientName": "whole milk",
-          "saleUnitSize": 4,
-          "saleUnitType": "l",
-          "salePrice": 0,
-          "saleFractionUsed": 0.019518675000000003,
-          "regularPrice": 0,
-          "regularFractionUsed": 0.019518675000000003,
-          "source": "flyer",
-          "sourceDate": "2025-05-07",
-          "productName": "Beatrice 2% Milk",
-          "savingsPercentage": 0
-        },
-        {
-          "recipeIngredientName": "garlic",
-          "saleUnitSize": 1,
-          "saleUnitType": "whole",
-          "salePrice": 0.5,
-          "saleFractionUsed": 4,
-          "regularPrice": 2,
-          "regularFractionUsed": 4,
-          "source": "database",
-          "sourceDate": "2024-12-12",
-          "productName": "garlic",
-          "savingsPercentage": 0
-        },
-        {
-          "recipeIngredientName": "garlic powder",
-          "salePrice": 0,
-          "regularPrice": 0,
-          "source": "skipped",
-          "savingsPercentage": 0
-        },
-        {
-          "recipeIngredientName": "salt",
-          "salePrice": 0,
-          "regularPrice": 0,
-          "source": "skipped",
-          "savingsPercentage": 0
-        },
-        {
-          "recipeIngredientName": "black pepper",
-          "salePrice": 0,
-          "regularPrice": 0,
-          "source": "skipped",
-          "savingsPercentage": 0
-        }
-      ]
-    },
-    {
-      "name": "Frittata with Variations",
-      "url": "https://www.loveandlemons.com/frittata-recipe/",
-      "salePrice": 5.425141678499835,
-      "regularPrice": 5.425141678499835,
-      "totalSavings": 0,
-      "servings": 4,
-      "ingredients": [
-        {
-          "recipeIngredientName": "egg",
-          "saleUnitSize": 1,
-          "saleUnitType": "dozen",
-          "salePrice": 4.49,
-          "saleFractionUsed": 0.6666666666666666,
-          "regularPrice": 2.993333333333333,
-          "regularFractionUsed": 0.6666666666666666,
-          "source": "database",
-          "sourceDate": "2025-04-16",
-          "productName": "egg",
-          "savingsPercentage": 0
-        },
-        {
-          "recipeIngredientName": "almond milk",
-          "saleUnitSize": 1890,
-          "saleUnitType": "ml",
-          "salePrice": 4.97,
-          "saleFractionUsed": 0.041309365079365085,
-          "regularPrice": 0.20530754444444446,
-          "regularFractionUsed": 0.041309365079365085,
-          "source": "database",
-          "sourceDate": "2025-04-22",
-          "productName": "almond milk",
-          "savingsPercentage": 0
-        },
-        {
-          "recipeIngredientName": "garlic",
-          "saleUnitSize": 1,
-          "saleUnitType": "whole",
-          "salePrice": 0.5,
-          "saleFractionUsed": 2.67,
-          "regularPrice": 1.335,
-          "regularFractionUsed": 2.67,
-          "source": "database",
-          "sourceDate": "2024-12-12",
-          "productName": "garlic",
-          "savingsPercentage": 0
-        },
-        {
-          "recipeIngredientName": "sea salt",
-          "saleUnitSize": 800,
-          "saleUnitType": "g",
-          "salePrice": 1.49,
-          "saleFractionUsed": 0.0023465895642250305,
-          "regularPrice": 0.0034964184506952956,
-          "regularFractionUsed": 0.0023465895642250305,
-          "source": "flyer",
-          "sourceDate": "2025-05-07",
-          "productName": "Tata Sea Salt",
-          "savingsPercentage": 0
+          "sourceDate": "2025-04-30",
+          "productName": "kosher salt",
+          "savingsPercentage": 0,
+          "type": "core"
         },
         {
           "recipeIngredientName": "black pepper",
@@ -3235,130 +3148,739 @@
           "saleUnitType": "g",
           "salePrice": 6.49,
           "saleFractionUsed": 0.005847323924709154,
-          "regularPrice": 0.03794913227136241,
+          "regularPrice": 6.49,
           "regularFractionUsed": 0.005847323924709154,
           "source": "database",
           "sourceDate": "2025-04-16",
           "productName": "pepper",
-          "savingsPercentage": 0
+          "savingsPercentage": 0,
+          "type": "core"
         },
         {
-          "recipeIngredientName": "extra virgin olive oil",
+          "recipeIngredientName": "panko breadcrumbs",
+          "saleUnitSize": 200,
+          "saleUnitType": "g",
+          "salePrice": 2.97,
+          "saleFractionUsed": 0.0625,
+          "regularPrice": 2.97,
+          "regularFractionUsed": 0.0625,
+          "source": "database",
+          "sourceDate": "2025-04-22",
+          "productName": "panko breadcrumbs",
+          "savingsPercentage": 0,
+          "type": "core"
+        },
+        {
+          "recipeIngredientName": "parsley",
+          "saleUnitSize": 1,
+          "saleUnitType": "bunch",
+          "salePrice": 1.99,
+          "saleFractionUsed": 0.6666666666666666,
+          "regularPrice": 1.99,
+          "regularFractionUsed": 0.6666666666666666,
+          "source": "database",
+          "sourceDate": "2024-07-15",
+          "productName": "parsley",
+          "savingsPercentage": 0,
+          "type": "core"
+        },
+        {
+          "recipeIngredientName": "unsalted butter",
+          "saleUnitSize": 454,
+          "saleUnitType": "g",
+          "salePrice": 6.69,
+          "saleFractionUsed": 0.06251320850416332,
+          "regularPrice": 6.69,
+          "regularFractionUsed": 0.06251320850416332,
+          "source": "database",
+          "sourceDate": "2025-04-22",
+          "productName": "unsalted butter",
+          "savingsPercentage": 0,
+          "type": "core"
+        },
+        {
+          "recipeIngredientName": "salmon fillet",
+          "saleUnitSize": 1,
+          "saleUnitType": "lb",
+          "salePrice": 8.88,
+          "saleFractionUsed": 1.4999999999999998,
+          "regularPrice": 15.900000000000002,
+          "regularFractionUsed": 1.4999999999999998,
+          "source": "flyer",
+          "sourceDate": "2025-05-14",
+          "productName": "FRESH ATLANTIC SALMON FILLET FAMILY PACK",
+          "savingsPercentage": 44.15094339622642,
+          "type": "core"
+        },
+        {
+          "recipeIngredientName": "Dijon mustard",
+          "saleUnitSize": 1,
+          "saleUnitType": "l",
+          "salePrice": 1.99,
+          "saleFractionUsed": 0.01479,
+          "regularPrice": 1.99,
+          "regularFractionUsed": 0.01479,
+          "source": "database",
+          "sourceDate": "2024-07-29",
+          "productName": "mustard",
+          "savingsPercentage": 0,
+          "type": "core"
+        }
+      ]
+    },
+    {
+      "name": "Baked Honey Mustard Chicken",
+      "url": "https://www.allrecipes.com/recipe/8847/baked-honey-mustard-chicken/",
+      "salePrice": 22.016943499353037,
+      "regularPrice": 35.14945024550377,
+      "totalSavings": 13.132506746150735,
+      "servings": 6,
+      "ingredients": [
+        {
+          "recipeIngredientName": "cooking spray",
+          "saleUnitSize": 227,
+          "saleUnitType": "g",
+          "salePrice": 4.49,
+          "saleFractionUsed": 0.017441276968856136,
+          "regularPrice": 4.49,
+          "regularFractionUsed": 0.017441276968856136,
+          "source": "database",
+          "sourceDate": "2025-04-16",
+          "productName": "cooking spray",
+          "savingsPercentage": 0,
+          "type": "core"
+        },
+        {
+          "recipeIngredientName": "chicken breast",
+          "saleUnitSize": 1,
+          "saleUnitType": "lb",
+          "salePrice": 4.58,
+          "saleFractionUsed": 4.497433817174906,
+          "regularPrice": 7.5,
+          "regularFractionUsed": 4.497433817174906,
+          "source": "flyer",
+          "sourceDate": "2025-05-14",
+          "productName": "FRESH BONELESS SKINLESS CHICKEN BREAST FAMILY PACK",
+          "savingsPercentage": 38.93333333333332,
+          "type": "core"
+        },
+        {
+          "recipeIngredientName": "salt",
+          "salePrice": 0,
+          "regularPrice": 0,
+          "source": "skipped",
+          "savingsPercentage": 0,
+          "type": "to taste"
+        },
+        {
+          "recipeIngredientName": "black pepper",
+          "salePrice": 0,
+          "regularPrice": 0,
+          "source": "skipped",
+          "savingsPercentage": 0,
+          "type": "to taste"
+        },
+        {
+          "recipeIngredientName": "honey",
+          "saleUnitSize": 1,
+          "saleUnitType": "l",
+          "salePrice": 5.88,
+          "saleFractionUsed": 0.118295,
+          "regularPrice": 5.88,
+          "regularFractionUsed": 0.118295,
+          "source": "flyer",
+          "sourceDate": "2025-05-07",
+          "productName": "Casablanca Honey",
+          "savingsPercentage": 0,
+          "type": "core"
+        },
+        {
+          "recipeIngredientName": "prepared mustard",
+          "saleUnitSize": 1,
+          "saleUnitType": "l",
+          "salePrice": 1.99,
+          "saleFractionUsed": 0.118295,
+          "regularPrice": 1.99,
+          "regularFractionUsed": 0.118295,
+          "source": "database",
+          "sourceDate": "2024-07-29",
+          "productName": "mustard",
+          "savingsPercentage": 0,
+          "type": "core"
+        },
+        {
+          "recipeIngredientName": "dried basil",
+          "saleUnitSize": 15,
+          "saleUnitType": "g",
+          "salePrice": 3.99,
+          "saleFractionUsed": 0.027783648224072584,
+          "regularPrice": 3.99,
+          "regularFractionUsed": 0.027783648224072584,
+          "source": "database",
+          "sourceDate": "2025-01-14",
+          "productName": "dried basil",
+          "savingsPercentage": 0,
+          "type": "core"
+        },
+        {
+          "recipeIngredientName": "paprika",
+          "saleUnitSize": 40,
+          "saleUnitType": "g",
+          "salePrice": 4.49,
+          "saleFractionUsed": 0.052094340420136095,
+          "regularPrice": 4.49,
+          "regularFractionUsed": 0.052094340420136095,
+          "source": "database",
+          "sourceDate": "2024-06-29",
+          "productName": "paprika",
+          "savingsPercentage": 0,
+          "type": "core"
+        },
+        {
+          "recipeIngredientName": "dried parsley",
+          "saleUnitSize": 9,
+          "saleUnitType": "g",
+          "salePrice": 3.49,
+          "saleFractionUsed": 0.01852243214938172,
+          "regularPrice": 3.49,
+          "regularFractionUsed": 0.01852243214938172,
+          "source": "database",
+          "sourceDate": "2025-04-16",
+          "productName": "dried parsley",
+          "savingsPercentage": 0,
+          "type": "core"
+        }
+      ]
+    },
+    {
+      "name": "Bangers & Mash (Sausage with Onion Gravy)",
+      "url": " https://www.recipetineats.com/wprm_print/bangers-mash-sausage-with-onion-gravy",
+      "salePrice": 9.711591067524184,
+      "regularPrice": 9.956304378164583,
+      "totalSavings": 0.24471331064039958,
+      "servings": 4,
+      "ingredients": [
+        {
+          "recipeIngredientName": "oil",
+          "saleUnitSize": 3000,
+          "saleUnitType": "ml",
+          "salePrice": 9.47,
+          "saleFractionUsed": 0.012324999999999997,
+          "regularPrice": 9.47,
+          "regularFractionUsed": 0.012324999999999997,
+          "source": "database",
+          "sourceDate": "2025-04-22",
+          "productName": "vegetable oil",
+          "savingsPercentage": 0,
+          "type": "core"
+        },
+        {
+          "recipeIngredientName": "sausage",
+          "saleUnitSize": 1,
+          "saleUnitType": "lb",
+          "salePrice": 4.49,
+          "saleFractionUsed": 1.4991446057249687,
+          "regularPrice": 4.49,
+          "regularFractionUsed": 1.4991446057249687,
+          "source": "flyer",
+          "sourceDate": "2025-05-07",
+          "productName": "Selection Fresh Pork Breakfast Sausage Family Pack",
+          "savingsPercentage": 0,
+          "type": "core"
+        },
+        {
+          "recipeIngredientName": "onion",
+          "saleUnitSize": "4",
+          "saleUnitType": "lb",
+          "salePrice": 5,
+          "saleFractionUsed": 0.08267341575689166,
+          "regularPrice": 7.959999999999999,
+          "regularFractionUsed": 0.08267341575689166,
+          "source": "flyer",
+          "sourceDate": "2025-05-14",
+          "productName": "YELLOW ONIONS",
+          "savingsPercentage": 37.1859296482412,
+          "type": "core"
+        },
+        {
+          "recipeIngredientName": "garlic",
+          "saleUnitSize": 1,
+          "saleUnitType": "whole",
+          "salePrice": 0.5,
+          "saleFractionUsed": 2,
+          "regularPrice": 0.5,
+          "regularFractionUsed": 2,
+          "source": "database",
+          "sourceDate": "2024-12-12",
+          "productName": "garlic",
+          "savingsPercentage": 0,
+          "type": "core"
+        },
+        {
+          "recipeIngredientName": "all-purpose flour",
+          "saleUnitSize": 2500,
+          "saleUnitType": "g",
+          "salePrice": 3.79,
+          "saleFractionUsed": 0.009376981275624497,
+          "regularPrice": 3.79,
+          "regularFractionUsed": 0.009376981275624497,
+          "source": "database",
+          "sourceDate": "2025-04-22",
+          "productName": "all-purpose flour",
+          "savingsPercentage": 0,
+          "type": "core"
+        },
+        {
+          "recipeIngredientName": "beef broth",
+          "saleUnitSize": 1,
+          "saleUnitType": "l",
+          "salePrice": 2.99,
+          "saleFractionUsed": 0.47318,
+          "regularPrice": 2.99,
+          "regularFractionUsed": 0.47318,
+          "source": "database",
+          "sourceDate": "2024-08-28",
+          "productName": "beef broth",
+          "savingsPercentage": 0,
+          "type": "core"
+        },
+        {
+          "recipeIngredientName": "salt",
+          "salePrice": 0,
+          "regularPrice": 0,
+          "source": "skipped",
+          "savingsPercentage": 0,
+          "type": "to taste"
+        },
+        {
+          "recipeIngredientName": "black pepper",
+          "salePrice": 0,
+          "regularPrice": 0,
+          "source": "skipped",
+          "savingsPercentage": 0,
+          "type": "to taste"
+        },
+        {
+          "recipeIngredientName": "mashed potato",
+          "salePrice": 0,
+          "regularPrice": 0,
+          "source": "skipped",
+          "savingsPercentage": 0,
+          "type": "garnish"
+        },
+        {
+          "recipeIngredientName": "peas",
+          "salePrice": 0,
+          "regularPrice": 0,
+          "source": "skipped",
+          "savingsPercentage": 0,
+          "type": "garnish"
+        }
+      ]
+    },
+    {
+      "name": "Mango Chicken Stir Fry",
+      "url": "https://www.allrecipes.com/recipe/8527054/mango-chicken-stir-fry/",
+      "salePrice": 20.99342113948604,
+      "regularPrice": 29.035777794806243,
+      "totalSavings": 8.042356655320205,
+      "servings": 5,
+      "ingredients": [
+        {
+          "recipeIngredientName": "orange juice",
+          "saleUnitSize": 1.54,
+          "saleUnitType": "l",
+          "salePrice": 4.49,
+          "saleFractionUsed": 0.07681493506493506,
+          "regularPrice": 4.49,
+          "regularFractionUsed": 0.07681493506493506,
+          "source": "flyer",
+          "sourceDate": "2025-05-07",
+          "productName": "Tropicana Orange Juice",
+          "savingsPercentage": 0,
+          "type": "core"
+        },
+        {
+          "recipeIngredientName": "tomato paste",
+          "saleUnitSize": 156,
+          "saleUnitType": "ml",
+          "salePrice": 1.39,
+          "saleFractionUsed": 0.1896153846153846,
+          "regularPrice": 1.39,
+          "regularFractionUsed": 0.1896153846153846,
+          "source": "database",
+          "sourceDate": "2024-12-05",
+          "productName": "tomato paste",
+          "savingsPercentage": 0,
+          "type": "core"
+        },
+        {
+          "recipeIngredientName": "coconut aminos",
+          "saleUnitSize": 296,
+          "saleUnitType": "ml",
+          "salePrice": 7.99,
+          "saleFractionUsed": 0.19982263513513515,
+          "regularPrice": 7.99,
+          "regularFractionUsed": 0.19982263513513515,
+          "source": "database",
+          "sourceDate": "2025-05-02",
+          "productName": "coconut aminos",
+          "savingsPercentage": 0,
+          "type": "core"
+        },
+        {
+          "recipeIngredientName": "chile-garlic sauce",
+          "saleUnitSize": 226,
+          "saleUnitType": "ml",
+          "salePrice": 2.49,
+          "saleFractionUsed": 0.06544247787610619,
+          "regularPrice": 2.49,
+          "regularFractionUsed": 0.06544247787610619,
+          "source": "flyer",
+          "sourceDate": "2025-05-07",
+          "productName": "Taco Bell Hot Sauce",
+          "savingsPercentage": 0,
+          "type": "core"
+        },
+        {
+          "recipeIngredientName": "rice vinegar",
+          "saleUnitSize": 355,
+          "saleUnitType": "ml",
+          "salePrice": 4.79,
+          "saleFractionUsed": 0.08332394366197182,
+          "regularPrice": 4.79,
+          "regularFractionUsed": 0.08332394366197182,
+          "source": "database",
+          "sourceDate": "2025-04-22",
+          "productName": "rice vinegar",
+          "savingsPercentage": 0,
+          "type": "core"
+        },
+        {
+          "recipeIngredientName": "ground ginger",
+          "saleUnitSize": 35,
+          "saleUnitType": "g",
+          "salePrice": 3.49,
+          "saleFractionUsed": 0.06668075573777421,
+          "regularPrice": 3.49,
+          "regularFractionUsed": 0.06668075573777421,
+          "source": "database",
+          "sourceDate": "2025-05-02",
+          "productName": "ground ginger",
+          "savingsPercentage": 0,
+          "type": "core"
+        },
+        {
+          "recipeIngredientName": "granulated garlic",
+          "saleUnitSize": 1,
+          "saleUnitType": "kg",
+          "salePrice": 9.99,
+          "saleFractionUsed": 0.0034173887315609277,
+          "regularPrice": 9.99,
+          "regularFractionUsed": 0.0034173887315609277,
+          "source": "database",
+          "sourceDate": "2024-09-11",
+          "productName": "garlic powder",
+          "savingsPercentage": 0,
+          "type": "core"
+        },
+        {
+          "recipeIngredientName": "arrowroot powder",
+          "saleUnitSize": 454,
+          "saleUnitType": "g",
+          "salePrice": 6.99,
+          "saleFractionUsed": 0.017624869358001994,
+          "regularPrice": 6.99,
+          "regularFractionUsed": 0.017624869358001994,
+          "source": "database",
+          "sourceDate": "2025-05-02",
+          "productName": "arrowroot powder",
+          "savingsPercentage": 0,
+          "type": "core"
+        },
+        {
+          "recipeIngredientName": "chicken breast",
+          "saleUnitSize": 1,
+          "saleUnitType": "lb",
+          "salePrice": 4.58,
+          "saleFractionUsed": 2.5,
+          "regularPrice": 7.5,
+          "regularFractionUsed": 2.5,
+          "source": "flyer",
+          "sourceDate": "2025-05-14",
+          "productName": "FRESH BONELESS SKINLESS CHICKEN BREAST FAMILY PACK",
+          "savingsPercentage": 38.93333333333334,
+          "type": "core"
+        },
+        {
+          "recipeIngredientName": "salt",
+          "saleUnitSize": 800,
+          "saleUnitType": "g",
+          "salePrice": 1.49,
+          "saleFractionUsed": 0.007110877467348576,
+          "regularPrice": 1.49,
+          "regularFractionUsed": 0.007110877467348576,
+          "source": "flyer",
+          "sourceDate": "2025-05-07",
+          "productName": "Tata Sea Salt",
+          "savingsPercentage": 0,
+          "type": "core"
+        },
+        {
+          "recipeIngredientName": "ground white pepper",
+          "saleUnitSize": 110,
+          "saleUnitType": "g",
+          "salePrice": 3,
+          "saleFractionUsed": 0.011366037909847875,
+          "regularPrice": 3,
+          "regularFractionUsed": 0.011366037909847875,
+          "source": "database",
+          "sourceDate": "2025-04-22",
+          "productName": "ground white pepper",
+          "savingsPercentage": 0,
+          "type": "core"
+        },
+        {
+          "recipeIngredientName": "avocado oil",
+          "saleUnitSize": 750,
+          "saleUnitType": "ml",
+          "salePrice": 12.97,
+          "saleFractionUsed": 0.039439999999999996,
+          "regularPrice": 12.97,
+          "regularFractionUsed": 0.039439999999999996,
+          "source": "database",
+          "sourceDate": "2025-04-22",
+          "productName": "avocado oil",
+          "savingsPercentage": 0,
+          "type": "core"
+        },
+        {
+          "recipeIngredientName": "onion",
+          "saleUnitSize": "4",
+          "saleUnitType": "lb",
+          "salePrice": 5,
+          "saleFractionUsed": 0.04133670787844583,
+          "regularPrice": 7.959999999999999,
+          "regularFractionUsed": 0.04133670787844583,
+          "source": "flyer",
+          "sourceDate": "2025-05-14",
+          "productName": "YELLOW ONIONS",
+          "savingsPercentage": 37.1859296482412,
+          "type": "core"
+        },
+        {
+          "recipeIngredientName": "green bell pepper",
+          "saleUnitSize": 3,
+          "saleUnitType": "whole",
+          "salePrice": 2.88,
+          "saleFractionUsed": 0.3333333333333333,
+          "regularPrice": 2.88,
+          "regularFractionUsed": 0.3333333333333333,
+          "source": "flyer",
+          "sourceDate": "2025-05-07",
+          "productName": "Sweet Assorted Peppers",
+          "savingsPercentage": 0,
+          "type": "core"
+        },
+        {
+          "recipeIngredientName": "red bell pepper",
+          "saleUnitSize": 3,
+          "saleUnitType": "whole",
+          "salePrice": 2.88,
+          "saleFractionUsed": 0.3333333333333333,
+          "regularPrice": 2.88,
+          "regularFractionUsed": 0.3333333333333333,
+          "source": "flyer",
+          "sourceDate": "2025-05-07",
+          "productName": "Sweet Assorted Peppers",
+          "savingsPercentage": 0,
+          "type": "core"
+        },
+        {
+          "recipeIngredientName": "broccoli florets",
+          "saleUnitSize": 1,
+          "saleUnitType": "whole",
+          "salePrice": 5,
+          "saleFractionUsed": 0.6066666666666667,
+          "regularPrice": 5,
+          "regularFractionUsed": 0.6066666666666667,
+          "source": "flyer",
+          "sourceDate": "2025-05-07",
+          "productName": "Broccoli Crowns",
+          "savingsPercentage": 0,
+          "type": "core"
+        },
+        {
+          "recipeIngredientName": "red pepper flakes",
+          "salePrice": 0,
+          "regularPrice": 0,
+          "source": "skipped",
+          "savingsPercentage": 0,
+          "type": "to taste"
+        },
+        {
+          "recipeIngredientName": "mango",
+          "saleUnitSize": 1,
+          "saleUnitType": "whole",
+          "salePrice": 0.67,
+          "saleFractionUsed": 1,
+          "regularPrice": 1.29,
+          "regularFractionUsed": 1,
+          "source": "flyer",
+          "sourceDate": "2025-05-14",
+          "productName": "ATAULFO (HONEY) MANGOS",
+          "savingsPercentage": 48.06201550387597,
+          "type": "core"
+        }
+      ]
+    },
+    {
+      "name": "Roast Chicken and Vegetables",
+      "url": "https://www.spendwithpennies.com/roast-chicken-vegetables/",
+      "salePrice": 8.827971851640084,
+      "regularPrice": 9.025285737246532,
+      "totalSavings": 0.19731388560644803,
+      "servings": 4,
+      "ingredients": [
+        {
+          "recipeIngredientName": "whole chicken",
+          "saleUnitSize": 1,
+          "saleUnitType": "kg",
+          "salePrice": 4.47,
+          "saleFractionUsed": 1.587572,
+          "regularPrice": 4.47,
+          "regularFractionUsed": 1.587572,
+          "source": "database",
+          "sourceDate": "2025-04-22",
+          "productName": "whole chicken",
+          "savingsPercentage": 0,
+          "type": "core"
+        },
+        {
+          "recipeIngredientName": "carrots",
+          "saleUnitSize": 1360,
+          "saleUnitType": "g",
+          "salePrice": 2.97,
+          "saleFractionUsed": 0.09558823529411764,
+          "regularPrice": 2.97,
+          "regularFractionUsed": 0.09558823529411764,
+          "source": "database",
+          "sourceDate": "2025-04-22",
+          "productName": "carrots",
+          "savingsPercentage": 0,
+          "type": "core"
+        },
+        {
+          "recipeIngredientName": "potatoes",
+          "saleUnitSize": 5,
+          "saleUnitType": "lb",
+          "salePrice": 3.98,
+          "saleFractionUsed": 0.06613873260551333,
+          "regularPrice": 4.99,
+          "regularFractionUsed": 0.06613873260551333,
+          "source": "flyer",
+          "sourceDate": "2025-05-14",
+          "productName": "RED CANADIAN POTATOES",
+          "savingsPercentage": 20.240480961923854,
+          "type": "core"
+        },
+        {
+          "recipeIngredientName": "onions",
+          "saleUnitSize": "4",
+          "saleUnitType": "lb",
+          "salePrice": 5,
+          "saleFractionUsed": 0.04409248840367555,
+          "regularPrice": 7.960000000000001,
+          "regularFractionUsed": 0.04409248840367555,
+          "source": "flyer",
+          "sourceDate": "2025-05-14",
+          "productName": "YELLOW ONIONS",
+          "savingsPercentage": 37.185929648241206,
+          "type": "core"
+        },
+        {
+          "recipeIngredientName": "olive oil",
           "saleUnitSize": 1000,
           "saleUnitType": "ml",
           "salePrice": 22.99,
-          "saleFractionUsed": 0.036974999999999994,
-          "regularPrice": 0.8500552499999998,
-          "regularFractionUsed": 0.036974999999999994,
+          "saleFractionUsed": 0.0394893,
+          "regularPrice": 22.99,
+          "regularFractionUsed": 0.0394893,
           "source": "database",
           "sourceDate": "2025-04-22",
           "productName": "extra virgin olive oil",
-          "savingsPercentage": 0
+          "savingsPercentage": 0,
+          "type": "core"
         },
         {
-          "recipeIngredientName": "scallion",
+          "recipeIngredientName": "Italian seasoning",
+          "saleUnitSize": 40,
+          "saleUnitType": "g",
+          "salePrice": 2.99,
+          "saleFractionUsed": 0.018753962551248993,
+          "regularPrice": 2.99,
+          "regularFractionUsed": 0.018753962551248993,
+          "source": "database",
+          "sourceDate": "2025-04-22",
+          "productName": "italian seasoning",
+          "savingsPercentage": 0,
+          "type": "core"
+        },
+        {
+          "recipeIngredientName": "paprika",
           "salePrice": 0,
           "regularPrice": 0,
           "source": "skipped",
-          "savingsPercentage": 0
+          "savingsPercentage": 0,
+          "type": "optional"
         },
         {
-          "recipeIngredientName": "broccoli",
+          "recipeIngredientName": "seasoning salt",
           "salePrice": 0,
           "regularPrice": 0,
           "source": "skipped",
-          "savingsPercentage": 0
+          "savingsPercentage": 0,
+          "type": "optional"
         },
         {
-          "recipeIngredientName": "smoked paprika",
+          "recipeIngredientName": "garlic powder",
           "salePrice": 0,
           "regularPrice": 0,
           "source": "skipped",
-          "savingsPercentage": 0
+          "savingsPercentage": 0,
+          "type": "optional"
         },
         {
-          "recipeIngredientName": "feta cheese",
+          "recipeIngredientName": "black pepper",
           "salePrice": 0,
           "regularPrice": 0,
           "source": "skipped",
-          "savingsPercentage": 0
+          "savingsPercentage": 0,
+          "type": "optional"
         },
         {
-          "recipeIngredientName": "shallot",
+          "recipeIngredientName": "dried parsley",
           "salePrice": 0,
           "regularPrice": 0,
           "source": "skipped",
-          "savingsPercentage": 0
+          "savingsPercentage": 0,
+          "type": "optional"
         },
         {
-          "recipeIngredientName": "roasted red bell pepper",
+          "recipeIngredientName": "dried thyme",
           "salePrice": 0,
           "regularPrice": 0,
           "source": "skipped",
-          "savingsPercentage": 0
+          "savingsPercentage": 0,
+          "type": "optional"
         },
         {
-          "recipeIngredientName": "spinach",
+          "recipeIngredientName": "dried rosemary",
           "salePrice": 0,
           "regularPrice": 0,
           "source": "skipped",
-          "savingsPercentage": 0
-        },
-        {
-          "recipeIngredientName": "asparagus",
-          "salePrice": 0,
-          "regularPrice": 0,
-          "source": "skipped",
-          "savingsPercentage": 0
-        },
-        {
-          "recipeIngredientName": "frozen peas",
-          "salePrice": 0,
-          "regularPrice": 0,
-          "source": "skipped",
-          "savingsPercentage": 0
-        },
-        {
-          "recipeIngredientName": "mini mozzarella balls",
-          "salePrice": 0,
-          "regularPrice": 0,
-          "source": "skipped",
-          "savingsPercentage": 0
-        },
-        {
-          "recipeIngredientName": "tarragon",
-          "salePrice": 0,
-          "regularPrice": 0,
-          "source": "skipped",
-          "savingsPercentage": 0
-        },
-        {
-          "recipeIngredientName": "mixed mushrooms",
-          "salePrice": 0,
-          "regularPrice": 0,
-          "source": "skipped",
-          "savingsPercentage": 0
-        },
-        {
-          "recipeIngredientName": "pecorino cheese",
-          "salePrice": 0,
-          "regularPrice": 0,
-          "source": "skipped",
-          "savingsPercentage": 0
-        },
-        {
-          "recipeIngredientName": "cherry tomato",
-          "salePrice": 0,
-          "regularPrice": 0,
-          "source": "skipped",
-          "savingsPercentage": 0
-        },
-        {
-          "recipeIngredientName": "fresh basil",
-          "salePrice": 0,
-          "regularPrice": 0,
-          "source": "skipped",
-          "savingsPercentage": 0
+          "savingsPercentage": 0,
+          "type": "optional"
         }
       ]
     },
@@ -3376,12 +3898,13 @@
           "saleUnitType": "g",
           "salePrice": 0.98,
           "saleFractionUsed": 0.252,
-          "regularPrice": 0.62748,
+          "regularPrice": 2.4900000000000007,
           "regularFractionUsed": 0.252,
           "source": "flyer",
           "sourceDate": "2025-05-14",
           "productName": "PRIMO PASTA",
-          "savingsPercentage": 60.642570281124506
+          "savingsPercentage": 60.642570281124506,
+          "type": "core"
         },
         {
           "recipeIngredientName": "unsalted butter",
@@ -3389,12 +3912,13 @@
           "saleUnitType": "g",
           "salePrice": 6.69,
           "saleFractionUsed": 0.31256604252081654,
-          "regularPrice": 2.0910668244642627,
+          "regularPrice": 6.69,
           "regularFractionUsed": 0.31256604252081654,
           "source": "database",
           "sourceDate": "2025-04-22",
           "productName": "unsalted butter",
-          "savingsPercentage": 0
+          "savingsPercentage": 0,
+          "type": "core"
         },
         {
           "recipeIngredientName": "garlic",
@@ -3402,19 +3926,21 @@
           "saleUnitType": "whole",
           "salePrice": 0.5,
           "saleFractionUsed": 3,
-          "regularPrice": 1.5,
+          "regularPrice": 0.5,
           "regularFractionUsed": 3,
           "source": "database",
           "sourceDate": "2024-12-12",
           "productName": "garlic",
-          "savingsPercentage": 0
+          "savingsPercentage": 0,
+          "type": "core"
         },
         {
           "recipeIngredientName": "red pepper flakes",
           "salePrice": 0,
           "regularPrice": 0,
           "source": "skipped",
-          "savingsPercentage": 0
+          "savingsPercentage": 0,
+          "type": "optional"
         },
         {
           "recipeIngredientName": "Parmesan cheese",
@@ -3422,33 +3948,37 @@
           "saleUnitType": "g",
           "salePrice": 7.49,
           "saleFractionUsed": 0.24,
-          "regularPrice": 1.7976,
+          "regularPrice": 7.49,
           "regularFractionUsed": 0.24,
           "source": "flyer",
           "sourceDate": "2025-05-07",
           "productName": "Kraft Parmesan",
-          "savingsPercentage": 0
+          "savingsPercentage": 0,
+          "type": "core"
         },
         {
           "recipeIngredientName": "salt",
           "salePrice": 0,
           "regularPrice": 0,
           "source": "skipped",
-          "savingsPercentage": 0
+          "savingsPercentage": 0,
+          "type": "to taste"
         },
         {
           "recipeIngredientName": "black pepper",
           "salePrice": 0,
           "regularPrice": 0,
           "source": "skipped",
-          "savingsPercentage": 0
+          "savingsPercentage": 0,
+          "type": "to taste"
         },
         {
           "recipeIngredientName": "fresh parsley",
           "salePrice": 0,
           "regularPrice": 0,
           "source": "skipped",
-          "savingsPercentage": 0
+          "savingsPercentage": 0,
+          "type": "optional"
         }
       ]
     },
@@ -3466,12 +3996,13 @@
           "saleUnitType": "kg",
           "salePrice": 11,
           "saleFractionUsed": 0.453592,
-          "regularPrice": 4.9895119999999995,
+          "regularPrice": 11,
           "regularFractionUsed": 0.453592,
           "source": "database",
           "sourceDate": "2025-04-22",
           "productName": "pork tenderloin",
-          "savingsPercentage": 0
+          "savingsPercentage": 0,
+          "type": "core"
         },
         {
           "recipeIngredientName": "oil",
@@ -3479,12 +4010,13 @@
           "saleUnitType": "ml",
           "salePrice": 9.47,
           "saleFractionUsed": 0.0049299999999999995,
-          "regularPrice": 0.046687099999999995,
+          "regularPrice": 9.47,
           "regularFractionUsed": 0.0049299999999999995,
           "source": "database",
           "sourceDate": "2025-04-22",
           "productName": "vegetable oil",
-          "savingsPercentage": 0
+          "savingsPercentage": 0,
+          "type": "core"
         },
         {
           "recipeIngredientName": "lemon",
@@ -3492,12 +4024,13 @@
           "saleUnitType": "whole",
           "salePrice": 4.88,
           "saleFractionUsed": 0.16666666666666666,
-          "regularPrice": 0.8133333333333332,
+          "regularPrice": 4.88,
           "regularFractionUsed": 0.16666666666666666,
           "source": "flyer",
           "sourceDate": "2025-05-07",
           "productName": "Lemons",
-          "savingsPercentage": 0
+          "savingsPercentage": 0,
+          "type": "core"
         },
         {
           "recipeIngredientName": "Italian seasoning",
@@ -3505,12 +4038,13 @@
           "saleUnitType": "g",
           "salePrice": 2.99,
           "saleFractionUsed": 0.07501585020499597,
-          "regularPrice": 0.22429739211293798,
+          "regularPrice": 2.99,
           "regularFractionUsed": 0.07501585020499597,
           "source": "database",
           "sourceDate": "2025-04-22",
           "productName": "italian seasoning",
-          "savingsPercentage": 0
+          "savingsPercentage": 0,
+          "type": "core"
         },
         {
           "recipeIngredientName": "garlic powder",
@@ -3518,12 +4052,13 @@
           "saleUnitType": "kg",
           "salePrice": 9.99,
           "saleFractionUsed": 0.0034173887315609277,
-          "regularPrice": 0.034139713428293667,
+          "regularPrice": 9.99,
           "regularFractionUsed": 0.0034173887315609277,
           "source": "database",
           "sourceDate": "2024-09-11",
           "productName": "garlic powder",
-          "savingsPercentage": 0
+          "savingsPercentage": 0,
+          "type": "core"
         },
         {
           "recipeIngredientName": "cumin",
@@ -3531,12 +4066,13 @@
           "saleUnitType": "g",
           "salePrice": 4.49,
           "saleFractionUsed": 0.052094340420136095,
-          "regularPrice": 0.23390358848641107,
+          "regularPrice": 4.49,
           "regularFractionUsed": 0.052094340420136095,
           "source": "database",
           "sourceDate": "2025-01-10",
           "productName": "ground cumin",
-          "savingsPercentage": 0
+          "savingsPercentage": 0,
+          "type": "core"
         },
         {
           "recipeIngredientName": "salt",
@@ -3544,12 +4080,13 @@
           "saleUnitType": "g",
           "salePrice": 1.49,
           "saleFractionUsed": 0.007110877467348576,
-          "regularPrice": 0.010595207426349378,
+          "regularPrice": 1.49,
           "regularFractionUsed": 0.007110877467348576,
           "source": "flyer",
           "sourceDate": "2025-05-07",
           "productName": "Tata Sea Salt",
-          "savingsPercentage": 0
+          "savingsPercentage": 0,
+          "type": "core"
         },
         {
           "recipeIngredientName": "chili powder",
@@ -3557,19 +4094,21 @@
           "saleUnitType": "g",
           "salePrice": 4.49,
           "saleFractionUsed": 0.04167547233610888,
-          "regularPrice": 0.1871228707891289,
+          "regularPrice": 4.49,
           "regularFractionUsed": 0.04167547233610888,
           "source": "database",
           "sourceDate": "2024-06-20",
           "productName": "chili powder",
-          "savingsPercentage": 0
+          "savingsPercentage": 0,
+          "type": "core"
         },
         {
           "recipeIngredientName": "smoked paprika",
           "salePrice": 0,
           "regularPrice": 0,
           "source": "skipped",
-          "savingsPercentage": 0
+          "savingsPercentage": 0,
+          "type": "optional"
         },
         {
           "recipeIngredientName": "black pepper",
@@ -3577,324 +4116,237 @@
           "saleUnitType": "g",
           "salePrice": 6.49,
           "saleFractionUsed": 0.005847323924709154,
-          "regularPrice": 0.03794913227136241,
+          "regularPrice": 6.49,
           "regularFractionUsed": 0.005847323924709154,
           "source": "database",
           "sourceDate": "2025-04-16",
           "productName": "pepper",
-          "savingsPercentage": 0
+          "savingsPercentage": 0,
+          "type": "core"
         }
       ]
     },
     {
-      "name": "Sauteed Green Beans with Garlic and Almonds",
-      "url": "https://www.lecremedelacrumb.com/sauteed-green-beans-with-garlic-and-almonds/",
-      "salePrice": 7.216250040519735,
-      "regularPrice": 7.216250040519735,
-      "totalSavings": 0,
+      "name": "Sesame Soba Noodles",
+      "url": "https://www.loveandlemons.com/sesame-soba-noodles/",
+      "salePrice": 14.801087648734674,
+      "regularPrice": 17.41873420045881,
+      "totalSavings": 2.617646551724137,
       "servings": 4,
       "ingredients": [
         {
-          "recipeIngredientName": "fresh green beans",
-          "saleUnitSize": 680,
+          "recipeIngredientName": "rice vinegar",
+          "saleUnitSize": 355,
+          "saleUnitType": "ml",
+          "salePrice": 4.79,
+          "saleFractionUsed": 0.33322535211267607,
+          "regularPrice": 4.79,
+          "regularFractionUsed": 0.33322535211267607,
+          "source": "database",
+          "sourceDate": "2025-04-22",
+          "productName": "rice vinegar",
+          "savingsPercentage": 0,
+          "type": "core"
+        },
+        {
+          "recipeIngredientName": "tamari",
+          "saleUnitSize": 296,
+          "saleUnitType": "ml",
+          "salePrice": 6.99,
+          "saleFractionUsed": 0.19986486486486485,
+          "regularPrice": 6.99,
+          "regularFractionUsed": 0.19986486486486485,
+          "source": "database",
+          "sourceDate": "2025-04-22",
+          "productName": "tamari",
+          "savingsPercentage": 0,
+          "type": "core"
+        },
+        {
+          "recipeIngredientName": "toasted sesame oil",
+          "saleUnitSize": 443,
+          "saleUnitType": "ml",
+          "salePrice": 8.49,
+          "saleFractionUsed": 0.011128668171557561,
+          "regularPrice": 8.49,
+          "regularFractionUsed": 0.011128668171557561,
+          "source": "database",
+          "sourceDate": "2025-04-22",
+          "productName": "toasted sesame oil",
+          "savingsPercentage": 0,
+          "type": "core"
+        },
+        {
+          "recipeIngredientName": "fresh ginger",
+          "saleUnitSize": 454,
           "saleUnitType": "g",
-          "salePrice": 5.17,
-          "saleFractionUsed": 0.6670470588235294,
-          "regularPrice": 3.448633294117647,
-          "regularFractionUsed": 0.6670470588235294,
+          "salePrice": 3.49,
+          "saleFractionUsed": 0.008812434679000995,
+          "regularPrice": 3.49,
+          "regularFractionUsed": 0.008812434679000995,
           "source": "database",
           "sourceDate": "2025-04-22",
-          "productName": "green beans",
-          "savingsPercentage": 0
-        },
-        {
-          "recipeIngredientName": "sesame oil",
-          "saleUnitSize": 163,
-          "saleUnitType": "ml",
-          "salePrice": 5.49,
-          "saleFractionUsed": 0.0907361963190184,
-          "regularPrice": 0.49814171779141103,
-          "regularFractionUsed": 0.0907361963190184,
-          "source": "database",
-          "sourceDate": "2025-04-22",
-          "productName": "sesame oil",
-          "savingsPercentage": 0
-        },
-        {
-          "recipeIngredientName": "olive oil",
-          "saleUnitSize": 1000,
-          "saleUnitType": "ml",
-          "salePrice": 22.99,
-          "saleFractionUsed": 0.01479,
-          "regularPrice": 0.34002209999999994,
-          "regularFractionUsed": 0.01479,
-          "source": "database",
-          "sourceDate": "2025-04-22",
-          "productName": "extra virgin olive oil",
-          "savingsPercentage": 0
-        },
-        {
-          "recipeIngredientName": "salt",
-          "salePrice": 0,
-          "regularPrice": 0,
-          "source": "skipped",
-          "savingsPercentage": 0
-        },
-        {
-          "recipeIngredientName": "black pepper",
-          "salePrice": 0,
-          "regularPrice": 0,
-          "source": "skipped",
-          "savingsPercentage": 0
+          "productName": "ginger",
+          "savingsPercentage": 0,
+          "type": "core"
         },
         {
           "recipeIngredientName": "garlic",
           "saleUnitSize": 1,
           "saleUnitType": "whole",
           "salePrice": 0.5,
-          "saleFractionUsed": 4,
-          "regularPrice": 2,
-          "regularFractionUsed": 4,
+          "saleFractionUsed": 2,
+          "regularPrice": 0.5,
+          "regularFractionUsed": 2,
           "source": "database",
           "sourceDate": "2024-12-12",
           "productName": "garlic",
-          "savingsPercentage": 0
+          "savingsPercentage": 0,
+          "type": "core"
         },
         {
-          "recipeIngredientName": "brown sugar",
-          "saleUnitSize": 1,
-          "saleUnitType": "kg",
-          "salePrice": 2.2,
-          "saleFractionUsed": 0.009168603913943953,
-          "regularPrice": 0.020170928610676698,
-          "regularFractionUsed": 0.009168603913943953,
-          "source": "database",
-          "sourceDate": "2024-10-01",
-          "productName": "brown sugar",
-          "savingsPercentage": 0
-        },
-        {
-          "recipeIngredientName": "sliced almonds",
-          "saleUnitSize": 200,
-          "saleUnitType": "g",
-          "salePrice": 5.99,
-          "saleFractionUsed": 0.15180000000000002,
-          "regularPrice": 0.9092820000000001,
-          "regularFractionUsed": 0.15180000000000002,
-          "source": "database",
-          "sourceDate": "2025-04-30",
-          "productName": "sliced almonds",
-          "savingsPercentage": 0
-        }
-      ]
-    },
-    {
-      "name": "Best Shakshuka",
-      "url": "https://www.loveandlemons.com/shakshuka-recipe/",
-      "salePrice": 7.710406847045251,
-      "regularPrice": 7.97143437839501,
-      "totalSavings": 0.2610275313497592,
-      "servings": 4,
-      "ingredients": [
-        {
-          "recipeIngredientName": "extra virgin olive oil",
-          "saleUnitSize": 1000,
+          "recipeIngredientName": "maple syrup",
+          "saleUnitSize": 500,
           "saleUnitType": "ml",
-          "salePrice": 22.99,
-          "saleFractionUsed": 0.02958,
-          "regularPrice": 0.6800441999999999,
-          "regularFractionUsed": 0.02958,
+          "salePrice": 10,
+          "saleFractionUsed": 0.009859999999999999,
+          "regularPrice": 10,
+          "regularFractionUsed": 0.009859999999999999,
           "source": "database",
           "sourceDate": "2025-04-22",
-          "productName": "extra virgin olive oil",
-          "savingsPercentage": 0
+          "productName": "maple syrup",
+          "savingsPercentage": 0,
+          "type": "core"
         },
         {
-          "recipeIngredientName": "yellow onion",
-          "saleUnitSize": "4",
-          "saleUnitType": "lb",
-          "salePrice": 5,
-          "saleFractionUsed": 0.0881849768073511,
-          "regularPrice": 0.7019524153865148,
-          "regularFractionUsed": 0.0881849768073511,
-          "source": "flyer",
-          "sourceDate": "2025-05-14",
-          "productName": "YELLOW ONIONS",
-          "savingsPercentage": 37.185929648241206
-        },
-        {
-          "recipeIngredientName": "red bell pepper",
-          "saleUnitSize": 3,
-          "saleUnitType": "whole",
-          "salePrice": 2.88,
-          "saleFractionUsed": 0.3333333333333333,
-          "regularPrice": 0.96,
-          "regularFractionUsed": 0.3333333333333333,
-          "source": "flyer",
-          "sourceDate": "2025-05-07",
-          "productName": "Sweet Assorted Peppers",
-          "savingsPercentage": 0
-        },
-        {
-          "recipeIngredientName": "sea salt",
-          "saleUnitSize": 800,
-          "saleUnitType": "g",
-          "salePrice": 1.49,
-          "saleFractionUsed": 0.001777719366837144,
-          "regularPrice": 0.0026488018565873446,
-          "regularFractionUsed": 0.001777719366837144,
-          "source": "flyer",
-          "sourceDate": "2025-05-07",
-          "productName": "Tata Sea Salt",
-          "savingsPercentage": 0
-        },
-        {
-          "recipeIngredientName": "black pepper",
-          "saleUnitSize": 98,
-          "saleUnitType": "g",
-          "salePrice": 6.49,
-          "saleFractionUsed": 0.005847323924709154,
-          "regularPrice": 0.03794913227136241,
-          "regularFractionUsed": 0.005847323924709154,
-          "source": "database",
-          "sourceDate": "2025-04-16",
-          "productName": "pepper",
-          "savingsPercentage": 0
-        },
-        {
-          "recipeIngredientName": "garlic",
-          "saleUnitSize": 1,
-          "saleUnitType": "whole",
-          "salePrice": 0.5,
-          "saleFractionUsed": 3,
-          "regularPrice": 1.5,
-          "regularFractionUsed": 3,
-          "source": "database",
-          "sourceDate": "2024-12-12",
-          "productName": "garlic",
-          "savingsPercentage": 0
-        },
-        {
-          "recipeIngredientName": "smoked paprika",
-          "saleUnitSize": 40,
-          "saleUnitType": "g",
-          "salePrice": 4.49,
-          "saleFractionUsed": 0.026047170210068048,
-          "regularPrice": 0.11695179424320554,
-          "regularFractionUsed": 0.026047170210068048,
-          "source": "database",
-          "sourceDate": "2024-06-29",
-          "productName": "paprika",
-          "savingsPercentage": 0
-        },
-        {
-          "recipeIngredientName": "ground cumin",
-          "saleUnitSize": 40,
-          "saleUnitType": "g",
-          "salePrice": 4.49,
-          "saleFractionUsed": 0.026047170210068048,
-          "regularPrice": 0.11695179424320554,
-          "regularFractionUsed": 0.026047170210068048,
-          "source": "database",
-          "sourceDate": "2025-01-10",
-          "productName": "ground cumin",
-          "savingsPercentage": 0
-        },
-        {
-          "recipeIngredientName": "cayenne pepper",
-          "salePrice": 0,
-          "regularPrice": 0,
-          "source": "skipped",
-          "savingsPercentage": 0
-        },
-        {
-          "recipeIngredientName": "canned crushed tomatoes",
-          "saleUnitSize": 796,
-          "saleUnitType": "ml",
-          "salePrice": 1.27,
-          "saleFractionUsed": 0.9830671168341709,
-          "regularPrice": 1.248495238379397,
-          "regularFractionUsed": 0.9830671168341709,
-          "source": "database",
-          "sourceDate": "2025-04-30",
-          "productName": "canned diced tomatoes",
-          "savingsPercentage": 0
-        },
-        {
-          "recipeIngredientName": "harissa paste",
-          "saleUnitSize": 170,
-          "saleUnitType": "g",
-          "salePrice": 4.99,
-          "saleFractionUsed": 0.17650788283528468,
-          "regularPrice": 0.8807743353480706,
-          "regularFractionUsed": 0.17650788283528468,
-          "source": "database",
-          "sourceDate": "2025-04-30",
-          "productName": "harissa paste",
-          "savingsPercentage": 0
-        },
-        {
-          "recipeIngredientName": "spinach",
+          "recipeIngredientName": "soba noodles",
           "saleUnitSize": 300,
           "saleUnitType": "g",
-          "salePrice": 2.29,
-          "saleFractionUsed": 0.1,
-          "regularPrice": 0.229,
-          "regularFractionUsed": 0.1,
+          "salePrice": 2.28,
+          "saleFractionUsed": 1.1340000000000001,
+          "regularPrice": 2.28,
+          "regularFractionUsed": 1.1340000000000001,
           "source": "database",
-          "sourceDate": "2025-04-29",
-          "productName": "chopped spinach",
-          "savingsPercentage": 0
+          "sourceDate": "2025-04-22",
+          "productName": "soba noodles",
+          "savingsPercentage": 0,
+          "type": "core"
         },
         {
-          "recipeIngredientName": "egg",
-          "saleUnitSize": 1,
-          "saleUnitType": "dozen",
-          "salePrice": 4.49,
-          "saleFractionUsed": 0.3333333333333333,
-          "regularPrice": 1.4966666666666666,
-          "regularFractionUsed": 0.3333333333333333,
-          "source": "database",
-          "sourceDate": "2025-04-16",
-          "productName": "egg",
-          "savingsPercentage": 0
-        },
-        {
-          "recipeIngredientName": "feta cheese",
-          "salePrice": 0,
-          "regularPrice": 0,
-          "source": "skipped",
-          "savingsPercentage": 0
-        },
-        {
-          "recipeIngredientName": "parsley",
-          "salePrice": 0,
-          "regularPrice": 0,
-          "source": "skipped",
-          "savingsPercentage": 0
+          "recipeIngredientName": "lemon",
+          "saleUnitSize": 6,
+          "saleUnitType": "whole",
+          "salePrice": 4.88,
+          "saleFractionUsed": 0.16666666666666666,
+          "regularPrice": 4.88,
+          "regularFractionUsed": 0.16666666666666666,
+          "source": "flyer",
+          "sourceDate": "2025-05-07",
+          "productName": "Lemons",
+          "savingsPercentage": 0,
+          "type": "core"
         },
         {
           "recipeIngredientName": "avocado",
-          "salePrice": 0,
-          "regularPrice": 0,
-          "source": "skipped",
-          "savingsPercentage": 0
+          "saleUnitSize": "5",
+          "saleUnitType": "whole",
+          "salePrice": 2.88,
+          "saleFractionUsed": 0.8,
+          "regularPrice": 5,
+          "regularFractionUsed": 0.8,
+          "source": "flyer",
+          "sourceDate": "2025-05-14",
+          "productName": "AVOCADOS",
+          "savingsPercentage": 42.400000000000006,
+          "type": "core"
         },
         {
-          "recipeIngredientName": "microgreens",
-          "salePrice": 0,
-          "regularPrice": 0,
-          "source": "skipped",
-          "savingsPercentage": 0
+          "recipeIngredientName": "snap peas",
+          "saleUnitSize": 200,
+          "saleUnitType": "g",
+          "salePrice": 3,
+          "saleFractionUsed": 1.12,
+          "regularPrice": 3,
+          "regularFractionUsed": 1.12,
+          "source": "database",
+          "sourceDate": "2025-04-22",
+          "productName": "snap peas",
+          "savingsPercentage": 0,
+          "type": "core"
         },
         {
-          "recipeIngredientName": "bread",
+          "recipeIngredientName": "edamame",
+          "saleUnitSize": 500,
+          "saleUnitType": "g",
+          "salePrice": 4.5,
+          "saleFractionUsed": 0.155,
+          "regularPrice": 4.5,
+          "regularFractionUsed": 0.155,
+          "source": "database",
+          "sourceDate": "2025-04-22",
+          "productName": "edamame",
+          "savingsPercentage": 0,
+          "type": "core"
+        },
+        {
+          "recipeIngredientName": "radish",
+          "saleUnitSize": 340,
+          "saleUnitType": "g",
+          "salePrice": 1.99,
+          "saleFractionUsed": 0.08823529411764706,
+          "regularPrice": 1.99,
+          "regularFractionUsed": 0.08823529411764706,
+          "source": "database",
+          "sourceDate": "2025-04-30",
+          "productName": "radish",
+          "savingsPercentage": 0,
+          "type": "core"
+        },
+        {
+          "recipeIngredientName": "fresh mint leaves",
+          "saleUnitSize": 29,
+          "saleUnitType": "g",
+          "salePrice": 1.79,
+          "saleFractionUsed": 0.3620689655172414,
+          "regularPrice": 4.335500000000001,
+          "regularFractionUsed": 0.3620689655172414,
+          "source": "flyer",
+          "sourceDate": "2025-05-14",
+          "productName": "TIC TAC MINTS",
+          "savingsPercentage": 58.71295121669935,
+          "type": "core"
+        },
+        {
+          "recipeIngredientName": "sesame seeds",
           "salePrice": 0,
           "regularPrice": 0,
           "source": "skipped",
-          "savingsPercentage": 0
+          "savingsPercentage": 0,
+          "type": "optional"
+        },
+        {
+          "recipeIngredientName": "tamari",
+          "salePrice": 0,
+          "regularPrice": 0,
+          "source": "skipped",
+          "savingsPercentage": 0,
+          "type": "optional"
+        },
+        {
+          "recipeIngredientName": "toasted sesame oil",
+          "salePrice": 0,
+          "regularPrice": 0,
+          "source": "skipped",
+          "savingsPercentage": 0,
+          "type": "optional"
         }
       ]
+    },
+    {
+      "name": "Creamy Pasta Bake with Cherry Tomatoes and Basil",
+      "url": "https://www.allrecipes.com/recipe/261148/creamy-pasta-with-cherry-tomatoes-and-basil/",
+      "salePrice": 14.98,
+      "servings": 6
     },
     {
       "name": "Vegetable Curry",
@@ -3910,12 +4362,13 @@
           "saleUnitType": "g",
           "salePrice": 2.97,
           "saleFractionUsed": 1.002,
-          "regularPrice": 2.97594,
+          "regularPrice": 2.97,
           "regularFractionUsed": 1.002,
           "source": "database",
           "sourceDate": "2025-04-22",
           "productName": "frozen mixed vegetables",
-          "savingsPercentage": 0
+          "savingsPercentage": 0,
+          "type": "core"
         },
         {
           "recipeIngredientName": "oil",
@@ -3923,12 +4376,13 @@
           "saleUnitType": "ml",
           "salePrice": 9.47,
           "saleFractionUsed": 0.01479,
-          "regularPrice": 0.1400613,
+          "regularPrice": 9.47,
           "regularFractionUsed": 0.01479,
           "source": "database",
           "sourceDate": "2025-04-22",
           "productName": "vegetable oil",
-          "savingsPercentage": 0
+          "savingsPercentage": 0,
+          "type": "core"
         },
         {
           "recipeIngredientName": "onion",
@@ -3936,19 +4390,21 @@
           "saleUnitType": "lb",
           "salePrice": 5,
           "saleFractionUsed": 0.08267341575689166,
-          "regularPrice": 0.6580803894248576,
+          "regularPrice": 7.959999999999999,
           "regularFractionUsed": 0.08267341575689166,
           "source": "flyer",
           "sourceDate": "2025-05-14",
           "productName": "YELLOW ONIONS",
-          "savingsPercentage": 37.1859296482412
+          "savingsPercentage": 37.1859296482412,
+          "type": "core"
         },
         {
           "recipeIngredientName": "green chili",
           "salePrice": 0,
           "regularPrice": 0,
           "source": "skipped",
-          "savingsPercentage": 0
+          "savingsPercentage": 0,
+          "type": "optional"
         },
         {
           "recipeIngredientName": "ginger garlic paste",
@@ -3956,12 +4412,13 @@
           "saleUnitType": "g",
           "salePrice": 2.99,
           "saleFractionUsed": 0.15603296842639164,
-          "regularPrice": 0.466538575594911,
+          "regularPrice": 2.99,
           "regularFractionUsed": 0.15603296842639164,
           "source": "database",
           "sourceDate": "2025-04-30",
           "productName": "ginger garlic paste",
-          "savingsPercentage": 0
+          "savingsPercentage": 0,
+          "type": "core"
         },
         {
           "recipeIngredientName": "tomatoes",
@@ -3969,12 +4426,13 @@
           "saleUnitType": "lb",
           "salePrice": 1.98,
           "saleFractionUsed": 0.39683239563308,
-          "regularPrice": 0.9881126651263692,
+          "regularPrice": 2.4899999999999998,
           "regularFractionUsed": 0.39683239563308,
           "source": "flyer",
           "sourceDate": "2025-05-14",
           "productName": "HOTHOUSE TOMATOES",
-          "savingsPercentage": 20.481927710843376
+          "savingsPercentage": 20.481927710843376,
+          "type": "core"
         },
         {
           "recipeIngredientName": "carrot",
@@ -3982,12 +4440,13 @@
           "saleUnitType": "g",
           "salePrice": 2.97,
           "saleFractionUsed": 0.04411764705882353,
-          "regularPrice": 0.1310294117647059,
+          "regularPrice": 2.97,
           "regularFractionUsed": 0.04411764705882353,
           "source": "database",
           "sourceDate": "2025-04-22",
           "productName": "carrots",
-          "savingsPercentage": 0
+          "savingsPercentage": 0,
+          "type": "core"
         },
         {
           "recipeIngredientName": "potatoes",
@@ -3995,12 +4454,13 @@
           "saleUnitType": "lb",
           "salePrice": 3.98,
           "saleFractionUsed": 0.07495723028624843,
-          "regularPrice": 0.3740365791283797,
+          "regularPrice": 4.99,
           "regularFractionUsed": 0.07495723028624843,
           "source": "flyer",
           "sourceDate": "2025-05-14",
           "productName": "RED CANADIAN POTATOES",
-          "savingsPercentage": 20.240480961923854
+          "savingsPercentage": 20.240480961923854,
+          "type": "core"
         },
         {
           "recipeIngredientName": "green beans",
@@ -4008,12 +4468,13 @@
           "saleUnitType": "g",
           "salePrice": 5.17,
           "saleFractionUsed": 0.08088235294117647,
-          "regularPrice": 0.41816176470588234,
+          "regularPrice": 5.17,
           "regularFractionUsed": 0.08088235294117647,
           "source": "database",
           "sourceDate": "2025-04-22",
           "productName": "green beans",
-          "savingsPercentage": 0
+          "savingsPercentage": 0,
+          "type": "core"
         },
         {
           "recipeIngredientName": "peas",
@@ -4021,12 +4482,13 @@
           "saleUnitType": "kg",
           "salePrice": 3.99,
           "saleFractionUsed": 0.10875,
-          "regularPrice": 0.43391250000000003,
+          "regularPrice": 3.99,
           "regularFractionUsed": 0.10875,
           "source": "database",
           "sourceDate": "2024-09-04",
           "productName": "peas",
-          "savingsPercentage": 0
+          "savingsPercentage": 0,
+          "type": "core"
         },
         {
           "recipeIngredientName": "cauliflower",
@@ -4034,40 +4496,45 @@
           "saleUnitType": "g",
           "salePrice": 3.99,
           "saleFractionUsed": 0.25,
-          "regularPrice": 0.9975,
+          "regularPrice": 3.99,
           "regularFractionUsed": 0.25,
           "source": "database",
           "sourceDate": "2025-04-30",
           "productName": "cauliflower",
-          "savingsPercentage": 0
+          "savingsPercentage": 0,
+          "type": "core"
         },
         {
           "recipeIngredientName": "sweet corn kernels",
           "salePrice": 0,
           "regularPrice": 0,
           "source": "skipped",
-          "savingsPercentage": 0
+          "savingsPercentage": 0,
+          "type": "optional"
         },
         {
           "recipeIngredientName": "coriander leaves",
           "salePrice": 0,
           "regularPrice": 0,
           "source": "skipped",
-          "savingsPercentage": 0
+          "savingsPercentage": 0,
+          "type": "garnish"
         },
         {
           "recipeIngredientName": "kasuri methi",
           "salePrice": 0,
           "regularPrice": 0,
           "source": "skipped",
-          "savingsPercentage": 0
+          "savingsPercentage": 0,
+          "type": "optional"
         },
         {
           "recipeIngredientName": "cashews",
           "salePrice": 0,
           "regularPrice": 0,
           "source": "skipped",
-          "savingsPercentage": 0
+          "savingsPercentage": 0,
+          "type": "optional"
         },
         {
           "recipeIngredientName": "hot water",
@@ -4080,7 +4547,8 @@
           "source": "database",
           "sourceDate": "2025-05-02",
           "productName": "warm water",
-          "savingsPercentage": 0
+          "savingsPercentage": 0,
+          "type": "core"
         },
         {
           "recipeIngredientName": "Kashmiri red chili powder",
@@ -4088,12 +4556,13 @@
           "saleUnitType": "g",
           "salePrice": 2.99,
           "saleFractionUsed": 0.03386132127308846,
-          "regularPrice": 0.1012453506065345,
+          "regularPrice": 2.99,
           "regularFractionUsed": 0.03386132127308846,
           "source": "database",
           "sourceDate": "2025-04-30",
           "productName": "kashmiri chili powder",
-          "savingsPercentage": 0
+          "savingsPercentage": 0,
+          "type": "core"
         },
         {
           "recipeIngredientName": "garam masala",
@@ -4101,12 +4570,13 @@
           "saleUnitType": "g",
           "salePrice": 3.49,
           "saleFractionUsed": 0.023963396593262604,
-          "regularPrice": 0.0836322541104865,
+          "regularPrice": 3.49,
           "regularFractionUsed": 0.023963396593262604,
           "source": "database",
           "sourceDate": "2025-04-30",
           "productName": "garam masala",
-          "savingsPercentage": 0
+          "savingsPercentage": 0,
+          "type": "core"
         },
         {
           "recipeIngredientName": "cumin powder",
@@ -4114,12 +4584,13 @@
           "saleUnitType": "g",
           "salePrice": 4.49,
           "saleFractionUsed": 0.052094340420136095,
-          "regularPrice": 0.23390358848641107,
+          "regularPrice": 4.49,
           "regularFractionUsed": 0.052094340420136095,
           "source": "database",
           "sourceDate": "2025-01-10",
           "productName": "ground cumin",
-          "savingsPercentage": 0
+          "savingsPercentage": 0,
+          "type": "core"
         },
         {
           "recipeIngredientName": "coriander powder",
@@ -4127,12 +4598,13 @@
           "saleUnitType": "g",
           "salePrice": 3.99,
           "saleFractionUsed": 0.09019762941314995,
-          "regularPrice": 0.3598885413584683,
+          "regularPrice": 3.99,
           "regularFractionUsed": 0.09019762941314995,
           "source": "database",
           "sourceDate": "2025-04-22",
           "productName": "ground coriander",
-          "savingsPercentage": 0
+          "savingsPercentage": 0,
+          "type": "core"
         },
         {
           "recipeIngredientName": "turmeric",
@@ -4140,54 +4612,61 @@
           "saleUnitType": "g",
           "salePrice": 2.29,
           "saleFractionUsed": 0.002734952872057145,
-          "regularPrice": 0.006263042077010862,
+          "regularPrice": 2.29,
           "regularFractionUsed": 0.002734952872057145,
           "source": "database",
           "sourceDate": "2025-04-30",
           "productName": "ground turmeric",
-          "savingsPercentage": 0
+          "savingsPercentage": 0,
+          "type": "core"
         },
         {
           "recipeIngredientName": "salt",
           "salePrice": 0,
           "regularPrice": 0,
           "source": "skipped",
-          "savingsPercentage": 0
+          "savingsPercentage": 0,
+          "type": "to taste"
         },
         {
           "recipeIngredientName": "cumin seeds",
           "salePrice": 0,
           "regularPrice": 0,
           "source": "skipped",
-          "savingsPercentage": 0
+          "savingsPercentage": 0,
+          "type": "optional"
         },
         {
           "recipeIngredientName": "cardamoms",
           "salePrice": 0,
           "regularPrice": 0,
           "source": "skipped",
-          "savingsPercentage": 0
+          "savingsPercentage": 0,
+          "type": "optional"
         },
         {
           "recipeIngredientName": "cinnamon stick",
           "salePrice": 0,
           "regularPrice": 0,
           "source": "skipped",
-          "savingsPercentage": 0
+          "savingsPercentage": 0,
+          "type": "optional"
         },
         {
           "recipeIngredientName": "bay leaf",
           "salePrice": 0,
           "regularPrice": 0,
           "source": "skipped",
-          "savingsPercentage": 0
+          "savingsPercentage": 0,
+          "type": "optional"
         },
         {
           "recipeIngredientName": "curry leaves",
           "salePrice": 0,
           "regularPrice": 0,
           "source": "skipped",
-          "savingsPercentage": 0
+          "savingsPercentage": 0,
+          "type": "optional"
         }
       ]
     }
