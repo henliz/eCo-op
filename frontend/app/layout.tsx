@@ -37,7 +37,7 @@ export const metadata: Metadata = {
    openGraph: {
     images: [
       {
-        url: "https://www.skrimp.ai/Robo_Chef",
+        url: "https://www.skrimp.ai/Robo_Chef.png",
         width: 1200,
         height: 630,
         alt: "Skrimp – Save money on groceries with AI meal plans"
