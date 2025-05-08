@@ -34,6 +34,16 @@ export const metadata: Metadata = {
     // fallback for older browsers:
     shortcut: "/favicon-dark.png",
   },
+   openGraph: {
+    images: [
+      {
+        url: "https://www.skrimp.ai/Robo_Chef",
+        width: 1200,
+        height: 630,
+        alt: "Skrimp – Save money on groceries with AI meal plans"
+      }
+    ]
+  },
 };
 
 export default function RootLayout({
