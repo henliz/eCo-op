@@ -14,7 +14,7 @@ interface GroceryItemProps {
 
 export function GroceryItem({ item, isChecked, onToggle }: GroceryItemProps) {
   // Calculate the correct usage percentage based on how much of the purchased quantity is used
-  const quantityToBuy = Math.ceil(item.neededFraction - 0.05);
+  const quantityToBuy = Math.ceil(Math.max(0.001, item.neededFraction - 0.05));
   const usagePercentage = ((item.neededFraction / quantityToBuy) * 100).toFixed(0);
 
   const status = item.tags?.status || 'bought';

@@ -66,7 +66,7 @@ export function GroceryScreen() {
 
     selectedItems.forEach(item => {
       // Quantity to purchase is always rounded up
-      const quantityToBuy = Math.ceil(item.neededFraction - 0.05);
+      const quantityToBuy = Math.ceil(Math.max(0.001, item.neededFraction - 0.05));
 
       // Calculate meal cost (portion actually used in recipes)
       const usedCost = item.packPrice * item.neededFraction;
