@@ -27,17 +27,17 @@ export default function AboutAndFeedback() {
         <div className="max-w-3xl mx-auto text-center px-4">
 
           <h2 className="text-4xl font-bold text-gray-900 mb-4">Our Story</h2>
+          <img
+              src="/Henrietta_Headshot_small.jpg"
+              alt="Henrietta, founder of SmartCart"
+              className="mx-auto w-24 h-24 rounded-full border-2 border-[#4FD1C5] mb-6"
+          />
           <p className="text-gray-700 leading-relaxed">
             Hi, I’m Henrietta! I started this because I saw families
             and students struggling with grocery bills—and I knew AI could flip the script.
             Our mission is to deliver budget‑friendly, nutritious meal plans every week
             so you can eat well without the sticker shock.
           </p>
-          <img
-              src="/Henrietta_Headshot_small.jpg"
-              alt="Henrietta, founder of SmartCart"
-              className="mx-auto w-24 h-24 rounded-full border-2 border-[#4FD1C5] mb-6"
-          />
         </div>
       </motion.section>
 
@@ -60,8 +60,8 @@ export default function AboutAndFeedback() {
             </h3>
             <p className="text-gray-700 leading-relaxed">
               Skrimp exists to help families eat well on a budget. Our AI has already
-              saved you an average of <span className="font-semibold">$58/week</span>, but
-              we want to do even more. Tell us what recipes, features, or local deals
+              saved you an average of <span className="font-semibold">43%</span> compared to the typical Canadian family’s grocery bill, but
+              we want to do even more. <br></br><br></br>Tell us what recipes, features, or local deals
               you’d love to see next week.
             </p>
             <a

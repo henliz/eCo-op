@@ -36,10 +36,11 @@ export default function FreeListPromo() {
             </h2>
 
             <p className="text-lg text-gray-700">
-              Save an estimated&nbsp;
-              <span className="font-semibold text-emerald-600">$58.00</span>
-              &nbsp;this week! We’ll email you a fully AI‑powered grocery list—tailored
-              to the best deals, absolutely free.
+              Most families spend $350/week on groceries according to Canada’s Food Price Report.<small><br></br><br></br></small>
+              Skrimp families spend only ~
+              <span className="font-semibold text-emerald-600">$200</span>
+              . </p> <p className="text-lg text-gray-700">
+              Stop skimping. Start Skrimping. Your free list is waiting.
             </p>
 
             <Link
