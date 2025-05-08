@@ -1,24 +1,37 @@
 'use client';
 
-import React from 'react';
+import React, { useEffect } from 'react';
 import Image from 'next/image';
 import { motion, AnimatePresence } from 'framer-motion';
 import { usePlannerStore } from './usePlannerStore';
+import { format } from 'date-fns';
 
 export default function StoreSelector() {
   const {
     selectedStore,
     setSelectedStore,
-    fetchMealData,
     isLoading,
     error,
     isDataLoaded,
-    availableStores
+    availableStores,
+    isStoresLoaded,
+    discoverStores
   } = usePlannerStore();
+
+  // Discover stores on component mount
+  useEffect(() => {
+    if (!isStoresLoaded && !isLoading) {
+      discoverStores();
+    }
+  }, [isStoresLoaded, isLoading, discoverStores]);
 
   const handleStoreSelect = (storeId: string) => {
     setSelectedStore(storeId);
-    if (!isDataLoaded) fetchMealData();
+
+    // Add a short delay then explicitly trigger fetchMealData
+    setTimeout(() => {
+      usePlannerStore.getState().fetchMealData();
+    }, 100);
   };
 
   return (
@@ -30,7 +43,7 @@ export default function StoreSelector() {
     >
       <div className="container mx-auto">
 
-        {/* Cross‐fade between prompt & selection banner */}
+        {/* Cross-fade between prompt & selection banner */}
         <AnimatePresence initial={false} mode="wait">
           {selectedStore && !isLoading && isDataLoaded ? (
             <motion.div
@@ -45,6 +58,10 @@ export default function StoreSelector() {
                 You&apos;ve selected{' '}
                 <span className="font-bold">
                   {availableStores.find(s => s.id === selectedStore)?.name}
+                </span>{' '}
+                in{' '}
+                <span className="font-bold">
+                  {availableStores.find(s => s.id === selectedStore)?.location}
                 </span>.
                 <br />
                 Now you can proceed to the &quot;Plan&quot; tab to start planning your meals!
@@ -89,53 +106,75 @@ export default function StoreSelector() {
               height={190}
               className="mx-auto"
             />
-            {/* Legend */}
+            {/* Show count of available stores */}
             <div className="mt-4 text-center">
-              <button
-                className="
-                  px-5 py-3 rounded-full text-lg font-medium
-                  bg-gray-200 text-gray-500 opacity-70 cursor-default
-                "
-              >
-                Coming Soon
-              </button>
+              {isStoresLoaded && (
+                <p className="text-gray-700 font-medium">
+                  {availableStores.filter(s => s.isAvailable).length} stores available
+                </p>
+              )}
               <p className="mt-2 text-gray-600">
-                Greyed stores are not yet available
+                {isStoresLoaded ?
+                  "Select a store to see deals and plan meals" :
+                  "Checking for stores with current deals..."}
               </p>
             </div>
           </div>
 
           {/* Store buttons */}
-          <div>
-            <div className="grid grid-cols-2 gap-3">
-              {availableStores.map(store => (
-                <button
-                  key={store.id}
-                  onClick={() => store.isAvailable && handleStoreSelect(store.id)}
-                  disabled={!store.isAvailable}
-                  className={`
-                    flex items-center justify-center w-full
-                    px-6 py-3 rounded-[30px] text-lg font-medium transition
-                    ${selectedStore === store.id
-                      ? 'bg-[#5BC4B4] text-white'
-                      : store.isAvailable
-                        ? 'bg-orange-200 text-gray-800 hover:bg-orange-300'
-                        : 'bg-gray-200 text-gray-500'}
-                    ${!store.isAvailable ? 'opacity-70 cursor-not-allowed' : ''}
-                  `}
-                >
-                  {store.name}
-                </button>
-              ))}
-            </div>
+          <div className="w-2/3">
+            {isLoading && !isStoresLoaded ? (
+              <div className="flex justify-center mt-6">
+                <div className="animate-spin rounded-full h-8 w-8 border-t-2 border-b-2 border-blue-600"></div>
+                <p className="ml-3 text-gray-600">Discovering available stores...</p>
+              </div>
+            ) : (
+              <>
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
+                  {availableStores
+                    .sort((a, b) => (a.isAvailable === b.isAvailable) ? 0 : a.isAvailable ? -1 : 1)
+                    .map(store => (
+                    <button
+                      key={store.id}
+                      onClick={() => store.isAvailable && handleStoreSelect(store.id)}
+                      disabled={!store.isAvailable}
+                      className={`
+                        flex flex-col items-start justify-center w-full
+                        px-6 py-3 rounded-[30px] text-lg font-medium transition
+                        ${selectedStore === store.id
+                          ? 'bg-[#5BC4B4] text-white'
+                          : store.isAvailable
+                            ? 'bg-orange-200 text-gray-800 hover:bg-orange-300'
+                            : 'bg-gray-200 text-gray-500'}
+                        ${!store.isAvailable ? 'opacity-70 cursor-not-allowed' : ''}
+                      `}
+                    >
+                      <span className="text-lg">{store.name}</span>
+                      <span className="text-sm">{store.location}</span>
+                      <span className="text-xs mt-1">
+                        {store.isAvailable
+                          ? `Deals expire ${format(store.validUntil, 'MMM d, yyyy')}`
+                          : `Deals ended ${format(store.validUntil, 'MMM d, yyyy')}`}
+                      </span>
+                    </button>
+                  ))}
+                </div>
+
+                {isStoresLoaded && availableStores.length === 0 && (
+                  <div className="text-center p-4 bg-gray-100 rounded-lg mt-4">
+                    <p className="text-gray-700">No stores with current sales were found. Please check back later.</p>
+                  </div>
+                )}
+              </>
+            )}
           </div>
         </div>
 
-        {/* Loading indicator */}
-        {isLoading && (
+        {/* Loading indicator for store data */}
+        {isLoading && selectedStore && (
           <div className="flex justify-center mt-6">
             <div className="animate-spin rounded-full h-8 w-8 border-t-2 border-b-2 border-blue-600"></div>
-            <p className="ml-3 text-gray-600">Loading store data...</p>
+            <p className="ml-3 text-gray-600">Loading meal deals for {availableStores.find(s => s.id === selectedStore)?.name}...</p>
           </div>
         )}
 
@@ -143,4 +182,3 @@ export default function StoreSelector() {
     </motion.section>
   );
 }
-

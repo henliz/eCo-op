@@ -3,7 +3,7 @@
 import React, { useState, useMemo } from 'react';
 import Image from 'next/image';
 import { usePlannerStore, type Recipe } from './usePlannerStore';
-import { ExternalLink, Mail, Search } from 'lucide-react';
+import { ExternalLink, Mail, Search, AlertCircle } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Card, CardHeader, CardTitle } from '@/components/ui/card';
 import { motion } from 'framer-motion';
@@ -66,10 +66,9 @@ export function CookScreen() {
     );
   }, [allSelectedRecipes, searchQuery]);
 
-  // Handle email recipes
+  // Simple alert for email functionality
   const handleEmailRecipes = () => {
-    alert('Your recipes have been emailed to you!');
-    // In a real implementation, this would send a request to your backend
+    alert("The email recipe feature is coming soon!");
   };
 
   return (
@@ -102,10 +101,14 @@ export function CookScreen() {
 
             <Button
               onClick={handleEmailRecipes}
-              className="flex items-center gap-2 bg-teal-600 hover:bg-teal-700 w-full sm:w-auto"
+              className="flex items-center gap-2 bg-white border border-teal-600 text-teal-600 hover:bg-teal-50 w-full sm:w-auto"
             >
               <Mail size={18} />
               <span>Email My Recipes</span>
+              <span className="ml-1 text-xs bg-amber-100 text-amber-800 px-1.5 py-0.5 rounded-full flex items-center">
+                <AlertCircle size={12} className="mr-0.5" />
+                Soon
+              </span>
             </Button>
           </div>
         </div>
@@ -189,5 +192,3 @@ export function CookScreen() {
     </div>
   );
 }
-
-
