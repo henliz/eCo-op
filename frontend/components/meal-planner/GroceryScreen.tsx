@@ -299,7 +299,7 @@ export function GroceryScreen() {
                   <span className="font-bold text-right">${groceryTotals.groceryBill.toFixed(2)}</span>
                 </div>
                 <div className="flex flex-col items-end">
-                  <span className="text-sm text-gray-600 text-right">Savings</span>
+                  <span className="text-sm text-gray-600 text-right">Deals</span>
                   <span className="font-bold text-green-600 text-right">${groceryTotals.totalSavings.toFixed(2)}</span>
                 </div>
               </div>

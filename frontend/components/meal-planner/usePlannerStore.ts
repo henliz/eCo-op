@@ -32,6 +32,7 @@ interface Ingredient {
   saleFractionUsed?: number;
   regularPrice: number;
   regularFractionUsed?: number;
+  type?: 'core' | 'optional' | 'garnish' | 'to taste'; // Add this line
   source: 'flyer' | 'database' | 'skipped';
   sourceDate?: string;
   productName?: string;

@@ -110,7 +110,7 @@ export function MealPlanScreen() {
                 <span className="font-bold">${summaryTotals.saleTotal.toFixed(2)}</span>
               </div>
               <div>
-                <span>Savings: </span>
+                <span>Deals</span>
                 <span className="font-bold text-green-600">${summaryTotals.totalSavings.toFixed(2)}</span>
               </div>
             </div>
