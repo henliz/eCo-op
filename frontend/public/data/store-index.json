@@ -13,6 +13,27 @@
       "location": "Hespeler",
       "filename": "Zehrs-Hespeler-2025-05-14.json",
       "validUntil": "2025-05-14"
+    },
+    {
+      "id": "foodbasics-galt",
+      "name": "Food Basics",
+      "location": "Galt",
+      "filename": "FoodBasics-Galt-2025-05-14.json",
+      "validUntil": "2025-05-14"
+    },
+    {
+      "id": "freshco-hwy24sheldondr",
+      "name": "Freshco",
+      "location": "Hwy 24, Sheldon Dr",
+      "filename": "Freshco-hwy24sheldondr-2025-05-14.json",
+      "validUntil": "2025-05-14"
+    },
+    {
+      "id": "nofrills-preston",
+      "name": "NoFrills",
+      "location": "Preston",
+      "filename": "NoFrills-Preston-2025-05-14.json",
+      "validUntil": "2025-05-14"
     }
   ]
 }
