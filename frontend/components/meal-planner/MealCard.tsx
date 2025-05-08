@@ -28,11 +28,14 @@ export function MealCard({
 }: MealCardProps) {
   const dec = (e: React.MouseEvent) => {
     e.stopPropagation();
-    onMultiplierChange(recipe.url, Math.max(0, multiplier - 1));
+    // Decrease by 0.5, but ensure it doesn't go below 0
+    onMultiplierChange(recipe.url, Math.max(0, multiplier - 0.5));
   };
+
   const inc = (e: React.MouseEvent) => {
     e.stopPropagation();
-    onMultiplierChange(recipe.url, multiplier + 1);
+    // Increase by 0.5
+    onMultiplierChange(recipe.url, multiplier + 0.5);
   };
 
   // Calculate savings
@@ -114,7 +117,7 @@ export function MealCard({
               className="w-16 h-10 flex items-center justify-center font-bold text-lg"
               style={{backgroundColor: '#FFE6D9'}}
             >
-              x{multiplier}
+              x{multiplier.toFixed(1).replace('.0', '')}
             </div>
             <button
               onClick={inc}
@@ -128,3 +131,4 @@ export function MealCard({
     </motion.div>
   );
 }
+

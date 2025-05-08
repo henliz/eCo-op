@@ -44,15 +44,31 @@ export function MealPlanScreen() {
         <CollapsibleTrigger className="w-full">
           <div className="flex items-center justify-between p-2 bg-gray-200 rounded-lg">
             <span className="text-xl font-semibold">{title}</span>
-            <div className="flex items-center gap-3">
-              <span className="text-sm">Meals: {summary[mealType]}</span>
-              <span className="text-sm text-green-600">
-                Cost: ${sectionSaleTotal.toFixed(2)}
-              </span>
-              <span className="text-sm text-green-600 font-bold">
-                Deals: ${sectionSavingsTotal.toFixed(2)}
-              </span>
-              {isOpen ? <ChevronUp size={20} /> : <ChevronDown size={20} />}
+
+            {/* Ledger style aligned stats - Meals, Deals, Cost in that order */}
+            <div className="flex items-center gap-6">
+              {/* Meals */}
+              <div className="text-right">
+                <div className="text-sm font-medium">Meals</div>
+                <div className="text-sm">{summary[mealType]}</div>
+              </div>
+
+              {/* Deals */}
+              <div className="text-right">
+                <div className="text-sm font-medium text-green-600">Deals</div>
+                <div className="text-sm font-bold text-green-600">${sectionSavingsTotal.toFixed(2)}</div>
+              </div>
+
+              {/* Cost */}
+              <div className="text-right">
+                <div className="text-sm font-medium">Cost</div>
+                <div className="text-sm">${sectionSaleTotal.toFixed(2)}</div>
+              </div>
+
+              {/* Expand/Collapse icon */}
+              <div className="ml-2">
+                {isOpen ? <ChevronUp size={20} /> : <ChevronDown size={20} />}
+              </div>
             </div>
           </div>
         </CollapsibleTrigger>
@@ -89,11 +105,11 @@ export function MealPlanScreen() {
     <div className="mx-auto px-0 sm:px-0 pb-1"> {/* Remove "container" class here */}
       <div className="space-y-2"> {/* Reduced from space-y-6 */}
         <MealSection title="Breakfast" recipes={meals.breakfast} mealType="breakfast" />
-        <MealSection title="Lunch"       recipes={meals.lunch}     mealType="lunch" />
-        <MealSection title="Dinner"      recipes={meals.dinner}    mealType="dinner" />
+        <MealSection title="Lunch"     recipes={meals.lunch}     mealType="lunch" />
+        <MealSection title="Dinner"    recipes={meals.dinner}    mealType="dinner" />
       </div>
 
-      {/* Bottom summary bar */}
+      {/* Bottom summary bar - keeping original spread-out style with new sequence */}
       <div className="fixed bottom-0 left-0 right-0 bg-gray-200 border-t py-2 px-3 shadow-lg pb-4">
         <div className="container mx-auto">
           {/* TOTALS header */}
@@ -101,17 +117,17 @@ export function MealPlanScreen() {
             <span className="font-bold text-lg">TOTALS</span>
           </div>
 
-          {/* Stats row */}
+          {/* Stats row - reordered to: Meals, Deals, Cost but spread out like before */}
           <div className="flex justify-around items-center">
             <div className="flex items-center gap-8">
               <p className="text-gray-500 !mb-0">Meals: <span className="font-bold">{mealSummary().total}</span></p>
               <div>
-                <span>Cost: </span>
-                <span className="font-bold">${summaryTotals.saleTotal.toFixed(2)}</span>
-              </div>
-              <div>
                 <span>Deals: </span>
                 <span className="font-bold text-green-600">${summaryTotals.totalSavings.toFixed(2)}</span>
+              </div>
+              <div>
+                <span>Cost: </span>
+                <span className="font-bold">${summaryTotals.saleTotal.toFixed(2)}</span>
               </div>
             </div>
           </div>

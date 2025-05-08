@@ -84,11 +84,14 @@ interface Totals {
 
 
 interface PlannerState {
+  // Configuration
+  normalMealServings: number;
+
   // Data state
   meals: MealCategory;
   selectedMeals: Set<string>;
   groceryCheckedItems: Set<string>;
-  recipeMultipliers: Record<string, number>; // url -> multiplier (defaults to 1)
+  recipeMultipliers: Record<string, number>; // url -> multiplier (defaults to calculated value)
   ingredientTags: Record<string, IngredientTags>; // packageId -> tags
 
   // Store state
@@ -109,12 +112,14 @@ interface PlannerState {
   setIngredientTag: (packageId: string, tag: keyof IngredientTags, value: string | undefined) => void;
   setIngredientTags: (packageId: string, tags: Partial<IngredientTags>) => void;
   discoverStores: () => Promise<void>;
+  setNormalMealServings: (servings: number) => void;
 
   // Computed values
   selectedRecipes: () => Recipe[];
   aggregatedIngredients: () => Map<string, AggregatedItem>;
   totals: () => Totals;
   mealSummary: () => { breakfast: number; lunch: number; dinner: number; total: number };
+  calculateInitialMultiplier: (servings: number) => number;
 }
 
 
@@ -123,7 +128,15 @@ const logMessage = (msg: string) => {
   console.log(`[PlannerStore] ${msg}`);
 };
 
+// Helper function to round up to the nearest 0.5
+const roundUpToHalf = (num: number): number => {
+  return Math.ceil(num * 2) / 2;
+};
+
 export const usePlannerStore = create<PlannerState>((set, get) => ({
+  // Configuration
+  normalMealServings: 4,
+
   // Initial data state
   meals: {
     breakfast: [],
@@ -142,6 +155,18 @@ export const usePlannerStore = create<PlannerState>((set, get) => ({
   isDataLoaded: false,
   availableStores: [],
   isStoresLoaded: false,
+
+  // Calculate initial multiplier based on recipe servings and normalMealServings
+  calculateInitialMultiplier: (servings: number) => {
+    const state = get();
+    // Round up to nearest 0.5
+    return roundUpToHalf(state.normalMealServings / servings);
+  },
+
+  // Set normal meal servings
+  setNormalMealServings: (servings: number) => {
+    set({ normalMealServings: servings });
+  },
 
   // Set selected store
   setSelectedStore: (storeId) => {
@@ -244,11 +269,12 @@ export const usePlannerStore = create<PlannerState>((set, get) => ({
     const defaultSelectedMeals = new Set<string>();
     const initialMultipliers: Record<string, number> = {};
 
-    // Default to selecting the first 7 recipes in each category
+    // Default to selecting the first 7 recipes in each category with calculated multipliers
     Object.values(mealCategories).forEach((recipes: Recipe[]) => {
       recipes.slice(0, 7).forEach(recipe => {
         defaultSelectedMeals.add(recipe.url);
-        initialMultipliers[recipe.url] = 1;
+        // Calculate initial multiplier based on normalMealServings and recipe servings
+        initialMultipliers[recipe.url] = state.calculateInitialMultiplier(recipe.servings);
       });
 
       recipes.slice(7).forEach(recipe => {
@@ -287,7 +313,8 @@ export const usePlannerStore = create<PlannerState>((set, get) => ({
       Object.values(meals).forEach((recipes: Recipe[]) => {
         recipes.slice(0, 7).forEach(recipe => {
           defaultSelectedMeals.add(recipe.url);
-          initialMultipliers[recipe.url] = 1; // Default multiplier
+          // Calculate initial multiplier based on normalMealServings and recipe servings
+          initialMultipliers[recipe.url] = state.calculateInitialMultiplier(recipe.servings);
         });
 
         // Set zero multiplier for unselected recipes
@@ -315,8 +342,18 @@ export const usePlannerStore = create<PlannerState>((set, get) => ({
       newSelectedMeals.delete(url);
       newMultipliers[url] = 0; // Set multiplier to 0 when unselected
     } else {
-      newSelectedMeals.add(url);
-      newMultipliers[url] = 1; // Set multiplier to 1 when selected
+      // Find the recipe to get its servings
+      const recipe = [
+        ...state.meals.breakfast,
+        ...state.meals.lunch,
+        ...state.meals.dinner
+      ].find(r => r.url === url);
+
+      if (recipe) {
+        newSelectedMeals.add(url);
+        // Calculate initial multiplier based on normalMealServings and recipe servings
+        newMultipliers[url] = state.calculateInitialMultiplier(recipe.servings);
+      }
     }
 
     return {
@@ -339,8 +376,8 @@ export const usePlannerStore = create<PlannerState>((set, get) => ({
     const newMultipliers = { ...state.recipeMultipliers };
     const newSelectedMeals = new Set(state.selectedMeals);
 
-    // Ensure multiplier is a non-negative integer
-    const newMultiplier = Math.max(0, Math.round(multiplier));
+    // Ensure multiplier is a non-negative number with precision of 0.5
+    const newMultiplier = Math.max(0, multiplier);
     newMultipliers[url] = newMultiplier;
 
     // Update selection based on multiplier
@@ -505,15 +542,15 @@ export const usePlannerStore = create<PlannerState>((set, get) => ({
       total: 0
     };
 
-    // Count selected meals by category, considering multipliers
+    // Count selected meals by category - simply count active cards
     (['breakfast', 'lunch', 'dinner'] as const).forEach(category => {
-      state.meals[category].forEach(recipe => {
-        if (state.selectedMeals.has(recipe.url)) {
-          const multiplier = state.recipeMultipliers[recipe.url] || 1;
-          summary[category] += multiplier;
-          summary.total += multiplier;
-        }
-      });
+      // Count the number of selected recipes in each category
+      summary[category] = state.meals[category].filter(recipe =>
+        state.selectedMeals.has(recipe.url)
+      ).length;
+
+      // Add to the total
+      summary.total += summary[category];
     });
 
     return summary;
