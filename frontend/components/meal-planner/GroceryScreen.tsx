@@ -1,17 +1,10 @@
 'use client';
 
-import React, { useState } from 'react';
+import React from 'react';
 import { usePlannerStore, type AggregatedItem, type IngredientTags } from './usePlannerStore';
-import { Collapsible, CollapsibleTrigger, CollapsibleContent } from '@/components/ui/collapsible';
-import { ChevronDown, ChevronUp, Tag } from 'lucide-react';
 import { GroceryItem } from './GroceryItem';
 
 /* -------------------------------- types -------------------------------- */
-interface GroupedItems {
-  section: string;
-  items: AggregatedItem[];
-}
-
 interface GroceryTotals {
   mealCost: number;     // Cost of the portions used in recipes
   futureUseCost: number; // Cost of the unused portions
@@ -28,9 +21,6 @@ export function GroceryScreen() {
     setIngredientTags,
   } = usePlannerStore();
 
-  const [showPantryStaples, setPantryStaplesOpen] = useState(false);
-  const [groupBySection, setGroupBySection] = useState(false);
-
   const groceryItems = Array.from(aggregatedIngredients().values());
 
   /* ---------------------- split items into two buckets ---------------------- */
@@ -39,14 +29,14 @@ export function GroceryScreen() {
       if (item.tags?.status === 'ignored') return false;
       return item.tags?.importance === 'core' || item.neededFraction * 100 >= 25;
     })
-    .sort(sortLogic(groupBySection, groceryCheckedItems));
+    .sort(sortLogic(groceryCheckedItems));
 
   const pantryStapleItems = groceryItems
     .filter(item => {
       if (item.tags?.status === 'ignored') return false;
       return item.tags?.importance === 'optional' || item.neededFraction * 100 < 25;
     })
-    .sort(sortLogic(groupBySection, groceryCheckedItems));
+    .sort(sortLogic(groceryCheckedItems));
 
   /* ------------------------------ totals ----------------------------------- */
   // Calculate the new grocery totals with corrected math
@@ -103,42 +93,7 @@ export function GroceryScreen() {
   const handleUpdateTags = (packageId: string, tags: Partial<IngredientTags>) =>
     setIngredientTags(packageId, tags);
 
-  /* --------------------------- grouping helper ------------------------------ */
-  const getGroupedItems = (items: AggregatedItem[]): GroupedItems[] => {
-    if (!groupBySection) return items.map(i => ({ section: '', items: [i] }));
-
-    const sections = new Set<string>();
-    items.forEach(i => sections.add(i.tags?.storeSection || 'Uncategorized'));
-
-    return Array.from(sections)
-      .sort()
-      .map(section => ({
-        section,
-        items: items.filter(i => (i.tags?.storeSection || 'Uncategorized') === section)
-      }));
-  };
-
   const renderItems = (items: AggregatedItem[]) => {
-    if (groupBySection) {
-      return getGroupedItems(items).map(g => (
-        <div key={g.section} className="mb-2">
-          <div className="bg-gray-100 p-0 font-medium text-sm flex items-center">
-            <Tag size={14} className="mr-1" />
-            {g.section}
-          </div>
-          {g.items.map(i => (
-            <GroceryItem
-              key={i.packageId}
-              item={i}
-              isChecked={groceryCheckedItems.has(i.packageId)}
-              onToggle={toggleGroceryItem}
-              onUpdateTags={handleUpdateTags}
-            />
-          ))}
-        </div>
-      ));
-    }
-
     return items.map(i => (
       <GroceryItem
         key={i.packageId}
@@ -156,20 +111,6 @@ export function GroceryScreen() {
           className="container mx-0 p-0 !px-0"
           style={{scrollPaddingTop: '80px', scrollPaddingBottom: '200px'}}
       >
-        {/* header */}
-        <div className="bg-white flex justify-between items-center mb-2 px-2">
-          <span className="text-xl font-bold">Shopping List</span>
-          <button
-              onClick={() => setGroupBySection(!groupBySection)}
-              className={`flex items-center gap-0 px-0 py-0 rounded-md text-sm ${
-                  groupBySection ? 'bg-blue-100 text-blue-700' : 'bg-gray-100'
-              }`}
-          >
-            <Tag size={16}/>
-            {groupBySection ? 'Grouped by Section' : 'Group by Section'}
-          </button>
-        </div>
-
         {/* ---------------- Essential Card ---------------- */}
         <div className="rounded-lg border border-gray-200 overflow-hidden mb-4">
           <div className="flex justify-between items-center p-2 bg-gray-200">
@@ -224,33 +165,23 @@ export function GroceryScreen() {
             </div>
 
             <div className="rounded-lg border border-gray-200 overflow-hidden mb-4 mt-2">
-              <Collapsible open={showPantryStaples} onOpenChange={setPantryStaplesOpen} className="w-full">
-                <CollapsibleTrigger className="w-full">
-                  <div className="flex justify-between items-center p-2 bg-gray-200">
-                    <div className="flex items-center gap-2">
-                      <span className="text-lg font-bold">Pantry Staples</span>
-                      {/* Chevron icon next to title */}
-                      <div className="ml-2">
-                        {showPantryStaples ? <ChevronUp size={20}/> : <ChevronDown size={20}/>}
-                      </div>
-                    </div>
-                    <div className="flex items-center">
-                      {/* Qty column header */}
-                      <div className="w-16 text-right font-semibold text-sm text-gray-600">Qty</div>
-                      {/* Each column header */}
-                      <div className="w-20 text-right font-semibold text-sm text-gray-600">Each</div>
-                      {/* Total column header */}
-                      <div className="w-20 text-right font-semibold text-sm text-gray-600">Total</div>
-                    </div>
-                  </div>
-                </CollapsibleTrigger>
+              {/* Non-collapsible header */}
+              <div className="flex justify-between items-center p-2 bg-gray-200">
+                <span className="text-lg font-bold">Pantry Staples</span>
+                <div className="flex items-center">
+                  {/* Qty column header */}
+                  <div className="w-16 text-right font-semibold text-sm text-gray-600">Qty</div>
+                  {/* Each column header */}
+                  <div className="w-20 text-right font-semibold text-sm text-gray-600">Each</div>
+                  {/* Total column header */}
+                  <div className="w-20 text-right font-semibold text-sm text-gray-600">Total</div>
+                </div>
+              </div>
 
-                <CollapsibleContent>
-                  <div className="bg-[#FDE2E7]">
-                    {renderItems(pantryStapleItems)}
-                  </div>
-                </CollapsibleContent>
-              </Collapsible>
+              {/* Content area always visible */}
+              <div className="bg-[#FDE2E7]">
+                {renderItems(pantryStapleItems)}
+              </div>
             </div>
           </>
         )}
@@ -292,7 +223,6 @@ export function GroceryScreen() {
 
 /* ----------------------------- helpers ---------------------------------- */
 function sortLogic(
-    groupBy: boolean,
     checked: Set<string>
 ): (a: AggregatedItem, b: AggregatedItem) => number {
   return (a, b) => {
@@ -304,12 +234,6 @@ function sortLogic(
     const aChecked = checked.has(a.packageId);
     const bChecked = checked.has(b.packageId);
     if (aChecked !== bChecked) return aChecked ? 1 : -1;
-
-    if (groupBy) {
-      const aSec = a.tags?.storeSection || '';
-      const bSec = b.tags?.storeSection || '';
-      if (aSec !== bSec) return aSec.localeCompare(bSec);
-    }
 
     return b.lineCost - a.lineCost;
   };
