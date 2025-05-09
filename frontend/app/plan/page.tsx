@@ -23,9 +23,9 @@ const tabs: { label: string; value: View }[] = [
 // Contextual helper text for each step
 const instructions: Record<View, string> = {
   store: 'Please select a store to continue.',
-  plan: 'Pick some budget‑friendly meals to fill your weekly plan.',
-  groceries: 'Review your shopping list and check items off as you go.',
-  cook: 'Click on a recipe to follow the steps and enjoy your meals!',
+  plan: 'Select your recipes for the week.',
+  groceries: 'Review your shopping list. Check items off as you go.',
+  cook: 'Click on a recipe to see the cooking instructions.',
 };
 
 export default function MealPlannerPage() {
