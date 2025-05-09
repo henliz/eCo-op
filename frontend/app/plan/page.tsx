@@ -67,11 +67,16 @@ export default function MealPlannerPage() {
     }
   }, [selectedStore, isDataLoaded, isLoading, view]);
 
-  return (
-    <>
+return (
+  <>
+    {/* Fixed Header */}
+    <div className="fixed top-0 left-0 right-0 z-30 bg-white">
       <Header />
+    </div>
 
-      <div className="container mx-auto p-1 min-h-screen">
+    {/* Fixed tabs section - positioned right below the header */}
+    <div className="fixed top-16 left-0 right-0 bg-white z-20 shadow-sm">
+      <div className="container mx-auto p-1">
         {/* --- 4‑step selector --- */}
         <div className="relative mx-auto mt-2 mb-1 w-full max-w-md h-12">
           <div className="absolute inset-0 bg-teal-100 rounded-full"/>
@@ -99,47 +104,54 @@ export default function MealPlannerPage() {
               }}
           />
         </div>
-
-        {/* --- Instruction card for all steps --- */}
-        <motion.div
-          key={view}
-          initial={{ opacity: 0, y: 8 }}
-          animate={{ opacity: 1, y: 0 }}
-          exit={{ opacity: 0, y: -8 }}
-          transition={{ duration: 0.2 }}
-          className="max-w-md mx-auto mb-0.5 rounded-lg bg-orange-50 shadow-sm px-4 relative mb-1"
-          style={{height: "28px"}}
-        >
-          <p className="text-sm text-gray-700 italic m-0 absolute left-0 right-0 text-center flex items-center justify-center"
-             style={{top: "50%", transform: "translateY(-50%)"}}>
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              width="16"
-              height="16"
-              viewBox="0 0 24 24"
-              fill="none"
-              stroke="currentColor"
-              strokeWidth="2"
-              strokeLinecap="round"
-              strokeLinejoin="round"
-              className="mr-2 text-amber-500"
-            >
-              <path d="M15 14c.2-1 .7-1.7 1.5-2.5 1-.9 1.5-2.2 1.5-3.5A6 6 0 0 0 6 8c0 1 .2 2.2 1.5 3.5.7.7 1.3 1.5 1.5 2.5"></path>
-              <path d="M9 18h6"></path>
-              <path d="M10 22h4"></path>
-            </svg>
-            {instructions[view]}
-          </p>
-        </motion.div>
-
-        {/* --- Content panels --- */}
-        {view === 'store' && <StoreSelector shouldNavigateToPlan={shouldNavigateToPlan}/>}
-        {view === 'plan' && <MealPlanScreen/>}
-        {view === 'groceries' && <GroceryScreen/>}
-        {view === 'cook' && <CookScreen/>}
       </div>
+    </div>
 
-      <Footer/>
-    </>
-  );
-}
+    {/* Invisible spacer div that matches the height of fixed elements */}
+    <div className="h-32"></div>
+
+    {/* Content section without the extra padding-top since we have the spacer */}
+    <div className="container mx-auto p-1 min-h-screen">
+      {/* --- Instruction card (part of scrollable content) --- */}
+      <motion.div
+        key={view}
+        initial={{ opacity: 0, y: 8 }}
+        animate={{ opacity: 1, y: 0 }}
+        exit={{ opacity: 0, y: -8 }}
+        transition={{ duration: 0.2 }}
+        className="max-w-md mx-auto mb-0.5 rounded-lg bg-orange-50 shadow-sm px-4 relative mb-1"
+        style={{height: "28px"}}
+      >
+        <p className="text-sm text-gray-700 italic m-0 absolute left-0 right-0 text-center flex items-center justify-center"
+           style={{top: "50%", transform: "translateY(-50%)"}}>
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            width="16"
+            height="16"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            strokeWidth="2"
+            strokeLinecap="round"
+            strokeLinejoin="round"
+            className="mr-2 text-amber-500"
+          >
+            <path d="M15 14c.2-1 .7-1.7 1.5-2.5 1-.9 1.5-2.2 1.5-3.5A6 6 0 0 0 6 8c0 1 .2 2.2 1.5 3.5.7.7 1.3 1.5 1.5 2.5"></path>
+            <path d="M9 18h6"></path>
+            <path d="M10 22h4"></path>
+          </svg>
+          {instructions[view]}
+        </p>
+      </motion.div>
+
+      {/* --- Content panels --- */}
+      {view === 'store' && <StoreSelector shouldNavigateToPlan={shouldNavigateToPlan}/>}
+      {view === 'plan' && <MealPlanScreen/>}
+      {view === 'groceries' && <GroceryScreen/>}
+      {view === 'cook' && <CookScreen/>}
+    </div>
+
+    <Footer/>
+  </>
+); // Closing parenthesis for return statement
+} // Closing brace for MealPlannerPage function
