@@ -224,12 +224,29 @@ export function GroceryScreen() {
         {/* ---------------- Optional Card ---------------- */}
         {discretionaryItems.length > 0 && (
             <>
-              {/* Instruction card for discretionary items explanation */}
-              <div className="max-w-md mx-auto my-1 rounded-lg bg-orange-50 shadow-sm px-4 relative mb-2"
+
+              {/* Instruction card for pantry staples explanation */}
+              <div className="max-w-md mx-auto mb-0.5 rounded-lg bg-orange-50 shadow-sm px-4 relative my-2 mx-1"
                    style={{height: "45px"}}>
-                <p className="text-sm text-gray-700 italic m-0 absolute left-0 right-0 text-center"
+                <p className="text-sm text-gray-700 italic m-0 absolute left-0 right-0 text-center flex items-center justify-center mx-1"
                    style={{top: "50%", transform: "translateY(-50%)"}}>
-                  Pantry Staples: You'll only use a small portion of these items in your recipes. Check your kitchen before purchasing.
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    width="16"
+                    height="16"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    strokeWidth="2"
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    className="mx-1 text-amber-500"
+                  >
+                    <path d="M15 14c.2-1 .7-1.7 1.5-2.5 1-.9 1.5-2.2 1.5-3.5A6 6 0 0 0 6 8c0 1 .2 2.2 1.5 3.5.7.7 1.3 1.5 1.5 2.5"></path>
+                    <path d="M9 18h6"></path>
+                    <path d="M10 22h4"></path>
+                  </svg>
+                    Pantry Staples: You&apos;ll only use a small portion of these items in the recipes. Check your kitchen before buying.
                 </p>
               </div>
 
