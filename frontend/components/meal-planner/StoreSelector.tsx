@@ -2,7 +2,7 @@
 
 import React, { useEffect } from 'react';
 import Image from 'next/image';
-import { motion, AnimatePresence } from 'framer-motion';
+import { motion } from 'framer-motion';
 import { usePlannerStore } from './usePlannerStore';
 import { format } from 'date-fns';
 
@@ -17,7 +17,6 @@ export default function StoreSelector({ shouldNavigateToPlan }: StoreSelectorPro
     setSelectedStore,
     isLoading,
     error,
-    isDataLoaded,
     availableStores,
     isStoresLoaded,
     discoverStores
@@ -50,43 +49,6 @@ export default function StoreSelector({ shouldNavigateToPlan }: StoreSelectorPro
       transition={{ duration: 0.5, ease: 'easeOut' }}
     >
       <div className="container mx-auto">
-
-        {/* Cross-fade between prompt & selection banner */}
-        <AnimatePresence initial={false} mode="wait">
-          {selectedStore && !isLoading && isDataLoaded ? (
-            <motion.div
-              key="selected"
-              className="text-center mb-2 p-2 bg-green-50 rounded-lg"
-              initial={{ opacity: 0, y: -10 }}
-              animate={{ opacity: 1, y: 0 }}
-              exit={{ opacity: 0, y: -10 }}
-              transition={{ duration: 0.3 }}
-            >
-              <p className="text-gray-700">
-                You&apos;ve selected{' '}
-                <span className="font-bold">
-                  {availableStores.find(s => s.id === selectedStore)?.name}
-                </span>{' '}
-                in{' '}
-                <span className="font-bold">
-                  {availableStores.find(s => s.id === selectedStore)?.location}
-                </span>.
-              </p>
-            </motion.div>
-          ) : !isLoading ? (
-            <motion.div
-              key="prompt"
-              className="text-center mb-2 p-2 bg-orange-50 rounded-lg text-gray-700"
-              initial={{ opacity: 0, y: -10 }}
-              animate={{ opacity: 1, y: 0 }}
-              exit={{ opacity: 0, y: -10 }}
-              transition={{ duration: 0.3 }}
-            >
-              Please select a store to continue
-            </motion.div>
-          ) : null}
-        </AnimatePresence>
-
         {/* Error message */}
         {error && (
             <div className="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded mb-6">

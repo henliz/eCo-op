@@ -103,7 +103,7 @@ export function GroceryItem({ item, isChecked, onToggle }: GroceryItemProps) {
       <div className="flex items-center justify-between text-sm text-gray-700">
         {/* Usage percentage */}
         <div className="flex-1">
-          <span className="text-sm">{usagePercentage}% used in meals</span>
+          <span className="text-sm font-normal">{usagePercentage}% used in recipes</span>
         </div>
 
         {/* Right-aligned numeric data with consistent width */}
