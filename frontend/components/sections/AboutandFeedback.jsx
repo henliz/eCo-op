@@ -60,7 +60,7 @@ export default function AboutAndFeedback() {
             </h3>
             <p className="text-gray-700 leading-relaxed">
               Skrimp exists to help families eat well on a budget. Our AI has already
-              saved you an average of <span className="font-semibold">43%</span> compared to the typical Canadian family’s grocery bill, but
+              saved you an average of <span className="font-semibold">~30%</span> compared to the typical Canadian family’s grocery bill, but
               we want to do even more. <br></br><br></br>Tell us what recipes, features, or local deals
               you’d love to see next week.
             </p>

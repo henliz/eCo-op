@@ -42,7 +42,7 @@ export default function EmailSignupBanner() {
       viewport={{ once: true, amount: 0.1 }}
       variants={containerVariants}
     >
-      <div className="max-w-[1200px] mx-auto px-4">
+      <div className="max-w-[1200px] mx-auto px-4 scroll-mt-24" id="contact">
         <motion.div
           className="bg-[#4FD1C5] rounded-2xl p-8 flex flex-col md:flex-row items-center gap-6"
           variants={childVariants}

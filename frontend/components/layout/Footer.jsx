@@ -28,9 +28,9 @@ export default function Footer() {
               <span className="opacity-60">Careers (coming soon)</span>
             </li>
             <li>
-              <Link href="/blog" className="hover:underline">
-                Blog
-              </Link>
+              <span className="opacity-60">
+                Blog (coming soon)
+              </span>
             </li>
           </ul>
         </div>
@@ -40,18 +40,8 @@ export default function Footer() {
           <h4 className="font-semibold text-lg">Support</h4>
           <ul className="space-y-1">
             <li>
-              <Link href="/contact" className="hover:underline">
+              <Link href="/#contact" className="hover:underline">
                 Contact Us
-              </Link>
-            </li>
-            <li>
-              <Link href="/privacy" className="hover:underline">
-                Privacy Policy
-              </Link>
-            </li>
-            <li>
-              <Link href="/terms" className="hover:underline">
-                Terms of Service
               </Link>
             </li>
           </ul>
@@ -63,33 +53,6 @@ export default function Footer() {
           <p>coming soon...</p>
           <div className="flex items-center space-x-4">
 
-            <a
-              href="https://instagram.com/yourhandle"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="hover:text-gray-300"
-              aria-label="Instagram"
-            >
-              <FaInstagram size={20} />
-            </a>
-            <a
-              href="https://tiktok.com/@yourhandle"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="hover:text-gray-300"
-              aria-label="TikTok"
-            >
-              <FaTiktok size={20} />
-            </a>
-            <a
-              href="https://linkedin.com/company/yourcompany"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="hover:text-gray-300"
-              aria-label="LinkedIn"
-            >
-              <FaLinkedin size={20} />
-            </a>
           </div>
         </div>
 
