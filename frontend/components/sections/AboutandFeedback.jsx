@@ -33,11 +33,17 @@ export default function AboutAndFeedback() {
               className="mx-auto w-24 h-24 rounded-full border-2 border-[#4FD1C5] mb-6"
           />
           <p className="text-gray-700 leading-relaxed">
-            Hi, I’m Henrietta! I started this because I saw families
-            and students struggling with grocery bills—and I knew AI could flip the script.
-            Our mission is to deliver budget‑friendly, nutritious meal plans every week
-            so you can eat well without the sticker shock.
-          </p>
+            Hi, I’m Henrietta—full‑time student, part‑time coupon hunter, and now the founder of Skrimp.ai.
+            Between tuition hikes and rent that keeps climbing, I watched classmates skip meals and parents in the checkout line put groceries back on the shelf.
+            Those moments hit hard, because I was making the same trade‑offs. So I cracked open my laptop (instead of another pack of instant noodles) and built
+            an AI that scours every flyer in town, hunts the deepest weekly discounts, and turns them into balanced meals you can actually look forward to.
+            </p>
+            <p>
+            Here’s the magic: Skrimp starts with the deals → AI 'magics' you a meal plan that maximise those savings → builds a ready‑to‑shop list, complete with a running “cash you kept” counter.
+            Early testers are shaving $50‑plus off grocery bills—without sacrificing nutrition or flavour.
+            I’m still pulling all‑nighters for exams, but I’m just as committed to helping you keep more money in your pocket and good food on your table.
+            Join me while we flip the script on grocery prices together.
+            </p>
         </div>
       </motion.section>
 
