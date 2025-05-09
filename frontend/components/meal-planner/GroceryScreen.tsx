@@ -223,56 +223,50 @@ export function GroceryScreen() {
 
         {/* ---------------- Optional Card ---------------- */}
         {discretionaryItems.length > 0 && (
-            <Card>
-              <CardHeader className="p-0">
-                <CardTitle>
-                  <Collapsible open={showDiscretionary} onOpenChange={setShowDiscretionary}>
-                    <CollapsibleTrigger className="w-full bg-gray-200">
-                      {/* Row 1: Title and selection count */}
-                      <div className="flex justify-between items-center py-2 px-4">
-                        <div className="flex items-center gap-2">
+            <>
+              {/* Instruction card for discretionary items explanation */}
+              <div className="max-w-md mx-auto my-1 rounded-lg bg-orange-50 shadow-sm px-4 relative mb-2"
+                   style={{height: "45px"}}>
+                <p className="text-sm text-gray-700 italic m-0 absolute left-0 right-0 text-center"
+                   style={{top: "50%", transform: "translateY(-50%)"}}>
+                  Pantry Staples: You'll only use a small portion of these items in your recipes. Check your kitchen before purchasing.
+                </p>
+              </div>
 
-                        </div>
-                        {showDiscretionary ? <ChevronUp size={20}/> : <ChevronDown size={20}/>}
-                      </div>
-
-                      {/* Row 2: Column headers */}
-                      <div className="flex justify-between items-center px-4 py-2 border-b">
-                        <div className="flex-1">
-                          <span className="text-lg font-bold">Discretionary</span>
-                          <p className="font-normal">
-                              Most people will have these at home, but please check if you want to buy any optional items.
-                            </p>
-                        </div>
-
-                        <div className="flex items-center">
-                          {/* Qty column header - exactly matching width */}
-                          <div className="w-16 text-right font-semibold text-sm text-gray-600">
-                          Qty
+              <Card>
+                <CardHeader className="p-0">
+                  <CardTitle>
+                    <Collapsible open={showDiscretionary} onOpenChange={setShowDiscretionary}>
+                      <CollapsibleTrigger className="w-full">
+                        <div className="flex justify-between items-center p-2 bg-gray-200 rounded-lg">
+                          <div className="flex items-center gap-2">
+                            <span className="text-lg font-bold">Pantry Staples</span>
+                            {/* Chevron icon next to title */}
+                            <div className="ml-2">
+                              {showDiscretionary ? <ChevronUp size={20}/> : <ChevronDown size={20}/>}
+                            </div>
                           </div>
-
-                          {/* Each column header - exactly matching width */}
-                          <div className="w-20 text-right font-semibold text-sm text-gray-600">
-                            Each
-                          </div>
-
-                          {/* Total column header - exactly matching width */}
-                          <div className="w-20 text-right font-semibold text-sm text-gray-600">
-                            Total
+                          <div className="flex items-center">
+                            {/* Qty column header */}
+                            <div className="w-16 text-right font-semibold text-sm text-gray-600">Qty</div>
+                            {/* Each column header */}
+                            <div className="w-20 text-right font-semibold text-sm text-gray-600">Each</div>
+                            {/* Total column header */}
+                            <div className="w-20 text-right font-semibold text-sm text-gray-600">Total</div>
                           </div>
                         </div>
-                      </div>
-                    </CollapsibleTrigger>
+                      </CollapsibleTrigger>
 
-                    <CollapsibleContent>
-                      <CardContent className="p-0">
-                        {renderItems(discretionaryItems)}
-                      </CardContent>
-                    </CollapsibleContent>
-                  </Collapsible>
-                </CardTitle>
-              </CardHeader>
-            </Card>
+                      <CollapsibleContent>
+                        <CardContent className="p-0">
+                          {renderItems(discretionaryItems)}
+                        </CardContent>
+                      </CollapsibleContent>
+                    </Collapsible>
+                  </CardTitle>
+                </CardHeader>
+              </Card>
+            </>
         )}
 
         {/* Bottom summary bar with enhanced totals */}
