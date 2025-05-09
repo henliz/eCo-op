@@ -151,7 +151,10 @@ return (
       {view === 'cook' && <CookScreen/>}
     </div>
 
-    <Footer/>
+    {/* Footer with lower z-index than the summary bar */}
+    <div className="relative z-0">
+      <Footer/>
+    </div>
   </>
 ); // Closing parenthesis for return statement
 } // Closing brace for MealPlannerPage function

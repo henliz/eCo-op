@@ -118,37 +118,39 @@ export function MealPlanScreen() {
   const summaryTotals = totals();
 
   return (
-    <div className="mx-auto px-0 sm:px-0 pb-1"> {/* Remove "container" class here */}
-      <div className="space-y-2"> {/* Reduced from space-y-6 */}
-        <MealSection title="Breakfast" recipes={meals.breakfast} mealType="breakfast" />
-        <MealSection title="Lunch"     recipes={meals.lunch}     mealType="lunch" />
-        <MealSection title="Dinner"    recipes={meals.dinner}    mealType="dinner" />
+    <>
+      <div className="mx-auto px-0 sm:px-0">
+        <div className="space-y-2">
+          <MealSection title="Breakfast" recipes={meals.breakfast} mealType="breakfast" />
+          <MealSection title="Lunch"     recipes={meals.lunch}     mealType="lunch" />
+          <MealSection title="Dinner"    recipes={meals.dinner}    mealType="dinner" />
+        </div>
       </div>
 
-      {/* Bottom summary bar - keeping original spread-out style with new sequence */}
-      <div className="fixed bottom-0 left-0 right-0 bg-gray-200 border-t py-2 px-3 shadow-lg pb-4">
-        <div className="container mx-auto">
-          {/* TOTALS header */}
-          <div className="text-center mb-1">
-            <span className="font-bold text-lg">TOTALS</span>
-          </div>
+      {/* STICKY Summary Bar - Full width of viewport */}
+<div className="sticky bottom-0 left-0 right-0 w-screen ml-[calc(-50vw+50%)] bg-gray-200 border-t py-2 shadow-lg pb-4 z-10 mt-2">
+  <div className="w-full px-4">
+    {/* TOTALS header */}
+    <div className="text-center mb-1">
+      <span className="font-bold text-lg">TOTALS</span>
+    </div>
 
-          {/* Stats row - reordered to: Meals, Deals, Cost but spread out like before */}
-          <div className="flex justify-around items-center">
-            <div className="flex items-center gap-8">
-              <p className="text-gray-500 !mb-0">Recipes: <span className="font-bold">{mealSummary().total}</span></p>
-              <div>
-                <span>Deals: </span>
-                <span className="font-bold">${summaryTotals.totalSavings.toFixed(2)}</span>
-              </div>
-              <div>
-                <span>Cost: </span>
-                <span className="font-bold">${summaryTotals.saleTotal.toFixed(2)}</span>
-              </div>
-            </div>
-          </div>
+    {/* Stats row */}
+    <div className="flex justify-around items-center">
+      <div className="flex items-center gap-8">
+        <p className="text-gray-500 !mb-0">Recipes: <span className="font-bold">{mealSummary().total}</span></p>
+        <div>
+          <span>Deals: </span>
+          <span className="font-bold">${summaryTotals.totalSavings.toFixed(2)}</span>
+        </div>
+        <div>
+          <span>Cost: </span>
+          <span className="font-bold">${summaryTotals.saleTotal.toFixed(2)}</span>
         </div>
       </div>
     </div>
+  </div>
+</div>
+    </>
   );
 }
