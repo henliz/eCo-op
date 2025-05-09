@@ -2,7 +2,6 @@
 
 import React, { useState } from 'react';
 import { usePlannerStore, type AggregatedItem, type IngredientTags } from './usePlannerStore';
-import { Card, CardHeader, CardContent, CardTitle } from '@/components/ui/card';
 import { Collapsible, CollapsibleTrigger, CollapsibleContent } from '@/components/ui/collapsible';
 import { ChevronDown, ChevronUp, Tag } from 'lucide-react';
 import { GroceryItem } from './GroceryItem';
@@ -29,7 +28,7 @@ export function GroceryScreen() {
     setIngredientTags,
   } = usePlannerStore();
 
-  const [showDiscretionary, setShowDiscretionary] = useState(false);
+  const [showPantryStaples, setPantryStaplesOpen] = useState(false);
   const [groupBySection, setGroupBySection] = useState(false);
 
   const groceryItems = Array.from(aggregatedIngredients().values());
@@ -38,21 +37,21 @@ export function GroceryScreen() {
   const essentialItems = groceryItems
     .filter(item => {
       if (item.tags?.status === 'ignored') return false;
-      return item.tags?.importance === 'core' || item.neededFraction * 100 >= 20;
+      return item.tags?.importance === 'core' || item.neededFraction * 100 >= 25;
     })
     .sort(sortLogic(groupBySection, groceryCheckedItems));
 
-  const discretionaryItems = groceryItems
+  const pantryStapleItems = groceryItems
     .filter(item => {
       if (item.tags?.status === 'ignored') return false;
-      return item.tags?.importance === 'optional' || item.neededFraction * 100 < 20;
+      return item.tags?.importance === 'optional' || item.neededFraction * 100 < 25;
     })
     .sort(sortLogic(groupBySection, groceryCheckedItems));
 
   /* ------------------------------ totals ----------------------------------- */
   // Calculate the new grocery totals with corrected math
   const calculateGroceryTotals = (): GroceryTotals => {
-    const allItems = [...essentialItems, ...discretionaryItems];
+    const allItems = [...essentialItems, ...pantryStapleItems];
     let mealCost = 0;
     let futureUseCost = 0;
     let groceryBill = 0;
@@ -172,101 +171,88 @@ export function GroceryScreen() {
         </div>
 
         {/* ---------------- Essential Card ---------------- */}
-        <Card>
-          <CardHeader className="p-0">
-            <CardTitle>
-              <div className="w-full bg-gray-200">
-                {/* Row 1: Similar to discretionary */}
-                <div className="flex justify-between items-center py-2 px-4">
-                  <div className="flex items-center gap-2">
-                    {/* Empty to match structure */}
-                  </div>
-                  {/* No chevron since this doesn't collapse */}
-                </div>
+        <div className="rounded-lg border border-gray-200 overflow-hidden mb-4">
+          <div className="flex justify-between items-center p-2 bg-gray-200">
+            <span className="text-lg font-bold">Essentials</span>
+            <div className="flex items-center">
+              {/* Qty column header */}
+              <div className="w-16 text-right font-semibold text-sm text-gray-600">Qty</div>
+              {/* Each column header */}
+              <div className="w-20 text-right font-semibold text-sm text-gray-600">Each</div>
+              {/* Total column header */}
+              <div className="w-20 text-right font-semibold text-sm text-gray-600">Total</div>
+            </div>
+          </div>
 
-                {/* Row 2: Column headers */}
-                <div className="flex justify-between items-center px-4 py-2 border-b">
-                  <div className="flex-1">
-                    <span className="text-lg font-bold">Essentials</span>
-                  </div>
-
-                  <div className="flex items-center">
-                    {/* Qty column header */}
-                    <div className="w-16 text-right font-semibold text-sm text-gray-600">
-                      Qty
-                    </div>
-
-                    {/* Each column header */}
-                    <div className="w-20 text-right font-semibold text-sm text-gray-600">
-                      Each
-                    </div>
-
-                    {/* Total column header */}
-                    <div className="w-20 text-right font-semibold text-sm text-gray-600">
-                      Total
-                    </div>
-                  </div>
-                </div>
+          <div>
+            {essentialItems.length ? (
+              renderItems(essentialItems)
+            ) : (
+              <div className="p-2 text-center text-gray-500">
+                Select some meals to generate your shopping list
               </div>
-              <CardContent className="!p-0">
-                {essentialItems.length ? (
-                  renderItems(essentialItems)
-                ) : (
-                  <p className="p-2 text-center text-gray-500">
-                    Select some meals to generate your shopping list
-                  </p>
-                )}
-              </CardContent>
-            </CardTitle>
-          </CardHeader>
-        </Card>
+            )}
+          </div>
+        </div>
 
-        {/* ---------------- Optional Card ---------------- */}
-        {discretionaryItems.length > 0 && (
-            <>
-              {/* Instruction card for discretionary items explanation */}
-              <div className="max-w-md mx-auto my-1 rounded-lg bg-orange-50 shadow-sm px-4 relative mb-2"
-                   style={{height: "45px"}}>
-                <p className="text-sm text-gray-700 italic m-0 absolute left-0 right-0 text-center"
-                   style={{top: "50%", transform: "translateY(-50%)"}}>
-                  Pantry Staples: You&apos;ll only use a small portion of these items in your recipes. Check your kitchen before purchasing.
-                </p>
-              </div>
+        {/* ---------------- Pantry Staples Card ---------------- */}
+        {pantryStapleItems.length > 0 && (
+          <>
+            {/* Instruction card for pantry staples explanation */}
+            <div className="max-w-md mx-auto mb-0.5 rounded-lg bg-orange-50 shadow-sm px-4 relative my-2"
+                style={{height: "45px"}}>
+              <p className="text-sm text-gray-700 italic m-0 absolute left-0 right-0 text-center flex items-center justify-center mx-1"
+                style={{top: "50%", transform: "translateY(-50%)"}}>
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  width="26"
+                  height="26"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  strokeWidth="2"
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  className="mx-2 text-amber-500"
+                >
+                  <path d="M15 14c.2-1 .7-1.7 1.5-2.5 1-.9 1.5-2.2 1.5-3.5A6 6 0 0 0 6 8c0 1 .2 2.2 1.5 3.5.7.7 1.3 1.5 1.5 2.5"></path>
+                  <path d="M9 18h6"></path>
+                  <path d="M10 22h4"></path>
+                </svg>
+                Pantry Staples: Check if you have these before buying. Recipes only need a small portion.
+              </p>
+            </div>
 
-              <Card>
-                <CardHeader className="p-0">
-                  <CardTitle>
-                    <Collapsible open={showDiscretionary} onOpenChange={setShowDiscretionary}>
-                      <CollapsibleTrigger className="w-full">
-                        <div className="flex justify-between items-center p-2 bg-gray-200 rounded-lg">
-                          <div className="flex items-center gap-2">
-                            <span className="text-lg font-bold">Pantry Staples</span>
-                            {/* Chevron icon next to title */}
-                            <div className="ml-2">
-                              {showDiscretionary ? <ChevronUp size={20}/> : <ChevronDown size={20}/>}
-                            </div>
-                          </div>
-                          <div className="flex items-center">
-                            {/* Qty column header */}
-                            <div className="w-16 text-right font-semibold text-sm text-gray-600">Qty</div>
-                            {/* Each column header */}
-                            <div className="w-20 text-right font-semibold text-sm text-gray-600">Each</div>
-                            {/* Total column header */}
-                            <div className="w-20 text-right font-semibold text-sm text-gray-600">Total</div>
-                          </div>
-                        </div>
-                      </CollapsibleTrigger>
+            <div className="rounded-lg border border-gray-200 overflow-hidden mb-4 mt-2">
+              <Collapsible open={showPantryStaples} onOpenChange={setPantryStaplesOpen} className="w-full">
+                <CollapsibleTrigger className="w-full">
+                  <div className="flex justify-between items-center p-2 bg-gray-200">
+                    <div className="flex items-center gap-2">
+                      <span className="text-lg font-bold">Pantry Staples</span>
+                      {/* Chevron icon next to title */}
+                      <div className="ml-2">
+                        {showPantryStaples ? <ChevronUp size={20}/> : <ChevronDown size={20}/>}
+                      </div>
+                    </div>
+                    <div className="flex items-center">
+                      {/* Qty column header */}
+                      <div className="w-16 text-right font-semibold text-sm text-gray-600">Qty</div>
+                      {/* Each column header */}
+                      <div className="w-20 text-right font-semibold text-sm text-gray-600">Each</div>
+                      {/* Total column header */}
+                      <div className="w-20 text-right font-semibold text-sm text-gray-600">Total</div>
+                    </div>
+                  </div>
+                </CollapsibleTrigger>
 
-                      <CollapsibleContent>
-                        <CardContent className="p-0">
-                          {renderItems(discretionaryItems)}
-                        </CardContent>
-                      </CollapsibleContent>
-                    </Collapsible>
-                  </CardTitle>
-                </CardHeader>
-              </Card>
-            </>
+                <CollapsibleContent>
+                  <div className="bg-[#FDE2E7]">
+                    {renderItems(pantryStapleItems)}
+                  </div>
+                </CollapsibleContent>
+              </Collapsible>
+            </div>
+          </>
         )}
 
         {/* Bottom summary bar with enhanced totals */}
@@ -328,4 +314,3 @@ function sortLogic(
     return b.lineCost - a.lineCost;
   };
 }
-
