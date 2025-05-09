@@ -1,12 +1,19 @@
 'use client';
 
-import React from 'react';
+import React, { useState } from 'react';
 import { usePlannerStore, type Recipe, type MealCategory } from './usePlannerStore';
 import { Collapsible, CollapsibleTrigger, CollapsibleContent } from '@/components/ui/collapsible';
 import { ChevronDown, ChevronUp } from 'lucide-react';
 import { MealCard } from './MealCard';
 
 export function MealPlanScreen() {
+  // Lift collapsible state up to the parent component
+  const [openSections, setOpenSections] = useState({
+    breakfast: true,
+    lunch: true,
+    dinner: true
+  });
+
   const {
     meals,
     selectedMeals,
@@ -19,6 +26,13 @@ export function MealPlanScreen() {
     error
   } = usePlannerStore();
 
+  const handleSectionToggle = (section: keyof MealCategory) => {
+    setOpenSections(prev => ({
+      ...prev,
+      [section]: !prev[section]
+    }));
+  };
+
   const MealSection = ({
     title,
     recipes,
@@ -28,7 +42,6 @@ export function MealPlanScreen() {
     recipes: Recipe[];
     mealType: keyof MealCategory;
   }) => {
-    const [isOpen, setIsOpen] = React.useState(true);
     const summary = mealSummary();
 
     const sectionSaleTotal = recipes
@@ -40,7 +53,10 @@ export function MealPlanScreen() {
       .reduce((sum, r) => sum + r.totalSavings * (recipeMultipliers[r.url] || 1), 0);
 
     return (
-      <Collapsible open={isOpen} onOpenChange={setIsOpen}>
+      <Collapsible
+        open={openSections[mealType]}
+        onOpenChange={() => handleSectionToggle(mealType)}
+      >
         <CollapsibleTrigger className="w-full">
           <div className="flex items-center justify-between p-2 bg-gray-200 rounded-lg">
             <span className="text-xl font-semibold">{title}</span>
@@ -49,14 +65,14 @@ export function MealPlanScreen() {
             <div className="flex items-center gap-6">
               {/* Meals */}
               <div className="text-right">
-                <div className="text-sm font-medium">Meals</div>
-                <div className="text-sm">{summary[mealType]}</div>
+                <div className="text-sm font-medium">Recipes</div>
+                <div className="text-sm text-center">{summary[mealType]}</div>
               </div>
 
               {/* Deals */}
               <div className="text-right">
-                <div className="text-sm font-medium text-green-600">Deals</div>
-                <div className="text-sm font-bold text-green-600">${sectionSavingsTotal.toFixed(2)}</div>
+                <div className="text-sm font-medium">Deals</div>
+                <div className="text-sm">${sectionSavingsTotal.toFixed(2)}</div>
               </div>
 
               {/* Cost */}
@@ -67,7 +83,7 @@ export function MealPlanScreen() {
 
               {/* Expand/Collapse icon */}
               <div className="ml-2">
-                {isOpen ? <ChevronUp size={20} /> : <ChevronDown size={20} />}
+                {openSections[mealType] ? <ChevronUp size={20} /> : <ChevronDown size={20} />}
               </div>
             </div>
           </div>
@@ -120,10 +136,10 @@ export function MealPlanScreen() {
           {/* Stats row - reordered to: Meals, Deals, Cost but spread out like before */}
           <div className="flex justify-around items-center">
             <div className="flex items-center gap-8">
-              <p className="text-gray-500 !mb-0">Meals: <span className="font-bold">{mealSummary().total}</span></p>
+              <p className="text-gray-500 !mb-0">Recipes: <span className="font-bold">{mealSummary().total}</span></p>
               <div>
                 <span>Deals: </span>
-                <span className="font-bold text-green-600">${summaryTotals.totalSavings.toFixed(2)}</span>
+                <span className="font-bold">${summaryTotals.totalSavings.toFixed(2)}</span>
               </div>
               <div>
                 <span>Cost: </span>

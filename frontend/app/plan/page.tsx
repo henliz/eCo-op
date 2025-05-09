@@ -24,7 +24,7 @@ const tabs: { label: string; value: View }[] = [
 const instructions: Record<View, string> = {
   store: 'Please select a store to continue.',
   plan: 'Select your recipes for the week.',
-  groceries: 'Review your shopping list. Check items off as you go.',
+  groceries: 'Review your shopping list. Check off items as you go.',
   cook: 'Click on a recipe to see the cooking instructions.',
 };
 
