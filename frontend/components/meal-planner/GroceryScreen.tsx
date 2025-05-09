@@ -229,7 +229,7 @@ export function GroceryScreen() {
                    style={{height: "45px"}}>
                 <p className="text-sm text-gray-700 italic m-0 absolute left-0 right-0 text-center"
                    style={{top: "50%", transform: "translateY(-50%)"}}>
-                  Pantry Staples: You'll only use a small portion of these items in your recipes. Check your kitchen before purchasing.
+                  Pantry Staples: You&apos;ll only use a small portion of these items in your recipes. Check your kitchen before purchasing.
                 </p>
               </div>
 
