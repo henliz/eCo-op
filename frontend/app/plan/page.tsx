@@ -1,6 +1,6 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { motion } from 'framer-motion';
 
 import Header from '@/components/layout/Header';
@@ -30,15 +30,37 @@ const instructions: Record<View, string> = {
 
 export default function MealPlannerPage() {
   const [view, setView] = useState<View>('store');
-  const { selectedStore, isDataLoaded } = usePlannerStore();
+  const { selectedStore, isDataLoaded, isLoading } = usePlannerStore();
 
-  // Tabs enabled once store is chosen & data loaded (except first tab)
+  // Keep track of when we need to navigate to Plan
+  const shouldNavigateToPlan = useRef(false);
+
+  // Tabs are only enabled when a store is selected and data is loaded
+  // (except for the Store tab which is always enabled)
   const isTabEnabled = (tabId: View) =>
     tabId === 'store' || (!!selectedStore && isDataLoaded);
 
   const handleViewChange = (newView: View) => {
-    if (isTabEnabled(newView)) setView(newView);
+    if (isTabEnabled(newView)) {
+      setView(newView);
+    }
   };
+
+  // Auto-switch to Plan tab when store is selected and data is loaded
+  useEffect(() => {
+    // If we're on the store tab and data is loaded, and we've been flagged to navigate
+    if (selectedStore && isDataLoaded && !isLoading && view === 'store' && shouldNavigateToPlan.current) {
+      // Reset the flag so we don't keep triggering this
+      shouldNavigateToPlan.current = false;
+
+      // Add a small delay to allow the confirmation message to be seen
+      const timer = setTimeout(() => {
+        setView('plan');
+      }, 1);
+
+      return () => clearTimeout(timer);
+    }
+  }, [selectedStore, isDataLoaded, isLoading, view]);
 
   return (
     <>
@@ -90,7 +112,7 @@ export default function MealPlannerPage() {
         )}
 
         {/* --- Content panels --- */}
-        {view === 'store' && <StoreSelector />}
+        {view === 'store' && <StoreSelector shouldNavigateToPlan={shouldNavigateToPlan} />}
         {view === 'plan' && <MealPlanScreen />}
         {view === 'groceries' && <GroceryScreen />}
         {view === 'cook' && <CookScreen />}

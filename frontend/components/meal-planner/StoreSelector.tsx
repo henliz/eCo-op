@@ -6,7 +6,12 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { usePlannerStore } from './usePlannerStore';
 import { format } from 'date-fns';
 
-export default function StoreSelector() {
+// The parent page will pass this ref so we can set it when a store is selected
+interface StoreSelectorProps {
+  shouldNavigateToPlan: React.MutableRefObject<boolean>;
+}
+
+export default function StoreSelector({ shouldNavigateToPlan }: StoreSelectorProps) {
   const {
     selectedStore,
     setSelectedStore,
@@ -27,6 +32,9 @@ export default function StoreSelector() {
 
   const handleStoreSelect = (storeId: string) => {
     setSelectedStore(storeId);
+
+    // Signal that we should navigate to the Plan tab after loading
+    shouldNavigateToPlan.current = true;
 
     // Add a short delay then explicitly trigger fetchMealData
     setTimeout(() => {
@@ -63,8 +71,6 @@ export default function StoreSelector() {
                 <span className="font-bold">
                   {availableStores.find(s => s.id === selectedStore)?.location}
                 </span>.
-                <br />
-                Now you can proceed to the &quot;Plan&quot; tab to start planning your meals!
               </p>
             </motion.div>
           ) : !isLoading ? (
@@ -80,13 +86,6 @@ export default function StoreSelector() {
             </motion.div>
           ) : null}
         </AnimatePresence>
-
-        {/* Header */}
-        <div className="bg-[#5BC4B4] rounded-lg px-3 py-4 mt-2 flex items-center justify-center min-h-[70px]">
-          <span className="font-bold text-xl sm:text-2xl md:text-3xl lg:text-4xl">
-            Where are you shopping today?
-          </span>
-        </div>
 
         {/* Error message */}
         {error && (
