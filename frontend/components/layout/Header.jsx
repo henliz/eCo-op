@@ -1,136 +1,184 @@
 // components/layout/Header.jsx
 'use client';
 
-import React, { useState, useEffect } from "react";
-import Link from "next/link";
+import React, { useEffect, useState } from 'react';
+import Link from 'next/link';
 
 export default function Header() {
-  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
-  const [isMobile, setIsMobile] = useState(false);
+  /* ------------------------------------------------- */
+  const [open, setOpen] = useState(false);
+  const [mobile, setMob] = useState(false);
 
-  // detect mobile vs desktop
   useEffect(() => {
     if (typeof window === 'undefined') return;
-    const checkMobile = () => setIsMobile(window.innerWidth < 768);
-    checkMobile();
-    window.addEventListener("resize", checkMobile);
-    return () => window.removeEventListener("resize", checkMobile);
+    const check = () => setMob(window.innerWidth < 768);
+    check();
+    window.addEventListener('resize', check);
+    return () => window.removeEventListener('resize', check);
   }, []);
 
-  // only this block changed:
-  const mobileNavItems = [
-    { label: 'How It Works',   href: '/#how-it-works', external: false },
-    { label: 'About',       href: '#about',       external: false },
+  const NAV = [
+    { label: 'How It Works', href: '/#how-it-works' },
+    { label: 'About',        href: '#about' },
     {
-      label:    'Feedback Form',
-      href:     'https://docs.google.com/forms/d/e/1FAIpQLSeaWg3pAelFtLZTBslhFiI_wxldA6muBfeidd_eTpIYTs5ZQQ/viewform?usp=header',
+      label: 'Feedback Form',
+      href:  'https://docs.google.com/forms/d/e/1FAIpQLSeaWg3pAelFtLZTBslhFiI_wxldA6muBfeidd_eTpIYTs5ZQQ/viewform?usp=header',
       external: true,
     },
   ];
 
+  /* ------------------------------------------------- */
   return (
-    <header>
-      <div className="container">
-        <nav className="navbar flex items-center justify-between">
-          {/* logo */}
-          <Link href="/" className="logo flex items-center gap-2">
+    <>
+      {/* fonts */}
+      <link
+        href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600&family=Montserrat+Alternates:wght@700&display=swap"
+        rel="stylesheet"
+      />
+
+      <header
+        className="sticky top-0 z-50 h-14 w-full font-montserrat relative isolate"
+        style={{ background: 'transparent' }}
+      >
+        {/* glass tint (8 % spearmint) */}
+        <div
+          className="
+            absolute inset-0 -z-10 pointer-events-none
+            backdrop-blur-md backdrop-saturate-150
+            ring-1 ring-inset ring-white/15
+          "
+          style={{ background: 'rgba(69,176,140,0.7)' }}   /* ← mint */
+        />
+
+        {/* nav row */}
+        <div className="h-full max-w-screen-xl mx-auto flex items-center justify-between px-4">
+          {/* logo + word‑mark */}
+          <Link href="/" className="flex items-center gap-2">
             <img
               src="/SmartCart_White.png"
               alt="SmartCart logo"
-              className="logo-icon h-8 w-auto"
+              className="h-6 w-15"             /* 24 px cap */
             />
-            <span className="font-bold text-xl">skrimp.ai</span>
+            <span className="font-montserratAlt font-bold text-lg tracking-tight whitespace-nowrap text-white">
+              skrimp.ai
+            </span>
           </Link>
 
-          {/* Desktop nav: hidden on mobile, flex from md up */}
-          <div className="nav-links hidden md:flex items-center space-x-6">
-            <Link href="/#how-it-works" scroll={true}>How It Works</Link>
-            <Link href="/#about"      scroll={true}>About</Link>
-            <a
-              href="https://docs.google.com/forms/d/e/1FAIpQLSeaWg3pAelFtLZTBslhFiI_wxldA6muBfeidd_eTpIYTs5ZQQ/viewform?usp=header"
-              target="_blank"
-              rel="noopener noreferrer"
+          {/* desktop links */}
+          <nav className="hidden md:flex items-center gap-8">
+            {NAV.map(({ label, href, external }) =>
+              external ? (
+                <a
+                  key={href}
+                  href={href}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="
+                    relative text-white/90
+                    after:absolute after:left-0 after:-bottom-1 after:h-0.5
+                    after:w-0 after:bg-white/80 after:transition-[width] after:duration-300
+                    hover:after:w-full hover:text-white transition-colors duration-200
+                  "
+                >
+                  {label}
+                </a>
+              ) : (
+                <Link
+                  key={href}
+                  href={href}
+                  scroll
+                  className="
+                    relative text-white/90
+                    after:absolute after:left-0 after:-bottom-1 after:h-0.5
+                    after:w-0 after:bg-white/80 after:transition-[width] after:duration-300
+                    hover:after:w-full hover:text-white transition-colors duration-200
+                  "
+                >
+                  {label}
+                </Link>
+              )
+            )}
+
+            {/* CTA */}
+            <Link
+              href="/plan"
+              className="
+                rounded-full bg-[#FDBA74] px-4 py-2 font-semibold text-white
+                transition-transform duration-200 ease-out
+                hover:scale-105 hover:brightness-110
+              "
             >
-              Feedback Form
-            </a>
-            <Link href="/plan" className="header-cta">Try It Free</Link>
-          </div>
+              Try It Free
+            </Link>
+          </nav>
 
-          {/* Mobile toggle: only on small screens */}
+          {/* hamburger */}
           <button
-            className="mobile-menu-button md:hidden text-2xl"
-            onClick={() => setIsMobileMenuOpen(open => !open)}
-            aria-label={isMobileMenuOpen ? "Close menu" : "Open menu"}
+            className="md:hidden text-3xl leading-none transition-transform duration-200 hover:scale-110"
+            onClick={() => setOpen(!open)}
+            aria-label={open ? 'Close menu' : 'Open menu'}
           >
-            {isMobileMenuOpen ? "✕" : "☰"}
+            {open ? '✕' : '☰'}
           </button>
-        </nav>
+        </div>
 
-        {/* Mobile menu: only when on mobile AND toggled open */}
-        {isMobile && isMobileMenuOpen && (
-          <nav className="md:hidden absolute top-full left-0 w-full bg-green-100 shadow-lg z-50">
-            <div className="mx-auto max-w-md rounded-lg overflow-hidden mt-2">
-              {mobileNavItems.map((item, i) =>
-                item.external ? (
-                  // external link opens new tab
-                  <a
-                    key={i}
-                    href={item.href}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    onClick={() => setIsMobileMenuOpen(false)}
-                    className="
-                      block w-full
-                      px-6 py-6
-                      text-lg font-medium
-                      text-gray-800
-                      hover:bg-green-200
-                      border-b last:border-0
-                      text-center
-                    "
-                  >
-                    {item.label}
-                  </a>
-                ) : (
-                  // internal Next.js link
-                  <Link
-                    key={i}
-                    href={item.href}
-                    onClick={() => setIsMobileMenuOpen(false)}
-                    className="
-                      block w-full
-                      px-6 py-6
-                      text-lg font-medium
-                      text-gray-800
-                      hover:bg-green-200
-                      border-b last:border-0
-                      text-center
-                    "
-                  >
-                    {item.label}
-                  </Link>
-                )
-              )}
+        {/* mobile drawer */}
+        {mobile && open && (
+          <nav
+              className={`
+                md:hidden absolute top-14 left-0 w-full shadow-xl
+                transform-gpu transition-[opacity,transform] duration-300 ease-out
+                ${open ? 'opacity-100 translate-y-0' : 'opacity-0 -translate-y-4 pointer-events-none'}
+              `}
+              style={{ background: 'rgba(69,176,140,0.92)', backdropFilter: 'blur(8px)' }}
+            >
 
-              {/* Full-width apricot “Try It Free” row */}
-              <Link
-                href="/plan"
-                onClick={() => setIsMobileMenuOpen(false)}
-                className="
-                  block w-full
-                  px-6 py-6
-                  text-lg font-semibold
-                  text-white
-                  bg-orange-300 hover:bg-orange-400
-                  text-center
-                "
-              >
-                Try It Free
-              </Link>
-            </div>
+
+            {NAV.map(({ label, href, external }) =>
+              external ? (
+                <a
+                  key={href}
+                  href={href}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  onClick={() => setOpen(false)}
+                  className="
+                    block text-center text-lg font-medium text-gray-900
+                    px-6 py-6 border-b last:border-0
+                    hover:bg-white/10 transition-colors
+                  "
+                >
+                  {label}
+                </a>
+              ) : (
+                <Link
+                  key={href}
+                  href={href}
+                  onClick={() => setOpen(false)}
+                  className="
+                    block text-center text-lg font-medium text-gray-900
+                    px-6 py-6 border-b last:border-0
+                    hover:bg-white/10 transition-colors
+                  "
+                >
+                  {label}
+                </Link>
+              )
+            )}
+            <Link
+              href="/plan"
+              onClick={() => setOpen(false)}
+              className="
+                block text-center text-lg font-semibold text-white
+                bg-[#FDBA74] hover:bg-[#FDBA74]/90 transition-colors
+                px-6 py-6
+              "
+            >
+              Try It Free
+            </Link>
           </nav>
         )}
-      </div>
-    </header>
+      </header>
+    </>
   );
 }
