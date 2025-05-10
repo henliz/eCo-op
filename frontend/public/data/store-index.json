@@ -34,6 +34,20 @@
       "location": "Preston",
       "filename": "NoFrills-Preston-2025-05-14.json",
       "validUntil": "2025-05-14"
+    },
+    {
+      "id": "nofrills-preston",
+      "name": "NoFrills",
+      "location": "Preston",
+      "filename": "NoFrills-Preston-2025-05-14.json",
+      "validUntil": "2025-05-14"
+    },
+    {
+      "id": "metro-all",
+      "name": "Metro",
+      "location": "All locations",
+      "filename": "Metro-All-2025-05-14.json",
+      "validUntil": "2025-05-14"
     }
   ]
 }
