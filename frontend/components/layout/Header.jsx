@@ -47,7 +47,7 @@ export default function Header() {
             backdrop-blur-md backdrop-saturate-150
             ring-1 ring-inset ring-white/15
           "
-          style={{ background: 'rgba(69,176,140,0.7)' }}   /* ← mint */
+          style={{ background: 'rgba(69,176,140,0.65)' }}   /* ← mint */
         />
 
         {/* nav row */}
