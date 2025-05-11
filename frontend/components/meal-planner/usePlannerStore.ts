@@ -52,6 +52,7 @@ export interface Recipe {
   flyerItemsCount: number; // Add this property to track number of flyer items
   ingredients: Ingredient[];
   multiplier?: number; // How many times this recipe will be made
+  img?: string;
 }
 
 export interface MealCategory {

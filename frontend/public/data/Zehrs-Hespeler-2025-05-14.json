@@ -3,6 +3,7 @@
     {
       "name": "3-Ingredient Chia Pudding",
       "url": "https://feelgoodfoodie.net/recipe/3-ingredient-chia-pudding/",
+      "img": "/Chia_Pudding.png",
       "salePrice": 0.7487384630847328,
       "regularPrice": 0.7487384630847328,
       "totalSavings": 0,
@@ -57,6 +58,7 @@
     {
       "name": "Avocado Toast with Egg",
       "url": "https://feelgoodfoodie.net/wprm_print/avocado-toast-with-egg",
+      "img": "/AvoToast_Egg.png",
       "salePrice": 0.997852591164916,
       "regularPrice": 0.997852591164916,
       "totalSavings": 0,
@@ -159,6 +161,7 @@
     {
       "name": "Easy Overnight Oats",
       "url": "https://feelgoodfoodie.net/wprm_print/easy-overnight-oats",
+      "img": "/Overnight_Oats.png",
       "salePrice": 1.7625270822037422,
       "regularPrice": 1.7625270822037422,
       "totalSavings": 0,
@@ -445,6 +448,7 @@
     {
       "name": "Veggie Omelet",
       "url": "https://feelgoodfoodie.net/wprm_print/veggie-omelet",
+      "img": "/Veggie_Omelet.png",
       "salePrice": 2.3218064368122007,
       "regularPrice": 2.3218064368122007,
       "totalSavings": 0,
@@ -598,6 +602,7 @@
     {
       "name": "How to Make French Toast",
       "url": "https://feelgoodfoodie.net/wprm_print/how-to-make-french-toast",
+      "img": "/French_Toast.png",
       "salePrice": 3.5407220822954972,
       "regularPrice": 3.5407220822954972,
       "totalSavings": 0,
@@ -722,6 +727,7 @@
     {
       "name": "Delicious Egg Salad",
       "url": "https://www.allrecipes.com/recipe/147103/delicious-egg-salad-for-sandwiches/",
+      "img": "/Egg_Salad.png",
       "salePrice": 3.9349919850187267,
       "regularPrice": 3.9349919850187267,
       "totalSavings": 0,
@@ -812,6 +818,7 @@
     {
       "name": "Strawberry Pancakes",
       "url": "https://feelgoodfoodie.net/wprm_print/strawberry-pancakes",
+      "img": "/Strawberry_Pancakes.png",
       "salePrice": 4.34505708149214,
       "regularPrice": 4.34505708149214,
       "totalSavings": 0,
@@ -986,6 +993,7 @@
     {
       "name": "French Toast Casserole",
       "url": "https://belleofthekitchen.com/wprm_print/french-toast-casserole",
+      "img": "/French_Toast_Casserole.png",
       "salePrice": 4.506439167109768,
       "regularPrice": 4.506439167109768,
       "totalSavings": 0,
@@ -1116,6 +1124,7 @@
     {
       "name": "Breakfast Egg Fried Rice",
       "url": "https://mykoreankitchen.com/breakfast-egg-fried-rice/",
+      "img": "/Breakfast_Egg_Fried_Rice.png",
       "salePrice": 4.595214990960452,
       "regularPrice": 4.941270938097016,
       "totalSavings": 0.3460559471365645,
@@ -1214,6 +1223,7 @@
     {
       "name": "Sweet Potato Breakfast Hash With Eggs",
       "url": "https://feelgoodfoodie.net/wprm_print/sweet-potato-breakfast-hash-with-eggs",
+      "img": "/Sweet_Potato_Hash.png",
       "salePrice": 5.238212411612403,
       "regularPrice": 5.388244112022395,
       "totalSavings": 0.15003170040999247,
@@ -1360,6 +1370,7 @@
     {
       "name": "Cucumber Tomato Salad",
       "url": "https://www.spendwithpennies.com/cucumber-tomato-salad/",
+      "img": "/Cucumber_Tomato_Salad.png",
       "salePrice": 4.252922027514552,
       "regularPrice": 4.252922027514552,
       "totalSavings": 0,
@@ -1464,6 +1475,7 @@
     {
       "name": "Easy Greek Pasta Salad",
       "url": "https://www.spendwithpennies.com/easy-greek-pasta-salad/",
+      "img": "/Greek_Pasta_Salad.png",
       "salePrice": 4.901268810085868,
       "regularPrice": 5.321006310085868,
       "totalSavings": 0.4197375000000001,
@@ -1658,6 +1670,7 @@
     {
       "name": "Tuna Pasta",
       "url": "https://feelgoodfoodie.net/wprm_print/tuna-pasta-recipe",
+      "img": "/Tuna_Pasta_Salad.png",
       "salePrice": 5.329712580430347,
       "regularPrice": 5.959712580430348,
       "totalSavings": 0.6300000000000008,
@@ -1790,6 +1803,7 @@
     {
       "name": "Couscous Salad",
       "url": "https://www.jessicagavin.com/mediterranean-couscous-salad/",
+      "img": "/Couscous_Salad.png",
       "salePrice": 5.379255092997976,
       "regularPrice": 5.379255092997976,
       "totalSavings": 0,
@@ -2047,6 +2061,7 @@
     {
       "name": "Cucumber Turkey Sub Sandwich",
       "url": "https://www.eatingwell.com/recipe/261898/cucumber-turkey-sub-sandwich/",
+      "img": "/Cucumber_Turkey_Sub.png",
       "salePrice": 5.379567997747975,
       "regularPrice": 6.286767997747975,
       "totalSavings": 0.9072000000000005,
