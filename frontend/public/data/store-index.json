@@ -3,7 +3,7 @@
     {
       "id": "walmart-cambridge",
       "name": "Walmart",
-      "location": "All locations",
+      "location": "Ontario",
       "filename": "Walmart-Cambridge-2025-05-14.json",
       "validUntil": "2025-05-14"
     },
@@ -33,6 +33,13 @@
       "name": "NoFrills",
       "location": "Preston",
       "filename": "NoFrills-Preston-2025-05-14.json",
+      "validUntil": "2025-05-14"
+    },
+    {
+      "id": "metro-all",
+      "name": "Metro",
+      "location": "Ontario",
+      "filename": "Metro-All-2025-05-14.json",
       "validUntil": "2025-05-14"
     }
   ]
