@@ -1,51 +1,80 @@
 'use client';
 
-import React, { useState, useEffect } from 'react';
+import React, { useRef, useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
 import Link from 'next/link';
 
-/* ---------------- fade‐in variants ---------------- */
+/* ---------------- fade-in variants ---------------- */
 const containerVariant = {
   hidden: {},
-  show: { transition: { delayChildren: 1.75, staggerChildren: 0.5 } }
+  show: { transition: { delayChildren: 1.75, staggerChildren: 0.5 } },
 };
 const fadeUp = {
   hidden: { opacity: 0, y: 40 },
-  show:  { opacity: 1, y: 0, transition: { duration: 1.5, ease: [0.22,1,0.36,1] } }
+  show:  { opacity: 1, y: 0, transition: { duration: 1.5, ease: [0.22,1,0.36,1] } },
 };
 
-/* --------------- 3‐line infinite CSS scroll with equal holds -------------- */
+/* --------------- 3-line infinite CSS scroll + live highlight -------------- */
 function RotatingLines({ lines, duration = 8 }) {
+  const containerRef = useRef(null);
+  const measureRef   = useRef(null);
+  const [lineH, setLineH] = useState(0);
   const [currentIndex, setCurrentIndex] = useState(0);
 
-  // advance the featured index at each hold interval
+  // measure one line's height
   useEffect(() => {
-    const stepMs = (duration * 1000) / lines.length;
-    const id = setInterval(() => {
-      setCurrentIndex(i => (i + 1) % lines.length);
-    }, stepMs);
-    return () => clearInterval(id);
-  }, [lines.length, duration]);
+    if (measureRef.current) {
+      setLineH(measureRef.current.offsetHeight);
+    }
+  }, []);
 
-  // duplicate so scrolling by 3 lines loops seamlessly
+  // on every animation frame, read the CSS transform and compute center index
+  useEffect(() => {
+    let rafId;
+    const n = lines.length;
+    function sync() {
+      if (containerRef.current && lineH) {
+        // read computed transform
+        const style = getComputedStyle(containerRef.current);
+        const m = style.transform.match(/matrix.*\((.+)\)/);
+        if (m) {
+          const ty = parseFloat(m[1].split(',')[5]);        // translateY in px
+          const raw = (-ty + lineH) / lineH;                // 1 lineH down is center
+          const idx = Math.floor(raw) % n;
+          setCurrentIndex((idx + n) % n);
+        }
+      }
+      rafId = requestAnimationFrame(sync);
+    }
+    rafId = requestAnimationFrame(sync);
+    return () => cancelAnimationFrame(rafId);
+  }, [lineH, lines.length]);
+
+  // duplicate so CSS scroll wraps seamlessly
   const combined = [...lines, ...lines];
 
   return (
-    <div className="relative inline-block w-full overflow-hidden h-[3.6em]">
-      {/* scrolling wrapper */}
+    <div
+      className="relative inline-block w-full overflow-hidden"
+      style={{
+        height: `calc(${lineH}px * 3)`,
+        maskImage:       'linear-gradient(to bottom, transparent 0%, black 10%, black 90%, transparent 100%)',
+        WebkitMaskImage: 'linear-gradient(to bottom, transparent 0%, black 10%, black 90%, transparent 100%)'
+      }}
+    >
       <div
+        ref={containerRef}
         className="flex flex-col animate-scroll"
         style={{ animationDuration: `${duration}s` }}
       >
-        {combined.map((text, i) => {
+        {combined.map((text,i) => {
           const idx = i % lines.length;
-          // shift highlight up one row:
-          const highlightIdx = (currentIndex - 1 + lines.length) % lines.length;
           return (
             <motion.span
               key={i}
+              ref={i===0?measureRef:null}
               className="h-[1.2em] flex items-center justify-center whitespace-nowrap text-black"
-              animate={{ opacity: idx === highlightIdx ? 1 : 0.5 }}
+              animate={{ opacity: idx === currentIndex ? 1 : 0.5 }}
               transition={{ duration: 0.5 }}
             >
               {text}
@@ -54,17 +83,13 @@ function RotatingLines({ lines, duration = 8 }) {
         })}
       </div>
 
-      {/* fade masks */}
-      <div className="pointer-events-none absolute inset-x-0 top-0 h-[1.2em] bg-gradient-to-b from-white to-transparent" />
-      <div className="pointer-events-none absolute inset-x-0 bottom-0 h-[1.2em] bg-gradient-to-t from-white to-transparent" />
-
-      {/* CSS keyframes for equal holds and seamless loop */}
+      {/* CSS keyframes */}
       <style jsx>{`
         @keyframes scroll {
-          0%,16.6667%       { transform: translateY(0); }
-          33.3333%,49.9999% { transform: translateY(-1.2em); }
-          66.6667%,83.3333% { transform: translateY(-2.4em); }
-          100%              { transform: translateY(-3.6em); }
+          0%,16.6667%        { transform: translateY(0); }
+          33.3333%,49.9999%  { transform: translateY(-1.2em); }
+          66.6667%,83.3333%  { transform: translateY(-2.4em); }
+          100%               { transform: translateY(-3.6em); }
         }
         .animate-scroll {
           animation-name: scroll;
@@ -87,14 +112,14 @@ export default function Hero() {
         variants={containerVariant}
         initial="hidden"
         whileInView="show"
-        viewport={{ once: true, amount: 0.4 }}
+        viewport={{ once:true, amount:0.4 }}
         className="hero-content text-center"
       >
         <motion.h1
           className="relative inline-block leading-tight"
-          initial={{ clipPath: 'inset(0 100% 0 0)' }}
-          animate={{ clipPath: 'inset(0 0% 0 0)' }}
-          transition={{ duration: 1, ease: [0.22,1,0.36,1] }}
+          initial={{ clipPath:'inset(0 100% 0 0)' }}
+          animate={{ clipPath:'inset(0 0% 0 0)' }}
+          transition={{ duration:1, ease:[0.22,1,0.36,1] }}
         >
           <span className="block font-montserratAlt font-extrabold text-3xl md:text-5xl md:mt-8">
             Inflation squeezing your budget?
@@ -115,8 +140,7 @@ export default function Hero() {
         </motion.h1>
 
         <motion.p variants={fadeUp} className="mt-4 text-base md:text-lg">
-          Skrimp uses AI to help Canadians save money on groceries by creating meal
-          plans from this week’s local deals.
+          Skrimp uses AI to help Canadians save money on groceries by creating meal plans from this week’s local deals.
         </motion.p>
 
         <motion.div variants={fadeUp} className="hero-btns mt-6">
