@@ -7,31 +7,31 @@ import Link from 'next/link';
 function RotatingLines({ lines, pause = 2000, animDur = 600 }) {
   const containerRef = useRef(null);
   const spansRef     = useRef([]);
-  const [lineH, setLineH] = useState(0);
-  const [items, setItems] = useState([
+  const [lineH, setLineH]   = useState(0);
+  const [items, setItems]   = useState([
     lines[lines.length - 1],
     ...lines,
     lines[0],
   ]);
 
-  // measure one line’s height (including padding, line-height, etc)
+  // measure line height
   const measure = useCallback(() => {
     const el = spansRef.current[1];
     if (el) setLineH(el.offsetHeight);
   }, []);
-
   useEffect(() => {
     measure();
     window.addEventListener('resize', measure);
     return () => window.removeEventListener('resize', measure);
   }, [measure]);
 
+  // slide / rotate / snap loop
   useEffect(() => {
     if (!lineH) return;
     const c = containerRef.current;
     let animTimeout, cycleTimeout;
 
-    // center the first real item
+    // center & feature the middle
     c.style.transform = `translateY(-${lineH}px)`;
     spansRef.current.forEach((el, i) =>
       el.classList.toggle('featured', i === 2)
@@ -40,35 +40,45 @@ function RotatingLines({ lines, pause = 2000, animDur = 600 }) {
     function runCycle() {
       // prep transitions
       c.style.transition = `transform ${animDur}ms ease-in-out`;
-      spansRef.current.forEach((el) => {
+      spansRef.current.forEach(el => {
         el.style.transition = `
           opacity   ${animDur}ms ease-in-out,
           transform ${animDur}ms ease-in-out
         `;
       });
 
-      // swap featured classes
+      // fade out old, fade in next
       spansRef.current[2].classList.remove('featured');
       spansRef.current[3].classList.add('featured');
 
       // slide up
       c.style.transform = `translateY(-${2 * lineH}px)`;
 
-      // after slide, rotate & snap
+      // after slide, snap back hidden
       animTimeout = setTimeout(() => {
-        setItems((old) => {
+        c.style.visibility = 'hidden';
+
+        // rotate
+        setItems(old => {
           const [first, ...rest] = old;
           return [...rest, first];
         });
+
+        // reset
         c.style.transition = 'none';
-        spansRef.current.forEach((el) => (el.style.transition = 'none'));
+        spansRef.current.forEach(el => (el.style.transition = 'none'));
         c.style.transform = `translateY(-${lineH}px)`;
-        spansRef.current.forEach((el, i) =>
-          el.classList.toggle('featured', i === 2)
-        );
+
+        // un-hide & re-feature
+        requestAnimationFrame(() => {
+          spansRef.current.forEach((el, i) =>
+            el.classList.toggle('featured', i === 2)
+          );
+          c.style.visibility = '';
+        });
       }, animDur);
 
-      // schedule next
+      // queue next
       cycleTimeout = setTimeout(runCycle, pause + animDur);
     }
 
@@ -93,12 +103,17 @@ function RotatingLines({ lines, pause = 2000, animDur = 600 }) {
       <div ref={containerRef} className="flex flex-col">
         {items.map((text, i) => (
           <span
-            key={i}
-            ref={(el) => (spansRef.current[i] = el)}
+            key={`${text}-${i}`}
+            ref={el => (spansRef.current[i] = el)}
             className={`
               h-[1.2em] flex items-center justify-center whitespace-nowrap
-              font-montserratAlt font-semibold text-xl md:text-3xl text-black
+              font-montserratAlt font-semibold
+              text-base        /* mobile smaller */
+              sm:text-xl       /* small screens & up */
+              md:text-3xl      /* medium+ */
+              text-black
               opacity-20 transform scale-100
+              ${i === 2 ? 'featured' : ''}
             `}
           >
             {text}
@@ -114,7 +129,6 @@ function RotatingLines({ lines, pause = 2000, animDur = 600 }) {
     </div>
   );
 }
-/* ------------------------------------------------------------------------ */
 
 /* ---------------------------------- HERO --------------------------------- */
 export default function Hero() {
@@ -133,7 +147,13 @@ export default function Hero() {
 
   return (
     <section
-      className="hero pt-12 pb-24 px-4 sm:px-8 md:px-10 overflow-visible"
+      className="
+        hero pt-12 pb-24
+        px-2        /* extra-tight on mobile */
+        sm:px-8     /* back to your normal on small+ */
+        md:px-10
+        overflow-visible
+      "
       style={{ minHeight: 'calc(100vh - 4rem)' }}
     >
       <div className="flex flex-col items-center space-y-6 text-center">
