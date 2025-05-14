@@ -3077,6 +3077,7 @@
     {
       "name": "Baked Honey Mustard Chicken",
       "url": "https://www.allrecipes.com/recipe/8847/baked-honey-mustard-chicken/",
+      "img": "Honey_Mustard_Chicken.png",
       "salePrice": 24.573215221136863,
       "regularPrice": 44.047103649504216,
       "totalSavings": 19.473888428367353,
@@ -3201,6 +3202,7 @@
     {
       "name": "Juicy Roasted Chicken",
       "url": "https://www.allrecipes.com/recipe/83557/juicy-roasted-chicken/",
+      "png": "Roasted_Chicken.png",
       "salePrice": 14.446931573608351,
       "regularPrice": 20.446931573608353,
       "totalSavings": 6.000000000000002,
@@ -3283,6 +3285,7 @@
     {
       "name": "Creamy Homemade Baked Mac and Cheese",
       "url": "https://www.thechunkychef.com/wprm_print/creamy-homemade-baked-mac-and-cheese",
+      "img": "Creamy_Mac_n_Cheese.png",
       "salePrice": 13.991893965061713,
       "regularPrice": 17.327129259179358,
       "totalSavings": 3.335235294117645,
