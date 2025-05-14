@@ -36,11 +36,11 @@ export function MealCard({
   };
 
   const hasSavings = recipe.totalSavings > 0;
-  const hasFlyer   = recipe.flyerItemsCount > 0;
+  const hasFlyerItems = recipe.flyerItemsCount > 0;
 
   return (
     <motion.div
-      layout
+      key={recipe.url}
       initial={false}
       animate={{ scale: isSelected ? 1.03 : 1 }}
       transition={{ type: 'spring', stiffness: 300, damping: 25 }}
@@ -53,80 +53,89 @@ export function MealCard({
           w-full flex flex-col
           min-h-[10rem] max-h-[10rem] overflow-hidden
           transition-colors
-          bg-gray-100 hover:bg-gray-200
-          ${isSelected ? 'bg-teal-100 filter-none opacity-100' : ''}
-          ${!isSelected && recipe.img ? 'filter grayscale opacity-60' : ''}
+          ${isSelected ? 'bg-teal-100' : 'bg-gray-100 hover:bg-gray-200'}
+          ${!isSelected && recipe.img ? 'filter grayscale' : ''}
           ${recipe.img ? 'bg-cover bg-center' : ''}
         `}
         style={recipe.img ? { backgroundImage: `url(${recipe.img})` } : {}}
       >
-        {/* white overlay to fade image to 80% */}
-        {recipe.img && (
-          <div className="absolute inset-0 bg-white opacity-20 pointer-events-none" />
+        {/* darker overlay for unselected cards with images */}
+        {recipe.img && !isSelected && (
+          <div className="absolute inset-0 bg-black opacity-30 pointer-events-none" />
+        )}
+        {/* lighter overlay for selected cards with images */}
+        {recipe.img && isSelected && (
+          <div className="absolute inset-0 bg-black opacity-10 pointer-events-none" />
         )}
 
-        {/* content wrapper above overlay */}
-        <div className="relative z-10 flex flex-col flex-grow">
-          <CardHeader className="!pl-3 !pr-2 !pb-1 !pt-3 !mb-0 bg-transparent">
-            <CardTitle className="text-sm sm:text-lg font-semibold leading-snug break-words text-black">
+        {/* content wrapper above overlay - removed flex-grow to avoid pushing buttons down */}
+        <div className="relative z-10">
+          <CardHeader className="!pl-3 !pr-2 !mb-0">
+            <CardTitle className="text-sm sm:text-lg font-semibold leading-snug break-words">
               <div className="flex justify-between items-start">
-                <span>{recipe.name}</span>
+                <span className={recipe.img ? "px-1 bg-white/70 rounded" : ""}>{recipe.name}</span>
                 {recipe.url && (
                   <span
-                    onClick={e => e.stopPropagation()}
+                    onClick={(e) => e.stopPropagation()}
                     className="flex shrink-0 ml-1 text-gray-500 hover:text-teal-600"
                   >
                     <RecipeViewer
                       title={recipe.name}
                       url={recipe.url}
-                      trigger={<ExternalLink size={16} className="cursor-pointer" />}
+                      trigger={
+                        <ExternalLink size={16} className="cursor-pointer" />
+                      }
                     />
                   </span>
                 )}
               </div>
-              <div className="flex justify-between items-center text-xs sm:text-sm mt-2 ml-1 mr-3">
-                <p className="text-gray-800 mb-0">Servings: {recipe.servings}</p>
-                <p className="text-gray-800 mb-0">
+              <div className="flex justify-between items-center text-xs sm:text-sm !ml-1 !mr-3 !mt-2">
+                <p className={`text-gray-500 !mb-0 ${recipe.img ? "px-1 bg-white/60 rounded" : ""}`}>
+                  Servings: {recipe.servings}
+                </p>
+                <p className={`text-gray-500 !mb-0 ${recipe.img ? "px-1 bg-white/60 rounded" : ""}`}>
                   Cost: <span className="font-bold">${recipe.salePrice.toFixed(2)}</span>
                 </p>
               </div>
-              <div className="flex justify-end text-xs sm:text-sm mr-3 mt-1">
+              {/* Savings or Flyer Items display - show one or the other, not both */}
+              <div className="flex justify-end text-xs sm:text-sm !mr-3">
                 {hasSavings ? (
-                  <p className="text-green-700 font-bold mb-0">
+                  <p className={`text-green-600 font-bold !mb-0 ${recipe.img ? "px-1 bg-white/60 rounded" : ""}`}>
                     Deals: ${recipe.totalSavings.toFixed(2)}
                   </p>
-                ) : hasFlyer ? (
-                  <p className="text-blue-700 font-bold mb-0">
+                ) : hasFlyerItems ? (
+                  <p className={`text-blue-600 font-bold !mb-0 ${recipe.img ? "px-1 bg-white/60 rounded" : ""}`}>
                     {recipe.flyerItemsCount} flyer items
                   </p>
                 ) : null}
               </div>
             </CardTitle>
           </CardHeader>
-
-          {isSelected && (
-            <div className="absolute bottom-2 left-0 right-0 flex items-center justify-center">
-              <button
-                onClick={dec}
-                className="bg-gray-200 hover:bg-gray-400 w-12 h-10 flex items-center justify-center rounded-l"
-              >
-                <Minus size={20} />
-              </button>
-              <div
-                className="w-16 h-10 flex items-center justify-center font-bold text-lg"
-                style={{ backgroundColor: '#FFE6D9' }}
-              >
-                x{multiplier.toFixed(1).replace(/\.0$/, '')}
-              </div>
-              <button
-                onClick={inc}
-                className="bg-gray-200 hover:bg-gray-400 w-12 h-10 flex items-center justify-center rounded-r"
-              >
-                <Plus size={20} />
-              </button>
-            </div>
-          )}
         </div>
+
+        {/* Fixed bottom multiplier controls - positioned absolutely in the Card */}
+        {isSelected && (
+          <div className="absolute bottom-2 left-0 right-0 flex items-center justify-center z-20">
+            <button
+              onClick={dec}
+              className="bg-gray-200 hover:bg-gray-400 w-12 h-10 flex items-center justify-center rounded-l"
+            >
+              <Minus size={20}/>
+            </button>
+            <div
+              className="w-16 h-10 flex items-center justify-center font-bold text-lg"
+              style={{backgroundColor: '#FFE6D9'}}
+            >
+              x{multiplier.toFixed(1).replace('.0', '')}
+            </div>
+            <button
+              onClick={inc}
+              className="bg-gray-200 hover:bg-gray-400 w-12 h-10 flex items-center justify-center rounded-r"
+            >
+              <Plus size={20}/>
+            </button>
+          </div>
+        )}
       </Card>
     </motion.div>
   );
