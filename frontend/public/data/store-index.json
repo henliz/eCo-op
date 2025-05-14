@@ -5,42 +5,42 @@
       "name": "Walmart",
       "location": "Ontario",
       "filename": "Walmart-Cambridge-2025-05-14.json",
-      "validUntil": "2025-05-14"
+      "validUntil": "2025-05-15"
     },
     {
       "id": "zehrs-hespeler",
       "name": "Zehrs",
       "location": "Hespeler",
       "filename": "Zehrs-Hespeler-2025-05-14.json",
-      "validUntil": "2025-05-14"
+      "validUntil": "2025-05-15"
     },
     {
       "id": "foodbasics-galt",
       "name": "Food Basics",
       "location": "Galt",
       "filename": "FoodBasics-Galt-2025-05-14.json",
-      "validUntil": "2025-05-14"
+      "validUntil": "2025-05-15"
     },
     {
       "id": "freshco-hwy24sheldondr",
       "name": "FreshCo",
       "location": "Hwy 24, Sheldon Dr",
       "filename": "FreshCo-hwy24sheldondr-2025-05-14.json",
-      "validUntil": "2025-05-14"
+      "validUntil": "2025-05-15"
     },
     {
       "id": "nofrills-preston",
       "name": "NoFrills",
       "location": "Preston",
       "filename": "NoFrills-Preston-2025-05-14.json",
-      "validUntil": "2025-05-14"
+      "validUntil": "2025-05-15"
     },
     {
       "id": "metro-all",
       "name": "Metro",
       "location": "Ontario",
       "filename": "Metro-All-2025-05-14.json",
-      "validUntil": "2025-05-14"
+      "validUntil": "2025-05-15"
     }
   ]
 }
