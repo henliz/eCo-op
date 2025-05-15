@@ -33,14 +33,14 @@
       "name": "NoFrills",
       "location": "Preston",
       "filename": "NoFrills-Preston-2025-05-14.json",
-      "validUntil": "2025-05-14"
+      "validUntil": "2025-05-15"
     },
     {
       "id": "metro-all",
       "name": "Metro",
       "location": "Ontario",
       "filename": "Metro-All-2025-05-14.json",
-      "validUntil": "2025-05-14"
+      "validUntil": "2025-05-15"
     }
   ]
 }

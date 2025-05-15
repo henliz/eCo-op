@@ -2178,6 +2178,7 @@
     {
       "name": "Roasted Vegetable Quinoa Bowl",
       "url": "https://feelgoodfoodie.net/wprm_print/roasted-vegetable-quinoa-bowl",
+      "img": "/Roasted_Veg_Quinoa_Bowl.png",
       "salePrice": 5.794311352501722,
       "regularPrice": 5.794311352501722,
       "totalSavings": 0,
@@ -3077,6 +3078,7 @@
     {
       "name": "Baked Honey Mustard Chicken",
       "url": "https://www.allrecipes.com/recipe/8847/baked-honey-mustard-chicken/",
+      "img": "/Honey_Mustard_Chicken.png",
       "salePrice": 24.573215221136863,
       "regularPrice": 44.047103649504216,
       "totalSavings": 19.473888428367353,
@@ -3201,6 +3203,7 @@
     {
       "name": "Juicy Roasted Chicken",
       "url": "https://www.allrecipes.com/recipe/83557/juicy-roasted-chicken/",
+      "png": "/Roasted_Chicken.png",
       "salePrice": 14.446931573608351,
       "regularPrice": 20.446931573608353,
       "totalSavings": 6.000000000000002,
@@ -3283,6 +3286,7 @@
     {
       "name": "Creamy Homemade Baked Mac and Cheese",
       "url": "https://www.thechunkychef.com/wprm_print/creamy-homemade-baked-mac-and-cheese",
+      "img": "Creamy_Mac_n_Cheese.png",
       "salePrice": 13.991893965061713,
       "regularPrice": 17.327129259179358,
       "totalSavings": 3.335235294117645,
@@ -3433,6 +3437,7 @@
     {
       "name": "Easy Baked Tilapia",
       "url": "https://www.allrecipes.com/recipe/70163/easy-baked-tilapia/",
+      "img": "/Baked_Tilapia.png",
       "salePrice": 4.107236683700595,
       "regularPrice": 4.107236683700595,
       "totalSavings": 0,
@@ -3553,6 +3558,7 @@
     {
       "name": "Frittata with Variations",
       "url": "https://www.loveandlemons.com/frittata-recipe/",
+      "img": "/Frittata_Variations.png",
       "salePrice": 5.1827341909041715,
       "regularPrice": 5.1827341909041715,
       "totalSavings": 0,
