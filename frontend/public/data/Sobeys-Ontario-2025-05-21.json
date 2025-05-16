@@ -52,7 +52,8 @@
           "savingsPercentage": 0,
           "type": "garnish"
         }
-      ]
+      ],
+      "img": "/Chia_Pudding.png"
     },
     {
       "name": "Avocado Toast with Egg",
@@ -1230,7 +1231,8 @@
           "savingsPercentage": 0,
           "type": "to taste"
         }
-      ]
+      ],
+      "img": "/Egg_Salad.png"
     },
     {
       "name": "Easy Greek Pasta Salad",
@@ -1686,7 +1688,8 @@
           "savingsPercentage": 0,
           "type": "core"
         }
-      ]
+      ],
+      "img": "/SteakSandwich.png"
     },
     {
       "name": "Mediterranean Pasta Salad",

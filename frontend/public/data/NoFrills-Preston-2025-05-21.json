@@ -391,8 +391,8 @@
     {
       "name": "Veggie Omelet",
       "url": "https://feelgoodfoodie.net/wprm_print/veggie-omelet",
-      "salePrice": 2.494667562309897,
-      "regularPrice": 2.5929935534993245,
+      "salePrice": 2.502820325040125,
+      "regularPrice": 2.6011463162295523,
       "totalSavings": 0.09832599118942742,
       "servings": 1,
       "ingredients": [
@@ -454,14 +454,14 @@
         },
         {
           "recipeIngredientName": "baby spinach",
-          "saleUnitSize": 312,
+          "saleUnitSize": 142,
           "saleUnitType": "g",
-          "salePrice": 3.98,
-          "saleFractionUsed": 0.09615384615384616,
-          "regularPrice": 3.98,
-          "regularFractionUsed": 0.09615384615384616,
+          "salePrice": 1.85,
+          "saleFractionUsed": 0.2112676056338028,
+          "regularPrice": 1.85,
+          "regularFractionUsed": 0.2112676056338028,
           "source": "database",
-          "sourceDate": "2025-04-22",
+          "sourceDate": "2025-05-15",
           "productName": "baby spinach",
           "savingsPercentage": 0,
           "type": "core"
@@ -513,7 +513,7 @@
           "salePrice": 0,
           "regularPrice": 0,
           "source": "free",
-          "sourceDate": "2025-05-15",
+          "sourceDate": "2025-05-16",
           "savingsPercentage": 0,
           "type": "core"
         },
@@ -848,8 +848,8 @@
     {
       "name": "Hummus Veggie Wrap",
       "url": "https://www.foodiecrush.com/hummus-veggie-wrap-plus-10-heavenly-hummus-recipes-to-make-at-home/",
-      "salePrice": 8.315149284872959,
-      "regularPrice": 10.013749284872958,
+      "salePrice": 8.270149284872959,
+      "regularPrice": 9.968749284872958,
       "totalSavings": 1.698599999999999,
       "servings": 4,
       "ingredients": [
@@ -899,12 +899,12 @@
           "recipeIngredientName": "fresh spinach leaves",
           "saleUnitSize": 300,
           "saleUnitType": "g",
-          "salePrice": 2.29,
+          "salePrice": 1.39,
           "saleFractionUsed": 0.05,
-          "regularPrice": 2.29,
+          "regularPrice": 1.39,
           "regularFractionUsed": 0.05,
           "source": "database",
-          "sourceDate": "2025-04-29",
+          "sourceDate": "2025-05-15",
           "productName": "chopped spinach",
           "savingsPercentage": 0,
           "type": "core"
@@ -1587,7 +1587,8 @@
           "savingsPercentage": 0,
           "type": "core"
         }
-      ]
+      ],
+      "img": "/SteakSandwich.png"
     },
     {
       "name": "Couscous Salad",
@@ -1602,7 +1603,7 @@
           "salePrice": 0,
           "regularPrice": 0,
           "source": "free",
-          "sourceDate": "2025-05-15",
+          "sourceDate": "2025-05-16",
           "savingsPercentage": 0,
           "type": "core"
         },
@@ -1965,8 +1966,8 @@
     {
       "name": "Tuna Pasta",
       "url": "https://feelgoodfoodie.net/wprm_print/tuna-pasta-recipe",
-      "salePrice": 9.845174985870456,
-      "regularPrice": 10.585078069570896,
+      "salePrice": 8.595174985870456,
+      "regularPrice": 9.335078069570896,
       "totalSavings": 0.7399030837004403,
       "servings": 4,
       "ingredients": [
@@ -2001,11 +2002,11 @@
         {
           "recipeIngredientName": "garlic",
           "saleUnitSize": 1,
-          "saleUnitType": "whole",
+          "saleUnitType": "head",
           "salePrice": 0.5,
-          "saleFractionUsed": 3,
+          "saleFractionUsed": 0.5,
           "regularPrice": 0.5,
-          "regularFractionUsed": 3,
+          "regularFractionUsed": 0.5,
           "source": "database",
           "sourceDate": "2024-12-12",
           "productName": "garlic",
@@ -2097,8 +2098,8 @@
     {
       "name": "Broccoli Cheddar Soup",
       "url": "https://www.loveandlemons.com/broccoli-cheddar-soup/",
-      "salePrice": 10.22985789911822,
-      "regularPrice": 10.653217356618537,
+      "salePrice": 8.97985789911822,
+      "regularPrice": 9.403217356618537,
       "totalSavings": 0.42335945750031634,
       "servings": 4,
       "ingredients": [
@@ -2161,11 +2162,11 @@
         {
           "recipeIngredientName": "garlic",
           "saleUnitSize": 1,
-          "saleUnitType": "whole",
+          "saleUnitType": "head",
           "salePrice": 0.5,
-          "saleFractionUsed": 3,
+          "saleFractionUsed": 0.5,
           "regularPrice": 0.5,
-          "regularFractionUsed": 3,
+          "regularFractionUsed": 0.5,
           "source": "database",
           "sourceDate": "2024-12-12",
           "productName": "garlic",
@@ -2283,8 +2284,8 @@
     {
       "name": "Caprese Sandwich",
       "url": "https://cookieandkate.com/caprese-sandwich-recipe/",
-      "salePrice": 13.340783373600598,
-      "regularPrice": 13.43116607022981,
+      "salePrice": 13.132450040267264,
+      "regularPrice": 13.222832736896477,
       "totalSavings": 0.09038269662921294,
       "servings": 4,
       "ingredients": [
@@ -2411,11 +2412,11 @@
         {
           "recipeIngredientName": "garlic",
           "saleUnitSize": 1,
-          "saleUnitType": "whole",
+          "saleUnitType": "head",
           "salePrice": 0.5,
-          "saleFractionUsed": 0.5,
+          "saleFractionUsed": 0.08333333333333333,
           "regularPrice": 0.5,
-          "regularFractionUsed": 0.5,
+          "regularFractionUsed": 0.08333333333333333,
           "source": "database",
           "sourceDate": "2024-12-12",
           "productName": "garlic",
@@ -3173,8 +3174,8 @@
     {
       "name": "Parmesan Garlic Spaghetti",
       "url": "https://damndelicious.net/2016/01/01/parmesan-garlic-spaghetti/",
-      "salePrice": 6.845076250052834,
-      "regularPrice": 8.347640477504067,
+      "salePrice": 5.595076250052834,
+      "regularPrice": 7.097640477504067,
       "totalSavings": 1.5025642274512325,
       "servings": 4,
       "ingredients": [
@@ -3209,11 +3210,11 @@
         {
           "recipeIngredientName": "garlic",
           "saleUnitSize": 1,
-          "saleUnitType": "whole",
+          "saleUnitType": "head",
           "salePrice": 0.5,
-          "saleFractionUsed": 3,
+          "saleFractionUsed": 0.5,
           "regularPrice": 0.5,
-          "regularFractionUsed": 3,
+          "regularFractionUsed": 0.5,
           "source": "database",
           "sourceDate": "2024-12-12",
           "productName": "garlic",
@@ -3271,9 +3272,9 @@
     {
       "name": "Creamy Broccoli Mac and Cheese",
       "url": "https://damndelicious.net/2017/12/28/creamy-broccoli-mac-and-cheese/",
-      "salePrice": 9.103695195216996,
-      "regularPrice": 10.074796682667596,
-      "totalSavings": 0.9711014874505999,
+      "salePrice": 8.270361861883664,
+      "regularPrice": 9.241463349334262,
+      "totalSavings": 0.9711014874505981,
       "servings": 4,
       "ingredients": [
         {
@@ -3307,11 +3308,11 @@
         {
           "recipeIngredientName": "garlic",
           "saleUnitSize": 1,
-          "saleUnitType": "whole",
+          "saleUnitType": "head",
           "salePrice": 0.5,
-          "saleFractionUsed": 2,
+          "saleFractionUsed": 0.3333333333333333,
           "regularPrice": 0.5,
-          "regularFractionUsed": 2,
+          "regularFractionUsed": 0.3333333333333333,
           "source": "database",
           "sourceDate": "2024-12-12",
           "productName": "garlic",
@@ -3514,7 +3515,8 @@
           "savingsPercentage": 0,
           "type": "core"
         }
-      ]
+      ],
+      "img": "/Roasted_Chicken.png"
     },
     {
       "name": "Baked Chicken Wings",
@@ -3635,8 +3637,8 @@
     {
       "name": "Spaghetti Bolognese",
       "url": "https://www.recipetineats.com/wprm_print/spaghetti-bolognese",
-      "salePrice": 12.579667357165762,
-      "regularPrice": 13.623622325349807,
+      "salePrice": 11.913000690499095,
+      "regularPrice": 12.956955658683139,
       "totalSavings": 1.0439549681840443,
       "servings": 4,
       "ingredients": [
@@ -3657,11 +3659,11 @@
         {
           "recipeIngredientName": "garlic",
           "saleUnitSize": 1,
-          "saleUnitType": "whole",
+          "saleUnitType": "head",
           "salePrice": 0.5,
-          "saleFractionUsed": 1.6,
+          "saleFractionUsed": 0.26666666666666666,
           "regularPrice": 0.5,
-          "regularFractionUsed": 1.6,
+          "regularFractionUsed": 0.26666666666666666,
           "source": "database",
           "sourceDate": "2024-12-12",
           "productName": "garlic",
@@ -4191,9 +4193,9 @@
     {
       "name": "Creamy Pasta Bake with Cherry Tomatoes and Basil",
       "url": "https://www.allrecipes.com/recipe/261148/creamy-pasta-bake-with-cherry-tomatoes-and-basil/",
-      "salePrice": 19.744329616459527,
-      "regularPrice": 21.22413578386041,
-      "totalSavings": 1.4798061674008842,
+      "salePrice": 18.494329616459527,
+      "regularPrice": 19.974135783860408,
+      "totalSavings": 1.4798061674008807,
       "servings": 6,
       "ingredients": [
         {
@@ -4241,11 +4243,11 @@
         {
           "recipeIngredientName": "garlic",
           "saleUnitSize": 1,
-          "saleUnitType": "whole",
+          "saleUnitType": "head",
           "salePrice": 0.5,
-          "saleFractionUsed": 3,
+          "saleFractionUsed": 0.5,
           "regularPrice": 0.5,
-          "regularFractionUsed": 3,
+          "regularFractionUsed": 0.5,
           "source": "database",
           "sourceDate": "2024-12-12",
           "productName": "garlic",
@@ -4380,7 +4382,8 @@
           "savingsPercentage": 0,
           "type": "core"
         }
-      ]
+      ],
+      "img": "/Creamy_Pasta_Bake.png"
     },
     {
       "name": "Beef Stroganoff",
@@ -4544,13 +4547,14 @@
           "savingsPercentage": 0,
           "type": "core"
         }
-      ]
+      ],
+      "img": "/Beef_Stroganoff.png"
     },
     {
       "name": "Easy Indian Butter Chicken",
       "url": "https://www.allrecipes.com/recipe/141169/easy-indian-butter-chicken/",
-      "salePrice": 22.843326156905064,
-      "regularPrice": 24.063326156905063,
+      "salePrice": 22.078164484814103,
+      "regularPrice": 23.2981644848141,
       "totalSavings": 1.2199999999999989,
       "servings": 6,
       "ingredients": [
@@ -4585,11 +4589,11 @@
         {
           "recipeIngredientName": "garlic",
           "saleUnitSize": 1,
-          "saleUnitType": "whole",
+          "saleUnitType": "head",
           "salePrice": 0.5,
-          "saleFractionUsed": 1.7003592713132423,
+          "saleFractionUsed": 0.17003592713132423,
           "regularPrice": 0.5,
-          "regularFractionUsed": 1.7003592713132423,
+          "regularFractionUsed": 0.17003592713132423,
           "source": "database",
           "sourceDate": "2024-12-12",
           "productName": "garlic",
@@ -4708,13 +4712,14 @@
           "savingsPercentage": 0,
           "type": "core"
         }
-      ]
+      ],
+      "img": "/Indian_ButterChicken.png"
     },
     {
       "name": "The Best Slow Cooker Beef Roast",
       "url": "https://momsdish.com/wprm_print/the-best-slow-cooker-beef-roast",
-      "salePrice": 24.339049742759556,
-      "regularPrice": 25.577935381526075,
+      "salePrice": 22.089049742759556,
+      "regularPrice": 23.327935381526075,
       "totalSavings": 1.2388856387665186,
       "servings": 4,
       "ingredients": [
@@ -4763,11 +4768,11 @@
         {
           "recipeIngredientName": "garlic",
           "saleUnitSize": 1,
-          "saleUnitType": "whole",
+          "saleUnitType": "head",
           "salePrice": 0.5,
-          "saleFractionUsed": 5,
+          "saleFractionUsed": 0.5,
           "regularPrice": 0.5,
-          "regularFractionUsed": 5,
+          "regularFractionUsed": 0.5,
           "source": "database",
           "sourceDate": "2024-12-12",
           "productName": "garlic",
@@ -4849,7 +4854,7 @@
           "salePrice": 0,
           "regularPrice": 0,
           "source": "free",
-          "sourceDate": "2025-05-15",
+          "sourceDate": "2025-05-16",
           "savingsPercentage": 0,
           "type": "core"
         }

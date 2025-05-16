@@ -791,8 +791,8 @@
     {
       "name": "Veggie Omelet",
       "url": "https://feelgoodfoodie.net/wprm_print/veggie-omelet",
-      "salePrice": 2.411974498266671,
-      "regularPrice": 2.517934386681228,
+      "salePrice": 2.4201272609968982,
+      "regularPrice": 2.526087149411455,
       "totalSavings": 0.10595988841455695,
       "servings": 1,
       "ingredients": [
@@ -854,14 +854,14 @@
         },
         {
           "recipeIngredientName": "baby spinach",
-          "saleUnitSize": 312,
+          "saleUnitSize": 142,
           "saleUnitType": "g",
-          "salePrice": 3.98,
-          "saleFractionUsed": 0.09615384615384616,
-          "regularPrice": 3.98,
-          "regularFractionUsed": 0.09615384615384616,
+          "salePrice": 1.85,
+          "saleFractionUsed": 0.2112676056338028,
+          "regularPrice": 1.85,
+          "regularFractionUsed": 0.2112676056338028,
           "source": "database",
-          "sourceDate": "2025-04-22",
+          "sourceDate": "2025-05-15",
           "productName": "baby spinach",
           "savingsPercentage": 0,
           "type": "core"
@@ -913,7 +913,7 @@
           "salePrice": 0,
           "regularPrice": 0,
           "source": "free",
-          "sourceDate": "2025-05-15",
+          "sourceDate": "2025-05-16",
           "savingsPercentage": 0,
           "type": "core"
         },
@@ -1130,9 +1130,9 @@
     {
       "name": "Hummus Veggie Wrap",
       "url": "https://www.foodiecrush.com/hummus-veggie-wrap-plus-10-heavenly-hummus-recipes-to-make-at-home/",
-      "salePrice": 10.902858004873247,
-      "regularPrice": 12.51481800487325,
-      "totalSavings": 1.6119600000000034,
+      "salePrice": 10.857858004873249,
+      "regularPrice": 12.46981800487325,
+      "totalSavings": 1.6119600000000016,
       "servings": 4,
       "ingredients": [
         {
@@ -1181,12 +1181,12 @@
           "recipeIngredientName": "fresh spinach leaves",
           "saleUnitSize": 300,
           "saleUnitType": "g",
-          "salePrice": 2.29,
+          "salePrice": 1.39,
           "saleFractionUsed": 0.05,
-          "regularPrice": 2.29,
+          "regularPrice": 1.39,
           "regularFractionUsed": 0.05,
           "source": "database",
-          "sourceDate": "2025-04-29",
+          "sourceDate": "2025-05-15",
           "productName": "chopped spinach",
           "savingsPercentage": 0,
           "type": "core"
@@ -1252,9 +1252,9 @@
     {
       "name": "Breakfast Flatbread",
       "url": "https://www.livingchirpy.com/breakfast-flatbread/",
-      "salePrice": 15.218729829879138,
-      "regularPrice": 17.11952982987914,
-      "totalSavings": 1.9008000000000038,
+      "salePrice": 15.226882592609368,
+      "regularPrice": 17.127682592609368,
+      "totalSavings": 1.9008000000000003,
       "servings": 4,
       "ingredients": [
         {
@@ -1329,14 +1329,14 @@
         },
         {
           "recipeIngredientName": "baby spinach",
-          "saleUnitSize": 312,
+          "saleUnitSize": 142,
           "saleUnitType": "g",
-          "salePrice": 3.98,
-          "saleFractionUsed": 0.09615384615384616,
-          "regularPrice": 3.98,
-          "regularFractionUsed": 0.09615384615384616,
+          "salePrice": 1.85,
+          "saleFractionUsed": 0.2112676056338028,
+          "regularPrice": 1.85,
+          "regularFractionUsed": 0.2112676056338028,
           "source": "database",
-          "sourceDate": "2025-04-22",
+          "sourceDate": "2025-05-15",
           "productName": "baby spinach",
           "savingsPercentage": 0,
           "type": "core"
@@ -1636,7 +1636,7 @@
           "salePrice": 0,
           "regularPrice": 0,
           "source": "free",
-          "sourceDate": "2025-05-15",
+          "sourceDate": "2025-05-16",
           "savingsPercentage": 0,
           "type": "core"
         },
@@ -1883,9 +1883,9 @@
     {
       "name": "Broccoli Cheddar Soup",
       "url": "https://www.loveandlemons.com/broccoli-cheddar-soup/",
-      "salePrice": 9.151790315936257,
-      "regularPrice": 10.852790315936257,
-      "totalSavings": 1.7010000000000005,
+      "salePrice": 7.901790315936256,
+      "regularPrice": 9.602790315936257,
+      "totalSavings": 1.7010000000000014,
       "servings": 4,
       "ingredients": [
         {
@@ -1947,11 +1947,11 @@
         {
           "recipeIngredientName": "garlic",
           "saleUnitSize": 1,
-          "saleUnitType": "whole",
+          "saleUnitType": "head",
           "salePrice": 0.5,
-          "saleFractionUsed": 3,
+          "saleFractionUsed": 0.5,
           "regularPrice": 0.5,
-          "regularFractionUsed": 3,
+          "regularFractionUsed": 0.5,
           "source": "database",
           "sourceDate": "2024-12-12",
           "productName": "garlic",
@@ -2506,13 +2506,14 @@
           "savingsPercentage": 0,
           "type": "core"
         }
-      ]
+      ],
+      "img": "/Turkey_Wraps.png"
     },
     {
       "name": "Avocado Sweet Potato Tacos",
       "url": "https://www.loveandlemons.com/avocado-sweet-potato-tacos/",
-      "salePrice": 11.760223072464374,
-      "regularPrice": 12.126089739131041,
+      "salePrice": 11.343556405797708,
+      "regularPrice": 11.709423072464375,
       "totalSavings": 0.36586666666666723,
       "servings": 4,
       "ingredients": [
@@ -2659,11 +2660,11 @@
         {
           "recipeIngredientName": "garlic",
           "saleUnitSize": 1,
-          "saleUnitType": "whole",
+          "saleUnitType": "head",
           "salePrice": 0.5,
-          "saleFractionUsed": 1,
+          "saleFractionUsed": 0.16666666666666666,
           "regularPrice": 0.5,
-          "regularFractionUsed": 1,
+          "regularFractionUsed": 0.16666666666666666,
           "source": "database",
           "sourceDate": "2024-12-12",
           "productName": "garlic",
@@ -3126,13 +3127,14 @@
           "savingsPercentage": 0,
           "type": "core"
         }
-      ]
+      ],
+      "img": "/SteakSandwich.png"
     },
     {
       "name": "Greek Grilled Chicken Salad",
       "url": "https://www.themediterraneandish.com/greek-grilled-chicken-salad-recipe/",
-      "salePrice": 26.230421942216086,
-      "regularPrice": 26.596288608882748,
+      "salePrice": 24.980421942216086,
+      "regularPrice": 25.346288608882748,
       "totalSavings": 0.3658666666666619,
       "servings": 4,
       "ingredients": [
@@ -3195,11 +3197,11 @@
         {
           "recipeIngredientName": "garlic",
           "saleUnitSize": 1,
-          "saleUnitType": "whole",
+          "saleUnitType": "head",
           "salePrice": 0.5,
-          "saleFractionUsed": 3,
+          "saleFractionUsed": 0.5,
           "regularPrice": 0.5,
-          "regularFractionUsed": 3,
+          "regularFractionUsed": 0.5,
           "source": "database",
           "sourceDate": "2024-12-12",
           "productName": "garlic",
@@ -4004,14 +4006,15 @@
           "savingsPercentage": 0,
           "type": "core"
         }
-      ]
+      ],
+      "img": "/Roasted_Chicken.png"
     },
     {
       "name": "Creamy Broccoli Mac and Cheese",
       "url": "https://damndelicious.net/2017/12/28/creamy-broccoli-mac-and-cheese/",
-      "salePrice": 8.180550490034214,
-      "regularPrice": 9.606168331443904,
-      "totalSavings": 1.4256178414096894,
+      "salePrice": 7.34721715670088,
+      "regularPrice": 8.772834998110572,
+      "totalSavings": 1.4256178414096912,
       "servings": 4,
       "ingredients": [
         {
@@ -4045,11 +4048,11 @@
         {
           "recipeIngredientName": "garlic",
           "saleUnitSize": 1,
-          "saleUnitType": "whole",
+          "saleUnitType": "head",
           "salePrice": 0.5,
-          "saleFractionUsed": 2,
+          "saleFractionUsed": 0.3333333333333333,
           "regularPrice": 0.5,
-          "regularFractionUsed": 2,
+          "regularFractionUsed": 0.3333333333333333,
           "source": "database",
           "sourceDate": "2024-12-12",
           "productName": "garlic",
@@ -4325,8 +4328,8 @@
     {
       "name": "Best Vegetable Lasagna",
       "url": "https://cookieandkate.com/best-vegetable-lasagna-recipe/",
-      "salePrice": 20.288663459662477,
-      "regularPrice": 21.649463459662478,
+      "salePrice": 19.501556291009532,
+      "regularPrice": 20.862356291009533,
       "totalSavings": 1.3608000000000011,
       "servings": 8,
       "ingredients": [
@@ -4416,14 +4419,14 @@
         },
         {
           "recipeIngredientName": "baby spinach",
-          "saleUnitSize": 312,
+          "saleUnitSize": 142,
           "saleUnitType": "g",
-          "salePrice": 3.98,
-          "saleFractionUsed": 0.5451923076923078,
-          "regularPrice": 3.98,
-          "regularFractionUsed": 0.5451923076923078,
+          "salePrice": 1.85,
+          "saleFractionUsed": 1.197887323943662,
+          "regularPrice": 1.85,
+          "regularFractionUsed": 1.197887323943662,
           "source": "database",
-          "sourceDate": "2025-04-22",
+          "sourceDate": "2025-05-15",
           "productName": "baby spinach",
           "savingsPercentage": 0,
           "type": "core"
@@ -4459,11 +4462,11 @@
         {
           "recipeIngredientName": "garlic",
           "saleUnitSize": 1,
-          "saleUnitType": "whole",
+          "saleUnitType": "head",
           "salePrice": 0.5,
-          "saleFractionUsed": 2,
+          "saleFractionUsed": 0.3333333333333333,
           "regularPrice": 0.5,
-          "regularFractionUsed": 2,
+          "regularFractionUsed": 0.3333333333333333,
           "source": "database",
           "sourceDate": "2024-12-12",
           "productName": "garlic",
@@ -4531,8 +4534,8 @@
     {
       "name": "Bangers & Mash (Sausage with Onion Gravy)",
       "url": "https://www.recipetineats.com/wprm_print/bangers-mash-sausage-with-onion-gravy",
-      "salePrice": 11.878518502098574,
-      "regularPrice": 13.69185183543191,
+      "salePrice": 11.04518516876524,
+      "regularPrice": 12.858518502098576,
       "totalSavings": 1.8133333333333361,
       "servings": 4,
       "ingredients": [
@@ -4581,11 +4584,11 @@
         {
           "recipeIngredientName": "garlic",
           "saleUnitSize": 1,
-          "saleUnitType": "whole",
+          "saleUnitType": "head",
           "salePrice": 0.5,
-          "saleFractionUsed": 2,
+          "saleFractionUsed": 0.3333333333333333,
           "regularPrice": 0.5,
-          "regularFractionUsed": 2,
+          "regularFractionUsed": 0.3333333333333333,
           "source": "database",
           "sourceDate": "2024-12-12",
           "productName": "garlic",
@@ -4781,8 +4784,8 @@
     {
       "name": "Ginger Shrimp Stir-Fry",
       "url": "https://hellofresh.ca/recipes/ginger-shrimp-stir-fry-62b9a0c2116443e6c603fbb1",
-      "salePrice": 13.049365072574373,
-      "regularPrice": 13.841365072574373,
+      "salePrice": 12.21603173924104,
+      "regularPrice": 13.008031739241039,
       "totalSavings": 0.7919999999999998,
       "servings": 2,
       "ingredients": [
@@ -4859,11 +4862,11 @@
         {
           "recipeIngredientName": "garlic",
           "saleUnitSize": 1,
-          "saleUnitType": "whole",
+          "saleUnitType": "head",
           "salePrice": 0.5,
-          "saleFractionUsed": 2,
+          "saleFractionUsed": 0.3333333333333333,
           "regularPrice": 0.5,
-          "regularFractionUsed": 2,
+          "regularFractionUsed": 0.3333333333333333,
           "source": "database",
           "sourceDate": "2024-12-12",
           "productName": "garlic",

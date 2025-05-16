@@ -52,7 +52,8 @@
           "savingsPercentage": 0,
           "type": "garnish"
         }
-      ]
+      ],
+      "img": "/Chia_Pudding.png"
     },
     {
       "name": "Perfect Baked Potato",
@@ -1530,7 +1531,8 @@
           "savingsPercentage": 0,
           "type": "to taste"
         }
-      ]
+      ],
+      "img": "/Egg_Salad.png"
     },
     {
       "name": "Couscous Salad",
@@ -2081,7 +2083,8 @@
           "savingsPercentage": 0,
           "type": "core"
         }
-      ]
+      ],
+      "img": "/BlackBean_Corn_Salad.png"
     },
     {
       "name": "Hummus Veggie Wrap",
@@ -3241,7 +3244,8 @@
           "savingsPercentage": 0,
           "type": "to taste"
         }
-      ]
+      ],
+      "img": "/Baked_Tilapia.png"
     },
     {
       "name": "Creamy Broccoli Mac and Cheese",
@@ -4647,7 +4651,8 @@
           "savingsPercentage": 0,
           "type": "core"
         }
-      ]
+      ],
+      "img": "Mango_Chicken_StirFry.png"
     }
   ]
 }

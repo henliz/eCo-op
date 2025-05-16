@@ -684,7 +684,8 @@
           "savingsPercentage": 0,
           "type": "garnish"
         }
-      ]
+      ],
+      "img": "/Chia_Pudding.png"
     },
     {
       "name": "Avocado Toast with Egg",
@@ -1050,7 +1051,8 @@
           "savingsPercentage": 0,
           "type": "to taste"
         }
-      ]
+      ],
+      "img": "/Egg_Salad.png"
     },
     {
       "name": "French Toast Casserole",
@@ -2045,7 +2047,7 @@
           "salePrice": 0,
           "regularPrice": 0,
           "source": "free",
-          "sourceDate": "2025-05-15",
+          "sourceDate": "2025-05-16",
           "savingsPercentage": 0,
           "type": "core"
         },
@@ -2292,8 +2294,8 @@
     {
       "name": "Best Damn Pork Tacos",
       "url": "https://recipeteacher.com/best-damn-pork-tacos/",
-      "salePrice": 13.481815531905164,
-      "regularPrice": 13.481815531905164,
+      "salePrice": 12.64848219857183,
+      "regularPrice": 12.64848219857183,
       "totalSavings": 0,
       "servings": 8,
       "ingredients": [
@@ -2342,11 +2344,11 @@
         {
           "recipeIngredientName": "garlic",
           "saleUnitSize": 1,
-          "saleUnitType": "whole",
+          "saleUnitType": "head",
           "salePrice": 0.5,
-          "saleFractionUsed": 2,
+          "saleFractionUsed": 0.3333333333333333,
           "regularPrice": 0.5,
-          "regularFractionUsed": 2,
+          "regularFractionUsed": 0.3333333333333333,
           "source": "database",
           "sourceDate": "2024-12-12",
           "productName": "garlic",
@@ -2458,8 +2460,8 @@
     {
       "name": "Mediterranean Pasta Salad",
       "url": "https://feelgoodfoodie.net/wprm_print/mediterranean-pasta-salad",
-      "salePrice": 6.844780230961118,
-      "regularPrice": 6.844780230961118,
+      "salePrice": 6.5710759153237035,
+      "regularPrice": 6.5710759153237035,
       "totalSavings": 0,
       "servings": 4,
       "ingredients": [
@@ -2507,14 +2509,14 @@
         },
         {
           "recipeIngredientName": "baby spinach",
-          "saleUnitSize": 312,
+          "saleUnitSize": 142,
           "saleUnitType": "g",
-          "salePrice": 3.98,
-          "saleFractionUsed": 0.06442307692307693,
-          "regularPrice": 3.98,
-          "regularFractionUsed": 0.06442307692307693,
+          "salePrice": 1.85,
+          "saleFractionUsed": 0.1415492957746479,
+          "regularPrice": 1.85,
+          "regularFractionUsed": 0.1415492957746479,
           "source": "database",
-          "sourceDate": "2025-04-22",
+          "sourceDate": "2025-05-15",
           "productName": "baby spinach",
           "savingsPercentage": 0,
           "type": "core"
@@ -2634,11 +2636,11 @@
         {
           "recipeIngredientName": "garlic",
           "saleUnitSize": 1,
-          "saleUnitType": "whole",
+          "saleUnitType": "head",
           "salePrice": 0.5,
-          "saleFractionUsed": 0.67,
+          "saleFractionUsed": 0.11166666666666668,
           "regularPrice": 0.5,
-          "regularFractionUsed": 0.67,
+          "regularFractionUsed": 0.11166666666666668,
           "source": "database",
           "sourceDate": "2024-12-12",
           "productName": "garlic",
@@ -2704,7 +2706,7 @@
           "salePrice": 0,
           "regularPrice": 0,
           "source": "free",
-          "sourceDate": "2025-05-15",
+          "sourceDate": "2025-05-16",
           "savingsPercentage": 0,
           "type": "core"
         },
@@ -2979,8 +2981,8 @@
     {
       "name": "Best Lentil Soup",
       "url": "https://cookieandkate.com/best-lentil-soup-recipe/",
-      "salePrice": 9.112949999796568,
-      "regularPrice": 9.112949999796568,
+      "salePrice": 7.446283333129902,
+      "regularPrice": 7.446283333129902,
       "totalSavings": 0,
       "servings": 4,
       "ingredients": [
@@ -3029,11 +3031,11 @@
         {
           "recipeIngredientName": "garlic",
           "saleUnitSize": 1,
-          "saleUnitType": "whole",
+          "saleUnitType": "head",
           "salePrice": 0.5,
-          "saleFractionUsed": 4,
+          "saleFractionUsed": 0.6666666666666666,
           "regularPrice": 0.5,
-          "regularFractionUsed": 4,
+          "regularFractionUsed": 0.6666666666666666,
           "source": "database",
           "sourceDate": "2024-12-12",
           "productName": "garlic",
@@ -3129,7 +3131,7 @@
           "salePrice": 0,
           "regularPrice": 0,
           "source": "free",
-          "sourceDate": "2025-05-15",
+          "sourceDate": "2025-05-16",
           "savingsPercentage": 0,
           "type": "core"
         },
@@ -3190,8 +3192,8 @@
     {
       "name": "Black Bean and Corn Salad",
       "url": "https://www.allrecipes.com/recipe/13933/black-bean-and-corn-salad-ii/?print",
-      "salePrice": 12.23017919611968,
-      "regularPrice": 12.23017919611968,
+      "salePrice": 11.813512529453012,
+      "regularPrice": 11.813512529453012,
       "totalSavings": 0,
       "servings": 6,
       "ingredients": [
@@ -3226,11 +3228,11 @@
         {
           "recipeIngredientName": "garlic",
           "saleUnitSize": 1,
-          "saleUnitType": "whole",
+          "saleUnitType": "head",
           "salePrice": 0.5,
-          "saleFractionUsed": 1,
+          "saleFractionUsed": 0.16666666666666666,
           "regularPrice": 0.5,
-          "regularFractionUsed": 1,
+          "regularFractionUsed": 0.16666666666666666,
           "source": "database",
           "sourceDate": "2024-12-12",
           "productName": "garlic",
@@ -3363,7 +3365,8 @@
           "savingsPercentage": 0,
           "type": "core"
         }
-      ]
+      ],
+      "img": "/BlackBean_Corn_Salad.png"
     }
   ],
   "dinner": [
@@ -3778,8 +3781,8 @@
     {
       "name": "Best Damn Pork Tacos",
       "url": "https://recipeteacher.com/best-damn-pork-tacos/",
-      "salePrice": 13.481815531905164,
-      "regularPrice": 13.481815531905164,
+      "salePrice": 12.64848219857183,
+      "regularPrice": 12.64848219857183,
       "totalSavings": 0,
       "servings": 8,
       "ingredients": [
@@ -3828,11 +3831,11 @@
         {
           "recipeIngredientName": "garlic",
           "saleUnitSize": 1,
-          "saleUnitType": "whole",
+          "saleUnitType": "head",
           "salePrice": 0.5,
-          "saleFractionUsed": 2,
+          "saleFractionUsed": 0.3333333333333333,
           "regularPrice": 0.5,
-          "regularFractionUsed": 2,
+          "regularFractionUsed": 0.3333333333333333,
           "source": "database",
           "sourceDate": "2024-12-12",
           "productName": "garlic",
@@ -4021,7 +4024,8 @@
           "savingsPercentage": 0,
           "type": "core"
         }
-      ]
+      ],
+      "img": "/Roasted_Chicken.png"
     },
     {
       "name": "Easy Baked Tilapia",
@@ -4141,7 +4145,8 @@
           "savingsPercentage": 0,
           "type": "to taste"
         }
-      ]
+      ],
+      "img": "/Baked_Tilapia.png"
     },
     {
       "name": "Beef Stroganoff",
@@ -4305,7 +4310,8 @@
           "savingsPercentage": 0,
           "type": "core"
         }
-      ]
+      ],
+      "img": "/Beef_Stroganoff.png"
     },
     {
       "name": "Baked Honey Mustard Chicken",
@@ -4429,14 +4435,15 @@
           "savingsPercentage": 0,
           "type": "core"
         }
-      ]
+      ],
+      "img": "/Honey_Mustard_Chicken.png"
     },
     {
       "name": "Easy Indian Butter Chicken",
       "url": "https://www.allrecipes.com/recipe/141169/easy-indian-butter-chicken/",
-      "salePrice": 20.428573923317494,
-      "regularPrice": 26.15857392331749,
-      "totalSavings": 5.729999999999997,
+      "salePrice": 19.663412251226532,
+      "regularPrice": 25.393412251226536,
+      "totalSavings": 5.730000000000004,
       "servings": 6,
       "ingredients": [
         {
@@ -4470,11 +4477,11 @@
         {
           "recipeIngredientName": "garlic",
           "saleUnitSize": 1,
-          "saleUnitType": "whole",
+          "saleUnitType": "head",
           "salePrice": 0.5,
-          "saleFractionUsed": 1.7003592713132423,
+          "saleFractionUsed": 0.17003592713132423,
           "regularPrice": 0.5,
-          "regularFractionUsed": 1.7003592713132423,
+          "regularFractionUsed": 0.17003592713132423,
           "source": "database",
           "sourceDate": "2024-12-12",
           "productName": "garlic",
@@ -4593,13 +4600,14 @@
           "savingsPercentage": 0,
           "type": "core"
         }
-      ]
+      ],
+      "img": "/Indian_ButterChicken.png"
     },
     {
       "name": "The Best Slow Cooker Beef Roast",
       "url": "https://momsdish.com/wprm_print/the-best-slow-cooker-beef-roast",
-      "salePrice": 26.779309185998056,
-      "regularPrice": 26.779309185998056,
+      "salePrice": 24.529309185998056,
+      "regularPrice": 24.529309185998056,
       "totalSavings": 0,
       "servings": 4,
       "ingredients": [
@@ -4648,11 +4656,11 @@
         {
           "recipeIngredientName": "garlic",
           "saleUnitSize": 1,
-          "saleUnitType": "whole",
+          "saleUnitType": "head",
           "salePrice": 0.5,
-          "saleFractionUsed": 5,
+          "saleFractionUsed": 0.5,
           "regularPrice": 0.5,
-          "regularFractionUsed": 5,
+          "regularFractionUsed": 0.5,
           "source": "database",
           "sourceDate": "2024-12-12",
           "productName": "garlic",
@@ -4734,7 +4742,7 @@
           "salePrice": 0,
           "regularPrice": 0,
           "source": "free",
-          "sourceDate": "2025-05-15",
+          "sourceDate": "2025-05-16",
           "savingsPercentage": 0,
           "type": "core"
         }

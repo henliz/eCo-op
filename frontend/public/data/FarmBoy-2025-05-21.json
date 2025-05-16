@@ -52,7 +52,8 @@
           "savingsPercentage": 0,
           "type": "garnish"
         }
-      ]
+      ],
+      "img": "/Chia_Pudding.png"
     },
     {
       "name": "Avocado Toast with Egg",
@@ -445,9 +446,9 @@
     {
       "name": "Veggie Omelet",
       "url": "https://feelgoodfoodie.net/wprm_print/veggie-omelet",
-      "salePrice": 2.754785626825741,
-      "regularPrice": 2.8960654780451502,
-      "totalSavings": 0.1412798512194091,
+      "salePrice": 2.762938389555969,
+      "regularPrice": 2.9042182407753776,
+      "totalSavings": 0.14127985121940867,
       "servings": 1,
       "ingredients": [
         {
@@ -508,14 +509,14 @@
         },
         {
           "recipeIngredientName": "baby spinach",
-          "saleUnitSize": 312,
+          "saleUnitSize": 142,
           "saleUnitType": "g",
-          "salePrice": 3.98,
-          "saleFractionUsed": 0.09615384615384616,
-          "regularPrice": 3.98,
-          "regularFractionUsed": 0.09615384615384616,
+          "salePrice": 1.85,
+          "saleFractionUsed": 0.2112676056338028,
+          "regularPrice": 1.85,
+          "regularFractionUsed": 0.2112676056338028,
           "source": "database",
-          "sourceDate": "2025-04-22",
+          "sourceDate": "2025-05-15",
           "productName": "baby spinach",
           "savingsPercentage": 0,
           "type": "core"
@@ -567,7 +568,7 @@
           "salePrice": 0,
           "regularPrice": 0,
           "source": "free",
-          "sourceDate": "2025-05-15",
+          "sourceDate": "2025-05-16",
           "savingsPercentage": 0,
           "type": "core"
         },
@@ -807,7 +808,8 @@
           "savingsPercentage": 0,
           "type": "to taste"
         }
-      ]
+      ],
+      "img": "/Egg_Salad.png"
     },
     {
       "name": "Sweet Potato Breakfast Hash With Eggs",
@@ -1474,7 +1476,7 @@
           "salePrice": 0,
           "regularPrice": 0,
           "source": "free",
-          "sourceDate": "2025-05-15",
+          "sourceDate": "2025-05-16",
           "savingsPercentage": 0,
           "type": "core"
         },
@@ -1721,8 +1723,8 @@
     {
       "name": "Mediterranean Pasta Salad",
       "url": "https://feelgoodfoodie.net/wprm_print/mediterranean-pasta-salad",
-      "salePrice": 7.060697646402872,
-      "regularPrice": 7.278109411108755,
+      "salePrice": 6.7869933307654575,
+      "regularPrice": 7.00440509547134,
       "totalSavings": 0.21741176470588286,
       "servings": 4,
       "ingredients": [
@@ -1770,14 +1772,14 @@
         },
         {
           "recipeIngredientName": "baby spinach",
-          "saleUnitSize": 312,
+          "saleUnitSize": 142,
           "saleUnitType": "g",
-          "salePrice": 3.98,
-          "saleFractionUsed": 0.06442307692307693,
-          "regularPrice": 3.98,
-          "regularFractionUsed": 0.06442307692307693,
+          "salePrice": 1.85,
+          "saleFractionUsed": 0.1415492957746479,
+          "regularPrice": 1.85,
+          "regularFractionUsed": 0.1415492957746479,
           "source": "database",
-          "sourceDate": "2025-04-22",
+          "sourceDate": "2025-05-15",
           "productName": "baby spinach",
           "savingsPercentage": 0,
           "type": "core"
@@ -1897,11 +1899,11 @@
         {
           "recipeIngredientName": "garlic",
           "saleUnitSize": 1,
-          "saleUnitType": "whole",
+          "saleUnitType": "head",
           "salePrice": 0.5,
-          "saleFractionUsed": 0.67,
+          "saleFractionUsed": 0.11166666666666668,
           "regularPrice": 0.5,
-          "regularFractionUsed": 0.67,
+          "regularFractionUsed": 0.11166666666666668,
           "source": "database",
           "sourceDate": "2024-12-12",
           "productName": "garlic",
@@ -2123,8 +2125,8 @@
     {
       "name": "Hummus Veggie Wrap",
       "url": "https://www.foodiecrush.com/hummus-veggie-wrap-plus-10-heavenly-hummus-recipes-to-make-at-home/",
-      "salePrice": 11.754760464303196,
-      "regularPrice": 11.754760464303196,
+      "salePrice": 11.709760464303194,
+      "regularPrice": 11.709760464303194,
       "totalSavings": 0,
       "servings": 4,
       "ingredients": [
@@ -2174,12 +2176,12 @@
           "recipeIngredientName": "fresh spinach leaves",
           "saleUnitSize": 300,
           "saleUnitType": "g",
-          "salePrice": 2.29,
+          "salePrice": 1.39,
           "saleFractionUsed": 0.05,
-          "regularPrice": 2.29,
+          "regularPrice": 1.39,
           "regularFractionUsed": 0.05,
           "source": "database",
-          "sourceDate": "2025-04-29",
+          "sourceDate": "2025-05-15",
           "productName": "chopped spinach",
           "savingsPercentage": 0,
           "type": "core"
@@ -2245,8 +2247,8 @@
     {
       "name": "Broccoli Cheddar Soup",
       "url": "https://www.loveandlemons.com/broccoli-cheddar-soup/",
-      "salePrice": 12.705642590749793,
-      "regularPrice": 14.973642590749794,
+      "salePrice": 11.455642590749793,
+      "regularPrice": 13.723642590749794,
       "totalSavings": 2.2680000000000007,
       "servings": 4,
       "ingredients": [
@@ -2309,11 +2311,11 @@
         {
           "recipeIngredientName": "garlic",
           "saleUnitSize": 1,
-          "saleUnitType": "whole",
+          "saleUnitType": "head",
           "salePrice": 0.5,
-          "saleFractionUsed": 3,
+          "saleFractionUsed": 0.5,
           "regularPrice": 0.5,
-          "regularFractionUsed": 3,
+          "regularFractionUsed": 0.5,
           "source": "database",
           "sourceDate": "2024-12-12",
           "productName": "garlic",
@@ -2562,7 +2564,8 @@
           "savingsPercentage": 0,
           "type": "core"
         }
-      ]
+      ],
+      "img": "/Turkey_Wraps.png"
     },
     {
       "name": "Cucumber Turkey Sub Sandwich",
@@ -2824,7 +2827,8 @@
           "savingsPercentage": 0,
           "type": "core"
         }
-      ]
+      ],
+      "img": "/SteakSandwich.png"
     },
     {
       "name": "Avocado Chicken Salad",
@@ -3023,8 +3027,8 @@
     {
       "name": "Garlic Mashed Potatoes",
       "url": "https://www.lecremedelacrumb.com/garlic-mashed-potatoes/",
-      "salePrice": 4.071733831065879,
-      "regularPrice": 4.071733831065879,
+      "salePrice": 2.4050671643992123,
+      "regularPrice": 2.4050671643992123,
       "totalSavings": 0,
       "servings": 4,
       "ingredients": [
@@ -3087,11 +3091,11 @@
         {
           "recipeIngredientName": "garlic",
           "saleUnitSize": 1,
-          "saleUnitType": "whole",
+          "saleUnitType": "head",
           "salePrice": 0.5,
-          "saleFractionUsed": 4,
+          "saleFractionUsed": 0.6666666666666666,
           "regularPrice": 0.5,
-          "regularFractionUsed": 4,
+          "regularFractionUsed": 0.6666666666666666,
           "source": "database",
           "sourceDate": "2024-12-12",
           "productName": "garlic",
@@ -3451,9 +3455,9 @@
     {
       "name": "Bangers & Mash (Sausage with Onion Gravy)",
       "url": "https://www.recipetineats.com/wprm_print/bangers-mash-sausage-with-onion-gravy",
-      "salePrice": 9.740564709034617,
-      "regularPrice": 11.773764709034618,
-      "totalSavings": 2.033200000000001,
+      "salePrice": 8.907231375701285,
+      "regularPrice": 10.940431375701284,
+      "totalSavings": 2.033199999999999,
       "servings": 4,
       "ingredients": [
         {
@@ -3501,11 +3505,11 @@
         {
           "recipeIngredientName": "garlic",
           "saleUnitSize": 1,
-          "saleUnitType": "whole",
+          "saleUnitType": "head",
           "salePrice": 0.5,
-          "saleFractionUsed": 2,
+          "saleFractionUsed": 0.3333333333333333,
           "regularPrice": 0.5,
-          "regularFractionUsed": 2,
+          "regularFractionUsed": 0.3333333333333333,
           "source": "database",
           "sourceDate": "2024-12-12",
           "productName": "garlic",
@@ -3727,9 +3731,9 @@
     {
       "name": "Creamy Broccoli Mac and Cheese",
       "url": "https://damndelicious.net/2017/12/28/creamy-broccoli-mac-and-cheese/",
-      "salePrice": 15.014225136691831,
-      "regularPrice": 17.795225136691833,
-      "totalSavings": 2.7810000000000024,
+      "salePrice": 14.180891803358499,
+      "regularPrice": 16.961891803358498,
+      "totalSavings": 2.780999999999999,
       "servings": 4,
       "ingredients": [
         {
@@ -3763,11 +3767,11 @@
         {
           "recipeIngredientName": "garlic",
           "saleUnitSize": 1,
-          "saleUnitType": "whole",
+          "saleUnitType": "head",
           "salePrice": 0.5,
-          "saleFractionUsed": 2,
+          "saleFractionUsed": 0.3333333333333333,
           "regularPrice": 0.5,
-          "regularFractionUsed": 2,
+          "regularFractionUsed": 0.3333333333333333,
           "source": "database",
           "sourceDate": "2024-12-12",
           "productName": "garlic",
@@ -3970,7 +3974,8 @@
           "savingsPercentage": 0,
           "type": "core"
         }
-      ]
+      ],
+      "img": "/Roasted_Chicken.png"
     },
     {
       "name": "The Best Cheesy Potatoes",
@@ -4272,7 +4277,8 @@
           "savingsPercentage": 0,
           "type": "core"
         }
-      ]
+      ],
+      "img": "/Honey_Mustard_Chicken.png"
     }
   ]
 }
