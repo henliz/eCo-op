@@ -52,7 +52,8 @@
           "savingsPercentage": 0,
           "type": "garnish"
         }
-      ]
+      ],
+      "img": "/Chia_Pudding.png"
     },
     {
       "name": "How to Make French Toast",
@@ -784,7 +785,8 @@
           "savingsPercentage": 0,
           "type": "to taste"
         }
-      ]
+      ],
+      "img": "/Egg_Salad.png"
     },
     {
       "name": "Strawberry Pancakes",
@@ -1061,8 +1063,8 @@
     {
       "name": "Veggie Omelet",
       "url": "https://feelgoodfoodie.net/wprm_print/veggie-omelet",
-      "salePrice": 2.5689389303271692,
-      "regularPrice": 2.60779355587783,
+      "salePrice": 2.5770916930573966,
+      "regularPrice": 2.6159463186080574,
       "totalSavings": 0.03885462555066077,
       "servings": 1,
       "ingredients": [
@@ -1124,14 +1126,14 @@
         },
         {
           "recipeIngredientName": "baby spinach",
-          "saleUnitSize": 312,
+          "saleUnitSize": 142,
           "saleUnitType": "g",
-          "salePrice": 3.98,
-          "saleFractionUsed": 0.09615384615384616,
-          "regularPrice": 3.98,
-          "regularFractionUsed": 0.09615384615384616,
+          "salePrice": 1.85,
+          "saleFractionUsed": 0.2112676056338028,
+          "regularPrice": 1.85,
+          "regularFractionUsed": 0.2112676056338028,
           "source": "database",
-          "sourceDate": "2025-04-22",
+          "sourceDate": "2025-05-15",
           "productName": "baby spinach",
           "savingsPercentage": 0,
           "type": "core"
@@ -1183,7 +1185,7 @@
           "salePrice": 0,
           "regularPrice": 0,
           "source": "free",
-          "sourceDate": "2025-05-15",
+          "sourceDate": "2025-05-16",
           "savingsPercentage": 0,
           "type": "core"
         },
@@ -1668,7 +1670,7 @@
           "salePrice": 0,
           "regularPrice": 0,
           "source": "free",
-          "sourceDate": "2025-05-15",
+          "sourceDate": "2025-05-16",
           "savingsPercentage": 0,
           "type": "core"
         },
@@ -1953,7 +1955,7 @@
           "salePrice": 0,
           "regularPrice": 0,
           "source": "free",
-          "sourceDate": "2025-05-15",
+          "sourceDate": "2025-05-16",
           "savingsPercentage": 0,
           "type": "core"
         },
@@ -2104,8 +2106,8 @@
     {
       "name": "Mediterranean Pasta Salad",
       "url": "https://feelgoodfoodie.net/wprm_print/mediterranean-pasta-salad",
-      "salePrice": 8.189982100340673,
-      "regularPrice": 8.189982100340673,
+      "salePrice": 7.916277784703258,
+      "regularPrice": 7.916277784703258,
       "totalSavings": 0,
       "servings": 4,
       "ingredients": [
@@ -2153,14 +2155,14 @@
         },
         {
           "recipeIngredientName": "baby spinach",
-          "saleUnitSize": 312,
+          "saleUnitSize": 142,
           "saleUnitType": "g",
-          "salePrice": 3.98,
-          "saleFractionUsed": 0.06442307692307693,
-          "regularPrice": 3.98,
-          "regularFractionUsed": 0.06442307692307693,
+          "salePrice": 1.85,
+          "saleFractionUsed": 0.1415492957746479,
+          "regularPrice": 1.85,
+          "regularFractionUsed": 0.1415492957746479,
           "source": "database",
-          "sourceDate": "2025-04-22",
+          "sourceDate": "2025-05-15",
           "productName": "baby spinach",
           "savingsPercentage": 0,
           "type": "core"
@@ -2280,11 +2282,11 @@
         {
           "recipeIngredientName": "garlic",
           "saleUnitSize": 1,
-          "saleUnitType": "whole",
+          "saleUnitType": "head",
           "salePrice": 0.5,
-          "saleFractionUsed": 0.67,
+          "saleFractionUsed": 0.11166666666666668,
           "regularPrice": 0.5,
-          "regularFractionUsed": 0.67,
+          "regularFractionUsed": 0.11166666666666668,
           "source": "database",
           "sourceDate": "2024-12-12",
           "productName": "garlic",
@@ -2312,8 +2314,8 @@
     {
       "name": "Best Lentil Soup",
       "url": "https://cookieandkate.com/best-lentil-soup-recipe/",
-      "salePrice": 10.148430480103242,
-      "regularPrice": 10.148430480103242,
+      "salePrice": 8.481763813436574,
+      "regularPrice": 8.481763813436574,
       "totalSavings": 0,
       "servings": 4,
       "ingredients": [
@@ -2362,11 +2364,11 @@
         {
           "recipeIngredientName": "garlic",
           "saleUnitSize": 1,
-          "saleUnitType": "whole",
+          "saleUnitType": "head",
           "salePrice": 0.5,
-          "saleFractionUsed": 4,
+          "saleFractionUsed": 0.6666666666666666,
           "regularPrice": 0.5,
-          "regularFractionUsed": 4,
+          "regularFractionUsed": 0.6666666666666666,
           "source": "database",
           "sourceDate": "2024-12-12",
           "productName": "garlic",
@@ -2462,7 +2464,7 @@
           "salePrice": 0,
           "regularPrice": 0,
           "source": "free",
-          "sourceDate": "2025-05-15",
+          "sourceDate": "2025-05-16",
           "savingsPercentage": 0,
           "type": "core"
         },
@@ -2523,8 +2525,8 @@
     {
       "name": "Avocado Sweet Potato Tacos",
       "url": "https://www.loveandlemons.com/avocado-sweet-potato-tacos/",
-      "salePrice": 10.41688203109962,
-      "regularPrice": 10.81688203109962,
+      "salePrice": 10.000215364432954,
+      "regularPrice": 10.400215364432954,
       "totalSavings": 0.40000000000000036,
       "servings": 4,
       "ingredients": [
@@ -2671,11 +2673,11 @@
         {
           "recipeIngredientName": "garlic",
           "saleUnitSize": 1,
-          "saleUnitType": "whole",
+          "saleUnitType": "head",
           "salePrice": 0.5,
-          "saleFractionUsed": 1,
+          "saleFractionUsed": 0.16666666666666666,
           "regularPrice": 0.5,
-          "regularFractionUsed": 1,
+          "regularFractionUsed": 0.16666666666666666,
           "source": "database",
           "sourceDate": "2024-12-12",
           "productName": "garlic",
@@ -2727,8 +2729,8 @@
     {
       "name": "Broccoli Cheddar Soup",
       "url": "https://www.loveandlemons.com/broccoli-cheddar-soup/",
-      "salePrice": 11.093681888736775,
-      "regularPrice": 11.093681888736775,
+      "salePrice": 9.843681888736775,
+      "regularPrice": 9.843681888736775,
       "totalSavings": 0,
       "servings": 4,
       "ingredients": [
@@ -2791,11 +2793,11 @@
         {
           "recipeIngredientName": "garlic",
           "saleUnitSize": 1,
-          "saleUnitType": "whole",
+          "saleUnitType": "head",
           "salePrice": 0.5,
-          "saleFractionUsed": 3,
+          "saleFractionUsed": 0.5,
           "regularPrice": 0.5,
-          "regularFractionUsed": 3,
+          "regularFractionUsed": 0.5,
           "source": "database",
           "sourceDate": "2024-12-12",
           "productName": "garlic",
@@ -3170,7 +3172,8 @@
           "savingsPercentage": 0,
           "type": "core"
         }
-      ]
+      ],
+      "img": "/SteakSandwich.png"
     }
   ],
   "dinner": [
@@ -3292,7 +3295,8 @@
           "savingsPercentage": 0,
           "type": "to taste"
         }
-      ]
+      ],
+      "img": "/Baked_Tilapia.png"
     },
     {
       "name": "Pork Tenderloin",
@@ -3441,8 +3445,8 @@
     {
       "name": "Tuna Pasta",
       "url": "https://feelgoodfoodie.net/wprm_print/tuna-pasta-recipe",
-      "salePrice": 10.112153756900936,
-      "regularPrice": 10.112153756900936,
+      "salePrice": 8.862153756900936,
+      "regularPrice": 8.862153756900936,
       "totalSavings": 0,
       "servings": 4,
       "ingredients": [
@@ -3477,11 +3481,11 @@
         {
           "recipeIngredientName": "garlic",
           "saleUnitSize": 1,
-          "saleUnitType": "whole",
+          "saleUnitType": "head",
           "salePrice": 0.5,
-          "saleFractionUsed": 3,
+          "saleFractionUsed": 0.5,
           "regularPrice": 0.5,
-          "regularFractionUsed": 3,
+          "regularFractionUsed": 0.5,
           "source": "database",
           "sourceDate": "2024-12-12",
           "productName": "garlic",
@@ -3853,8 +3857,8 @@
     {
       "name": "Baked Lemon Garlic Salmon",
       "url": "https://www.themediterraneandish.com/lemon-garlic-salmon-recipe/",
-      "salePrice": 17.573843989697867,
-      "regularPrice": 21.13925803664622,
+      "salePrice": 16.186343989697868,
+      "regularPrice": 19.75175803664622,
       "totalSavings": 3.5654140469483515,
       "servings": 4,
       "ingredients": [
@@ -3925,11 +3929,11 @@
         {
           "recipeIngredientName": "garlic",
           "saleUnitSize": 1,
-          "saleUnitType": "whole",
+          "saleUnitType": "head",
           "salePrice": 0.5,
-          "saleFractionUsed": 3.3299999999999996,
+          "saleFractionUsed": 0.555,
           "regularPrice": 0.5,
-          "regularFractionUsed": 3.3299999999999996,
+          "regularFractionUsed": 0.555,
           "source": "database",
           "sourceDate": "2024-12-12",
           "productName": "garlic",
@@ -4102,13 +4106,14 @@
           "savingsPercentage": 0,
           "type": "core"
         }
-      ]
+      ],
+      "img": "/Honey_Mustard_Chicken.png"
     },
     {
       "name": "Easy Indian Butter Chicken",
       "url": "https://www.allrecipes.com/recipe/141169/easy-indian-butter-chicken/",
-      "salePrice": 29.585933217381985,
-      "regularPrice": 32.90093321738198,
+      "salePrice": 28.820771545291024,
+      "regularPrice": 32.13577154529102,
       "totalSavings": 3.3149999999999977,
       "servings": 6,
       "ingredients": [
@@ -4143,11 +4148,11 @@
         {
           "recipeIngredientName": "garlic",
           "saleUnitSize": 1,
-          "saleUnitType": "whole",
+          "saleUnitType": "head",
           "salePrice": 0.5,
-          "saleFractionUsed": 1.7003592713132423,
+          "saleFractionUsed": 0.17003592713132423,
           "regularPrice": 0.5,
-          "regularFractionUsed": 1.7003592713132423,
+          "regularFractionUsed": 0.17003592713132423,
           "source": "database",
           "sourceDate": "2024-12-12",
           "productName": "garlic",
@@ -4266,7 +4271,8 @@
           "savingsPercentage": 0,
           "type": "core"
         }
-      ]
+      ],
+      "img": "/Indian_ButterChicken.png"
     },
     {
       "name": "Mango Chicken Stir-Fry",
@@ -4522,13 +4528,14 @@
           "savingsPercentage": 0,
           "type": "core"
         }
-      ]
+      ],
+      "img": "Mango_Chicken_StirFry.png"
     },
     {
       "name": "The Best Slow Cooker Beef Roast",
       "url": "https://momsdish.com/wprm_print/the-best-slow-cooker-beef-roast",
-      "salePrice": 25.625630021195654,
-      "regularPrice": 26.115189668772747,
+      "salePrice": 23.375630021195654,
+      "regularPrice": 23.865189668772747,
       "totalSavings": 0.48955964757709225,
       "servings": 4,
       "ingredients": [
@@ -4577,11 +4584,11 @@
         {
           "recipeIngredientName": "garlic",
           "saleUnitSize": 1,
-          "saleUnitType": "whole",
+          "saleUnitType": "head",
           "salePrice": 0.5,
-          "saleFractionUsed": 5,
+          "saleFractionUsed": 0.5,
           "regularPrice": 0.5,
-          "regularFractionUsed": 5,
+          "regularFractionUsed": 0.5,
           "source": "database",
           "sourceDate": "2024-12-12",
           "productName": "garlic",
@@ -4663,7 +4670,7 @@
           "salePrice": 0,
           "regularPrice": 0,
           "source": "free",
-          "sourceDate": "2025-05-15",
+          "sourceDate": "2025-05-16",
           "savingsPercentage": 0,
           "type": "core"
         }
