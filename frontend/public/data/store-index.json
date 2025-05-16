@@ -60,8 +60,15 @@
       "id": "metro-all",
       "name": "Metro",
       "location": "Ontario",
-      "filename": "Metro-All-2025-05-14.json",
-      "validUntil": "2025-05-15"
+      "filename": "Metro-All-2025-05-21.json",
+      "validUntil": "2025-05-21"
+    },
+    {
+      "id": "sobeys-all",
+      "name": "Sobeys",
+      "location": "Ontario",
+      "filename": "Sobeys-Ontario-2025-05-21.json",
+      "validUntil": "2025-05-21"
     }
   ]
 }
