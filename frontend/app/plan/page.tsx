@@ -25,7 +25,7 @@ const tabs: { label: string; value: View }[] = [
 const instructions: Record<View, string> = {
   store: 'Please select a store and set your household size to continue.',
   plan: 'Select your recipes for the week.',
-  groceries: 'Review your shopping list. Check off items as you go. Items with pink background are pantry staples: Check if you have these before buying. Recipes only need a small portion.',
+  groceries: 'Items with pink background are pantry staples: Check if you have these before buying. Recipes only need a small portion.',
   cook: 'Click on a recipe to see the cooking instructions.',
 };
 
@@ -77,7 +77,7 @@ return (
     </div>
 
     {/* Fixed tabs section - positioned right below the header */}
-    <div className="fixed top-16 left-0 right-0 bg-white z-20 shadow-sm">
+    <div className="fixed top-13 left-0 right-0 bg-white z-20 shadow-sm">
       <div className="container mx-auto p-1">
         {/* --- 4‑step selector --- */}
         <div className="relative mx-auto mt-2 mb-1 w-full max-w-md h-12">

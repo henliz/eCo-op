@@ -234,7 +234,8 @@ export function GroceryScreen() {
       ))}
 
       {/* Bottom summary bar with enhanced totals */}
-      <div className="fixed bottom-0 left-0 right-0 bg-gray-200 border-t py-2 px-3 shadow-lg pb-4">
+      <div
+        className="sticky bottom-0 left-0 right-0 w-screen ml-[calc(-50vw+50%)] bg-gray-200 border-t py-2 shadow-lg pb-4 z-10 mt-2">
         <div className="container mx-auto">
           {/* TOTALS header */}
           <div className="text-center mb-1">
@@ -270,7 +271,7 @@ export function GroceryScreen() {
 
 /* ----------------------------- helpers ---------------------------------- */
 function sortLogic(
-  checked: Set<string>
+    checked: Set<string>
 ): (a: AggregatedItem, b: AggregatedItem) => number {
   return (a, b) => {
     const statusOrder: Record<'bought' | 'owned' | 'ignored', number> = {bought: 2, owned: 1, ignored: 0};
