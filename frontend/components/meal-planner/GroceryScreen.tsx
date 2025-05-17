@@ -164,7 +164,7 @@ export function GroceryScreen() {
     >
       {/* Render each category section */}
       {sortedCategories.map(category => (
-        <div key={category} className="rounded-lg border border-gray-200 overflow-hidden mb-4">
+        <div key={category} className="rounded-lg border border-gray-200 overflow-hidden mb-1">
           {/* Category header - now clickable */}
           <div
             className="flex justify-between items-center p-2 bg-gray-200 cursor-pointer"
@@ -201,7 +201,7 @@ export function GroceryScreen() {
           {expandedCategories[category] && (
             <div>
               {/* Column headers - only visible when section is expanded */}
-              <div className="flex justify-end items-center p-2 bg-gray-100 border-b">
+              <div className="flex justify-end items-center px-3 bg-gray-200 border-t">
                 {/* Qty column header */}
                 <div className="w-16 text-right font-semibold text-sm text-gray-600">Qty</div>
                 {/* Each column header */}
