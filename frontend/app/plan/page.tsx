@@ -72,15 +72,13 @@ export default function MealPlannerPage() {
 return (
   <>
     {/* Fixed Header */}
-    <div className="fixed top-0 left-0 right-0 z-30 bg-white">
-      <Header />
-    </div>
+    <Header />
 
-    {/* Fixed tabs section - positioned right below the header */}
-    <div className="fixed top-13 left-0 right-0 bg-white z-20 shadow-sm">
+    {/* Sticky tabs section - positioned right below the header */}
+    <div className="sticky top-14 left-0 right-0 bg-white z-20 shadow-sm">
       <div className="container mx-auto p-1">
         {/* --- 4‑step selector --- */}
-        <div className="relative mx-auto mt-2 mb-1 w-full max-w-md h-12">
+        <div className="relative mx-auto mt-0 mb-1 w-full max-w-md h-12">
           <div className="absolute inset-0 bg-teal-100 rounded-full"/>
           <div className="absolute inset-0 flex">
             {tabs.map((tab) => (
@@ -109,8 +107,7 @@ return (
       </div>
     </div>
 
-    {/* Invisible spacer div that matches the height of fixed elements */}
-    <div className="h-32"></div>
+
 
     {/* Content section without the extra padding-top since we have the spacer */}
     <div className="container mx-auto p-1 min-h-screen">
