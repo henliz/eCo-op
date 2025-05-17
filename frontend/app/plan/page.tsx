@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { motion } from 'framer-motion';
 
 import Header from '@/components/layout/Header';
@@ -24,9 +24,10 @@ const tabs: { label: string; value: View }[] = [
 const instructions: Record<View, string> = {
   store: 'Please select a store to continue.',
   plan: 'Select your recipes for the week.',
-  groceries: 'Review your shopping list. Check off items as you go.',
+  groceries: 'Review your shopping list. Check off items as you go. Items with pink background are pantry staples: Check if you have these before buying. Recipes only need a small portion.',
   cook: 'Click on a recipe to see the cooking instructions.',
 };
+
 
 export default function MealPlannerPage() {
   const [view, setView] = useState<View>('store');

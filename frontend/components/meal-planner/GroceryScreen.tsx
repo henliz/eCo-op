@@ -38,7 +38,7 @@ export function GroceryScreen() {
     if (item.tags?.status === 'ignored') return acc;
 
     // Get the category from the item, or use "Other" if not defined
-    const category = item.category || "Other";
+    const category = item.category || "other";
 
     if (!acc[category]) {
       acc[category] = [];
@@ -56,8 +56,8 @@ export function GroceryScreen() {
   // Get sorted category keys with "Other" at the end
   const sortedCategories = Object.keys(categorizedItems).sort((a, b) => {
     // Always put "Other" at the end
-    if (a === "Other") return 1;
-    if (b === "Other") return -1;
+    if (a === "other") return 1;
+    if (b === "other") return -1;
     // Otherwise sort alphabetically
     return a.localeCompare(b);
   });
@@ -221,31 +221,6 @@ export function GroceryScreen() {
           )}
         </div>
       ))}
-
-      {/* Pantry staples explanation */}
-      <div className="max-w-md mx-auto mb-0.5 rounded-lg bg-orange-50 shadow-sm px-4 relative my-2"
-        style={{height: "45px"}}>
-        <p className="text-sm text-gray-700 italic m-0 absolute left-0 right-0 text-center flex items-center justify-center mx-1"
-          style={{top: "50%", transform: "translateY(-50%)"}}>
-          <svg
-            xmlns="http://www.w3.org/2000/svg"
-            width="26"
-            height="26"
-            viewBox="0 0 24 24"
-            fill="none"
-            stroke="currentColor"
-            strokeWidth="2"
-            strokeLinecap="round"
-            strokeLinejoin="round"
-            className="mx-2 text-amber-500"
-          >
-            <path d="M15 14c.2-1 .7-1.7 1.5-2.5 1-.9 1.5-2.2 1.5-3.5A6 6 0 0 0 6 8c0 1 .2 2.2 1.5 3.5.7.7 1.3 1.5 1.5 2.5"></path>
-            <path d="M9 18h6"></path>
-            <path d="M10 22h4"></path>
-          </svg>
-          Items with pink background are pantry staples: Check if you have these before buying. Recipes only need a small portion.
-        </p>
-      </div>
 
       {/* Bottom summary bar with enhanced totals */}
       <div className="fixed bottom-0 left-0 right-0 bg-gray-200 border-t py-2 px-3 shadow-lg pb-4">
