@@ -6,6 +6,7 @@ import { motion } from 'framer-motion';
 import Header from '@/components/layout/Header';
 import Footer from '@/components/layout/Footer';
 import StoreSelector from '@/components/meal-planner/StoreSelector';
+import { HouseholdSizeSelector } from '@/components/meal-planner/HouseholdSizeSelector';
 import { MealPlanScreen } from '@/components/meal-planner/MealPlanScreen';
 import { GroceryScreen } from '@/components/meal-planner/GroceryScreen';
 import { CookScreen } from '@/components/meal-planner/CookScreen';
@@ -22,7 +23,7 @@ const tabs: { label: string; value: View }[] = [
 
 // Contextual helper text for each step
 const instructions: Record<View, string> = {
-  store: 'Please select a store to continue.',
+  store: 'Please select a store and set your household size to continue.',
   plan: 'Select your recipes for the week.',
   groceries: 'Review your shopping list. Check off items as you go. Items with pink background are pantry staples: Check if you have these before buying. Recipes only need a small portion.',
   cook: 'Click on a recipe to see the cooking instructions.',
@@ -142,15 +143,20 @@ return (
       </div>
 
       {/* --- Content panels --- */}
-      {view === 'store' && <StoreSelector shouldNavigateToPlan={shouldNavigateToPlan}/>}
-      {view === 'plan' && <MealPlanScreen/>}
-      {view === 'groceries' && <GroceryScreen/>}
-      {view === 'cook' && <CookScreen/>}
+      {view === 'store' && (
+        <>
+          <HouseholdSizeSelector />
+          <StoreSelector shouldNavigateToPlan={shouldNavigateToPlan} />
+        </>
+      )}
+      {view === 'plan' && <MealPlanScreen />}
+      {view === 'groceries' && <GroceryScreen />}
+      {view === 'cook' && <CookScreen />}
     </div>
 
     {/* Footer with lower z-index than the summary bar */}
     <div className="relative z-0">
-      <Footer/>
+      <Footer />
     </div>
   </>
 ); // Closing parenthesis for return statement
