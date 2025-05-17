@@ -99,7 +99,7 @@ export function MealCard({
           {/* Deals - show only if more than $1 */}
           {hasSavings && (
             <p className={`text-xs sm:text-sm text-green-600 font-bold !mb-0 max-w-[45px] text-right ${recipe.img ? "px-1 bg-white/80 rounded mt-1" : "mt-1"}`}>
-              Deals: ${recipe.totalSavings.toFixed(2)}
+              Deals ${recipe.totalSavings.toFixed(2)}
             </p>
           )}
         </div>
