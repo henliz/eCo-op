@@ -3,6 +3,7 @@
 import React, { useState } from 'react';
 import { usePlannerStore, type AggregatedItem, type IngredientTags } from './usePlannerStore';
 import { GroceryItem } from './GroceryItem';
+import { GroceryListPrintable } from './GroceryListPrintable'; // Add this import at the top
 
 /* -------------------------------- types -------------------------------- */
 interface GroceryTotals {
@@ -163,6 +164,15 @@ export function GroceryScreen() {
       className="container mx-0 p-0 !px-0"
       style={{scrollPaddingTop: '80px', scrollPaddingBottom: '200px'}}
     >
+      {/* ADD THE PRINT BUTTON HERE - before the category sections */}
+      <div className="flex justify-end px-2 py-3 print:hidden">
+        <GroceryListPrintable
+          groceryItems={groceryItems}
+          groceryCheckedItems={groceryCheckedItems}
+          groceryTotals={groceryTotals}
+        />
+      </div>
+
       {/* Render each category section */}
       {sortedCategories.map(category => (
         <div key={category} className="rounded-lg border border-gray-200 overflow-hidden mb-1">
