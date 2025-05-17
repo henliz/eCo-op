@@ -24,7 +24,7 @@ export interface IngredientTags {
   storeSection?: string;
 }
 
-interface Ingredient {
+export interface Ingredient {
   recipeIngredientName: string;
   saleUnitSize?: number;
   saleUnitType?: string;
@@ -32,13 +32,14 @@ interface Ingredient {
   saleFractionUsed?: number;
   regularPrice: number;
   regularFractionUsed?: number;
-  type?: 'core' | 'optional' | 'garnish' | 'to taste'; // Add this line
+  type?: 'core' | 'optional' | 'garnish' | 'to taste';
   source: 'flyer' | 'database' | 'skipped';
   sourceDate?: string;
   productName?: string;
   packageId?: string;
   savingsPercentage?: number;
   tags?: IngredientTags;
+  category?: string; // Add category property
 }
 
 export interface Recipe {
@@ -74,6 +75,7 @@ export interface AggregatedItem {
   isChecked: boolean;
   savingsPercentage?: number;
   tags?: IngredientTags;
+  category?: string; // Add category property
 }
 
 
@@ -492,6 +494,7 @@ export const usePlannerStore = create<PlannerState>((set, get) => ({
             packsToBuy: 0,
             isChecked: state.groceryCheckedItems.has(packageId),
             savingsPercentage: ing.savingsPercentage,
+            category: ing.category,
             tags
           });
         }
