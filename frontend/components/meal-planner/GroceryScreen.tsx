@@ -35,7 +35,8 @@ export function GroceryScreen() {
 
   // Group items by category
   const categorizedItems = groceryItems.reduce((acc, item) => {
-    if (item.tags?.status === 'ignored') return acc;
+    // Skip ignored items and items with "free" source
+    if (item.tags?.status === 'ignored' || item.source === 'free') return acc;
 
     // Get the category from the item, or use "Other" if not defined
     const category = item.category || "other";
@@ -201,7 +202,7 @@ export function GroceryScreen() {
           {expandedCategories[category] && (
             <div>
               {/* Column headers - only visible when section is expanded */}
-              <div className="flex justify-end items-center px-3 bg-gray-200 border-t">
+              <div className="flex justify-end items-center p-2 bg-gray-200 border-t">
                 {/* Qty column header */}
                 <div className="w-16 text-right font-semibold text-sm text-gray-600">Qty</div>
                 {/* Each column header */}

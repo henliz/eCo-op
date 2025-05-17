@@ -33,7 +33,7 @@ export interface Ingredient {
   regularPrice: number;
   regularFractionUsed?: number;
   type?: 'core' | 'optional' | 'garnish' | 'to taste';
-  source: 'flyer' | 'database' | 'skipped';
+  source: 'flyer' | 'database' | 'skipped' | 'free';
   sourceDate?: string;
   productName?: string;
   packageId?: string;
@@ -69,7 +69,7 @@ export interface AggregatedItem {
   unitType: string;
   packPrice: number;
   productName: string;
-  source: 'flyer' | 'database' | 'skipped';
+  source: 'flyer' | 'database' | 'skipped' | 'free';
   lineCost: number;
   packsToBuy: number;
   isChecked: boolean;
