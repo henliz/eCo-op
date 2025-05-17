@@ -68,9 +68,14 @@ export function GroceryListPrintable({
       <!DOCTYPE html>
       <html>
         <head>
-          <title>skrimp.ai grocery list</title>
+          <title>skrimp.ai Grocery List</title>
           <meta charset="utf-8">
           <meta name="viewport" content="width=device-width, initial-scale=1">
+          <!-- Hide browser URL/about:blank from headers and footers -->
+          <meta name="format-detection" content="telephone=no">
+          <meta name="format-detection" content="date=no">
+          <meta name="format-detection" content="address=no">
+          <meta name="format-detection" content="email=no">
           <style>
             /* Reset and base styles */
             * {
@@ -128,7 +133,7 @@ export function GroceryListPrintable({
             .items-container {
               column-count: 3;
               column-gap: 10px;
-              column-fill: auto; /* Don't balance - fill columns sequentially */
+              column-fill: auto; /* Fill columns sequentially - important for first page content */
               margin-top: 5px; /* Small space after header */
               orphans: 3; /* Min number of lines at top of column */
               widows: 3; /* Min number of lines at bottom of column */
@@ -137,8 +142,9 @@ export function GroceryListPrintable({
             /* Category styles */
             .category {
               margin-bottom: 10px;
-              page-break-inside: auto; /* Allow breaking across columns/pages if needed */
-              display: block; /* For better flow control */
+              page-break-inside: auto; /* Allow breaking across columns/pages - important! */
+              break-inside: auto; /* Allow breaking across columns/pages - this is key */
+              display: block; /* Better flow control */
               width: 100%;
             }
             
@@ -169,6 +175,8 @@ export function GroceryListPrintable({
               border-bottom: 1px solid #eee;
               display: flex;
               align-items: flex-start;
+              break-inside: avoid; /* Don't break in the middle of an item */
+              page-break-inside: avoid; /* For older browsers */
             }
             
             .item:last-child {
@@ -259,7 +267,7 @@ export function GroceryListPrintable({
               border-top: 1px solid #000;
               font-size: 8pt;
               color: #555;
-              column-span: all; /* Make footer info span all columns */
+              column-span: all; /* Make footer span all columns */
             }
             
             /* Print optimization */
@@ -283,28 +291,34 @@ export function GroceryListPrintable({
                 print-color-adjust: exact !important;
               }
               
-              /* Continued marker styles */
-              .continued-marker {
-                font-style: italic;
-                font-size: 8pt;
-                color: #666;
-                text-align: right;
-                padding: 2px 6px;
+              /* Hide browser-generated headers and footers */
+              @page {
+                size: auto;
+                margin: 0.5cm;
               }
               
-              /* Force categories to break between items if necessary */
-              .category {
-                break-inside: auto;
+              /* Mobile-specific print adjustments */
+              @media (max-width: 600px) {
+                /* Instead of changing column count, we'll adjust their properties */
+                .items-container {
+                  column-width: auto !important; /* Let the browser decide column width */
+                  column-count: 1 !important; /* Force single column on mobile print */
+                  width: 100% !important;
+                }
+                
+                /* Make text slightly larger for readability */
+                body {
+                  font-size: 10pt !important;
+                }
               }
-              
-              /* Allow items to flow across columns */
-              .items-wrapper {
-                break-inside: auto;
-              }
-              
-              /* Prevent breaks within individual items */
-              .item {
-                break-inside: avoid;
+            }
+            
+            /* Mobile view adjustments */
+            @media (max-width: 600px) {
+              /* Any mobile-specific styles for the browser view */
+              .checkbox {
+                width: 12px;
+                height: 12px;
               }
             }
           </style>
@@ -382,9 +396,12 @@ export function GroceryListPrintable({
             ${new Date().toLocaleDateString()} • Printed on ${new Date().toLocaleString()}
           </div>
           
-          <!-- Force immediate flow of content -->
+          <!-- Force immediate flow of content and set document title -->
           <script>
-            // Ensure content flows properly
+            // Set the document title to remove about:blank
+            document.title = "skrimp.ai grocery list";
+            
+            // Set a timeout to show print dialog after content has loaded
             document.addEventListener('DOMContentLoaded', function() {
               // Force reflow of the page
               document.body.offsetHeight;
@@ -402,6 +419,9 @@ export function GroceryListPrintable({
     // Write to the new window and trigger print
     printWindow.document.write(printContent);
     printWindow.document.close();
+
+    // Set the document title immediately after writing
+    printWindow.document.title = "skrimp.ai grocery list";
   };
 
   return (
