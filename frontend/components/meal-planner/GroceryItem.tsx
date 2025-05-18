@@ -47,8 +47,9 @@ export function GroceryItem({ item, onToggle, onUpdateTags }: GroceryItemProps) 
       // Case 1: Show discount percentage with downward arrow
       return (
         <span className="text-green-600 font-medium flex items-center whitespace-nowrap">
-          <strong>{item.savingsPercentage.toFixed(0)}%</strong>
           <ArrowDown size={16} className="ml-0.5" />
+          <strong>{item.savingsPercentage.toFixed(0)}%</strong>
+
         </span>
       );
     } else if (item.source === 'flyer') {
