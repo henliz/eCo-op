@@ -3,6 +3,7 @@
     {
       "name": "Healthy Apple Muffins",
       "url": "https://cookieandkate.com/healthy-apple-muffins-recipe/",
+      "img": "/Apple_Muffin.png",
       "salePrice": 8.301237263466145,
       "regularPrice": 8.301237263466145,
       "totalSavings": 0,
@@ -203,6 +204,7 @@
     {
       "name": "Scrambled Egg Muffin Cups",
       "url": "https://www.allrecipes.com/recipe/222586/scrambled-egg-muffins/",
+      "img": "/ScrambledEgg_MuffinCups.png",
       "salePrice": 9.257248629816637,
       "regularPrice": 9.257248629816637,
       "totalSavings": 0,
@@ -325,6 +327,7 @@
     {
       "name": "How to Make French Toast",
       "url": "https://feelgoodfoodie.net/wprm_print/how-to-make-french-toast",
+      "img": "/French_Toast.png",
       "salePrice": 2.7172798002307967,
       "regularPrice": 2.7172798002307967,
       "totalSavings": 0,
@@ -449,6 +452,7 @@
     {
       "name": "The Best Blueberry Muffins",
       "url": "https://www.foodnetwork.com/recipes/food-network-kitchen/the-best-blueberry-muffins-7265025",
+      "img": "/Blueberry_Muffin.png",
       "salePrice": 9.532628358649385,
       "regularPrice": 9.532628358649385,
       "totalSavings": 0,
