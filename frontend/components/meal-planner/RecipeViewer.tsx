@@ -176,6 +176,7 @@ export function RecipeViewer({
             </div>
           </div>
         )}
+
         <Button
           onClick={handleOpenNewTab}
           className="w-full bg-teal-600 hover:bg-teal-700 text-white flex items-center justify-center gap-2"
