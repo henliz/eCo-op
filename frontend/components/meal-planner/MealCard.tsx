@@ -113,11 +113,11 @@ export function MealCard({
           )}
         </div>
 
-        {/* Bottom: Recipe Name - slightly smaller font */}
+        {/* Bottom: Recipe Name - inline-block to make it fit content but still wrap if needed */}
         <div className="absolute bottom-2 left-2 right-2 z-10">
-          <div className={`text-xs sm:text-base font-semibold leading-snug break-words ${recipe.img ? "px-1 bg-white/80 rounded" : ""}`}>
+          <span className={`inline-block text-xs sm:text-base font-semibold leading-snug break-words ${recipe.img ? "px-1 bg-white/80 rounded" : ""}`}>
             {recipe.name}
-          </div>
+          </span>
         </div>
       </Card>
     </motion.div>
