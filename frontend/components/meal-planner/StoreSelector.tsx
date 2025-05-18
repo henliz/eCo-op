@@ -78,6 +78,7 @@ export default function StoreSelector({ shouldNavigateToPlan }: StoreSelectorPro
             </div>
           </div>
 
+
           {/* Store buttons */}
           <div className="w-2/3">
             {isLoading && !isStoresLoaded ? (
