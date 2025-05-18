@@ -107,9 +107,9 @@ export default function StoreSelector({ shouldNavigateToPlan }: StoreSelectorPro
                         ${!store.isAvailable ? 'opacity-70 cursor-not-allowed' : ''}
                       `}
                     >
-                      <span className="text-lg">{store.name}</span>
-                      <span className="text-sm">{store.location}</span>
-                      <span className="text-xs mt-1">
+                      <span className="text-lg w-full text-left">{store.name}</span>
+                      <span className="text-sm w-full text-left">{store.location}</span>
+                      <span className="text-xs mt-1 w-full text-left">
                         {store.isAvailable
                           ? `Deals expire ${format(store.validUntil, 'MMM d, yyyy')}`
                           : `Deals ended ${format(store.validUntil, 'MMM d, yyyy')}`}
