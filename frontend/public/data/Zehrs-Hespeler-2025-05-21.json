@@ -189,7 +189,8 @@
           "savingsPercentage": 0,
           "type": "optional"
         }
-      ]
+      ],
+      "img": "/French_Toast.png"
     },
     {
       "name": "Avocado Toast with Egg",
@@ -297,7 +298,8 @@
           "savingsPercentage": 0,
           "type": "optional"
         }
-      ]
+      ],
+      "img": "AvoToast_Egg.png"
     },
     {
       "name": "French Toast Casserole",
@@ -435,7 +437,8 @@
           "type": "optional",
           "category": "pantry"
         }
-      ]
+      ],
+      "img": "/French_Toast_Casserole.png"
     },
     {
       "name": "Easy Overnight Oats",
@@ -740,7 +743,8 @@
           "type": "optional",
           "category": "spices"
         }
-      ]
+      ],
+      "img": "/Overnight_Oats.png"
     },
     {
       "name": "Delicious Egg Salad",
@@ -1024,7 +1028,8 @@
           "type": "optional",
           "category": "produce"
         }
-      ]
+      ],
+      "img": "/Strawberry_Pancakes.png"
     },
     {
       "name": "Breakfast Egg Fried Rice",
@@ -1128,7 +1133,8 @@
           "type": "to taste",
           "category": "spices"
         }
-      ]
+      ],
+      "img": "/Breakfast_Egg_Fried_Rice.png"
     },
     {
       "name": "Veggie Omelet",
@@ -1263,7 +1269,7 @@
           "salePrice": 0,
           "regularPrice": 0,
           "source": "free",
-          "sourceDate": "2025-05-17",
+          "sourceDate": "2025-05-18",
           "savingsPercentage": 0,
           "type": "core",
           "category": "beverages"
@@ -1292,7 +1298,8 @@
           "type": "garnish",
           "category": "produce"
         }
-      ]
+      ],
+      "img": "/Veggie_Omelet.png"
     },
     {
       "name": "Sweet Potato Breakfast Hash With Eggs",
@@ -1444,7 +1451,8 @@
           "savingsPercentage": 0,
           "type": "optional"
         }
-      ]
+      ],
+      "img": "/Sweet_Potato_Hash.png"
     }
   ],
   "lunch": [
@@ -1556,7 +1564,8 @@
           "type": "to taste",
           "category": "spices"
         }
-      ]
+      ],
+      "img": "/Cucumber_Tomato_Salad.png"
     },
     {
       "name": "Easy Greek Pasta Salad",
@@ -1762,7 +1771,8 @@
           "type": "to taste",
           "category": "spices"
         }
-      ]
+      ],
+      "img": "/Greek_Pasta_Salad.png"
     },
     {
       "name": "Couscous Salad",
@@ -1777,7 +1787,7 @@
           "salePrice": 0,
           "regularPrice": 0,
           "source": "free",
-          "sourceDate": "2025-05-17",
+          "sourceDate": "2025-05-18",
           "savingsPercentage": 0,
           "type": "core",
           "category": "beverages"
@@ -2036,7 +2046,8 @@
           "type": "core",
           "category": "spices"
         }
-      ]
+      ],
+      "img": "/Couscous_Salad.png"
     },
     {
       "name": "Roasted Vegetable Quinoa Bowl",
@@ -2081,7 +2092,7 @@
           "salePrice": 0,
           "regularPrice": 0,
           "source": "free",
-          "sourceDate": "2025-05-17",
+          "sourceDate": "2025-05-18",
           "savingsPercentage": 0,
           "type": "core",
           "category": "beverages"
@@ -2459,7 +2470,8 @@
           "type": "to taste",
           "category": "spices"
         }
-      ]
+      ],
+      "img": "/Mediterranean_Pasta_Salad.png"
     },
     {
       "name": "Best Lentil Soup",
@@ -2624,7 +2636,7 @@
           "salePrice": 0,
           "regularPrice": 0,
           "source": "free",
-          "sourceDate": "2025-05-17",
+          "sourceDate": "2025-05-18",
           "savingsPercentage": 0,
           "type": "core",
           "category": "beverages"
@@ -2686,7 +2698,8 @@
           "type": "to taste",
           "category": "beverages"
         }
-      ]
+      ],
+      "img": "/Lentil_Soup.png"
     },
     {
       "name": "Avocado Sweet Potato Tacos",
@@ -2905,7 +2918,8 @@
           "type": "optional",
           "category": "produce"
         }
-      ]
+      ],
+      "img": "/Avocado_SweetPotato_Tacos"
     },
     {
       "name": "Broccoli Cheddar Soup",
@@ -3103,7 +3117,8 @@
           "savingsPercentage": 0,
           "type": "optional"
         }
-      ]
+      ],
+      "img": "/Broccoli_Cheddar_Soup.png"
     },
     {
       "name": "Cucumber Turkey Sub Sandwich",
@@ -3227,7 +3242,8 @@
           "type": "to taste",
           "category": "spices"
         }
-      ]
+      ],
+      "img": "Cucumber_Turkey_Sub.png"
     },
     {
       "name": "Easy Steak Sandwich",
@@ -3668,7 +3684,8 @@
           "type": "core",
           "category": "spices"
         }
-      ]
+      ],
+      "img": "/Pork_Tenderloin.png"
     },
     {
       "name": "Tuna Pasta",
@@ -3808,7 +3825,8 @@
           "type": "garnish",
           "category": "dairy"
         }
-      ]
+      ],
+      "img": "/Tuna_Pasta.png"
     },
     {
       "name": "Baked Chicken Wings",
@@ -3932,7 +3950,8 @@
           "type": "garnish",
           "category": "produce"
         }
-      ]
+      ],
+      "img": "/Baked_ChickenWings.png"
     },
     {
       "name": "The Best Baked Salmon",
@@ -4246,7 +4265,8 @@
           "type": "core",
           "category": "spices"
         }
-      ]
+      ],
+      "img": "/Baked_LemonGarlic_Salmon.png"
     },
     {
       "name": "Baked Honey Mustard Chicken",
@@ -4975,12 +4995,13 @@
           "salePrice": 0,
           "regularPrice": 0,
           "source": "free",
-          "sourceDate": "2025-05-17",
+          "sourceDate": "2025-05-18",
           "savingsPercentage": 0,
           "type": "core",
           "category": "beverages"
         }
-      ]
+      ],
+      "img": "/SlowCooker_BeefRoast.png"
     }
   ]
 }
