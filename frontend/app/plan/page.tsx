@@ -15,16 +15,16 @@ import { usePlannerStore } from '@/components/meal-planner/usePlannerStore';
 type View = 'store' | 'plan' | 'groceries' | 'cook';
 
 const tabs: { label: string; value: View }[] = [
-  { label: '1. Store', value: 'store' },
-  { label: '2. Plan', value: 'plan' },
-  { label: '3. Shop', value: 'groceries' },
-  { label: '4. Cook', value: 'cook' },
+  { label: '1-Store', value: 'store' },
+  { label: '2-Plan', value: 'plan' },
+  { label: '3-Shop', value: 'groceries' },
+  { label: '4-Cook', value: 'cook' },
 ];
 
 // Contextual helper text for each step
 const instructions: Record<View, string> = {
   store: 'Please select a store and set your household size to continue.',
-  plan: 'Select recipes by clicking on them. Deals tally flyer items where $ savings are quantified.',
+  plan: 'Select recipes by clicking on them. Deals tally flyer items where $ savings are advertised.',
   groceries: 'Items with pink background are pantry staples: Check if you have these before buying. Recipes only need a small portion.',
   cook: 'Click on a recipe to see the cooking instructions.',
 };
@@ -75,7 +75,7 @@ return (
     <Header />
 
     {/* Sticky tabs section - positioned right below the header */}
-    <div className="sticky top-14 left-0 right-0 bg-white z-20 shadow-sm">
+    <div className="sticky top-14 left-0 right-0 z-20">
       <div className="container mx-auto p-1">
         {/* --- 4‑step selector --- */}
         <div className="relative mx-auto mt-0 mb-1 w-full max-w-md h-12">
