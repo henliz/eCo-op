@@ -28,6 +28,12 @@ export function MealCard({
   const hasSavings = recipe.totalSavings > 1.0;
   const hasFlyerItems = recipe.flyerItemsCount > 0;
 
+  // Prevent the card toggle when clicking on the gear icon area
+  const handleGearAreaClick = (e: React.MouseEvent) => {
+    e.stopPropagation();
+    console.log("Prevented click on gear region from bubbling to card");
+  };
+
   return (
     <motion.div
       key={recipe.url}
@@ -59,7 +65,10 @@ export function MealCard({
         )}
 
         {/* Top left: Gear icon and Serves */}
-        <div className="absolute top-2 left-2 z-10">
+        <div
+          className="absolute top-2 left-2 z-10"
+          onClick={handleGearAreaClick}
+        >
           {recipe.url && (
             <RecipeViewer
               title={recipe.name}
@@ -70,7 +79,6 @@ export function MealCard({
               trigger={
                 <div
                   className={`flex items-start cursor-pointer ${recipe.img ? "px-1 bg-white/80 rounded" : ""}`}
-                  onClick={(e) => e.stopPropagation()}
                 >
                   <Settings size={14} className="text-gray-500 mr-1 mt-0.5" />
                   <p className="text-xs sm:text-sm text-gray-700 !mb-0">
@@ -113,11 +121,11 @@ export function MealCard({
           )}
         </div>
 
-        {/* Bottom: Recipe Name - slightly smaller font */}
+        {/* Bottom: Recipe Name - inline-block to make it fit content but still wrap if needed */}
         <div className="absolute bottom-2 left-2 right-2 z-10">
-          <div className={`text-xs sm:text-base font-semibold leading-snug break-words ${recipe.img ? "px-1 bg-white/80 rounded" : ""}`}>
+          <span className={`inline-block text-xs sm:text-base font-semibold leading-snug break-words ${recipe.img ? "px-1 bg-white/80 rounded" : ""}`}>
             {recipe.name}
-          </div>
+          </span>
         </div>
       </Card>
     </motion.div>

@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useState } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import {
   Dialog,
   DialogContent,
@@ -30,6 +30,35 @@ export function RecipeViewer({
   onMultiplierChange
 }: RecipeViewerProps) {
   const [isOpen, setIsOpen] = useState(false);
+  // Local multiplier state that is only used while the dialog is open
+  const [localMultiplier, setLocalMultiplier] = useState(multiplier);
+
+  // Keep track of the initial multiplier value when opening
+  const initialMultiplier = useRef(multiplier);
+
+  // Update local multiplier when the dialog opens
+  useEffect(() => {
+    if (isOpen) {
+      setLocalMultiplier(multiplier);
+      initialMultiplier.current = multiplier;
+    }
+  }, [isOpen, multiplier]);
+
+  // Log for debugging
+  console.log(`RecipeViewer ${url}: isSelected=${isSelected}, multiplier=${multiplier}, localMultiplier=${localMultiplier}`);
+
+  // When dialog closes, save the final value back to Zustand
+  const handleOpenChange = (open: boolean) => {
+    if (isOpen && !open && onMultiplierChange) {
+      console.log(`Dialog closing: Updating multiplier from ${multiplier} to ${localMultiplier}`);
+
+      // Make sure we're not accidentally setting it to 0
+      if (localMultiplier > 0 || initialMultiplier.current !== localMultiplier) {
+        onMultiplierChange(localMultiplier);
+      }
+    }
+    setIsOpen(open);
+  };
 
   const handleOpenNewTab = (e: React.MouseEvent) => {
     e.stopPropagation();
@@ -37,22 +66,32 @@ export function RecipeViewer({
   };
 
   const decreaseMultiplier = (e: React.MouseEvent) => {
+    e.preventDefault();
     e.stopPropagation();
-    if (onMultiplierChange) {
-      onMultiplierChange(Math.max(0, multiplier - 0.5));
-    }
+    const newValue = Math.max(0, localMultiplier - 0.5);
+    console.log(`Decreasing multiplier to ${newValue}`);
+    setLocalMultiplier(newValue);
   };
 
   const increaseMultiplier = (e: React.MouseEvent) => {
+    e.preventDefault();
     e.stopPropagation();
-    if (onMultiplierChange) {
-      onMultiplierChange(multiplier + 0.5);
-    }
+    const newValue = localMultiplier + 0.5;
+    console.log(`Increasing multiplier to ${newValue}`);
+    setLocalMultiplier(newValue);
   };
 
+  // Force selection state when dialog is open and multiplier > 0
+  useEffect(() => {
+    if (isOpen && localMultiplier > 0 && onMultiplierChange && !isSelected) {
+      console.log(`Force selection: Recipe ${url} has multiplier ${localMultiplier} but is not selected`);
+      onMultiplierChange(localMultiplier);
+    }
+  }, [isOpen, localMultiplier, isSelected, url, onMultiplierChange]);
+
   return (
-    <Dialog open={isOpen} onOpenChange={setIsOpen}>
-      <DialogTrigger asChild onClick={(e) => e.stopPropagation()}>
+    <Dialog open={isOpen} onOpenChange={handleOpenChange}>
+      <DialogTrigger asChild>
         {trigger || (
           <Button
             variant="ghost"
@@ -71,7 +110,7 @@ export function RecipeViewer({
             <Button
               variant="ghost"
               size="icon"
-              onClick={() => setIsOpen(false)}
+              onClick={() => handleOpenChange(false)}
             >
               <X size={18} />
             </Button>
@@ -81,32 +120,32 @@ export function RecipeViewer({
           </DialogDescription>
         </DialogHeader>
 
-        {/* Add multiplier controls if recipe is selected */}
-        {isSelected && onMultiplierChange && (
-          <div className="flex flex-col items-center mb-4">
-            <div className="text-sm text-gray-600 mb-2">Recipe Multiplier:</div>
-            <div className="flex items-center">
-              <button
-                onClick={decreaseMultiplier}
-                className="bg-gray-200 hover:bg-gray-400 w-12 h-10 flex items-center justify-center rounded-l"
-              >
-                <Minus size={20}/>
-              </button>
-              <div
-                className="w-16 h-10 flex items-center justify-center font-bold text-lg"
-                style={{backgroundColor: '#FFE6D9'}}
-              >
-                x{multiplier.toFixed(1).replace('.0', '')}
-              </div>
-              <button
-                onClick={increaseMultiplier}
-                className="bg-gray-200 hover:bg-gray-400 w-12 h-10 flex items-center justify-center rounded-r"
-              >
-                <Plus size={20}/>
-              </button>
+        {/* Add multiplier controls - no longer checking isSelected */}
+        <div className="flex flex-col items-center mb-4">
+          <div className="text-sm text-gray-600 mb-2">Recipe Multiplier:</div>
+          <div className="flex items-center">
+            <button
+              onClick={decreaseMultiplier}
+              className="bg-gray-200 hover:bg-gray-400 w-12 h-10 flex items-center justify-center rounded-l"
+              type="button"
+            >
+              <Minus size={20}/>
+            </button>
+            <div
+              className="w-16 h-10 flex items-center justify-center font-bold text-lg"
+              style={{backgroundColor: '#FFE6D9'}}
+            >
+              x{localMultiplier.toFixed(1).replace('.0', '')}
             </div>
+            <button
+              onClick={increaseMultiplier}
+              className="bg-gray-200 hover:bg-gray-400 w-12 h-10 flex items-center justify-center rounded-r"
+              type="button"
+            >
+              <Plus size={20}/>
+            </button>
           </div>
-        )}
+        </div>
 
         <div className="bg-amber-50 p-4 rounded-md flex flex-col gap-3">
           <div className="flex items-start gap-2 text-amber-700">
