@@ -666,6 +666,7 @@
     {
       "name": "Golden Sweet Cornbread",
       "url": "https://www.allrecipes.com/recipe/17891/golden-sweet-cornbread/",
+      "img": "/Sweet_Cornbread.png",
       "salePrice": 2.8898813179835523,
       "regularPrice": 2.8898813179835523,
       "totalSavings": 0,
@@ -4369,6 +4370,7 @@
     {
       "name": "Roast Chicken & Vegetables",
       "url": "https://www.spendwithpennies.com/roast-chicken-vegetables/",
+      "img": "/Chicken_Vegetables.png",
       "salePrice": 16.148745900223037,
       "regularPrice": 16.29726098022304,
       "totalSavings": 0.1485150800000028,

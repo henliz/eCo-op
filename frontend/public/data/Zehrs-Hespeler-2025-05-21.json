@@ -2052,6 +2052,7 @@
     {
       "name": "Roasted Vegetable Quinoa Bowl",
       "url": "https://feelgoodfoodie.net/wprm_print/roasted-vegetable-quinoa-bowl",
+      "img": "/Roasted_Veg_Quinoa_Bowl.png",
       "salePrice": 5.839406402301038,
       "regularPrice": 5.839406402301038,
       "totalSavings": 0,
@@ -2919,7 +2920,7 @@
           "category": "produce"
         }
       ],
-      "img": "/Avocado_SweetPotato_Tacos"
+      "img": "/Avocado_SweetPotato_Tacos.png"
     },
     {
       "name": "Broccoli Cheddar Soup",
@@ -3956,6 +3957,7 @@
     {
       "name": "The Best Baked Salmon",
       "url": "https://www.foodnetwork.com/recipes/food-network-kitchen/the-best-baked-salmon-1-8081733",
+      "img": "/Baked_Salmon.png",
       "salePrice": 17.277658091181173,
       "regularPrice": 21.298801753153008,
       "totalSavings": 4.021143661971834,

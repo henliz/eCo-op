@@ -424,6 +424,7 @@
     {
       "name": "Golden Sweet Cornbread",
       "url": "https://www.allrecipes.com/recipe/17891/golden-sweet-cornbread/",
+      "img": "/Sweet_Cornbread.png",
       "salePrice": 2.513698607396343,
       "regularPrice": 2.513698607396343,
       "totalSavings": 0,
@@ -3795,7 +3796,7 @@
           "category": "produce"
         }
       ],
-      "img": "/Banders_and_Mash.png"
+      "img": "/Bangers_and_Mash.png"
     },
     {
       "name": "Ginger Shrimp Stir-Fry",
@@ -4181,6 +4182,7 @@
     {
       "name": "Chicken Fried Steak",
       "url": "https://www.foodnetwork.com/recipes/food-network-kitchen/the-best-chicken-fried-steak-7423168",
+      "img": "/Chicken_Fried_Steak.png",
       "salePrice": 17.908538799945283,
       "regularPrice": 17.908538799945283,
       "totalSavings": 0,
