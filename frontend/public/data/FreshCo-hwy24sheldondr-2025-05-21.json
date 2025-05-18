@@ -368,6 +368,7 @@
     {
       "name": "Golden Sweet Cornbread",
       "url": "https://www.allrecipes.com/recipe/17891/golden-sweet-cornbread/",
+      "img": "/Sweet_CornBread.png",
       "salePrice": 2.597415073797506,
       "regularPrice": 2.597415073797506,
       "totalSavings": 0,
@@ -4527,6 +4528,7 @@
     {
       "name": "Chicken Fried Steak",
       "url": "https://www.foodnetwork.com/recipes/food-network-kitchen/the-best-chicken-fried-steak-7423168",
+      "img": "/Chicken_Fried_Steak.png",
       "salePrice": 21.674310923597503,
       "regularPrice": 21.674310923597503,
       "totalSavings": 0,
