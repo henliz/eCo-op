@@ -22,7 +22,7 @@ export function GroceryScreen() {
     setIngredientTags,
   } = usePlannerStore();
 
-  // State to track expanded categories
+  // State to track expanded categories - initialize as empty object
   const [expandedCategories, setExpandedCategories] = useState<Record<string, boolean>>({});
 
   const groceryItems = Array.from(aggregatedIngredients().values());
@@ -68,9 +68,9 @@ export function GroceryScreen() {
   React.useEffect(() => {
     const initialExpandedState: Record<string, boolean> = {};
     sortedCategories.forEach(category => {
-      // If category state doesn't exist yet, set it to expanded by default
+      // If category state doesn't exist yet, set it to closed by default
       if (expandedCategories[category] === undefined) {
-        initialExpandedState[category] = true;
+        initialExpandedState[category] = false;
       }
     });
 
@@ -164,15 +164,6 @@ export function GroceryScreen() {
       className="container mx-0 p-0 !px-0"
       style={{scrollPaddingTop: '80px', scrollPaddingBottom: '200px'}}
     >
-      {/* ADD THE PRINT BUTTON HERE - before the category sections */}
-      <div className="flex justify-end px-2 py-3 print:hidden">
-        <GroceryListPrintable
-          groceryItems={groceryItems}
-          groceryCheckedItems={groceryCheckedItems}
-          groceryTotals={groceryTotals}
-        />
-      </div>
-
       {/* Render each category section */}
       {sortedCategories.map(category => (
         <div key={category} className="rounded-lg border border-gray-200 overflow-hidden mb-1">
@@ -232,6 +223,17 @@ export function GroceryScreen() {
           )}
         </div>
       ))}
+
+      {/* Print button - sticky section above the totals bar */}
+      <div className="sticky bottom-16 left-0 right-0 w-full py-5 z-30 print:hidden">
+        <div className="flex justify-end px-0">
+          <GroceryListPrintable
+            groceryItems={groceryItems}
+            groceryCheckedItems={groceryCheckedItems}
+            groceryTotals={groceryTotals}
+          />
+        </div>
+      </div>
 
       {/* Bottom summary bar with enhanced totals */}
       <div

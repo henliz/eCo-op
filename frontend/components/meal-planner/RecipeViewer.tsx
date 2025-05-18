@@ -10,7 +10,7 @@ import {
   DialogDescription,
 } from '@/components/ui/dialog';
 import { Button } from '@/components/ui/button';
-import { ExternalLink, AlertCircle, Plus, Minus, X } from 'lucide-react';
+import { ExternalLink, Plus, Minus, X } from 'lucide-react';
 
 interface RecipeViewerProps {
   title: string;
