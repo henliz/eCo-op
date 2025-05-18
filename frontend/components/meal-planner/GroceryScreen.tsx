@@ -225,7 +225,7 @@ export function GroceryScreen() {
       ))}
 
       {/* Print button - sticky section above the totals bar */}
-      <div className="sticky bottom-16 left-0 right-0 w-full py-5 z-30 print:hidden">
+      <div className="sticky bottom-14 left-0 right-0 w-full py-5 z-30 print:hidden">
         <div className="flex justify-end px-0">
           <GroceryListPrintable
             groceryItems={groceryItems}
@@ -246,22 +246,22 @@ export function GroceryScreen() {
 
           {/* Enhanced stats row with 4 metrics - ledger style */}
           <div className="flex justify-center items-center">
-            <div className="grid grid-cols-4 gap-4 w-full max-w-2xl">
-              <div className="flex flex-col items-end">
-                <span className="text-sm text-gray-600 text-right">Meal Cost</span>
-                <span className="font-bold text-right">${groceryTotals.mealCost.toFixed(2)}</span>
+            <div className="grid grid-cols-4 w-full max-w-2xl">
+              <div className="flex flex-col items-center text-center mx-2">
+                <span className="text-sm text-gray-600">Deals</span>
+                <span className="font-bold text-green-600">${groceryTotals.totalSavings.toFixed(2)}</span>
               </div>
-              <div className="flex flex-col items-end">
-                <span className="text-sm text-gray-600 text-right">Future Use</span>
-                <span className="font-bold text-amber-600 text-right">${groceryTotals.futureUseCost.toFixed(2)}</span>
+              <div className="flex flex-col items-center text-center mx-2">
+                <span className="text-sm text-gray-600">Bill</span>
+                <span className="font-bold">${groceryTotals.groceryBill.toFixed(2)}</span>
               </div>
-              <div className="flex flex-col items-end">
-                <span className="text-sm text-gray-600 text-right">Grocery Bill</span>
-                <span className="font-bold text-right">${groceryTotals.groceryBill.toFixed(2)}</span>
+              <div className="flex flex-col items-center text-center mx-2">
+                <span className="text-sm text-gray-600">Recipes</span>
+                <span className="font-bold">${groceryTotals.mealCost.toFixed(2)}</span>
               </div>
-              <div className="flex flex-col items-end">
-                <span className="text-sm text-gray-600 text-right">Deals</span>
-                <span className="font-bold text-green-600 text-right">${groceryTotals.totalSavings.toFixed(2)}</span>
+              <div className="flex flex-col items-center text-center mx-2">
+                <span className="text-sm text-gray-600">Leftovers</span>
+                <span className="font-bold text-amber-600">${groceryTotals.futureUseCost.toFixed(2)}</span>
               </div>
             </div>
           </div>

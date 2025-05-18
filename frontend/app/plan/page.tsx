@@ -75,7 +75,7 @@ return (
     <Header />
 
     {/* Sticky tabs section - positioned right below the header */}
-    <div className="sticky top-14 left-0 right-0 bg-white z-20 shadow-sm">
+    <div className="sticky top-14 left-0 right-0 z-20">
       <div className="container mx-auto p-1">
         {/* --- 4‑step selector --- */}
         <div className="relative mx-auto mt-0 mb-1 w-full max-w-md h-12">
