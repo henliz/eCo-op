@@ -80,17 +80,19 @@ export function GroceryScreen() {
   }, [sortedCategories, expandedCategories]);
 
   /* ------------------------------ totals ----------------------------------- */
-  // Calculate the new grocery totals with corrected math
+  // Update the calculateGroceryTotals function in GroceryScreen.tsx to only consider 'in_cart' items
+
   const calculateGroceryTotals = (): GroceryTotals => {
     let mealCost = 0;
     let futureUseCost = 0;
     let groceryBill = 0;
     let totalSavings = 0;
 
-    // Only consider items that are checked and not owned
+    // Only consider items that are explicitly marked as 'in_cart'
+    // OR checked but not having a specific status
     const selectedItems = groceryItems.filter(item =>
-      groceryCheckedItems.has(item.packageId) &&
-      item.tags?.status !== 'owned'
+      (item.tags?.status === 'in_cart') ||
+      (groceryCheckedItems.has(item.packageId) && !item.tags?.status)
     );
 
     selectedItems.forEach(item => {
@@ -142,7 +144,6 @@ export function GroceryScreen() {
       >
         <GroceryItem
           item={item}
-          isChecked={groceryCheckedItems.has(item.packageId)}
           onToggle={toggleGroceryItem}
           onUpdateTags={handleUpdateTags}
         />
@@ -193,20 +194,30 @@ export function GroceryScreen() {
               </svg>
               <span className="text-lg font-bold">{category}</span>
             </div>
-            {/* Right-aligned item count - UPDATED to show checked items */}
+            {/* Right-aligned item count - UPDATED to show properly "checked" items */}
             <span className="text-sm text-gray-600">
-              ({categorizedItems[category].filter(item => groceryCheckedItems.has(item.packageId) || item.tags?.status === 'owned').length} of {categorizedItems[category].length})
+              ({
+                          // Count items that are marked as in_cart
+                          categorizedItems[category].filter(item =>
+                              item.tags?.status === 'in_cart' || (groceryCheckedItems.has(item.packageId) && !item.tags?.status)
+                          ).length
+                        } of {
+                          // Total count excluding items marked as 'owned' or 'ignored'
+                          categorizedItems[category].filter(item =>
+                              item.tags?.status !== 'owned' && item.tags?.status !== 'ignored'
+                          ).length
+                        })
             </span>
           </div>
 
           {/* Category items - conditionally rendered based on expanded state */}
           {expandedCategories[category] && (
-            <div>
-              {/* Column headers - only visible when section is expanded */}
-              <div className="flex justify-end items-center p-2 bg-gray-200 border-t">
-                {/* Qty column header */}
-                <div className="w-16 text-right font-semibold text-sm text-gray-600">Qty</div>
-                {/* Each column header */}
+              <div>
+                {/* Column headers - only visible when section is expanded */}
+                <div className="flex justify-end items-center p-2 bg-gray-200 border-t">
+                  {/* Qty column header */}
+                  <div className="w-16 text-right font-semibold text-sm text-gray-600">Qty</div>
+                  {/* Each column header */}
                 <div className="w-20 text-right font-semibold text-sm text-gray-600">Each</div>
                 {/* Total column header */}
                 <div className="w-20 text-right font-semibold text-sm text-gray-600">Total</div>
@@ -272,13 +283,22 @@ export function GroceryScreen() {
 }
 
 /* ----------------------------- helpers ---------------------------------- */
+// Update the sortLogic function to account for the new 'in_cart' status
 function sortLogic(
-    checked: Set<string>
+  checked: Set<string>
 ): (a: AggregatedItem, b: AggregatedItem) => number {
   return (a, b) => {
-    const statusOrder: Record<'bought' | 'owned' | 'ignored', number> = {bought: 2, owned: 1, ignored: 0};
+    // Give priority in this order: in_cart, owned, bought, ignored
+    const statusOrder: Record<'in_cart' | 'owned' | 'bought' | 'ignored', number> = {
+      in_cart: 3,
+      owned: 2,
+      bought: 1,
+      ignored: 0
+    };
+
     const aStatus = a.tags?.status || 'bought';
     const bStatus = b.tags?.status || 'bought';
+
     if (aStatus !== bStatus) return statusOrder[aStatus] - statusOrder[bStatus];
 
     const aChecked = checked.has(a.packageId);

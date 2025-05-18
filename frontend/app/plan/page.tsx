@@ -15,10 +15,10 @@ import { usePlannerStore } from '@/components/meal-planner/usePlannerStore';
 type View = 'store' | 'plan' | 'groceries' | 'cook';
 
 const tabs: { label: string; value: View }[] = [
-  { label: '1. Store', value: 'store' },
-  { label: '2. Plan', value: 'plan' },
-  { label: '3. Shop', value: 'groceries' },
-  { label: '4. Cook', value: 'cook' },
+  { label: '1-Store', value: 'store' },
+  { label: '2-Plan', value: 'plan' },
+  { label: '3-Shop', value: 'groceries' },
+  { label: '4-Cook', value: 'cook' },
 ];
 
 // Contextual helper text for each step
