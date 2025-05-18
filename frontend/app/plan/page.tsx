@@ -24,7 +24,7 @@ const tabs: { label: string; value: View }[] = [
 // Contextual helper text for each step
 const instructions: Record<View, string> = {
   store: 'Please select a store and set your household size to continue.',
-  plan: 'Select recipes by clicking on them. Deals tally flyer items where $ savings are quantified.',
+  plan: 'Select recipes by clicking on them. Deals tally flyer items where $ savings are advertised.',
   groceries: 'Items with pink background are pantry staples: Check if you have these before buying. Recipes only need a small portion.',
   cook: 'Click on a recipe to see the cooking instructions.',
 };
