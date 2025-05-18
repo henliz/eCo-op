@@ -302,9 +302,9 @@ function sortLogic(
   return (a, b) => {
     // Updated priority order: in_cart, bought, owned, ignored
     const statusOrder: Record<'in_cart' | 'owned' | 'bought' | 'ignored', number> = {
-      in_cart: 3,
-      bought: 2,
-      owned: 1,
+      in_cart: 2,
+      bought: 1,
+      owned: 3,
       ignored: 0
     };
 
