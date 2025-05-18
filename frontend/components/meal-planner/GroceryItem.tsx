@@ -2,7 +2,7 @@
 
 import React from 'react';
 import { type AggregatedItem, type IngredientTags } from './usePlannerStore';
-import { Tag, Home, ShoppingCart } from 'lucide-react';
+import { Tag, Home, ShoppingCart, ArrowDown } from 'lucide-react';
 
 interface GroceryItemProps {
   item: AggregatedItem;
@@ -13,7 +13,6 @@ interface GroceryItemProps {
 export function GroceryItem({ item, onToggle, onUpdateTags }: GroceryItemProps) {
   // Calculate the correct usage percentage based on how much of the purchased quantity is used
   const quantityToBuy = Math.ceil(Math.max(0.001, item.neededFraction - 0.05));
-  const usagePercentage = ((item.neededFraction / quantityToBuy) * 100).toFixed(0);
 
   const status = item.tags?.status || 'bought';
   const storeSection = item.tags?.storeSection;
@@ -58,24 +57,25 @@ export function GroceryItem({ item, onToggle, onUpdateTags }: GroceryItemProps) 
   // Helper function to determine price source display
   const getPriceSourceDisplay = () => {
     if (item.savingsPercentage && item.savingsPercentage > 0) {
-      // Case 1: Show discount percentage when available
+      // Case 1: Show discount percentage with downward arrow
       return (
-        <span className="text-green-600 font-medium text-center text-xs">
-          <strong>{item.savingsPercentage.toFixed(0)}% off</strong>
+        <span className="text-green-600 font-medium flex items-center whitespace-nowrap">
+          <strong>{item.savingsPercentage.toFixed(0)}%</strong>
+          <ArrowDown size={16} className="ml-0.5" />
         </span>
       );
     } else if (item.source === 'flyer') {
       // Case 2: Show "flyer item" when source is flyer but no discount
       return (
-        <span className="text-blue-600 font-medium text-center text-xs">
+        <span className="text-blue-600 font-medium whitespace-nowrap">
           <strong>flyer</strong>
         </span>
       );
     } else if (item.source === 'database') {
       // Case 3: Show "price est" for database/estimated prices
       return (
-        <span className="text-gray-500 font-medium text-center text-xs">
-          est
+        <span className="text-gray-500 font-medium whitespace-nowrap">
+          estimate
         </span>
       );
     }
@@ -86,75 +86,56 @@ export function GroceryItem({ item, onToggle, onUpdateTags }: GroceryItemProps) 
 
   return (
     <div
-      className={`cursor-pointer border-b last:border-0 px-4 pt-3 pb-3 ${getStatusStyle()}`}
+      className={`px-4 py-0 ${getStatusStyle()}`}
       onClick={() => onToggle(item.packageId)}
     >
-      {/* Top section with product name, discount and action buttons */}
-      <div className="flex items-center mb-1">
-        <div className="flex-1 mr-2">
-          <span className="text-base font-semibold">
-            {item.productName}
-            <span className="text-sm text-gray-500 font-normal ml-1">
-              ({item.unitSize}{item.unitType})
-            </span>
-          </span>
-        </div>
+      {/* Top row - Product information with consistent text styling */}
+      <div className="flex flex-wrap justify-between items-center mb-0 mt-1">
+        {/* Left side - Product name and unit */}
+        <div className="text-base flex flex-wrap items-center">
+          <span className="font-semibold mr-1">{item.productName}</span>
 
-        {/* Right aligned elements */}
-        <div className="flex items-center gap-2">
+          {/* Section tag if available */}
           {storeSection && (
-            <span className="text-xs bg-gray-100 py-0.5 px-1.5 rounded text-gray-600 flex items-center gap-0.5">
-              <Tag size={12} />
+            <span className="ml-2 bg-gray-100 py-0.5 px-1.5 rounded text-gray-600 inline-flex items-center whitespace-nowrap">
+              <Tag size={12} className="mr-1" />
               {storeSection}
             </span>
           )}
-
-          {/* Price source indicator (discount %, flyer, or est) */}
-          {getPriceSourceDisplay()}
-
-          {/* Status action buttons */}
-          <button
-            onClick={handleHomeClick}
-            className={`w-8 h-8 flex items-center justify-center rounded-full 
-            ${status === 'owned' ? 'bg-blue-200 text-blue-600' : 'bg-gray-100 text-gray-500 hover:bg-gray-200'}`}
-          >
-            <Home size={16} />
-          </button>
-
-          <button
-            onClick={handleCartClick}
-            className={`w-8 h-8 flex items-center justify-center rounded-full 
-            ${status === 'in_cart' ? 'bg-green-200 text-green-600' : 'bg-gray-100 text-gray-500 hover:bg-gray-200'}`}
-          >
-            <ShoppingCart size={16} />
-          </button>
         </div>
+
+        {/* Right side - Flyer/savings indicator */}
+        {getPriceSourceDisplay() && (
+          <div className="ml-auto mt-1 md:mt-0">
+            {getPriceSourceDisplay()}
+          </div>
+        )}
       </div>
 
-      {/* Lower section with usage and price info - all same font/color */}
-      <div className="flex items-center justify-between text-sm text-gray-700">
-        {/* Usage percentage */}
-        <div className="flex-1">
-          <span className="text-sm font-normal">{usagePercentage}% used in recipes</span>
+      {/* Bottom row - Icons and centered pricing */}
+      <div className="flex items-center">
+        {/* Left side - Home icon */}
+        <button
+          onClick={handleHomeClick}
+          className={`w-10 h-10 flex items-center justify-center rounded-full
+          ${status === 'owned' ? 'bg-blue-200 text-blue-600' : 'bg-gray-100 text-gray-500 hover:bg-gray-200'}`}
+        >
+          <Home size={20} />
+        </button>
+
+        {/* Middle - Centered pricing information */}
+        <div className="flex-1 text-sm text-gray-700 text-center mx-2">
+          <span className="whitespace-nowrap">{quantityToBuy} × {item.unitSize} {item.unitType} @ ${item.packPrice.toFixed(2)} = <span className="font-bold">${(quantityToBuy * item.packPrice).toFixed(2)}</span></span>
         </div>
 
-        {/* Right-aligned numeric data with consistent width */}
-        <div className="flex items-center">
-          {/* Quantity */}
-          <div className="w-16 text-right font-medium">
-            {quantityToBuy}×
-          </div>
-
-          {/* Each price */}
-          <div className="w-20 text-right">
-            ${item.packPrice.toFixed(2)}
-          </div>
-
-          {/* Total price */}
-          <div className="w-20 text-right font-medium">
-            ${(quantityToBuy * item.packPrice).toFixed(2)}
-          </div>
-        </div>
+        {/* Right side - Shopping Cart icon */}
+        <button
+          onClick={handleCartClick}
+          className={`w-10 h-10 flex items-center justify-center rounded-full
+          ${status === 'in_cart' ? 'bg-green-200 text-green-600' : 'bg-gray-100 text-gray-500 hover:bg-gray-200'}`}
+        >
+          <ShoppingCart size={20} />
+        </button>
       </div>
     </div>
   );

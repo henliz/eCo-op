@@ -136,11 +136,12 @@ export function GroceryScreen() {
     setIngredientTags(packageId, tags);
 
   const renderItems = (items: AggregatedItem[]) => {
-    return items.map(item => (
+    return items.map((item, index) => (
       <div
         key={item.packageId}
-        // Add background color for pantry staples
-        className={!isEssentialItem(item) ? "bg-[#FDE2E7]" : ""}
+        // Add background color for pantry staples and add border between items
+        className={`${!isEssentialItem(item) ? "bg-[#FDE2E7]" : ""} 
+                   ${index !== 0 ? "border-t border-gray-300" : ""}`}
       >
         <GroceryItem
           item={item}
@@ -170,7 +171,7 @@ export function GroceryScreen() {
         <div key={category} className="rounded-lg border border-gray-200 overflow-hidden mb-1">
           {/* Category header - now clickable */}
           <div
-            className="flex justify-between items-center p-2 bg-gray-200 cursor-pointer"
+            className="flex justify-between items-center px-2 py-1 bg-gray-200 cursor-pointer"
             onClick={() => toggleCategory(category)}
           >
             <div className="flex items-center">
@@ -211,17 +212,10 @@ export function GroceryScreen() {
           </div>
 
           {/* Category items - conditionally rendered based on expanded state */}
+          {/* Category items - conditionally rendered based on expanded state */}
           {expandedCategories[category] && (
-              <div>
-                {/* Column headers - only visible when section is expanded */}
-                <div className="flex justify-end items-center p-2 bg-gray-200 border-t">
-                  {/* Qty column header */}
-                  <div className="w-16 text-right font-semibold text-sm text-gray-600">Qty</div>
-                  {/* Each column header */}
-                <div className="w-20 text-right font-semibold text-sm text-gray-600">Each</div>
-                {/* Total column header */}
-                <div className="w-20 text-right font-semibold text-sm text-gray-600">Total</div>
-              </div>
+            <div>
+              {/* Column headers removed */}
 
               {categorizedItems[category].length ? (
                 renderItems(categorizedItems[category])
@@ -288,11 +282,11 @@ function sortLogic(
   checked: Set<string>
 ): (a: AggregatedItem, b: AggregatedItem) => number {
   return (a, b) => {
-    // Give priority in this order: in_cart, owned, bought, ignored
+    // Updated priority order: in_cart, bought, owned, ignored
     const statusOrder: Record<'in_cart' | 'owned' | 'bought' | 'ignored', number> = {
       in_cart: 3,
-      owned: 2,
-      bought: 1,
+      bought: 2,
+      owned: 1,
       ignored: 0
     };
 
