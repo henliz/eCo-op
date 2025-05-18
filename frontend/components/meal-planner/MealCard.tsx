@@ -69,10 +69,10 @@ export function MealCard({
               onMultiplierChange={(newMultiplier) => onMultiplierChange(recipe.url, newMultiplier)}
               trigger={
                 <div
-                  className={`flex items-center cursor-pointer ${recipe.img ? "px-1 bg-white/80 rounded" : ""}`}
+                  className={`flex items-start cursor-pointer ${recipe.img ? "px-1 bg-white/80 rounded" : ""}`}
                   onClick={(e) => e.stopPropagation()}
                 >
-                  <Settings size={14} className="text-gray-500 mr-1" />
+                  <Settings size={14} className="text-gray-500 mr-1 mt-0.5" />
                   <p className="text-xs sm:text-sm text-gray-700 !mb-0">
                     Serves: {recipe.servings}
                   </p>
@@ -81,6 +81,15 @@ export function MealCard({
             />
           )}
         </div>
+
+        {/* Multiplier display - separate text block, only show if selected and multiplier != 1 */}
+        {isSelected && multiplier !== 1 && (
+          <div className="absolute top-7 left-2 z-10">
+            <p className={`text-xs sm:text-sm font-bold text-red-600 !mb-0 pt-0 ${recipe.img ? "px-1 bg-white/80 rounded" : ""}`}>
+              x{multiplier.toFixed(1).replace('.0', '')}
+            </p>
+          </div>
+        )}
 
         {/* Top right: Cost, Flyer Items, and Deals */}
         <div className="absolute top-2 right-2 z-10 flex flex-col items-end">
