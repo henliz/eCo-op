@@ -193,9 +193,9 @@ export function GroceryScreen() {
               </svg>
               <span className="text-lg font-bold">{category}</span>
             </div>
-            {/* Right-aligned item count in round brackets */}
+            {/* Right-aligned item count - UPDATED to show checked items */}
             <span className="text-sm text-gray-600">
-              ({categorizedItems[category].filter(item => !groceryCheckedItems.has(item.packageId) && item.tags?.status !== 'owned').length} of {categorizedItems[category].length})
+              ({categorizedItems[category].filter(item => groceryCheckedItems.has(item.packageId) || item.tags?.status === 'owned').length} of {categorizedItems[category].length})
             </span>
           </div>
 
