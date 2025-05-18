@@ -31,8 +31,12 @@ export function MealCard({
   // Prevent the card toggle when clicking on the gear icon area
   const handleGearAreaClick = (e: React.MouseEvent) => {
     e.stopPropagation();
-    console.log("Prevented click on gear region from bubbling to card");
   };
+
+  // Extract ingredient names from the recipe
+  const ingredientNames = recipe.ingredients
+    ? recipe.ingredients.map(ing => ing.recipeIngredientName)
+    : [];
 
   return (
     <motion.div
@@ -76,6 +80,7 @@ export function MealCard({
               isSelected={isSelected}
               multiplier={multiplier}
               onMultiplierChange={(newMultiplier) => onMultiplierChange(recipe.url, newMultiplier)}
+              ingredients={ingredientNames} // Pass the ingredient names here
               trigger={
                 <div
                   className={`flex items-start cursor-pointer ${recipe.img ? "px-1 bg-white/80 rounded" : ""}`}

@@ -10,7 +10,7 @@ import {
   DialogDescription,
 } from '@/components/ui/dialog';
 import { Button } from '@/components/ui/button';
-import { ExternalLink, X, AlertCircle, Plus, Minus } from 'lucide-react';
+import { ExternalLink, AlertCircle, Plus, Minus, X } from 'lucide-react';
 
 interface RecipeViewerProps {
   title: string;
@@ -19,6 +19,7 @@ interface RecipeViewerProps {
   isSelected?: boolean;
   multiplier?: number;
   onMultiplierChange?: (multiplier: number) => void;
+  ingredients?: string[]; // New prop for ingredients list
 }
 
 export function RecipeViewer({
@@ -27,7 +28,8 @@ export function RecipeViewer({
   trigger,
   isSelected = false,
   multiplier = 1,
-  onMultiplierChange
+  onMultiplierChange,
+  ingredients = [] // Default to empty array
 }: RecipeViewerProps) {
   const [isOpen, setIsOpen] = useState(false);
   // Local multiplier state that is only used while the dialog is open
@@ -44,14 +46,9 @@ export function RecipeViewer({
     }
   }, [isOpen, multiplier]);
 
-  // Log for debugging
-  console.log(`RecipeViewer ${url}: isSelected=${isSelected}, multiplier=${multiplier}, localMultiplier=${localMultiplier}`);
-
   // When dialog closes, save the final value back to Zustand
   const handleOpenChange = (open: boolean) => {
     if (isOpen && !open && onMultiplierChange) {
-      console.log(`Dialog closing: Updating multiplier from ${multiplier} to ${localMultiplier}`);
-
       // Make sure we're not accidentally setting it to 0
       if (localMultiplier > 0 || initialMultiplier.current !== localMultiplier) {
         onMultiplierChange(localMultiplier);
@@ -69,7 +66,6 @@ export function RecipeViewer({
     e.preventDefault();
     e.stopPropagation();
     const newValue = Math.max(0, localMultiplier - 0.5);
-    console.log(`Decreasing multiplier to ${newValue}`);
     setLocalMultiplier(newValue);
   };
 
@@ -77,17 +73,20 @@ export function RecipeViewer({
     e.preventDefault();
     e.stopPropagation();
     const newValue = localMultiplier + 0.5;
-    console.log(`Increasing multiplier to ${newValue}`);
     setLocalMultiplier(newValue);
   };
 
   // Force selection state when dialog is open and multiplier > 0
   useEffect(() => {
     if (isOpen && localMultiplier > 0 && onMultiplierChange && !isSelected) {
-      console.log(`Force selection: Recipe ${url} has multiplier ${localMultiplier} but is not selected`);
       onMultiplierChange(localMultiplier);
     }
   }, [isOpen, localMultiplier, isSelected, url, onMultiplierChange]);
+
+  // Split ingredients into two columns
+  const halfLength = Math.ceil(ingredients.length / 2);
+  const leftColumnIngredients = ingredients.slice(0, halfLength);
+  const rightColumnIngredients = ingredients.slice(halfLength);
 
   return (
     <Dialog open={isOpen} onOpenChange={handleOpenChange}>
@@ -103,24 +102,27 @@ export function RecipeViewer({
           </Button>
         )}
       </DialogTrigger>
-      <DialogContent className="sm:max-w-[600px]">
-        <DialogHeader className="flex flex-col gap-2">
+      <DialogContent className="sm:max-w-[600px] max-h-[80vh] overflow-y-auto">
+        {/* Sticky close button - always visible */}
+        <Button
+          variant="ghost"
+          size="icon"
+          onClick={() => handleOpenChange(false)}
+          className="absolute top-2 right-2 z-50 bg-white rounded-full shadow-md hover:bg-gray-100"
+        >
+          <X size={18} />
+        </Button>
+
+        <DialogHeader className="flex flex-col gap-2 pt-2 pr-10">
           <div className="flex flex-row items-center justify-between">
             <DialogTitle>{title}</DialogTitle>
-            <Button
-              variant="ghost"
-              size="icon"
-              onClick={() => handleOpenChange(false)}
-            >
-              <X size={18} />
-            </Button>
           </div>
           <DialogDescription className="text-sm break-all">
             <span className="font-medium">Recipe URL:</span> {url}
           </DialogDescription>
         </DialogHeader>
 
-        {/* Add multiplier controls - no longer checking isSelected */}
+        {/* Multiplier controls */}
         <div className="flex flex-col items-center mb-4">
           <div className="text-sm text-gray-600 mb-2">Recipe Multiplier:</div>
           <div className="flex items-center">
@@ -147,6 +149,34 @@ export function RecipeViewer({
           </div>
         </div>
 
+        {/* Ingredients List Section - 2 columns */}
+        {ingredients.length > 0 && (
+          <div className="mb-4">
+            <h3 className="font-medium text-gray-700 mb-2">Ingredients:</h3>
+            <div className="flex flex-row gap-4">
+              {/* Left column */}
+              <div className="flex-1">
+                <ul className="list-disc pl-5 space-y-1">
+                  {leftColumnIngredients.map((ingredient, index) => (
+                    <li key={index} className="text-sm text-gray-600">{ingredient}</li>
+                  ))}
+                </ul>
+              </div>
+
+              {/* Right column - only show if there are ingredients for it */}
+              {rightColumnIngredients.length > 0 && (
+                <div className="flex-1">
+                  <ul className="list-disc pl-5 space-y-1">
+                    {rightColumnIngredients.map((ingredient, index) => (
+                      <li key={index + halfLength} className="text-sm text-gray-600">{ingredient}</li>
+                    ))}
+                  </ul>
+                </div>
+              )}
+            </div>
+          </div>
+        )}
+
         <div className="bg-amber-50 p-4 rounded-md flex flex-col gap-3">
           <div className="flex items-start gap-2 text-amber-700">
             <AlertCircle size={20} className="mt-0.5 flex-shrink-0" />
@@ -167,5 +197,4 @@ export function RecipeViewer({
     </Dialog>
   );
 }
-
 
