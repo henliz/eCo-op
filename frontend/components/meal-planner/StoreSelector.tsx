@@ -60,33 +60,29 @@ export default function StoreSelector({ shouldNavigateToPlan }: StoreSelectorPro
         <div className="flex flex-row md:flex-col md:flex-row items-start gap-5 py-4">
           {/* Robot image */}
           <div className="w-1/3 text-center flex-shrink-0">
-            <Image
-              src="/Robo_Chef.png"
-              alt="Friendly chef robot"
-              width={190}
-              height={190}
-              className="mx-auto"
-            />
             {/* Show count of available stores */}
+
+            <Image
+                src="/Robo_Chef.png"
+                alt="Friendly chef robot"
+                width={190}
+                height={190}
+                className="mx-auto"
+            />
             <div className="mt-4 text-center">
               {isStoresLoaded && (
-                <p className="text-gray-700 font-medium">
-                  {availableStores.filter(s => s.isAvailable).length} stores available
-                </p>
+                  <p className="text-gray-700 font-medium">
+                    {availableStores.filter(s => s.isAvailable).length} stores available
+                  </p>
               )}
-              <p className="mt-2 text-gray-600">
-                {isStoresLoaded ?
-                  "Select a store to see deals and plan meals" :
-                  "Checking for stores with current deals..."}
-              </p>
             </div>
           </div>
 
           {/* Store buttons */}
           <div className="w-2/3">
             {isLoading && !isStoresLoaded ? (
-              <div className="flex justify-center mt-6">
-                <div className="animate-spin rounded-full h-8 w-8 border-t-2 border-b-2 border-blue-600"></div>
+                <div className="flex justify-center mt-6">
+                  <div className="animate-spin rounded-full h-8 w-8 border-t-2 border-b-2 border-blue-600"></div>
                 <p className="ml-3 text-gray-600">Discovering available stores...</p>
               </div>
             ) : (

@@ -16,7 +16,7 @@ import LoadingScreen from '@/components/meal-planner/LoadingScreen';
 type View = 'store' | 'plan' | 'groceries' | 'cook' | 'loading'; // Add loading as a view type
 
 const tabs: { label: string; value: View }[] = [
-  { label: '1-Store', value: 'store' },
+  { label: '1-Set', value: 'store' },
   { label: '2-Plan', value: 'plan' },
   { label: '3-Shop', value: 'groceries' },
   { label: '4-Cook', value: 'cook' },
