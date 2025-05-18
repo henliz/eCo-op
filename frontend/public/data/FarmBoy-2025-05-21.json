@@ -58,6 +58,7 @@
     {
       "name": "Avocado Toast with Egg",
       "url": "https://feelgoodfoodie.net/wprm_print/avocado-toast-with-egg",
+      "img": "/AvoToast_Egg.png",
       "salePrice": 1.3537647032575657,
       "regularPrice": 1.414564703257566,
       "totalSavings": 0.06080000000000019,
@@ -160,6 +161,7 @@
     {
       "name": "Easy Overnight Oats",
       "url": "https://feelgoodfoodie.net/wprm_print/easy-overnight-oats",
+      "img": "/Overnight_Oats.png",
       "salePrice": 1.558815707203742,
       "regularPrice": 1.6584490405370755,
       "totalSavings": 0.09963333333333346,
@@ -446,6 +448,7 @@
     {
       "name": "Veggie Omelet",
       "url": "https://feelgoodfoodie.net/wprm_print/veggie-omelet",
+      "img": "/Veggie_Omelet.png",
       "salePrice": 2.762938389555969,
       "regularPrice": 2.9042182407753776,
       "totalSavings": 0.14127985121940867,
@@ -599,6 +602,7 @@
     {
       "name": "How to Make French Toast",
       "url": "https://feelgoodfoodie.net/wprm_print/how-to-make-french-toast",
+      "img": "/French_Toast.png",
       "salePrice": 3.8378106189807966,
       "regularPrice": 4.221810618980797,
       "totalSavings": 0.38400000000000034,
@@ -814,6 +818,7 @@
     {
       "name": "Sweet Potato Breakfast Hash With Eggs",
       "url": "https://feelgoodfoodie.net/wprm_print/sweet-potato-breakfast-hash-with-eggs",
+      "img": "/Sweet_Potato_Hash.png",
       "salePrice": 5.41478657118334,
       "regularPrice": 5.41478657118334,
       "totalSavings": 0,
@@ -958,6 +963,7 @@
     {
       "name": "Scrambled Egg Muffin Cups",
       "url": "https://www.allrecipes.com/recipe/222586/scrambled-egg-muffins/",
+      "img": "/ScrambledEgg_MuffinCups.png",
       "salePrice": 9.198701603782666,
       "regularPrice": 10.441821643782669,
       "totalSavings": 1.2431200400000026,
@@ -1080,6 +1086,7 @@
     {
       "name": "Strawberry Parfait",
       "url": "https://feelgoodfoodie.net/wprm_print/strawberry-parfait",
+      "img": "/Strawberry_Parfait.png",
       "salePrice": 10.751332837683133,
       "regularPrice": 11.149866171016468,
       "totalSavings": 0.39853333333333474,
@@ -1174,6 +1181,7 @@
     {
       "name": "Breakfast Burritos",
       "url": "https://feelgoodfoodie.net/wprm_print/breakfast-burritos",
+      "img": "/Breakfast_Burrito.png",
       "salePrice": 12.305678870825265,
       "regularPrice": 13.718178870825263,
       "totalSavings": 1.4124999999999979,
@@ -1362,6 +1370,7 @@
     {
       "name": "Cucumber Tomato Salad",
       "url": "https://www.spendwithpennies.com/cucumber-tomato-salad/",
+      "img": "/Cucumber_Tomato_Salad.png",
       "salePrice": 3.536993015747485,
       "regularPrice": 3.536993015747485,
       "totalSavings": 0,
@@ -1466,6 +1475,7 @@
     {
       "name": "Couscous Salad",
       "url": "https://www.jessicagavin.com/mediterranean-couscous-salad/",
+      "img": "/Couscous_Salad.png",
       "salePrice": 6.038763966262276,
       "regularPrice": 6.093540245902159,
       "totalSavings": 0.054776279639883185,
@@ -1723,6 +1733,7 @@
     {
       "name": "Mediterranean Pasta Salad",
       "url": "https://feelgoodfoodie.net/wprm_print/mediterranean-pasta-salad",
+      "img": "/Mediterranean_Pasta_Salad.png",
       "salePrice": 6.7869933307654575,
       "regularPrice": 7.00440509547134,
       "totalSavings": 0.21741176470588286,
@@ -1931,6 +1942,7 @@
     {
       "name": "Easy Greek Pasta Salad",
       "url": "https://www.spendwithpennies.com/easy-greek-pasta-salad/",
+      "img": "/Greek_Pasta_Salad.png",
       "salePrice": 7.2809313095253145,
       "regularPrice": 8.105893074231195,
       "totalSavings": 0.8249617647058809,
@@ -2125,6 +2137,7 @@
     {
       "name": "Hummus Veggie Wrap",
       "url": "https://www.foodiecrush.com/hummus-veggie-wrap-plus-10-heavenly-hummus-recipes-to-make-at-home/",
+      "img": "/Hummus_Veggie_Wrap.png",
       "salePrice": 11.709760464303194,
       "regularPrice": 11.709760464303194,
       "totalSavings": 0,
@@ -2247,6 +2260,7 @@
     {
       "name": "Broccoli Cheddar Soup",
       "url": "https://www.loveandlemons.com/broccoli-cheddar-soup/",
+      "img": "/Broccoli_Cheddar_Soup.png",
       "salePrice": 11.455642590749793,
       "regularPrice": 13.723642590749794,
       "totalSavings": 2.2680000000000007,
@@ -2570,6 +2584,7 @@
     {
       "name": "Cucumber Turkey Sub Sandwich",
       "url": "https://www.eatingwell.com/recipe/261898/cucumber-turkey-sub-sandwich/",
+      "img": "/Cucumber_Turkey_Sub.png",
       "salePrice": 5.21367266863481,
       "regularPrice": 5.41367266863481,
       "totalSavings": 0.20000000000000018,
@@ -2833,6 +2848,7 @@
     {
       "name": "Avocado Chicken Salad",
       "url": "https://feelgoodfoodie.net/wprm_print/avocado-chicken-salad",
+      "img": "/Avocado_Chicken_Salad.png",
       "salePrice": 16.788606,
       "regularPrice": 16.920122000000003,
       "totalSavings": 0.1315160000000013,
@@ -2975,6 +2991,7 @@
     {
       "name": "Perfect Baked Potato",
       "url": "https://www.loveandlemons.com/baked-potato/",
+      "img": "/Baked_Potato_Bar.png",
       "salePrice": 1.715863133856038,
       "regularPrice": 1.715863133856038,
       "totalSavings": 0,
@@ -3027,6 +3044,7 @@
     {
       "name": "Garlic Mashed Potatoes",
       "url": "https://www.lecremedelacrumb.com/garlic-mashed-potatoes/",
+      "img": "/Garlic_Mash.png",
       "salePrice": 2.4050671643992123,
       "regularPrice": 2.4050671643992123,
       "totalSavings": 0,
@@ -3131,6 +3149,7 @@
     {
       "name": "Pork Tenderloin",
       "url": "https://www.lecremedelacrumb.com/best-baked-pork-tenderloin/",
+      "img": "/Pork_Tenderloin.png",
       "salePrice": 6.766252830944172,
       "regularPrice": 6.766252830944172,
       "totalSavings": 0,
@@ -3275,6 +3294,7 @@
     {
       "name": "Broccoli Rice Casserole",
       "url": "https://www.spendwithpennies.com/broccoli-rice-casserole-scratch/",
+      "img": "/Broccoli_Rice_Casserole.png",
       "salePrice": 8.04005661793398,
       "regularPrice": 9.73505661793398,
       "totalSavings": 1.6950000000000003,
@@ -3455,6 +3475,7 @@
     {
       "name": "Bangers & Mash (Sausage with Onion Gravy)",
       "url": "https://www.recipetineats.com/wprm_print/bangers-mash-sausage-with-onion-gravy",
+      "img": "/Bangers_and_Mash.png",
       "salePrice": 8.907231375701285,
       "regularPrice": 10.940431375701284,
       "totalSavings": 2.033199999999999,
@@ -3581,6 +3602,7 @@
     {
       "name": "Creamy Homemade Baked Mac and Cheese",
       "url": "https://www.thechunkychef.com/wprm_print/creamy-homemade-baked-mac-and-cheese",
+      "img": "/Baked_Mac_and_Cheese.png",
       "salePrice": 14.607793408444065,
       "regularPrice": 16.867793408444065,
       "totalSavings": 2.26,
@@ -3731,6 +3753,7 @@
     {
       "name": "Creamy Broccoli Mac and Cheese",
       "url": "https://damndelicious.net/2017/12/28/creamy-broccoli-mac-and-cheese/",
+      "img": "/Broccoli_Mac_and_Cheese.png",
       "salePrice": 14.180891803358499,
       "regularPrice": 16.961891803358498,
       "totalSavings": 2.780999999999999,
@@ -3980,6 +4003,7 @@
     {
       "name": "The Best Cheesy Potatoes",
       "url": "https://www.foodnetwork.com/recipes/food-network-kitchen/the-best-cheesy-potatoes-14182135",
+      "img": "/Cheesy_Potatoes.png",
       "salePrice": 20.01795603580157,
       "regularPrice": 24.553956035801573,
       "totalSavings": 4.536000000000001,
@@ -4158,6 +4182,7 @@
     {
       "name": "Baked Honey Mustard Chicken",
       "url": "https://www.allrecipes.com/recipe/8847/baked-honey-mustard-chicken/",
+      "img": "/Honey_Mustard_Chicken.png",
       "salePrice": 19.736314966691964,
       "regularPrice": 19.736314966691964,
       "totalSavings": 0,
@@ -4277,8 +4302,7 @@
           "savingsPercentage": 0,
           "type": "core"
         }
-      ],
-      "img": "/Honey_Mustard_Chicken.png"
+      ]
     }
   ]
 }
