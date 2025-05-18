@@ -252,7 +252,6 @@ export function GroceryScreen() {
         <div className="flex justify-end px-0">
           <GroceryListPrintable
             groceryItems={groceryItems}
-            groceryCheckedItems={groceryCheckedItems}
             groceryTotals={groceryTotals}
           />
         </div>

@@ -14,13 +14,14 @@ interface GroceryTotals {
 
 interface GroceryListPrintableProps {
   groceryItems: AggregatedItem[];
-  groceryCheckedItems: Set<string>;
+  // Commenting out this prop since we're not using it anymore
+  // groceryCheckedItems: Set<string>;
   groceryTotals: GroceryTotals;
 }
 
 export function GroceryListPrintable({
   groceryItems,
-  groceryCheckedItems,
+  // Remove the groceryCheckedItems parameter since we're not using it
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   groceryTotals // Need to keep this prop to avoid build errors, but it's not used in this component
 }: GroceryListPrintableProps) {
@@ -34,10 +35,9 @@ export function GroceryListPrintable({
       return;
     }
 
-    // Filter items using the same criteria as the main grocery screen
-    // Skip ignored items and items with "free" source
+    // Filter items - exclude 'owned' (home), 'ignored', and 'free' items
     const filteredItems = groceryItems.filter(item =>
-      !(item.tags?.status === 'ignored' || item.source === 'free')
+      !(item.tags?.status === 'owned' || item.tags?.status === 'ignored' || item.source === 'free')
     );
 
     if (filteredItems.length === 0) {
@@ -188,9 +188,9 @@ export function GroceryListPrintable({
               background-color: #FDE2E7;
             }
             
-            /* Checked item style */
-            .item-checked {
-              background-color: #f3f4f6;
+            /* In cart item style */
+            .item-in-cart {
+              background-color: #e6f7ef; /* Light green */
             }
             
             /* Checkbox */
@@ -237,26 +237,32 @@ export function GroceryListPrintable({
               font-size: 8pt;
             }
             
-            /* Status dots */
-            .status-icon {
+            /* Status icons */
+            .cart-icon {
               display: inline-block;
-              width: 6px;
-              height: 6px;
-              border-radius: 50%;
+              width: 8px;
+              height: 8px;
               margin-right: 3px;
               vertical-align: middle;
             }
             
-            .status-owned {
-              background-color: #3b82f6; /* blue */
+            .cart-icon {
+              color: #22c55e; /* green */
             }
             
-            .status-ignored {
-              background-color: #9ca3af; /* gray */
+            /* Source indicator */
+            .flyer-label {
+              color: #3b82f6; /* blue */
+              font-size: 8pt;
+              margin-left: 4px;
             }
             
-            .status-bought {
-              background-color: #22c55e; /* green */
+            /* Price source display */
+            .discount-label {
+              color: #22c55e; /* Green for discounts */
+              font-size: 7pt;
+              font-weight: bold;
+              margin-left: 3px;
             }
             
             /* Print info */
@@ -355,25 +361,34 @@ export function GroceryListPrintable({
           const unitPrice = item.packPrice.toFixed(2);
           const totalPrice = (quantityToBuy * item.packPrice).toFixed(2); // Calculate total price
           const storeSection = item.tags?.storeSection;
-          const isChecked = groceryCheckedItems.has(item.packageId);
           const status = item.tags?.status || 'bought';
+          const isInCart = status === 'in_cart';
 
           // Determine if item is an essential item or pantry staple
           const isEssentialItem = item.tags?.importance === 'core' || item.neededFraction * 100 >= 25;
           const pantryStapleClass = !isEssentialItem ? 'pantry-staple' : '';
 
-          // Get status icon class
-          const statusClass = `status-${status}`;
+          // Source and discount display
+          let sourceDisplay = '';
+          if (item.source === 'flyer') {
+            sourceDisplay = '<span class="flyer-label">flyer</span>';
+          }
+
+          // Discount label
+          let discountDisplay = '';
+          if (item.savingsPercentage && item.savingsPercentage > 0) {
+            discountDisplay = `<span class="discount-label">${item.savingsPercentage.toFixed(0)}%↓</span>`;
+          }
 
           printContent += `
-            <div class="item ${isChecked ? 'item-checked' : ''} ${pantryStapleClass}">
-              <div class="checkbox">${isChecked ? '✓' : ''}</div>
+            <div class="item ${isInCart ? 'item-in-cart' : ''} ${pantryStapleClass}">
+              <div class="checkbox">${isInCart ? '✓' : ''}</div>
               <div class="item-details">
                 <span class="item-name">
-                  <span class="status-icon ${statusClass}"></span>${item.productName}
+                  ${item.productName}${sourceDisplay}${discountDisplay}
                 </span>
                 <div class="item-meta">
-                  <span class="item-size">${item.unitSize}${item.unitType}${storeSection ? ` • ${storeSection}` : ''}</span>
+                  <span class="item-size">${item.unitSize} ${item.unitType}${storeSection ? ` • ${storeSection}` : ''}</span>
                   <span class="item-price">${quantityToBuy}× $${unitPrice} = $${totalPrice}</span>
                 </div>
               </div>
