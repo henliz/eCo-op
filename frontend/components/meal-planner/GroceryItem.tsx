@@ -41,19 +41,6 @@ export function GroceryItem({ item, onToggle, onUpdateTags }: GroceryItemProps) 
     }
   };
 
-  const getStatusStyle = () => {
-    switch (status) {
-      case 'owned':
-        return 'bg-blue-50 border-blue-200';
-      case 'in_cart':
-        return 'bg-green-50 border-green-200';
-      case 'ignored':
-        return 'bg-gray-50 border-gray-200 opacity-50';
-      default:
-        return '';
-    }
-  };
-
   // Helper function to determine price source display
   const getPriceSourceDisplay = () => {
     if (item.savingsPercentage && item.savingsPercentage > 0) {
@@ -86,7 +73,7 @@ export function GroceryItem({ item, onToggle, onUpdateTags }: GroceryItemProps) 
 
   return (
     <div
-      className={`px-4 py-0 ${getStatusStyle()}`}
+      className="px-4 py-0"
       onClick={() => onToggle(item.packageId)}
     >
       {/* Top row - Product information with consistent text styling */}
@@ -117,7 +104,7 @@ export function GroceryItem({ item, onToggle, onUpdateTags }: GroceryItemProps) 
         {/* Left side - Home icon */}
         <button
           onClick={handleHomeClick}
-          className={`w-10 h-10 flex items-center justify-center rounded-full
+          className={`w-10 h-10 flex items-center justify-center rounded-full mb-0.5yar
           ${status === 'owned' ? 'bg-blue-200 text-blue-600' : 'bg-gray-100 text-gray-500 hover:bg-gray-200'}`}
         >
           <Home size={20} />
@@ -131,7 +118,7 @@ export function GroceryItem({ item, onToggle, onUpdateTags }: GroceryItemProps) 
         {/* Right side - Shopping Cart icon */}
         <button
           onClick={handleCartClick}
-          className={`w-10 h-10 flex items-center justify-center rounded-full
+          className={`w-10 h-10 flex items-center justify-center rounded-full mb-0.5
           ${status === 'in_cart' ? 'bg-green-200 text-green-600' : 'bg-gray-100 text-gray-500 hover:bg-gray-200'}`}
         >
           <ShoppingCart size={20} />

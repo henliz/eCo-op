@@ -136,20 +136,38 @@ export function GroceryScreen() {
     setIngredientTags(packageId, tags);
 
   const renderItems = (items: AggregatedItem[]) => {
-    return items.map((item, index) => (
-      <div
-        key={item.packageId}
-        // Add background color for pantry staples and add border between items
-        className={`${!isEssentialItem(item) ? "bg-[#FDE2E7]" : ""} 
-                   ${index !== 0 ? "border-t border-gray-300" : ""}`}
-      >
-        <GroceryItem
-          item={item}
-          onToggle={toggleGroceryItem}
-          onUpdateTags={handleUpdateTags}
-        />
-      </div>
-    ));
+    return items.map((item, index) => {
+      // Determine background color based on both status and essentiality
+      let bgColor = '';
+      const status = item.tags?.status || 'bought';
+
+      // First check status (higher priority)
+      if (status === 'owned') {
+        bgColor = 'bg-blue-50 border-blue-200';
+      } else if (status === 'in_cart') {
+        bgColor = 'bg-green-50 border-green-200';
+      } else if (status === 'ignored') {
+        bgColor = 'bg-gray-50 border-gray-200 opacity-50';
+      }
+      // If no status background, check if pantry staple
+      else if (!isEssentialItem(item)) {
+        bgColor = 'bg-[#FDE2E7]';
+      }
+
+      return (
+        <div
+          key={item.packageId}
+          // Apply background color and border
+          className={`${bgColor} ${index !== 0 ? "border-t border-gray-300" : ""}`}
+        >
+          <GroceryItem
+            item={item}
+            onToggle={toggleGroceryItem}
+            onUpdateTags={handleUpdateTags}
+          />
+        </div>
+      );
+    });
   };
 
   // Toggle category expansion
