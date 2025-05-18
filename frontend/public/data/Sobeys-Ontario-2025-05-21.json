@@ -20,7 +20,8 @@
           "sourceDate": "2025-04-22",
           "productName": "chia seeds",
           "savingsPercentage": 0,
-          "type": "core"
+          "type": "core",
+          "category": "pantry"
         },
         {
           "recipeIngredientName": "almond milk",
@@ -34,7 +35,8 @@
           "sourceDate": "2025-04-22",
           "productName": "almond milk",
           "savingsPercentage": 0,
-          "type": "core"
+          "type": "core",
+          "category": "dairy"
         },
         {
           "recipeIngredientName": "honey",
@@ -42,7 +44,8 @@
           "regularPrice": 0,
           "source": "skipped",
           "savingsPercentage": 0,
-          "type": "optional"
+          "type": "optional",
+          "category": "pantry"
         },
         {
           "recipeIngredientName": "strawberries",
@@ -50,7 +53,8 @@
           "regularPrice": 0,
           "source": "skipped",
           "savingsPercentage": 0,
-          "type": "garnish"
+          "type": "garnish",
+          "category": "produce"
         }
       ],
       "img": "/Chia_Pudding.png"
@@ -58,8 +62,8 @@
     {
       "name": "Avocado Toast with Egg",
       "url": "https://feelgoodfoodie.net/wprm_print/avocado-toast-with-egg",
-      "salePrice": 1.1912654439983066,
-      "regularPrice": 1.1912654439983066,
+      "salePrice": 1.161635814368677,
+      "regularPrice": 1.161635814368677,
       "totalSavings": 0,
       "servings": 1,
       "ingredients": [
@@ -75,21 +79,23 @@
           "sourceDate": "2025-04-16",
           "productName": "avocado",
           "savingsPercentage": 0,
-          "type": "core"
+          "type": "core",
+          "category": "produce"
         },
         {
           "recipeIngredientName": "whole grain bread",
           "saleUnitSize": 675,
           "saleUnitType": "g",
           "salePrice": 2.5,
-          "saleFractionUsed": 0.056296296296296296,
+          "saleFractionUsed": 0.044444444444444446,
           "regularPrice": 2.5,
-          "regularFractionUsed": 0.056296296296296296,
+          "regularFractionUsed": 0.044444444444444446,
           "source": "flyer",
           "sourceDate": "2025-05-22",
           "productName": "DEMPSTER'S White or Whole Wheat, Texas Toast or Sandwich Bread",
           "savingsPercentage": 0,
-          "type": "core"
+          "type": "core",
+          "category": "bakery"
         },
         {
           "recipeIngredientName": "sea salt",
@@ -103,7 +109,8 @@
           "sourceDate": "2025-04-16",
           "productName": "salt",
           "savingsPercentage": 0,
-          "type": "core"
+          "type": "core",
+          "category": "spices"
         },
         {
           "recipeIngredientName": "black pepper",
@@ -117,7 +124,8 @@
           "sourceDate": "2025-04-16",
           "productName": "pepper",
           "savingsPercentage": 0,
-          "type": "core"
+          "type": "core",
+          "category": "spices"
         },
         {
           "recipeIngredientName": "butter",
@@ -131,7 +139,8 @@
           "sourceDate": "2025-04-22",
           "productName": "unsalted butter",
           "savingsPercentage": 0,
-          "type": "core"
+          "type": "core",
+          "category": "dairy"
         },
         {
           "recipeIngredientName": "egg",
@@ -145,7 +154,8 @@
           "sourceDate": "2025-04-16",
           "productName": "egg",
           "savingsPercentage": 0,
-          "type": "core"
+          "type": "core",
+          "category": "dairy"
         },
         {
           "recipeIngredientName": "white vinegar",
@@ -155,12 +165,12 @@
           "savingsPercentage": 0,
           "type": "optional"
         }
-      ]
+      ],
+      "img": "AvoToast_Egg.png"
     },
     {
       "name": "Easy Overnight Oats",
       "url": "https://feelgoodfoodie.net/wprm_print/easy-overnight-oats",
-      "img": "/Overnight_Oats.png",
       "salePrice": 1.250115707203742,
       "regularPrice": 1.4934823738704088,
       "totalSavings": 0.24336666666666673,
@@ -178,7 +188,8 @@
           "sourceDate": "2025-04-22",
           "productName": "rolled oats",
           "savingsPercentage": 0,
-          "type": "core"
+          "type": "core",
+          "category": "breakfast"
         },
         {
           "recipeIngredientName": "milk",
@@ -192,7 +203,8 @@
           "sourceDate": "2025-04-22",
           "productName": "milk",
           "savingsPercentage": 0,
-          "type": "core"
+          "type": "core",
+          "category": "dairy"
         },
         {
           "recipeIngredientName": "Greek yogurt",
@@ -206,7 +218,8 @@
           "sourceDate": "2025-05-22",
           "productName": "LIBERTÉ Greek Yogurt",
           "savingsPercentage": 49.916247906197654,
-          "type": "core"
+          "type": "core",
+          "category": "dairy"
         },
         {
           "recipeIngredientName": "chia seeds",
@@ -220,7 +233,8 @@
           "sourceDate": "2025-04-22",
           "productName": "chia seeds",
           "savingsPercentage": 0,
-          "type": "core"
+          "type": "core",
+          "category": "pantry"
         },
         {
           "recipeIngredientName": "maple syrup",
@@ -234,7 +248,8 @@
           "sourceDate": "2025-04-22",
           "productName": "maple syrup",
           "savingsPercentage": 0,
-          "type": "core"
+          "type": "core",
+          "category": "pantry"
         },
         {
           "recipeIngredientName": "vanilla extract",
@@ -272,7 +287,8 @@
           "regularPrice": 0,
           "source": "skipped",
           "savingsPercentage": 0,
-          "type": "optional"
+          "type": "optional",
+          "category": "produce"
         },
         {
           "recipeIngredientName": "peanuts",
@@ -280,7 +296,8 @@
           "regularPrice": 0,
           "source": "skipped",
           "savingsPercentage": 0,
-          "type": "optional"
+          "type": "optional",
+          "category": "pantry"
         },
         {
           "recipeIngredientName": "apple",
@@ -288,7 +305,8 @@
           "regularPrice": 0,
           "source": "skipped",
           "savingsPercentage": 0,
-          "type": "optional"
+          "type": "optional",
+          "category": "produce"
         },
         {
           "recipeIngredientName": "pecans",
@@ -304,7 +322,8 @@
           "regularPrice": 0,
           "source": "skipped",
           "savingsPercentage": 0,
-          "type": "optional"
+          "type": "optional",
+          "category": "pantry"
         },
         {
           "recipeIngredientName": "cinnamon",
@@ -312,7 +331,8 @@
           "regularPrice": 0,
           "source": "skipped",
           "savingsPercentage": 0,
-          "type": "optional"
+          "type": "optional",
+          "category": "spices"
         },
         {
           "recipeIngredientName": "banana",
@@ -360,7 +380,8 @@
           "regularPrice": 0,
           "source": "skipped",
           "savingsPercentage": 0,
-          "type": "optional"
+          "type": "optional",
+          "category": "pantry"
         },
         {
           "recipeIngredientName": "chocolate chips",
@@ -376,7 +397,8 @@
           "regularPrice": 0,
           "source": "skipped",
           "savingsPercentage": 0,
-          "type": "optional"
+          "type": "optional",
+          "category": "pantry"
         },
         {
           "recipeIngredientName": "blueberries",
@@ -384,7 +406,8 @@
           "regularPrice": 0,
           "source": "skipped",
           "savingsPercentage": 0,
-          "type": "optional"
+          "type": "optional",
+          "category": "produce"
         },
         {
           "recipeIngredientName": "lemon zest",
@@ -400,7 +423,8 @@
           "regularPrice": 0,
           "source": "skipped",
           "savingsPercentage": 0,
-          "type": "optional"
+          "type": "optional",
+          "category": "pantry"
         },
         {
           "recipeIngredientName": "salt",
@@ -408,7 +432,8 @@
           "regularPrice": 0,
           "source": "skipped",
           "savingsPercentage": 0,
-          "type": "optional"
+          "type": "optional",
+          "category": "spices"
         },
         {
           "recipeIngredientName": "brown sugar",
@@ -416,7 +441,8 @@
           "regularPrice": 0,
           "source": "skipped",
           "savingsPercentage": 0,
-          "type": "optional"
+          "type": "optional",
+          "category": "pantry"
         },
         {
           "recipeIngredientName": "maple syrup",
@@ -424,7 +450,8 @@
           "regularPrice": 0,
           "source": "skipped",
           "savingsPercentage": 0,
-          "type": "optional"
+          "type": "optional",
+          "category": "pantry"
         },
         {
           "recipeIngredientName": "cinnamon",
@@ -432,7 +459,8 @@
           "regularPrice": 0,
           "source": "skipped",
           "savingsPercentage": 0,
-          "type": "optional"
+          "type": "optional",
+          "category": "spices"
         },
         {
           "recipeIngredientName": "salt",
@@ -440,9 +468,11 @@
           "regularPrice": 0,
           "source": "skipped",
           "savingsPercentage": 0,
-          "type": "optional"
+          "type": "optional",
+          "category": "spices"
         }
-      ]
+      ],
+      "img": "/Overnight_Oats.png"
     },
     {
       "name": "Perfect Baked Potato",
@@ -464,7 +494,8 @@
           "sourceDate": "2025-01-21",
           "productName": "russet potatoes",
           "savingsPercentage": 0,
-          "type": "core"
+          "type": "core",
+          "category": "produce"
         },
         {
           "recipeIngredientName": "extra virgin olive oil",
@@ -478,7 +509,8 @@
           "sourceDate": "2025-04-22",
           "productName": "extra virgin olive oil",
           "savingsPercentage": 0,
-          "type": "core"
+          "type": "core",
+          "category": "pantry"
         },
         {
           "recipeIngredientName": "sea salt",
@@ -492,9 +524,11 @@
           "sourceDate": "2025-04-16",
           "productName": "salt",
           "savingsPercentage": 0,
-          "type": "core"
+          "type": "core",
+          "category": "spices"
         }
-      ]
+      ],
+      "img": "/Baked_Potato_Bar.png"
     },
     {
       "name": "How to Make French Toast",
@@ -516,7 +550,8 @@
           "sourceDate": "2025-04-22",
           "productName": "unsalted butter",
           "savingsPercentage": 0,
-          "type": "core"
+          "type": "core",
+          "category": "dairy"
         },
         {
           "recipeIngredientName": "egg",
@@ -530,7 +565,8 @@
           "sourceDate": "2025-04-16",
           "productName": "egg",
           "savingsPercentage": 0,
-          "type": "core"
+          "type": "core",
+          "category": "dairy"
         },
         {
           "recipeIngredientName": "milk",
@@ -544,7 +580,8 @@
           "sourceDate": "2025-04-22",
           "productName": "milk",
           "savingsPercentage": 0,
-          "type": "core"
+          "type": "core",
+          "category": "dairy"
         },
         {
           "recipeIngredientName": "dark brown sugar",
@@ -558,7 +595,8 @@
           "sourceDate": "2024-10-01",
           "productName": "brown sugar",
           "savingsPercentage": 0,
-          "type": "core"
+          "type": "core",
+          "category": "pantry"
         },
         {
           "recipeIngredientName": "cinnamon",
@@ -572,7 +610,8 @@
           "sourceDate": "2025-04-22",
           "productName": "ground cinnamon",
           "savingsPercentage": 0,
-          "type": "core"
+          "type": "core",
+          "category": "spices"
         },
         {
           "recipeIngredientName": "nutmeg",
@@ -586,7 +625,8 @@
           "sourceDate": "2025-04-22",
           "productName": "ground nutmeg",
           "savingsPercentage": 0,
-          "type": "core"
+          "type": "core",
+          "category": "spices"
         },
         {
           "recipeIngredientName": "white bread",
@@ -600,7 +640,8 @@
           "sourceDate": "2025-05-22",
           "productName": "DEMPSTER'S White or Whole Wheat, Texas Toast or Sandwich Bread",
           "savingsPercentage": 0,
-          "type": "core"
+          "type": "core",
+          "category": "bakery"
         },
         {
           "recipeIngredientName": "maple syrup",
@@ -608,7 +649,8 @@
           "regularPrice": 0,
           "source": "skipped",
           "savingsPercentage": 0,
-          "type": "optional"
+          "type": "optional",
+          "category": "pantry"
         },
         {
           "recipeIngredientName": "berries",
@@ -618,7 +660,8 @@
           "savingsPercentage": 0,
           "type": "optional"
         }
-      ]
+      ],
+      "img": "/French_Toast.png"
     },
     {
       "name": "Golden Sweet Cornbread",
@@ -640,7 +683,8 @@
           "sourceDate": "2025-04-22",
           "productName": "all-purpose flour",
           "savingsPercentage": 0,
-          "type": "core"
+          "type": "core",
+          "category": "pantry"
         },
         {
           "recipeIngredientName": "yellow cornmeal",
@@ -654,7 +698,8 @@
           "sourceDate": "2024-08-18",
           "productName": "cornmeal",
           "savingsPercentage": 0,
-          "type": "core"
+          "type": "core",
+          "category": "pantry"
         },
         {
           "recipeIngredientName": "white sugar",
@@ -668,7 +713,8 @@
           "sourceDate": "2025-05-22",
           "productName": "LANTIC Sugar Icing Brown or Yellow",
           "savingsPercentage": 0,
-          "type": "core"
+          "type": "core",
+          "category": "pantry"
         },
         {
           "recipeIngredientName": "baking powder",
@@ -682,7 +728,8 @@
           "sourceDate": "2025-04-22",
           "productName": "baking powder",
           "savingsPercentage": 0,
-          "type": "core"
+          "type": "core",
+          "category": "pantry"
         },
         {
           "recipeIngredientName": "salt",
@@ -696,7 +743,8 @@
           "sourceDate": "2025-04-16",
           "productName": "salt",
           "savingsPercentage": 0,
-          "type": "core"
+          "type": "core",
+          "category": "spices"
         },
         {
           "recipeIngredientName": "milk",
@@ -710,7 +758,8 @@
           "sourceDate": "2025-04-22",
           "productName": "milk",
           "savingsPercentage": 0,
-          "type": "core"
+          "type": "core",
+          "category": "dairy"
         },
         {
           "recipeIngredientName": "vegetable oil",
@@ -724,7 +773,8 @@
           "sourceDate": "2025-05-22",
           "productName": "MAZOLA Oil",
           "savingsPercentage": 0,
-          "type": "core"
+          "type": "core",
+          "category": "pantry"
         },
         {
           "recipeIngredientName": "eggs",
@@ -738,7 +788,8 @@
           "sourceDate": "2025-04-16",
           "productName": "egg",
           "savingsPercentage": 0,
-          "type": "core"
+          "type": "core",
+          "category": "dairy"
         }
       ]
     },
@@ -762,7 +813,8 @@
           "sourceDate": "2025-04-22",
           "productName": "all-purpose flour",
           "savingsPercentage": 0,
-          "type": "core"
+          "type": "core",
+          "category": "pantry"
         },
         {
           "recipeIngredientName": "granulated sugar",
@@ -776,7 +828,8 @@
           "sourceDate": "2025-05-22",
           "productName": "LANTIC Sugar Icing Brown or Yellow",
           "savingsPercentage": 0,
-          "type": "core"
+          "type": "core",
+          "category": "pantry"
         },
         {
           "recipeIngredientName": "baking powder",
@@ -790,7 +843,8 @@
           "sourceDate": "2025-04-22",
           "productName": "baking powder",
           "savingsPercentage": 0,
-          "type": "core"
+          "type": "core",
+          "category": "pantry"
         },
         {
           "recipeIngredientName": "salt",
@@ -804,7 +858,8 @@
           "sourceDate": "2025-04-16",
           "productName": "salt",
           "savingsPercentage": 0,
-          "type": "core"
+          "type": "core",
+          "category": "spices"
         },
         {
           "recipeIngredientName": "egg",
@@ -818,7 +873,8 @@
           "sourceDate": "2025-04-16",
           "productName": "egg",
           "savingsPercentage": 0,
-          "type": "core"
+          "type": "core",
+          "category": "dairy"
         },
         {
           "recipeIngredientName": "milk",
@@ -832,7 +888,8 @@
           "sourceDate": "2025-04-22",
           "productName": "milk",
           "savingsPercentage": 0,
-          "type": "core"
+          "type": "core",
+          "category": "dairy"
         },
         {
           "recipeIngredientName": "unsalted butter",
@@ -846,7 +903,8 @@
           "sourceDate": "2025-04-22",
           "productName": "unsalted butter",
           "savingsPercentage": 0,
-          "type": "core"
+          "type": "core",
+          "category": "dairy"
         },
         {
           "recipeIngredientName": "vanilla extract",
@@ -874,7 +932,8 @@
           "sourceDate": "2025-05-22",
           "productName": "Strawberries Clamshell",
           "savingsPercentage": 0,
-          "type": "core"
+          "type": "core",
+          "category": "produce"
         },
         {
           "recipeIngredientName": "nonstick cooking spray",
@@ -888,7 +947,8 @@
           "sourceDate": "2025-04-16",
           "productName": "cooking spray",
           "savingsPercentage": 0,
-          "type": "core"
+          "type": "core",
+          "category": "pantry"
         },
         {
           "recipeIngredientName": "butter",
@@ -896,7 +956,8 @@
           "regularPrice": 0,
           "source": "skipped",
           "savingsPercentage": 0,
-          "type": "optional"
+          "type": "optional",
+          "category": "dairy"
         },
         {
           "recipeIngredientName": "maple syrup",
@@ -904,7 +965,8 @@
           "regularPrice": 0,
           "source": "skipped",
           "savingsPercentage": 0,
-          "type": "optional"
+          "type": "optional",
+          "category": "pantry"
         },
         {
           "recipeIngredientName": "strawberries",
@@ -912,9 +974,11 @@
           "regularPrice": 0,
           "source": "skipped",
           "savingsPercentage": 0,
-          "type": "optional"
+          "type": "optional",
+          "category": "produce"
         }
-      ]
+      ],
+      "img": "/Strawberry_Pancakes.png"
     },
     {
       "name": "Scrambled Egg Muffin Cups",
@@ -936,7 +1000,8 @@
           "sourceDate": "2025-04-30",
           "productName": "pork sausage",
           "savingsPercentage": 0,
-          "type": "core"
+          "type": "core",
+          "category": "meat"
         },
         {
           "recipeIngredientName": "eggs",
@@ -950,7 +1015,8 @@
           "sourceDate": "2025-04-16",
           "productName": "egg",
           "savingsPercentage": 0,
-          "type": "core"
+          "type": "core",
+          "category": "dairy"
         },
         {
           "recipeIngredientName": "onion",
@@ -964,7 +1030,8 @@
           "sourceDate": "2025-05-22",
           "productName": "Vidalia Onions",
           "savingsPercentage": 0,
-          "type": "core"
+          "type": "core",
+          "category": "produce"
         },
         {
           "recipeIngredientName": "green bell pepper",
@@ -978,7 +1045,8 @@
           "sourceDate": "2024-06-25",
           "productName": "red bell pepper",
           "savingsPercentage": 0,
-          "type": "core"
+          "type": "core",
+          "category": "produce"
         },
         {
           "recipeIngredientName": "salt",
@@ -992,7 +1060,8 @@
           "sourceDate": "2025-04-16",
           "productName": "salt",
           "savingsPercentage": 0,
-          "type": "core"
+          "type": "core",
+          "category": "spices"
         },
         {
           "recipeIngredientName": "ground black pepper",
@@ -1006,7 +1075,8 @@
           "sourceDate": "2025-04-16",
           "productName": "pepper",
           "savingsPercentage": 0,
-          "type": "core"
+          "type": "core",
+          "category": "spices"
         },
         {
           "recipeIngredientName": "garlic powder",
@@ -1020,7 +1090,8 @@
           "sourceDate": "2024-09-11",
           "productName": "garlic powder",
           "savingsPercentage": 0,
-          "type": "core"
+          "type": "core",
+          "category": "spices"
         },
         {
           "recipeIngredientName": "Cheddar cheese",
@@ -1034,9 +1105,11 @@
           "sourceDate": "2025-05-22",
           "productName": "CRACKER BARREL Cheese",
           "savingsPercentage": 26.500000000000018,
-          "type": "core"
+          "type": "core",
+          "category": "dairy"
         }
-      ]
+      ],
+      "img": "/ScrambledEgg_MuffinCups.png"
     }
   ],
   "lunch": [
@@ -1060,7 +1133,8 @@
           "sourceDate": "2025-05-22",
           "productName": "Long English Seedless Cucumbers",
           "savingsPercentage": 0,
-          "type": "core"
+          "type": "core",
+          "category": "produce"
         },
         {
           "recipeIngredientName": "tomato",
@@ -1074,7 +1148,8 @@
           "sourceDate": "2025-05-22",
           "productName": "Hot House Tomatoes",
           "savingsPercentage": 0,
-          "type": "core"
+          "type": "core",
+          "category": "produce"
         },
         {
           "recipeIngredientName": "red onion",
@@ -1088,7 +1163,8 @@
           "sourceDate": "2025-05-22",
           "productName": "Vidalia Onions",
           "savingsPercentage": 0,
-          "type": "core"
+          "type": "core",
+          "category": "produce"
         },
         {
           "recipeIngredientName": "fresh herbs",
@@ -1110,7 +1186,8 @@
           "sourceDate": "2025-04-22",
           "productName": "extra virgin olive oil",
           "savingsPercentage": 0,
-          "type": "core"
+          "type": "core",
+          "category": "pantry"
         },
         {
           "recipeIngredientName": "red wine vinegar",
@@ -1132,7 +1209,8 @@
           "regularPrice": 0,
           "source": "skipped",
           "savingsPercentage": 0,
-          "type": "to taste"
+          "type": "to taste",
+          "category": "spices"
         },
         {
           "recipeIngredientName": "black pepper",
@@ -1140,9 +1218,11 @@
           "regularPrice": 0,
           "source": "skipped",
           "savingsPercentage": 0,
-          "type": "to taste"
+          "type": "to taste",
+          "category": "spices"
         }
-      ]
+      ],
+      "img": "/Cucumber_Tomato_Salad.png"
     },
     {
       "name": "Delicious Egg Salad",
@@ -1164,7 +1244,8 @@
           "sourceDate": "2025-04-16",
           "productName": "egg",
           "savingsPercentage": 0,
-          "type": "core"
+          "type": "core",
+          "category": "dairy"
         },
         {
           "recipeIngredientName": "mayonnaise",
@@ -1178,7 +1259,8 @@
           "sourceDate": "2025-05-22",
           "productName": "KRAFT Miracle Whip or Mayonnaise",
           "savingsPercentage": 23.1839258114374,
-          "type": "core"
+          "type": "core",
+          "category": "condiments"
         },
         {
           "recipeIngredientName": "green onion",
@@ -1192,7 +1274,8 @@
           "sourceDate": "2025-04-16",
           "productName": "green onions",
           "savingsPercentage": 0,
-          "type": "core"
+          "type": "core",
+          "category": "produce"
         },
         {
           "recipeIngredientName": "yellow mustard",
@@ -1206,7 +1289,8 @@
           "sourceDate": "2025-05-22",
           "productName": "PANACHE Dijon Mustard",
           "savingsPercentage": 0,
-          "type": "core"
+          "type": "core",
+          "category": "condiments"
         },
         {
           "recipeIngredientName": "paprika",
@@ -1214,7 +1298,8 @@
           "regularPrice": 0,
           "source": "skipped",
           "savingsPercentage": 0,
-          "type": "optional"
+          "type": "optional",
+          "category": "spices"
         },
         {
           "recipeIngredientName": "salt",
@@ -1222,7 +1307,8 @@
           "regularPrice": 0,
           "source": "skipped",
           "savingsPercentage": 0,
-          "type": "to taste"
+          "type": "to taste",
+          "category": "spices"
         },
         {
           "recipeIngredientName": "black pepper",
@@ -1230,7 +1316,8 @@
           "regularPrice": 0,
           "source": "skipped",
           "savingsPercentage": 0,
-          "type": "to taste"
+          "type": "to taste",
+          "category": "spices"
         }
       ],
       "img": "/Egg_Salad.png"
@@ -1255,7 +1342,8 @@
           "sourceDate": "2025-04-22",
           "productName": "spaghetti",
           "savingsPercentage": 0,
-          "type": "core"
+          "type": "core",
+          "category": "pantry"
         },
         {
           "recipeIngredientName": "English cucumber",
@@ -1269,7 +1357,8 @@
           "sourceDate": "2025-05-22",
           "productName": "Long English Seedless Cucumbers",
           "savingsPercentage": 0,
-          "type": "core"
+          "type": "core",
+          "category": "produce"
         },
         {
           "recipeIngredientName": "grape tomatoes",
@@ -1283,7 +1372,8 @@
           "sourceDate": "2025-05-22",
           "productName": "Assorted Snacking Tomatoes",
           "savingsPercentage": 0,
-          "type": "core"
+          "type": "core",
+          "category": "produce"
         },
         {
           "recipeIngredientName": "red bell pepper",
@@ -1297,7 +1387,8 @@
           "sourceDate": "2024-06-25",
           "productName": "red bell pepper",
           "savingsPercentage": 0,
-          "type": "core"
+          "type": "core",
+          "category": "produce"
         },
         {
           "recipeIngredientName": "sliced pitted olives",
@@ -1311,7 +1402,8 @@
           "sourceDate": "2025-04-22",
           "productName": "kalamata olives",
           "savingsPercentage": 0,
-          "type": "core"
+          "type": "core",
+          "category": "pantry"
         },
         {
           "recipeIngredientName": "feta cheese",
@@ -1325,7 +1417,8 @@
           "sourceDate": "2025-04-22",
           "productName": "feta cheese",
           "savingsPercentage": 0,
-          "type": "core"
+          "type": "core",
+          "category": "dairy"
         },
         {
           "recipeIngredientName": "red onion",
@@ -1339,7 +1432,8 @@
           "sourceDate": "2025-05-22",
           "productName": "Vidalia Onions",
           "savingsPercentage": 0,
-          "type": "core"
+          "type": "core",
+          "category": "produce"
         },
         {
           "recipeIngredientName": "Greek dressing",
@@ -1381,7 +1475,8 @@
           "sourceDate": "2025-04-22",
           "productName": "extra virgin olive oil",
           "savingsPercentage": 0,
-          "type": "core"
+          "type": "core",
+          "category": "pantry"
         },
         {
           "recipeIngredientName": "garlic powder",
@@ -1395,7 +1490,8 @@
           "sourceDate": "2024-09-11",
           "productName": "garlic powder",
           "savingsPercentage": 0,
-          "type": "core"
+          "type": "core",
+          "category": "spices"
         },
         {
           "recipeIngredientName": "dried oregano",
@@ -1409,7 +1505,8 @@
           "sourceDate": "2025-01-07",
           "productName": "dried oregano",
           "savingsPercentage": 0,
-          "type": "core"
+          "type": "core",
+          "category": "spices"
         },
         {
           "recipeIngredientName": "salt",
@@ -1417,7 +1514,8 @@
           "regularPrice": 0,
           "source": "skipped",
           "savingsPercentage": 0,
-          "type": "to taste"
+          "type": "to taste",
+          "category": "spices"
         },
         {
           "recipeIngredientName": "black pepper",
@@ -1425,16 +1523,18 @@
           "regularPrice": 0,
           "source": "skipped",
           "savingsPercentage": 0,
-          "type": "to taste"
+          "type": "to taste",
+          "category": "spices"
         }
-      ]
+      ],
+      "img": "/Greek_Pasta_Salad.png"
     },
     {
       "name": "Cucumber Turkey Sub Sandwich",
       "url": "https://www.eatingwell.com/recipe/261898/cucumber-turkey-sub-sandwich/",
-      "salePrice": 5.614586061863406,
-      "regularPrice": 5.7372040393914965,
-      "totalSavings": 0.12261797752809045,
+      "salePrice": 5.688086061863406,
+      "regularPrice": 5.837204039391496,
+      "totalSavings": 0.14911797752808997,
       "servings": 1,
       "ingredients": [
         {
@@ -1449,7 +1549,8 @@
           "sourceDate": "2025-05-22",
           "productName": "Long English Seedless Cucumbers",
           "savingsPercentage": 0,
-          "type": "core"
+          "type": "core",
+          "category": "produce"
         },
         {
           "recipeIngredientName": "yellow mustard",
@@ -1463,7 +1564,8 @@
           "sourceDate": "2025-05-22",
           "productName": "PANACHE Dijon Mustard",
           "savingsPercentage": 0,
-          "type": "core"
+          "type": "core",
+          "category": "condiments"
         },
         {
           "recipeIngredientName": "mayonnaise",
@@ -1477,7 +1579,8 @@
           "sourceDate": "2025-05-22",
           "productName": "KRAFT Miracle Whip or Mayonnaise",
           "savingsPercentage": 23.1839258114374,
-          "type": "core"
+          "type": "core",
+          "category": "condiments"
         },
         {
           "recipeIngredientName": "deli turkey breast",
@@ -1491,21 +1594,23 @@
           "sourceDate": "2024-10-10",
           "productName": "deli turkey",
           "savingsPercentage": 0,
-          "type": "core"
+          "type": "core",
+          "category": "deli"
         },
         {
           "recipeIngredientName": "Cheddar cheese",
           "saleUnitSize": 400,
           "saleUnitType": "g",
           "salePrice": 5.88,
-          "saleFractionUsed": 0.05,
-          "regularPrice": 8.000000000000002,
-          "regularFractionUsed": 0.05,
+          "saleFractionUsed": 0.0625,
+          "regularPrice": 8,
+          "regularFractionUsed": 0.0625,
           "source": "flyer",
           "sourceDate": "2025-05-22",
           "productName": "CRACKER BARREL Cheese",
-          "savingsPercentage": 26.500000000000007,
-          "type": "core"
+          "savingsPercentage": 26.5,
+          "type": "core",
+          "category": "dairy"
         },
         {
           "recipeIngredientName": "tomato",
@@ -1519,7 +1624,8 @@
           "sourceDate": "2025-05-22",
           "productName": "Hot House Tomatoes",
           "savingsPercentage": 0,
-          "type": "core"
+          "type": "core",
+          "category": "produce"
         },
         {
           "recipeIngredientName": "red onion",
@@ -1533,7 +1639,8 @@
           "sourceDate": "2025-05-22",
           "productName": "Vidalia Onions",
           "savingsPercentage": 0,
-          "type": "core"
+          "type": "core",
+          "category": "produce"
         },
         {
           "recipeIngredientName": "black pepper",
@@ -1541,16 +1648,18 @@
           "regularPrice": 0,
           "source": "skipped",
           "savingsPercentage": 0,
-          "type": "to taste"
+          "type": "to taste",
+          "category": "spices"
         }
-      ]
+      ],
+      "img": "Cucumber_Turkey_Sub.png"
     },
     {
       "name": "Easy Steak Sandwich",
       "url": "https://www.allrecipes.com/recipe/86219/easy-steak-sandwich/",
-      "salePrice": 4.860504871585083,
-      "regularPrice": 5.072504871585084,
-      "totalSavings": 0.21200000000000063,
+      "salePrice": 5.007504871585083,
+      "regularPrice": 5.272504871585083,
+      "totalSavings": 0.2649999999999997,
       "servings": 1,
       "ingredients": [
         {
@@ -1565,7 +1674,8 @@
           "sourceDate": "2025-04-22",
           "productName": "unsalted butter",
           "savingsPercentage": 0,
-          "type": "core"
+          "type": "core",
+          "category": "dairy"
         },
         {
           "recipeIngredientName": "onion",
@@ -1579,7 +1689,8 @@
           "sourceDate": "2025-05-22",
           "productName": "Vidalia Onions",
           "savingsPercentage": 0,
-          "type": "core"
+          "type": "core",
+          "category": "produce"
         },
         {
           "recipeIngredientName": "fresh mushrooms",
@@ -1587,7 +1698,8 @@
           "regularPrice": 0,
           "source": "skipped",
           "savingsPercentage": 0,
-          "type": "optional"
+          "type": "optional",
+          "category": "produce"
         },
         {
           "recipeIngredientName": "green bell pepper",
@@ -1601,7 +1713,8 @@
           "sourceDate": "2024-06-25",
           "productName": "red bell pepper",
           "savingsPercentage": 0,
-          "type": "core"
+          "type": "core",
+          "category": "produce"
         },
         {
           "recipeIngredientName": "beef steak",
@@ -1651,7 +1764,8 @@
           "regularPrice": 0,
           "source": "skipped",
           "savingsPercentage": 0,
-          "type": "to taste"
+          "type": "to taste",
+          "category": "spices"
         },
         {
           "recipeIngredientName": "black pepper",
@@ -1659,21 +1773,23 @@
           "regularPrice": 0,
           "source": "skipped",
           "savingsPercentage": 0,
-          "type": "to taste"
+          "type": "to taste",
+          "category": "spices"
         },
         {
           "recipeIngredientName": "Cheddar cheese",
           "saleUnitSize": 400,
           "saleUnitType": "g",
           "salePrice": 5.88,
-          "saleFractionUsed": 0.1,
-          "regularPrice": 8.000000000000002,
-          "regularFractionUsed": 0.1,
+          "saleFractionUsed": 0.125,
+          "regularPrice": 8,
+          "regularFractionUsed": 0.125,
           "source": "flyer",
           "sourceDate": "2025-05-22",
           "productName": "CRACKER BARREL Cheese",
-          "savingsPercentage": 26.500000000000007,
-          "type": "core"
+          "savingsPercentage": 26.5,
+          "type": "core",
+          "category": "dairy"
         },
         {
           "recipeIngredientName": "French baguette",
@@ -1687,7 +1803,8 @@
           "sourceDate": "2025-04-30",
           "productName": "baguette",
           "savingsPercentage": 0,
-          "type": "core"
+          "type": "core",
+          "category": "bakery"
         }
       ],
       "img": "/SteakSandwich.png"
@@ -1726,7 +1843,8 @@
           "sourceDate": "2025-05-22",
           "productName": "Long English Seedless Cucumbers",
           "savingsPercentage": 0,
-          "type": "core"
+          "type": "core",
+          "category": "produce"
         },
         {
           "recipeIngredientName": "cherry tomatoes",
@@ -1740,7 +1858,8 @@
           "sourceDate": "2025-05-22",
           "productName": "Assorted Snacking Tomatoes",
           "savingsPercentage": 0,
-          "type": "core"
+          "type": "core",
+          "category": "produce"
         },
         {
           "recipeIngredientName": "baby spinach",
@@ -1754,7 +1873,8 @@
           "sourceDate": "2025-05-15",
           "productName": "baby spinach",
           "savingsPercentage": 0,
-          "type": "core"
+          "type": "core",
+          "category": "produce"
         },
         {
           "recipeIngredientName": "red onion",
@@ -1768,7 +1888,8 @@
           "sourceDate": "2025-05-22",
           "productName": "Vidalia Onions",
           "savingsPercentage": 0,
-          "type": "core"
+          "type": "core",
+          "category": "produce"
         },
         {
           "recipeIngredientName": "feta cheese",
@@ -1782,7 +1903,8 @@
           "sourceDate": "2025-04-22",
           "productName": "feta cheese",
           "savingsPercentage": 0,
-          "type": "core"
+          "type": "core",
+          "category": "dairy"
         },
         {
           "recipeIngredientName": "kalamata olives",
@@ -1796,7 +1918,8 @@
           "sourceDate": "2025-04-22",
           "productName": "kalamata olives",
           "savingsPercentage": 0,
-          "type": "core"
+          "type": "core",
+          "category": "pantry"
         },
         {
           "recipeIngredientName": "olive oil",
@@ -1810,7 +1933,8 @@
           "sourceDate": "2025-04-22",
           "productName": "extra virgin olive oil",
           "savingsPercentage": 0,
-          "type": "core"
+          "type": "core",
+          "category": "pantry"
         },
         {
           "recipeIngredientName": "red wine vinegar",
@@ -1838,7 +1962,8 @@
           "sourceDate": "2025-05-22",
           "productName": "PANACHE Dijon Mustard",
           "savingsPercentage": 0,
-          "type": "core"
+          "type": "core",
+          "category": "condiments"
         },
         {
           "recipeIngredientName": "dried oregano",
@@ -1852,7 +1977,8 @@
           "sourceDate": "2025-01-07",
           "productName": "dried oregano",
           "savingsPercentage": 0,
-          "type": "core"
+          "type": "core",
+          "category": "spices"
         },
         {
           "recipeIngredientName": "dried mint",
@@ -1866,7 +1992,8 @@
           "sourceDate": "2025-04-30",
           "productName": "dried mint",
           "savingsPercentage": 0,
-          "type": "core"
+          "type": "core",
+          "category": "spices"
         },
         {
           "recipeIngredientName": "garlic",
@@ -1880,7 +2007,8 @@
           "sourceDate": "2024-12-12",
           "productName": "garlic",
           "savingsPercentage": 0,
-          "type": "core"
+          "type": "core",
+          "category": "produce"
         },
         {
           "recipeIngredientName": "salt",
@@ -1888,7 +2016,8 @@
           "regularPrice": 0,
           "source": "skipped",
           "savingsPercentage": 0,
-          "type": "to taste"
+          "type": "to taste",
+          "category": "spices"
         },
         {
           "recipeIngredientName": "black pepper",
@@ -1896,9 +2025,11 @@
           "regularPrice": 0,
           "source": "skipped",
           "savingsPercentage": 0,
-          "type": "to taste"
+          "type": "to taste",
+          "category": "spices"
         }
-      ]
+      ],
+      "img": "/Mediterranean_Pasta_Salad.png"
     },
     {
       "name": "Broccoli Cheddar Soup",
@@ -1920,7 +2051,8 @@
           "sourceDate": "2025-04-22",
           "productName": "unsalted butter",
           "savingsPercentage": 0,
-          "type": "core"
+          "type": "core",
+          "category": "dairy"
         },
         {
           "recipeIngredientName": "yellow onion",
@@ -1934,7 +2066,8 @@
           "sourceDate": "2025-05-22",
           "productName": "Vidalia Onions",
           "savingsPercentage": 0,
-          "type": "core"
+          "type": "core",
+          "category": "produce"
         },
         {
           "recipeIngredientName": "sea salt",
@@ -1948,7 +2081,8 @@
           "sourceDate": "2025-04-16",
           "productName": "salt",
           "savingsPercentage": 0,
-          "type": "core"
+          "type": "core",
+          "category": "spices"
         },
         {
           "recipeIngredientName": "black pepper",
@@ -1962,7 +2096,8 @@
           "sourceDate": "2025-04-16",
           "productName": "pepper",
           "savingsPercentage": 0,
-          "type": "core"
+          "type": "core",
+          "category": "spices"
         },
         {
           "recipeIngredientName": "garlic",
@@ -1976,7 +2111,8 @@
           "sourceDate": "2024-12-12",
           "productName": "garlic",
           "savingsPercentage": 0,
-          "type": "core"
+          "type": "core",
+          "category": "produce"
         },
         {
           "recipeIngredientName": "all-purpose flour",
@@ -1990,7 +2126,8 @@
           "sourceDate": "2025-04-22",
           "productName": "all-purpose flour",
           "savingsPercentage": 0,
-          "type": "core"
+          "type": "core",
+          "category": "pantry"
         },
         {
           "recipeIngredientName": "whole milk",
@@ -2004,7 +2141,8 @@
           "sourceDate": "2025-04-22",
           "productName": "milk",
           "savingsPercentage": 0,
-          "type": "core"
+          "type": "core",
+          "category": "dairy"
         },
         {
           "recipeIngredientName": "vegetable broth",
@@ -2018,7 +2156,8 @@
           "sourceDate": "2024-08-21",
           "productName": "vegetable broth",
           "savingsPercentage": 0,
-          "type": "core"
+          "type": "core",
+          "category": "pantry"
         },
         {
           "recipeIngredientName": "broccoli florets",
@@ -2032,7 +2171,8 @@
           "sourceDate": "2024-10-29",
           "productName": "broccoli",
           "savingsPercentage": 0,
-          "type": "core"
+          "type": "core",
+          "category": "produce"
         },
         {
           "recipeIngredientName": "carrot",
@@ -2046,7 +2186,8 @@
           "sourceDate": "2025-05-22",
           "productName": "Red Carrots",
           "savingsPercentage": 0,
-          "type": "core"
+          "type": "core",
+          "category": "produce"
         },
         {
           "recipeIngredientName": "Dijon mustard",
@@ -2060,7 +2201,8 @@
           "sourceDate": "2025-05-22",
           "productName": "PANACHE Dijon Mustard",
           "savingsPercentage": 0,
-          "type": "core"
+          "type": "core",
+          "category": "condiments"
         },
         {
           "recipeIngredientName": "cheddar cheese",
@@ -2074,7 +2216,8 @@
           "sourceDate": "2025-05-22",
           "productName": "CRACKER BARREL Cheese",
           "savingsPercentage": 26.49999999999999,
-          "type": "core"
+          "type": "core",
+          "category": "dairy"
         },
         {
           "recipeIngredientName": "croutons",
@@ -2084,13 +2227,14 @@
           "savingsPercentage": 0,
           "type": "optional"
         }
-      ]
+      ],
+      "img": "/Broccoli_Cheddar_Soup.png"
     },
     {
       "name": "Caprese Sandwich",
       "url": "https://cookieandkate.com/caprese-sandwich-recipe/",
-      "salePrice": 13.034750768233101,
-      "regularPrice": 13.234124363738719,
+      "salePrice": 11.177607911090243,
+      "regularPrice": 11.376981506595861,
       "totalSavings": 0.19937359550561773,
       "servings": 4,
       "ingredients": [
@@ -2106,7 +2250,8 @@
           "sourceDate": "2025-04-30",
           "productName": "baguette",
           "savingsPercentage": 0,
-          "type": "core"
+          "type": "core",
+          "category": "bakery"
         },
         {
           "recipeIngredientName": "balsamic vinegar",
@@ -2134,7 +2279,8 @@
           "sourceDate": "2025-04-22",
           "productName": "extra virgin olive oil",
           "savingsPercentage": 0,
-          "type": "core"
+          "type": "core",
+          "category": "pantry"
         },
         {
           "recipeIngredientName": "baby arugula",
@@ -2148,7 +2294,8 @@
           "sourceDate": "2025-04-30",
           "productName": "baby arugula",
           "savingsPercentage": 0,
-          "type": "core"
+          "type": "core",
+          "category": "produce"
         },
         {
           "recipeIngredientName": "mozzarella cheese",
@@ -2162,7 +2309,8 @@
           "sourceDate": "2025-04-30",
           "productName": "mozzarella cheese",
           "savingsPercentage": 0,
-          "type": "core"
+          "type": "core",
+          "category": "dairy"
         },
         {
           "recipeIngredientName": "tomato",
@@ -2176,7 +2324,8 @@
           "sourceDate": "2025-05-22",
           "productName": "Hot House Tomatoes",
           "savingsPercentage": 0,
-          "type": "core"
+          "type": "core",
+          "category": "produce"
         },
         {
           "recipeIngredientName": "flaky sea salt",
@@ -2198,21 +2347,23 @@
           "sourceDate": "2025-05-22",
           "productName": "KRAFT Miracle Whip or Mayonnaise",
           "savingsPercentage": 23.1839258114374,
-          "type": "core"
+          "type": "core",
+          "category": "condiments"
         },
         {
           "recipeIngredientName": "fresh basil",
           "saleUnitSize": 21,
           "saleUnitType": "g",
           "salePrice": 2,
-          "saleFractionUsed": 1.4285714285714286,
+          "saleFractionUsed": 0.5,
           "regularPrice": 2,
-          "regularFractionUsed": 1.4285714285714286,
+          "regularFractionUsed": 0.5,
           "source": "database",
           "sourceDate": "2025-04-30",
           "productName": "fresh basil",
           "savingsPercentage": 0,
-          "type": "core"
+          "type": "core",
+          "category": "produce"
         },
         {
           "recipeIngredientName": "garlic",
@@ -2226,7 +2377,8 @@
           "sourceDate": "2024-12-12",
           "productName": "garlic",
           "savingsPercentage": 0,
-          "type": "core"
+          "type": "core",
+          "category": "produce"
         },
         {
           "recipeIngredientName": "fine sea salt",
@@ -2240,7 +2392,8 @@
           "sourceDate": "2025-04-16",
           "productName": "salt",
           "savingsPercentage": 0,
-          "type": "core"
+          "type": "core",
+          "category": "spices"
         },
         {
           "recipeIngredientName": "black pepper",
@@ -2248,9 +2401,11 @@
           "regularPrice": 0,
           "source": "skipped",
           "savingsPercentage": 0,
-          "type": "to taste"
+          "type": "to taste",
+          "category": "spices"
         }
-      ]
+      ],
+      "img": "/Caprese_Sandwich.png"
     },
     {
       "name": "Falafel Pita Sandwich",
@@ -2272,7 +2427,8 @@
           "sourceDate": "2025-04-22",
           "productName": "extra virgin olive oil",
           "savingsPercentage": 0,
-          "type": "core"
+          "type": "core",
+          "category": "pantry"
         },
         {
           "recipeIngredientName": "pita bread",
@@ -2286,7 +2442,8 @@
           "sourceDate": "2025-04-30",
           "productName": "pita bread",
           "savingsPercentage": 0,
-          "type": "core"
+          "type": "core",
+          "category": "bakery"
         },
         {
           "recipeIngredientName": "falafel",
@@ -2300,7 +2457,8 @@
           "sourceDate": "2025-04-30",
           "productName": "falafel",
           "savingsPercentage": 0,
-          "type": "core"
+          "type": "core",
+          "category": "frozen"
         },
         {
           "recipeIngredientName": "tomato",
@@ -2314,7 +2472,8 @@
           "sourceDate": "2025-05-22",
           "productName": "Hot House Tomatoes",
           "savingsPercentage": 0,
-          "type": "core"
+          "type": "core",
+          "category": "produce"
         },
         {
           "recipeIngredientName": "cucumber",
@@ -2328,7 +2487,8 @@
           "sourceDate": "2025-05-22",
           "productName": "Long English Seedless Cucumbers",
           "savingsPercentage": 0,
-          "type": "core"
+          "type": "core",
+          "category": "produce"
         },
         {
           "recipeIngredientName": "onion",
@@ -2342,7 +2502,8 @@
           "sourceDate": "2025-05-22",
           "productName": "Vidalia Onions",
           "savingsPercentage": 0,
-          "type": "core"
+          "type": "core",
+          "category": "produce"
         },
         {
           "recipeIngredientName": "fresh parsley",
@@ -2356,7 +2517,8 @@
           "sourceDate": "2024-07-15",
           "productName": "parsley",
           "savingsPercentage": 0,
-          "type": "core"
+          "type": "core",
+          "category": "produce"
         },
         {
           "recipeIngredientName": "sandwich pickles",
@@ -2374,7 +2536,8 @@
           "savingsPercentage": 0,
           "type": "to taste"
         }
-      ]
+      ],
+      "img": "/Falafel_Pita.png"
     },
     {
       "name": "How to Make the Best BLT!",
@@ -2396,7 +2559,8 @@
           "sourceDate": "2025-05-22",
           "productName": "DEMPSTER'S White or Whole Wheat, Texas Toast or Sandwich Bread",
           "savingsPercentage": 0,
-          "type": "core"
+          "type": "core",
+          "category": "bakery"
         },
         {
           "recipeIngredientName": "butter",
@@ -2410,7 +2574,8 @@
           "sourceDate": "2025-04-22",
           "productName": "unsalted butter",
           "savingsPercentage": 0,
-          "type": "core"
+          "type": "core",
+          "category": "dairy"
         },
         {
           "recipeIngredientName": "mayonnaise",
@@ -2424,7 +2589,8 @@
           "sourceDate": "2025-05-22",
           "productName": "KRAFT Miracle Whip or Mayonnaise",
           "savingsPercentage": 23.183925811437398,
-          "type": "core"
+          "type": "core",
+          "category": "condiments"
         },
         {
           "recipeIngredientName": "bacon",
@@ -2438,7 +2604,8 @@
           "sourceDate": "2025-05-22",
           "productName": "COMPLIMENTS DELIGHT Bacon",
           "savingsPercentage": 14.306151645207441,
-          "type": "core"
+          "type": "core",
+          "category": "meat"
         },
         {
           "recipeIngredientName": "green leaf lettuce",
@@ -2452,7 +2619,8 @@
           "sourceDate": "2025-04-22",
           "productName": "green leaf lettuce",
           "savingsPercentage": 0,
-          "type": "core"
+          "type": "core",
+          "category": "produce"
         },
         {
           "recipeIngredientName": "tomato",
@@ -2466,7 +2634,8 @@
           "sourceDate": "2025-05-22",
           "productName": "Hot House Tomatoes",
           "savingsPercentage": 0,
-          "type": "core"
+          "type": "core",
+          "category": "produce"
         },
         {
           "recipeIngredientName": "avocado",
@@ -2480,7 +2649,8 @@
           "sourceDate": "2025-04-16",
           "productName": "avocado",
           "savingsPercentage": 0,
-          "type": "core"
+          "type": "core",
+          "category": "produce"
         },
         {
           "recipeIngredientName": "salt",
@@ -2488,7 +2658,8 @@
           "regularPrice": 0,
           "source": "skipped",
           "savingsPercentage": 0,
-          "type": "to taste"
+          "type": "to taste",
+          "category": "spices"
         },
         {
           "recipeIngredientName": "black pepper",
@@ -2496,9 +2667,11 @@
           "regularPrice": 0,
           "source": "skipped",
           "savingsPercentage": 0,
-          "type": "to taste"
+          "type": "to taste",
+          "category": "spices"
         }
-      ]
+      ],
+      "img": "/BLT.png"
     }
   ],
   "dinner": [
@@ -2522,7 +2695,8 @@
           "sourceDate": "2025-04-22",
           "productName": "spaghetti",
           "savingsPercentage": 0,
-          "type": "core"
+          "type": "core",
+          "category": "pantry"
         },
         {
           "recipeIngredientName": "unsalted butter",
@@ -2536,7 +2710,8 @@
           "sourceDate": "2025-04-22",
           "productName": "unsalted butter",
           "savingsPercentage": 0,
-          "type": "core"
+          "type": "core",
+          "category": "dairy"
         },
         {
           "recipeIngredientName": "garlic",
@@ -2550,7 +2725,8 @@
           "sourceDate": "2024-12-12",
           "productName": "garlic",
           "savingsPercentage": 0,
-          "type": "core"
+          "type": "core",
+          "category": "produce"
         },
         {
           "recipeIngredientName": "red pepper flakes",
@@ -2558,7 +2734,8 @@
           "regularPrice": 0,
           "source": "skipped",
           "savingsPercentage": 0,
-          "type": "optional"
+          "type": "optional",
+          "category": "spices"
         },
         {
           "recipeIngredientName": "Parmesan cheese",
@@ -2572,7 +2749,8 @@
           "sourceDate": "2025-05-22",
           "productName": "KRAFT Parmesan Shaved or Aged",
           "savingsPercentage": 0,
-          "type": "core"
+          "type": "core",
+          "category": "dairy"
         },
         {
           "recipeIngredientName": "salt",
@@ -2580,7 +2758,8 @@
           "regularPrice": 0,
           "source": "skipped",
           "savingsPercentage": 0,
-          "type": "to taste"
+          "type": "to taste",
+          "category": "spices"
         },
         {
           "recipeIngredientName": "black pepper",
@@ -2588,7 +2767,8 @@
           "regularPrice": 0,
           "source": "skipped",
           "savingsPercentage": 0,
-          "type": "to taste"
+          "type": "to taste",
+          "category": "spices"
         },
         {
           "recipeIngredientName": "fresh parsley",
@@ -2596,9 +2776,11 @@
           "regularPrice": 0,
           "source": "skipped",
           "savingsPercentage": 0,
-          "type": "optional"
+          "type": "optional",
+          "category": "produce"
         }
-      ]
+      ],
+      "img": "/Parmesan_Garlic_Spaghetti.png"
     },
     {
       "name": "Broccoli Rice Casserole",
@@ -2620,7 +2802,8 @@
           "sourceDate": "2024-10-29",
           "productName": "broccoli",
           "savingsPercentage": 0,
-          "type": "core"
+          "type": "core",
+          "category": "produce"
         },
         {
           "recipeIngredientName": "white rice",
@@ -2634,7 +2817,8 @@
           "sourceDate": "2025-05-22",
           "productName": "HOMAI Calrose Premium Rice",
           "savingsPercentage": 0,
-          "type": "core"
+          "type": "core",
+          "category": "pantry"
         },
         {
           "recipeIngredientName": "butter",
@@ -2648,7 +2832,8 @@
           "sourceDate": "2025-04-22",
           "productName": "unsalted butter",
           "savingsPercentage": 0,
-          "type": "core"
+          "type": "core",
+          "category": "dairy"
         },
         {
           "recipeIngredientName": "onion",
@@ -2662,7 +2847,8 @@
           "sourceDate": "2025-05-22",
           "productName": "Vidalia Onions",
           "savingsPercentage": 0,
-          "type": "core"
+          "type": "core",
+          "category": "produce"
         },
         {
           "recipeIngredientName": "all-purpose flour",
@@ -2676,7 +2862,8 @@
           "sourceDate": "2025-04-22",
           "productName": "all-purpose flour",
           "savingsPercentage": 0,
-          "type": "core"
+          "type": "core",
+          "category": "pantry"
         },
         {
           "recipeIngredientName": "milk",
@@ -2690,7 +2877,8 @@
           "sourceDate": "2025-04-22",
           "productName": "milk",
           "savingsPercentage": 0,
-          "type": "core"
+          "type": "core",
+          "category": "dairy"
         },
         {
           "recipeIngredientName": "garlic powder",
@@ -2704,7 +2892,8 @@
           "sourceDate": "2024-09-11",
           "productName": "garlic powder",
           "savingsPercentage": 0,
-          "type": "core"
+          "type": "core",
+          "category": "spices"
         },
         {
           "recipeIngredientName": "black pepper",
@@ -2712,7 +2901,8 @@
           "regularPrice": 0,
           "source": "skipped",
           "savingsPercentage": 0,
-          "type": "to taste"
+          "type": "to taste",
+          "category": "spices"
         },
         {
           "recipeIngredientName": "dry mustard powder",
@@ -2726,7 +2916,8 @@
           "sourceDate": "2025-04-29",
           "productName": "dry mustard powder",
           "savingsPercentage": 0,
-          "type": "core"
+          "type": "core",
+          "category": "spices"
         },
         {
           "recipeIngredientName": "paprika",
@@ -2740,7 +2931,8 @@
           "sourceDate": "2024-06-29",
           "productName": "paprika",
           "savingsPercentage": 0,
-          "type": "core"
+          "type": "core",
+          "category": "spices"
         },
         {
           "recipeIngredientName": "salt",
@@ -2748,7 +2940,8 @@
           "regularPrice": 0,
           "source": "skipped",
           "savingsPercentage": 0,
-          "type": "to taste"
+          "type": "to taste",
+          "category": "spices"
         },
         {
           "recipeIngredientName": "cream cheese",
@@ -2762,7 +2955,8 @@
           "sourceDate": "2025-05-22",
           "productName": "PHILADELPHIA Cream Cheese",
           "savingsPercentage": 0,
-          "type": "core"
+          "type": "core",
+          "category": "dairy"
         },
         {
           "recipeIngredientName": "cheddar cheese",
@@ -2776,9 +2970,11 @@
           "sourceDate": "2025-05-22",
           "productName": "CRACKER BARREL Cheese",
           "savingsPercentage": 26.500000000000007,
-          "type": "core"
+          "type": "core",
+          "category": "dairy"
         }
-      ]
+      ],
+      "img": "/Broccoli_Rice_Casserole.png"
     },
     {
       "name": "Creamy Broccoli Mac and Cheese",
@@ -2800,7 +2996,8 @@
           "sourceDate": "2025-04-22",
           "productName": "spaghetti",
           "savingsPercentage": 0,
-          "type": "core"
+          "type": "core",
+          "category": "pantry"
         },
         {
           "recipeIngredientName": "unsalted butter",
@@ -2814,7 +3011,8 @@
           "sourceDate": "2025-04-22",
           "productName": "unsalted butter",
           "savingsPercentage": 0,
-          "type": "core"
+          "type": "core",
+          "category": "dairy"
         },
         {
           "recipeIngredientName": "garlic",
@@ -2828,7 +3026,8 @@
           "sourceDate": "2024-12-12",
           "productName": "garlic",
           "savingsPercentage": 0,
-          "type": "core"
+          "type": "core",
+          "category": "produce"
         },
         {
           "recipeIngredientName": "shallot",
@@ -2842,7 +3041,8 @@
           "sourceDate": "2025-04-22",
           "productName": "shallots",
           "savingsPercentage": 0,
-          "type": "core"
+          "type": "core",
+          "category": "produce"
         },
         {
           "recipeIngredientName": "all-purpose flour",
@@ -2856,7 +3056,8 @@
           "sourceDate": "2025-04-22",
           "productName": "all-purpose flour",
           "savingsPercentage": 0,
-          "type": "core"
+          "type": "core",
+          "category": "pantry"
         },
         {
           "recipeIngredientName": "whole milk",
@@ -2870,7 +3071,8 @@
           "sourceDate": "2025-04-22",
           "productName": "milk",
           "savingsPercentage": 0,
-          "type": "core"
+          "type": "core",
+          "category": "dairy"
         },
         {
           "recipeIngredientName": "half and half",
@@ -2884,7 +3086,8 @@
           "sourceDate": "2025-04-30",
           "productName": "half and half",
           "savingsPercentage": 0,
-          "type": "core"
+          "type": "core",
+          "category": "dairy"
         },
         {
           "recipeIngredientName": "Dijon mustard",
@@ -2898,7 +3101,8 @@
           "sourceDate": "2025-05-22",
           "productName": "PANACHE Dijon Mustard",
           "savingsPercentage": 0,
-          "type": "core"
+          "type": "core",
+          "category": "condiments"
         },
         {
           "recipeIngredientName": "salt",
@@ -2906,7 +3110,8 @@
           "regularPrice": 0,
           "source": "skipped",
           "savingsPercentage": 0,
-          "type": "to taste"
+          "type": "to taste",
+          "category": "spices"
         },
         {
           "recipeIngredientName": "black pepper",
@@ -2914,7 +3119,8 @@
           "regularPrice": 0,
           "source": "skipped",
           "savingsPercentage": 0,
-          "type": "to taste"
+          "type": "to taste",
+          "category": "spices"
         },
         {
           "recipeIngredientName": "broccoli florets",
@@ -2928,7 +3134,8 @@
           "sourceDate": "2024-10-29",
           "productName": "broccoli",
           "savingsPercentage": 0,
-          "type": "core"
+          "type": "core",
+          "category": "produce"
         },
         {
           "recipeIngredientName": "cheddar cheese",
@@ -2942,9 +3149,11 @@
           "sourceDate": "2025-05-22",
           "productName": "CRACKER BARREL Cheese",
           "savingsPercentage": 26.5,
-          "type": "core"
+          "type": "core",
+          "category": "dairy"
         }
-      ]
+      ],
+      "img": "/Broccoli_Mac_and_Cheese.png"
     },
     {
       "name": "Spaghetti Bolognese",
@@ -2966,7 +3175,8 @@
           "sourceDate": "2025-04-22",
           "productName": "extra virgin olive oil",
           "savingsPercentage": 0,
-          "type": "core"
+          "type": "core",
+          "category": "pantry"
         },
         {
           "recipeIngredientName": "garlic",
@@ -2980,7 +3190,8 @@
           "sourceDate": "2024-12-12",
           "productName": "garlic",
           "savingsPercentage": 0,
-          "type": "core"
+          "type": "core",
+          "category": "produce"
         },
         {
           "recipeIngredientName": "onion",
@@ -2994,7 +3205,8 @@
           "sourceDate": "2025-05-22",
           "productName": "Vidalia Onions",
           "savingsPercentage": 0,
-          "type": "core"
+          "type": "core",
+          "category": "produce"
         },
         {
           "recipeIngredientName": "ground beef",
@@ -3008,7 +3220,8 @@
           "sourceDate": "2025-05-22",
           "productName": "Fresh Lean Ground Beef Family Size",
           "savingsPercentage": 33.361134278565466,
-          "type": "core"
+          "type": "core",
+          "category": "meat"
         },
         {
           "recipeIngredientName": "dry red wine",
@@ -3016,7 +3229,8 @@
           "regularPrice": 0,
           "source": "skipped",
           "savingsPercentage": 0,
-          "type": "optional"
+          "type": "optional",
+          "category": "beverages"
         },
         {
           "recipeIngredientName": "beef bouillon cube",
@@ -3030,7 +3244,8 @@
           "sourceDate": "2025-04-22",
           "productName": "beef bouillon cubes",
           "savingsPercentage": 0,
-          "type": "core"
+          "type": "core",
+          "category": "pantry"
         },
         {
           "recipeIngredientName": "canned crushed tomatoes",
@@ -3044,7 +3259,8 @@
           "sourceDate": "2025-04-30",
           "productName": "canned diced tomatoes",
           "savingsPercentage": 0,
-          "type": "core"
+          "type": "core",
+          "category": "pantry"
         },
         {
           "recipeIngredientName": "tomato paste",
@@ -3066,7 +3282,8 @@
           "regularPrice": 0,
           "source": "skipped",
           "savingsPercentage": 0,
-          "type": "optional"
+          "type": "optional",
+          "category": "pantry"
         },
         {
           "recipeIngredientName": "Worcestershire sauce",
@@ -3094,7 +3311,8 @@
           "sourceDate": "2024-12-22",
           "productName": "bay leaves",
           "savingsPercentage": 0,
-          "type": "core"
+          "type": "core",
+          "category": "spices"
         },
         {
           "recipeIngredientName": "fresh thyme",
@@ -3108,7 +3326,8 @@
           "sourceDate": "2025-04-22",
           "productName": "fresh thyme leaves",
           "savingsPercentage": 0,
-          "type": "core"
+          "type": "core",
+          "category": "produce"
         },
         {
           "recipeIngredientName": "cooking salt",
@@ -3122,7 +3341,8 @@
           "sourceDate": "2025-04-16",
           "productName": "salt",
           "savingsPercentage": 0,
-          "type": "core"
+          "type": "core",
+          "category": "spices"
         },
         {
           "recipeIngredientName": "black pepper",
@@ -3136,7 +3356,8 @@
           "sourceDate": "2025-04-16",
           "productName": "pepper",
           "savingsPercentage": 0,
-          "type": "core"
+          "type": "core",
+          "category": "spices"
         },
         {
           "recipeIngredientName": "spaghetti",
@@ -3150,7 +3371,8 @@
           "sourceDate": "2025-04-22",
           "productName": "spaghetti",
           "savingsPercentage": 0,
-          "type": "core"
+          "type": "core",
+          "category": "pantry"
         },
         {
           "recipeIngredientName": "Parmesan cheese",
@@ -3158,7 +3380,8 @@
           "regularPrice": 0,
           "source": "skipped",
           "savingsPercentage": 0,
-          "type": "garnish"
+          "type": "garnish",
+          "category": "dairy"
         },
         {
           "recipeIngredientName": "parsley",
@@ -3166,9 +3389,11 @@
           "regularPrice": 0,
           "source": "skipped",
           "savingsPercentage": 0,
-          "type": "garnish"
+          "type": "garnish",
+          "category": "produce"
         }
-      ]
+      ],
+      "img": "/Spaghetti_Bolognese.png"
     },
     {
       "name": "The Best Chili Recipe",
@@ -3190,7 +3415,8 @@
           "sourceDate": "2025-05-22",
           "productName": "Fresh Lean Ground Beef Family Size",
           "savingsPercentage": 33.361134278565466,
-          "type": "core"
+          "type": "core",
+          "category": "meat"
         },
         {
           "recipeIngredientName": "onion",
@@ -3204,7 +3430,8 @@
           "sourceDate": "2025-05-22",
           "productName": "Vidalia Onions",
           "savingsPercentage": 0,
-          "type": "core"
+          "type": "core",
+          "category": "produce"
         },
         {
           "recipeIngredientName": "jalapeño",
@@ -3218,7 +3445,8 @@
           "sourceDate": "2025-04-30",
           "productName": "jalapeno pepper",
           "savingsPercentage": 0,
-          "type": "core"
+          "type": "core",
+          "category": "produce"
         },
         {
           "recipeIngredientName": "garlic",
@@ -3232,7 +3460,8 @@
           "sourceDate": "2024-12-12",
           "productName": "garlic",
           "savingsPercentage": 0,
-          "type": "core"
+          "type": "core",
+          "category": "produce"
         },
         {
           "recipeIngredientName": "chili powder",
@@ -3246,7 +3475,8 @@
           "sourceDate": "2024-06-20",
           "productName": "chili powder",
           "savingsPercentage": 0,
-          "type": "core"
+          "type": "core",
+          "category": "spices"
         },
         {
           "recipeIngredientName": "cumin",
@@ -3260,7 +3490,8 @@
           "sourceDate": "2025-01-10",
           "productName": "ground cumin",
           "savingsPercentage": 0,
-          "type": "core"
+          "type": "core",
+          "category": "spices"
         },
         {
           "recipeIngredientName": "green bell pepper",
@@ -3274,7 +3505,8 @@
           "sourceDate": "2024-06-25",
           "productName": "red bell pepper",
           "savingsPercentage": 0,
-          "type": "core"
+          "type": "core",
+          "category": "produce"
         },
         {
           "recipeIngredientName": "canned crushed tomatoes",
@@ -3288,7 +3520,8 @@
           "sourceDate": "2025-04-30",
           "productName": "canned diced tomatoes",
           "savingsPercentage": 0,
-          "type": "core"
+          "type": "core",
+          "category": "pantry"
         },
         {
           "recipeIngredientName": "canned red kidney beans",
@@ -3302,7 +3535,8 @@
           "sourceDate": "2025-04-30",
           "productName": "canned kidney beans",
           "savingsPercentage": 0,
-          "type": "core"
+          "type": "core",
+          "category": "pantry"
         },
         {
           "recipeIngredientName": "canned diced tomatoes",
@@ -3316,7 +3550,8 @@
           "sourceDate": "2025-04-30",
           "productName": "canned diced tomatoes",
           "savingsPercentage": 0,
-          "type": "core"
+          "type": "core",
+          "category": "pantry"
         },
         {
           "recipeIngredientName": "beef broth",
@@ -3330,7 +3565,8 @@
           "sourceDate": "2024-08-28",
           "productName": "beef broth",
           "savingsPercentage": 0,
-          "type": "core"
+          "type": "core",
+          "category": "pantry"
         },
         {
           "recipeIngredientName": "beer",
@@ -3366,7 +3602,8 @@
           "regularPrice": 0,
           "source": "skipped",
           "savingsPercentage": 0,
-          "type": "optional"
+          "type": "optional",
+          "category": "pantry"
         },
         {
           "recipeIngredientName": "salt",
@@ -3374,7 +3611,8 @@
           "regularPrice": 0,
           "source": "skipped",
           "savingsPercentage": 0,
-          "type": "to taste"
+          "type": "to taste",
+          "category": "spices"
         },
         {
           "recipeIngredientName": "black pepper",
@@ -3382,9 +3620,11 @@
           "regularPrice": 0,
           "source": "skipped",
           "savingsPercentage": 0,
-          "type": "to taste"
+          "type": "to taste",
+          "category": "spices"
         }
-      ]
+      ],
+      "img": "/Best_Chilli.png"
     },
     {
       "name": "Avocado Sweet Potato Tacos",
@@ -3406,7 +3646,8 @@
           "sourceDate": "2025-04-22",
           "productName": "sweet potato",
           "savingsPercentage": 0,
-          "type": "core"
+          "type": "core",
+          "category": "produce"
         },
         {
           "recipeIngredientName": "extra virgin olive oil",
@@ -3420,7 +3661,8 @@
           "sourceDate": "2025-04-22",
           "productName": "extra virgin olive oil",
           "savingsPercentage": 0,
-          "type": "core"
+          "type": "core",
+          "category": "pantry"
         },
         {
           "recipeIngredientName": "chili powder",
@@ -3434,7 +3676,8 @@
           "sourceDate": "2024-06-20",
           "productName": "chili powder",
           "savingsPercentage": 0,
-          "type": "core"
+          "type": "core",
+          "category": "spices"
         },
         {
           "recipeIngredientName": "sea salt",
@@ -3448,7 +3691,8 @@
           "sourceDate": "2025-04-16",
           "productName": "salt",
           "savingsPercentage": 0,
-          "type": "core"
+          "type": "core",
+          "category": "spices"
         },
         {
           "recipeIngredientName": "black pepper",
@@ -3462,7 +3706,8 @@
           "sourceDate": "2025-04-16",
           "productName": "pepper",
           "savingsPercentage": 0,
-          "type": "core"
+          "type": "core",
+          "category": "spices"
         },
         {
           "recipeIngredientName": "tortilla",
@@ -3476,7 +3721,8 @@
           "sourceDate": "2024-12-19",
           "productName": "tortillas",
           "savingsPercentage": 0,
-          "type": "core"
+          "type": "core",
+          "category": "bakery"
         },
         {
           "recipeIngredientName": "black beans",
@@ -3490,7 +3736,8 @@
           "sourceDate": "2024-08-05",
           "productName": "black beans",
           "savingsPercentage": 0,
-          "type": "core"
+          "type": "core",
+          "category": "pantry"
         },
         {
           "recipeIngredientName": "lime",
@@ -3504,7 +3751,8 @@
           "sourceDate": "2024-12-15",
           "productName": "lime",
           "savingsPercentage": 0,
-          "type": "core"
+          "type": "core",
+          "category": "produce"
         },
         {
           "recipeIngredientName": "Greek yogurt",
@@ -3518,7 +3766,8 @@
           "sourceDate": "2025-05-22",
           "productName": "LIBERTÉ Greek Yogurt",
           "savingsPercentage": 49.916247906197654,
-          "type": "core"
+          "type": "core",
+          "category": "dairy"
         },
         {
           "recipeIngredientName": "avocado",
@@ -3532,7 +3781,8 @@
           "sourceDate": "2025-04-16",
           "productName": "avocado",
           "savingsPercentage": 0,
-          "type": "core"
+          "type": "core",
+          "category": "produce"
         },
         {
           "recipeIngredientName": "garlic",
@@ -3546,7 +3796,8 @@
           "sourceDate": "2024-12-12",
           "productName": "garlic",
           "savingsPercentage": 0,
-          "type": "core"
+          "type": "core",
+          "category": "produce"
         },
         {
           "recipeIngredientName": "scallion",
@@ -3554,7 +3805,8 @@
           "regularPrice": 0,
           "source": "skipped",
           "savingsPercentage": 0,
-          "type": "optional"
+          "type": "optional",
+          "category": "produce"
         },
         {
           "recipeIngredientName": "feta cheese",
@@ -3562,7 +3814,8 @@
           "regularPrice": 0,
           "source": "skipped",
           "savingsPercentage": 0,
-          "type": "optional"
+          "type": "optional",
+          "category": "dairy"
         },
         {
           "recipeIngredientName": "pickled onions",
@@ -3578,7 +3831,8 @@
           "regularPrice": 0,
           "source": "skipped",
           "savingsPercentage": 0,
-          "type": "optional"
+          "type": "optional",
+          "category": "produce"
         },
         {
           "recipeIngredientName": "cilantro",
@@ -3586,9 +3840,11 @@
           "regularPrice": 0,
           "source": "skipped",
           "savingsPercentage": 0,
-          "type": "optional"
+          "type": "optional",
+          "category": "produce"
         }
-      ]
+      ],
+      "img": "/Avocado_SweetPotato_Tacos"
     },
     {
       "name": "Ginger Shrimp Stir-Fry",
@@ -3624,7 +3880,8 @@
           "sourceDate": "2025-05-22",
           "productName": "COMPLIMENTS DELIGHT Bacon",
           "savingsPercentage": 14.306151645207446,
-          "type": "core"
+          "type": "core",
+          "category": "meat"
         },
         {
           "recipeIngredientName": "jasmine rice",
@@ -3638,7 +3895,8 @@
           "sourceDate": "2025-05-22",
           "productName": "HOMAI Calrose Premium Rice",
           "savingsPercentage": 0,
-          "type": "core"
+          "type": "core",
+          "category": "pantry"
         },
         {
           "recipeIngredientName": "hoisin sauce",
@@ -3680,7 +3938,8 @@
           "sourceDate": "2024-12-12",
           "productName": "garlic",
           "savingsPercentage": 0,
-          "type": "core"
+          "type": "core",
+          "category": "produce"
         },
         {
           "recipeIngredientName": "bok choy",
@@ -3694,7 +3953,8 @@
           "sourceDate": "2025-05-08",
           "productName": "bok choy",
           "savingsPercentage": 0,
-          "type": "core"
+          "type": "core",
+          "category": "produce"
         },
         {
           "recipeIngredientName": "carrot",
@@ -3708,7 +3968,8 @@
           "sourceDate": "2025-05-22",
           "productName": "Red Carrots",
           "savingsPercentage": 0,
-          "type": "core"
+          "type": "core",
+          "category": "produce"
         },
         {
           "recipeIngredientName": "ginger",
@@ -3722,7 +3983,8 @@
           "sourceDate": "2025-04-22",
           "productName": "ginger",
           "savingsPercentage": 0,
-          "type": "core"
+          "type": "core",
+          "category": "produce"
         },
         {
           "recipeIngredientName": "crispy shallots",
@@ -3738,7 +4000,8 @@
           "regularPrice": 0,
           "source": "skipped",
           "savingsPercentage": 0,
-          "type": "to taste"
+          "type": "to taste",
+          "category": "pantry"
         },
         {
           "recipeIngredientName": "salt",
@@ -3746,7 +4009,8 @@
           "regularPrice": 0,
           "source": "skipped",
           "savingsPercentage": 0,
-          "type": "to taste"
+          "type": "to taste",
+          "category": "spices"
         },
         {
           "recipeIngredientName": "black pepper",
@@ -3754,9 +4018,11 @@
           "regularPrice": 0,
           "source": "skipped",
           "savingsPercentage": 0,
-          "type": "to taste"
+          "type": "to taste",
+          "category": "spices"
         }
-      ]
+      ],
+      "img": "/Ginger_Shrimp_StirFry.png"
     },
     {
       "name": "Rainbow Trout Chowder",
@@ -3778,7 +4044,8 @@
           "sourceDate": "2025-04-22",
           "productName": "unsalted butter",
           "savingsPercentage": 0,
-          "type": "core"
+          "type": "core",
+          "category": "dairy"
         },
         {
           "recipeIngredientName": "red onion",
@@ -3792,7 +4059,8 @@
           "sourceDate": "2025-05-22",
           "productName": "Vidalia Onions",
           "savingsPercentage": 0,
-          "type": "core"
+          "type": "core",
+          "category": "produce"
         },
         {
           "recipeIngredientName": "all-purpose flour",
@@ -3806,7 +4074,8 @@
           "sourceDate": "2025-04-22",
           "productName": "all-purpose flour",
           "savingsPercentage": 0,
-          "type": "core"
+          "type": "core",
+          "category": "pantry"
         },
         {
           "recipeIngredientName": "chicken broth",
@@ -3820,7 +4089,8 @@
           "sourceDate": "2024-08-15",
           "productName": "chicken broth",
           "savingsPercentage": 0,
-          "type": "core"
+          "type": "core",
+          "category": "pantry"
         },
         {
           "recipeIngredientName": "baking potatoes",
@@ -3834,7 +4104,8 @@
           "sourceDate": "2025-01-21",
           "productName": "russet potatoes",
           "savingsPercentage": 0,
-          "type": "core"
+          "type": "core",
+          "category": "produce"
         },
         {
           "recipeIngredientName": "corn kernels",
@@ -3848,7 +4119,8 @@
           "sourceDate": "2025-05-22",
           "productName": "Bulk Corn product of USA",
           "savingsPercentage": 35.790419930653655,
-          "type": "core"
+          "type": "core",
+          "category": "produce"
         },
         {
           "recipeIngredientName": "rainbow trout fillet",
@@ -3862,7 +4134,8 @@
           "sourceDate": "2025-05-02",
           "productName": "rainbow trout fillet",
           "savingsPercentage": 0,
-          "type": "core"
+          "type": "core",
+          "category": "seafood"
         },
         {
           "recipeIngredientName": "salt",
@@ -3870,7 +4143,8 @@
           "regularPrice": 0,
           "source": "skipped",
           "savingsPercentage": 0,
-          "type": "to taste"
+          "type": "to taste",
+          "category": "spices"
         },
         {
           "recipeIngredientName": "black pepper",
@@ -3878,7 +4152,8 @@
           "regularPrice": 0,
           "source": "skipped",
           "savingsPercentage": 0,
-          "type": "to taste"
+          "type": "to taste",
+          "category": "spices"
         },
         {
           "recipeIngredientName": "fresh basil",
@@ -3886,7 +4161,8 @@
           "regularPrice": 0,
           "source": "skipped",
           "savingsPercentage": 0,
-          "type": "garnish"
+          "type": "garnish",
+          "category": "produce"
         },
         {
           "recipeIngredientName": "fresh corn kernels",
@@ -3896,7 +4172,8 @@
           "savingsPercentage": 0,
           "type": "garnish"
         }
-      ]
+      ],
+      "img": "/RainbowTrout_Chowder.png"
     },
     {
       "name": "The Best Cheesy Potatoes",
@@ -3918,7 +4195,8 @@
           "sourceDate": "2025-01-21",
           "productName": "russet potatoes",
           "savingsPercentage": 0,
-          "type": "core"
+          "type": "core",
+          "category": "produce"
         },
         {
           "recipeIngredientName": "kosher salt",
@@ -3932,7 +4210,8 @@
           "sourceDate": "2025-04-30",
           "productName": "kosher salt",
           "savingsPercentage": 0,
-          "type": "core"
+          "type": "core",
+          "category": "spices"
         },
         {
           "recipeIngredientName": "black pepper",
@@ -3946,7 +4225,8 @@
           "sourceDate": "2025-04-16",
           "productName": "pepper",
           "savingsPercentage": 0,
-          "type": "core"
+          "type": "core",
+          "category": "spices"
         },
         {
           "recipeIngredientName": "unsalted butter",
@@ -3960,7 +4240,8 @@
           "sourceDate": "2025-04-22",
           "productName": "unsalted butter",
           "savingsPercentage": 0,
-          "type": "core"
+          "type": "core",
+          "category": "dairy"
         },
         {
           "recipeIngredientName": "all-purpose flour",
@@ -3974,7 +4255,8 @@
           "sourceDate": "2025-04-22",
           "productName": "all-purpose flour",
           "savingsPercentage": 0,
-          "type": "core"
+          "type": "core",
+          "category": "pantry"
         },
         {
           "recipeIngredientName": "chicken bouillon",
@@ -3988,7 +4270,8 @@
           "sourceDate": "2024-07-25",
           "productName": "chicken bouillon",
           "savingsPercentage": 0,
-          "type": "core"
+          "type": "core",
+          "category": "pantry"
         },
         {
           "recipeIngredientName": "whole milk",
@@ -4002,7 +4285,8 @@
           "sourceDate": "2025-04-22",
           "productName": "milk",
           "savingsPercentage": 0,
-          "type": "core"
+          "type": "core",
+          "category": "dairy"
         },
         {
           "recipeIngredientName": "cayenne pepper",
@@ -4016,7 +4300,8 @@
           "sourceDate": "2024-07-04",
           "productName": "cayenne pepper",
           "savingsPercentage": 0,
-          "type": "core"
+          "type": "core",
+          "category": "spices"
         },
         {
           "recipeIngredientName": "cheddar cheese",
@@ -4030,7 +4315,8 @@
           "sourceDate": "2025-05-22",
           "productName": "CRACKER BARREL Cheese",
           "savingsPercentage": 26.49999999999999,
-          "type": "core"
+          "type": "core",
+          "category": "dairy"
         },
         {
           "recipeIngredientName": "sour cream",
@@ -4044,7 +4330,8 @@
           "sourceDate": "2025-05-22",
           "productName": "GAY LEA Sour Cream",
           "savingsPercentage": 0,
-          "type": "core"
+          "type": "core",
+          "category": "dairy"
         },
         {
           "recipeIngredientName": "scallion",
@@ -4058,7 +4345,8 @@
           "sourceDate": "2025-04-16",
           "productName": "green onions",
           "savingsPercentage": 0,
-          "type": "core"
+          "type": "core",
+          "category": "produce"
         },
         {
           "recipeIngredientName": "cornflakes",
@@ -4072,9 +4360,11 @@
           "sourceDate": "2024-08-11",
           "productName": "cornflakes",
           "savingsPercentage": 0,
-          "type": "core"
+          "type": "core",
+          "category": "breakfast"
         }
-      ]
+      ],
+      "img": "/Cheesy_Potatoes.png"
     },
     {
       "name": "Roast Chicken & Vegetables",
@@ -4110,7 +4400,8 @@
           "sourceDate": "2025-05-22",
           "productName": "Red Carrots",
           "savingsPercentage": 0,
-          "type": "core"
+          "type": "core",
+          "category": "produce"
         },
         {
           "recipeIngredientName": "potatoes",
@@ -4124,7 +4415,8 @@
           "sourceDate": "2025-01-21",
           "productName": "russet potatoes",
           "savingsPercentage": 0,
-          "type": "core"
+          "type": "core",
+          "category": "produce"
         },
         {
           "recipeIngredientName": "onions",
@@ -4138,7 +4430,8 @@
           "sourceDate": "2025-05-22",
           "productName": "Vidalia Onions",
           "savingsPercentage": 0,
-          "type": "core"
+          "type": "core",
+          "category": "produce"
         },
         {
           "recipeIngredientName": "olive oil",
@@ -4152,7 +4445,8 @@
           "sourceDate": "2025-04-22",
           "productName": "extra virgin olive oil",
           "savingsPercentage": 0,
-          "type": "core"
+          "type": "core",
+          "category": "pantry"
         },
         {
           "recipeIngredientName": "Italian seasoning",
@@ -4166,7 +4460,8 @@
           "sourceDate": "2025-04-22",
           "productName": "italian seasoning",
           "savingsPercentage": 0,
-          "type": "core"
+          "type": "core",
+          "category": "spices"
         },
         {
           "recipeIngredientName": "paprika",
@@ -4174,7 +4469,8 @@
           "regularPrice": 0,
           "source": "skipped",
           "savingsPercentage": 0,
-          "type": "optional"
+          "type": "optional",
+          "category": "spices"
         },
         {
           "recipeIngredientName": "seasoning salt",
@@ -4190,7 +4486,8 @@
           "regularPrice": 0,
           "source": "skipped",
           "savingsPercentage": 0,
-          "type": "optional"
+          "type": "optional",
+          "category": "spices"
         },
         {
           "recipeIngredientName": "black pepper",
@@ -4198,7 +4495,8 @@
           "regularPrice": 0,
           "source": "skipped",
           "savingsPercentage": 0,
-          "type": "optional"
+          "type": "optional",
+          "category": "spices"
         },
         {
           "recipeIngredientName": "dried parsley",
@@ -4206,7 +4504,8 @@
           "regularPrice": 0,
           "source": "skipped",
           "savingsPercentage": 0,
-          "type": "optional"
+          "type": "optional",
+          "category": "spices"
         },
         {
           "recipeIngredientName": "dried thyme",
@@ -4214,7 +4513,8 @@
           "regularPrice": 0,
           "source": "skipped",
           "savingsPercentage": 0,
-          "type": "optional"
+          "type": "optional",
+          "category": "spices"
         },
         {
           "recipeIngredientName": "dried rosemary",
@@ -4222,7 +4522,8 @@
           "regularPrice": 0,
           "source": "skipped",
           "savingsPercentage": 0,
-          "type": "optional"
+          "type": "optional",
+          "category": "spices"
         }
       ]
     },
@@ -4260,7 +4561,8 @@
           "sourceDate": "2025-01-17",
           "productName": "dried rosemary",
           "savingsPercentage": 0,
-          "type": "core"
+          "type": "core",
+          "category": "spices"
         },
         {
           "recipeIngredientName": "dried thyme",
@@ -4274,7 +4576,8 @@
           "sourceDate": "2025-01-03",
           "productName": "dried thyme",
           "savingsPercentage": 0,
-          "type": "core"
+          "type": "core",
+          "category": "spices"
         },
         {
           "recipeIngredientName": "dried oregano",
@@ -4288,7 +4591,8 @@
           "sourceDate": "2025-01-07",
           "productName": "dried oregano",
           "savingsPercentage": 0,
-          "type": "core"
+          "type": "core",
+          "category": "spices"
         },
         {
           "recipeIngredientName": "dried parsley",
@@ -4302,7 +4606,8 @@
           "sourceDate": "2025-04-16",
           "productName": "dried parsley",
           "savingsPercentage": 0,
-          "type": "core"
+          "type": "core",
+          "category": "spices"
         },
         {
           "recipeIngredientName": "dried basil",
@@ -4316,7 +4621,8 @@
           "sourceDate": "2025-01-14",
           "productName": "dried basil",
           "savingsPercentage": 0,
-          "type": "core"
+          "type": "core",
+          "category": "spices"
         },
         {
           "recipeIngredientName": "red pepper flakes",
@@ -4330,7 +4636,8 @@
           "sourceDate": "2024-10-11",
           "productName": "red pepper flakes",
           "savingsPercentage": 0,
-          "type": "core"
+          "type": "core",
+          "category": "spices"
         },
         {
           "recipeIngredientName": "garlic powder",
@@ -4344,7 +4651,8 @@
           "sourceDate": "2024-09-11",
           "productName": "garlic powder",
           "savingsPercentage": 0,
-          "type": "core"
+          "type": "core",
+          "category": "spices"
         },
         {
           "recipeIngredientName": "salt",
@@ -4358,7 +4666,8 @@
           "sourceDate": "2025-04-16",
           "productName": "salt",
           "savingsPercentage": 0,
-          "type": "core"
+          "type": "core",
+          "category": "spices"
         },
         {
           "recipeIngredientName": "black pepper",
@@ -4372,7 +4681,8 @@
           "sourceDate": "2025-04-16",
           "productName": "pepper",
           "savingsPercentage": 0,
-          "type": "core"
+          "type": "core",
+          "category": "spices"
         },
         {
           "recipeIngredientName": "bell peppers",
@@ -4386,7 +4696,8 @@
           "sourceDate": "2024-06-25",
           "productName": "red bell pepper",
           "savingsPercentage": 0,
-          "type": "core"
+          "type": "core",
+          "category": "produce"
         },
         {
           "recipeIngredientName": "onions",
@@ -4400,7 +4711,8 @@
           "sourceDate": "2025-05-22",
           "productName": "Vidalia Onions",
           "savingsPercentage": 0,
-          "type": "core"
+          "type": "core",
+          "category": "produce"
         },
         {
           "recipeIngredientName": "corn",
@@ -4414,7 +4726,8 @@
           "sourceDate": "2025-05-22",
           "productName": "Bulk Corn product of USA",
           "savingsPercentage": 35.79041993065366,
-          "type": "core"
+          "type": "core",
+          "category": "produce"
         },
         {
           "recipeIngredientName": "tomatoes",
@@ -4428,7 +4741,8 @@
           "sourceDate": "2025-05-22",
           "productName": "Hot House Tomatoes",
           "savingsPercentage": 0,
-          "type": "core"
+          "type": "core",
+          "category": "produce"
         },
         {
           "recipeIngredientName": "jalapenos",
@@ -4442,7 +4756,8 @@
           "sourceDate": "2025-04-30",
           "productName": "jalapeno pepper",
           "savingsPercentage": 0,
-          "type": "core"
+          "type": "core",
+          "category": "produce"
         },
         {
           "recipeIngredientName": "red onion",
@@ -4456,7 +4771,8 @@
           "sourceDate": "2025-05-22",
           "productName": "Vidalia Onions",
           "savingsPercentage": 0,
-          "type": "core"
+          "type": "core",
+          "category": "produce"
         },
         {
           "recipeIngredientName": "lime",
@@ -4470,7 +4786,8 @@
           "sourceDate": "2024-12-15",
           "productName": "lime",
           "savingsPercentage": 0,
-          "type": "core"
+          "type": "core",
+          "category": "produce"
         },
         {
           "recipeIngredientName": "balsamic vinegar",
@@ -4498,7 +4815,8 @@
           "sourceDate": "2025-01-28",
           "productName": "fresh cilantro",
           "savingsPercentage": 0,
-          "type": "core"
+          "type": "core",
+          "category": "produce"
         },
         {
           "recipeIngredientName": "salt",
@@ -4506,7 +4824,8 @@
           "regularPrice": 0,
           "source": "skipped",
           "savingsPercentage": 0,
-          "type": "to taste"
+          "type": "to taste",
+          "category": "spices"
         },
         {
           "recipeIngredientName": "black pepper",
@@ -4514,7 +4833,8 @@
           "regularPrice": 0,
           "source": "skipped",
           "savingsPercentage": 0,
-          "type": "to taste"
+          "type": "to taste",
+          "category": "spices"
         },
         {
           "recipeIngredientName": "corn tortillas",
@@ -4528,9 +4848,11 @@
           "sourceDate": "2024-12-19",
           "productName": "tortillas",
           "savingsPercentage": 0,
-          "type": "core"
+          "type": "core",
+          "category": "bakery"
         }
-      ]
+      ],
+      "img": "/Grilled_PorkTenderloin_Wraps.png"
     },
     {
       "name": "Stuffed Bell Peppers",
@@ -4552,7 +4874,8 @@
           "sourceDate": "2024-06-25",
           "productName": "red bell pepper",
           "savingsPercentage": 0,
-          "type": "core"
+          "type": "core",
+          "category": "produce"
         },
         {
           "recipeIngredientName": "olive oil",
@@ -4566,7 +4889,8 @@
           "sourceDate": "2025-04-22",
           "productName": "extra virgin olive oil",
           "savingsPercentage": 0,
-          "type": "core"
+          "type": "core",
+          "category": "pantry"
         },
         {
           "recipeIngredientName": "lean ground beef",
@@ -4580,7 +4904,8 @@
           "sourceDate": "2025-05-22",
           "productName": "Fresh Lean Ground Beef Family Size",
           "savingsPercentage": 33.361134278565466,
-          "type": "core"
+          "type": "core",
+          "category": "meat"
         },
         {
           "recipeIngredientName": "kosher salt",
@@ -4588,7 +4913,8 @@
           "regularPrice": 0,
           "source": "skipped",
           "savingsPercentage": 0,
-          "type": "to taste"
+          "type": "to taste",
+          "category": "spices"
         },
         {
           "recipeIngredientName": "ground black pepper",
@@ -4596,7 +4922,8 @@
           "regularPrice": 0,
           "source": "skipped",
           "savingsPercentage": 0,
-          "type": "to taste"
+          "type": "to taste",
+          "category": "spices"
         },
         {
           "recipeIngredientName": "onion",
@@ -4610,7 +4937,8 @@
           "sourceDate": "2025-05-22",
           "productName": "Vidalia Onions",
           "savingsPercentage": 0,
-          "type": "core"
+          "type": "core",
+          "category": "produce"
         },
         {
           "recipeIngredientName": "garlic",
@@ -4624,7 +4952,8 @@
           "sourceDate": "2024-12-12",
           "productName": "garlic",
           "savingsPercentage": 0,
-          "type": "core"
+          "type": "core",
+          "category": "produce"
         },
         {
           "recipeIngredientName": "zucchini",
@@ -4638,7 +4967,8 @@
           "sourceDate": "2025-05-22",
           "productName": "Zucchini product of USA",
           "savingsPercentage": 0,
-          "type": "core"
+          "type": "core",
+          "category": "produce"
         },
         {
           "recipeIngredientName": "roma tomatoes",
@@ -4652,7 +4982,8 @@
           "sourceDate": "2025-04-22",
           "productName": "plum tomatoes",
           "savingsPercentage": 0,
-          "type": "core"
+          "type": "core",
+          "category": "produce"
         },
         {
           "recipeIngredientName": "red pepper flakes",
@@ -4660,7 +4991,8 @@
           "regularPrice": 0,
           "source": "skipped",
           "savingsPercentage": 0,
-          "type": "to taste"
+          "type": "to taste",
+          "category": "spices"
         },
         {
           "recipeIngredientName": "long-grain and wild rice",
@@ -4674,7 +5006,8 @@
           "sourceDate": "2025-04-30",
           "productName": "long grain and wild rice",
           "savingsPercentage": 0,
-          "type": "core"
+          "type": "core",
+          "category": "pantry"
         },
         {
           "recipeIngredientName": "pepper Jack cheese",
@@ -4688,9 +5021,12 @@
           "sourceDate": "2025-04-22",
           "productName": "pepper jack cheese",
           "savingsPercentage": 0,
-          "type": "core"
+          "type": "core",
+          "category": "dairy"
         }
-      ]
+      ],
+      "img": "/Stuffed_BellPepper.png"
     }
   ]
 }
+
