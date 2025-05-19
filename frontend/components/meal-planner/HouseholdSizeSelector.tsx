@@ -1,220 +1,183 @@
 'use client';
 
-import React, { useEffect, useRef } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { Users } from 'lucide-react';
 import { usePlannerStore } from './usePlannerStore';
 
+/**
+ * HouseholdSizeSelector – hydration‑safe bumper‑car stick people 🤼‍♂️
+ * -----------------------------------------------------------------
+ * Fixes the React hydration mismatch by ensuring **no random values are used
+ * during server‑side rendering**. All randomness is deferred to a `useEffect`
+ * that runs only in the browser after hydration completes.
+ */
 export function HouseholdSizeSelector() {
-  // Access just what we need from the store
-  const normalMealServings = usePlannerStore(state => state.normalMealServings);
-  const setNormalMealServings = usePlannerStore(state => state.setNormalMealServings);
+  // ─── Store state ───────────────────────────────────────────────────────────
+  const normalMealServings     = usePlannerStore(s => s.normalMealServings);
+  const setNormalMealServings  = usePlannerStore(s => s.setNormalMealServings);
+  const selectedMeals          = usePlannerStore(s => s.selectedMeals);
+  const recipeMultipliers      = usePlannerStore(s => s.recipeMultipliers);
+  const setRecipeMultiplier    = usePlannerStore(s => s.setRecipeMultiplier);
+  const meals                  = usePlannerStore(s => s.meals);
 
-  // Get recipes and multipliers
-  const selectedMeals = usePlannerStore(state => state.selectedMeals);
-  const recipeMultipliers = usePlannerStore(state => state.recipeMultipliers);
-  const setRecipeMultiplier = usePlannerStore(state => state.setRecipeMultiplier);
-  const meals = usePlannerStore(state => state.meals);
+  // ─── Refs ──────────────────────────────────────────────────────────────────
+  const prevSizeRef       = useRef(normalMealServings);
+  const initialMountRef   = useRef(true);
+  const sliderRef         = useRef<HTMLInputElement>(null);
 
-  // Track animation frame for cleanup
-  const animationRef = useRef<number | null>(null);
-
-  // Track current time for animation
-  const timeRef = useRef<number>(0);
-
-  // Use a ref to track previous household size to avoid unnecessary updates
-  const prevSizeRef = useRef(normalMealServings);
-
-  // Flag to prevent updates on initial mount
-  const initialMountRef = useRef(true);
-
-  // Track if slider is being dragged
-  const sliderRef = useRef<HTMLInputElement>(null);
-
-  // Animation loop for jumping figures
+  // ─── Sync multipliers to household size ────────────────────────────────────
   useEffect(() => {
-    const animate = (timestamp: number) => {
-      if (!timeRef.current) {
-        timeRef.current = timestamp;
-      }
-
-      // Just update the timestamp
-      timeRef.current = timestamp;
-
-      // Request next frame
-      animationRef.current = requestAnimationFrame(animate);
-    };
-
-    // Start animation
-    animationRef.current = requestAnimationFrame(animate);
-
-    // Cleanup function
-    return () => {
-      if (animationRef.current !== null) {
-        cancelAnimationFrame(animationRef.current);
-      }
-    };
-  }, []);
-
-  // Effect to update recipe multipliers when household size changes
-  useEffect(() => {
-    // Skip the effect on initial mount
-    if (initialMountRef.current) {
-      initialMountRef.current = false;
-      return;
-    }
-
-    // Only run this effect if the household size has actually changed
-    if (prevSizeRef.current === normalMealServings) {
-      return;
-    }
-
-    // Update the previous size ref
+    if (initialMountRef.current) { initialMountRef.current = false; return; }
+    if (prevSizeRef.current === normalMealServings) return;
     prevSizeRef.current = normalMealServings;
 
-    // Get all selected recipes
-    const allMeals = [
-      ...meals.breakfast,
-      ...meals.lunch,
-      ...meals.dinner
-    ];
-
-    // Only update recipes that need updating to avoid infinite loops
+    const allMeals = [...meals.breakfast, ...meals.lunch, ...meals.dinner];
     Array.from(selectedMeals).forEach(url => {
       const recipe = allMeals.find(r => r.url === url);
-      if (recipe) {
-        // Calculate what the multiplier should be based on household size
-        const calculatedMultiplier = Math.ceil(normalMealServings / recipe.servings * 2) / 2;
-        const currentMultiplier = recipeMultipliers[url] || 0;
-
-        // Only update if the calculated multiplier is different from current
-        if (Math.abs(calculatedMultiplier - currentMultiplier) > 0.01) {
-          setRecipeMultiplier(url, calculatedMultiplier);
-        }
+      if (!recipe) return;
+      const calc = Math.ceil((normalMealServings / recipe.servings) * 2) / 2;
+      if (Math.abs((recipeMultipliers[url] || 0) - calc) > 0.01) {
+        setRecipeMultiplier(url, calc);
       }
     });
   }, [normalMealServings, meals, selectedMeals, recipeMultipliers, setRecipeMultiplier]);
 
-  // Handle slider change
+  // ─── Slider handler ────────────────────────────────────────────────────────
   const handleSliderChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const value = parseInt(e.target.value, 10);
-    setNormalMealServings(value);
+    setNormalMealServings(parseInt(e.target.value, 10));
   };
-
-  // Calculate the position percentage for the slider
   const sliderPosition = ((normalMealServings - 1) / 11) * 100;
 
-  // Generate stick figures based on current value
-  const renderStickFigures = () => {
-    const figures = [];
+  // ─── Animation helpers ─────────────────────────────────────────────────────
+  const animations = [
+    'jump', 'hop',
+    'somersault', 'somersaultReverse',
+    'wave', 'shake', 'spin',
+    'bumpRight', 'bumpLeft'
+  ] as const;
 
-    // Create stick figure SVG with jumping animation
-    const StickFigure = ({ index }: { index: number }) => {
-      // Create a random animation duration between 0.6s and 1.2s
-      const animationDuration = 0.6 + (index % 5) * 0.15;
+  const randomAnimation = () => animations[Math.floor(Math.random() * animations.length)];
 
-      // Create a random animation delay between 0s and 1s
-      const animationDelay = (index * 0.2) % 1;
+  // ─── Stick figure component ───────────────────────────────────────────────
+  const StickFigure: React.FC<{ index: number }> = ({ index }) => {
+    /**
+     * IMPORTANT: initialAnim must be **deterministic** so that the markup
+     * generated during SSR matches the markup on first render in the browser.
+     * We pick a safe placeholder ("jump") for everyone, then switch to a
+     * random animation as soon as the component mounts on the client.
+     */
+    const [anim, setAnim] = useState<string>('jump');
+    const wrapperRef = useRef<HTMLDivElement>(null);
 
-      return (
-        <div
-          className="inline-block mx-1"
-          style={{
-            animation: `jump ${animationDuration}s ease-in-out ${animationDelay}s infinite alternate`,
-            transformOrigin: 'bottom',
-          }}
-        >
-          <svg
-            width="16"
-            height="20"
-            viewBox="0 0 16 20"
-            className="text-teal-500"
-          >
-            <circle cx="8" cy="4" r="3.5" fill="currentColor" />
-            <line x1="8" y1="7.5" x2="8" y2="14" stroke="currentColor" strokeWidth="2" />
-            <line x1="8" y1="14" x2="5" y2="19" stroke="currentColor" strokeWidth="2" />
-            <line x1="8" y1="14" x2="11" y2="19" stroke="currentColor" strokeWidth="2" />
-            <line x1="3" y1="10" x2="13" y2="10" stroke="currentColor" strokeWidth="2" />
-          </svg>
-        </div>
-      );
-    };
+    // Swap in a random animation after hydration; then continue at each loop.
+    useEffect(() => {
+      setAnim(randomAnimation());
+      const el = wrapperRef.current;
+      if (!el) return;
+      const handler = () => setAnim(randomAnimation());
+      el.addEventListener('animationiteration', handler);
+      return () => el.removeEventListener('animationiteration', handler);
+    }, []);
 
-    // Limit the number of figures to avoid overcrowding
-    const maxVisible = Math.min(normalMealServings, 12);
+    // duration and delay remain deterministic (derived from index).
+    const duration = 0.8 + (index % 5) * 0.15;
+    const delay    = (index * 0.17) % 1;
+    const origin   = anim === 'spin' || anim.startsWith('somersault') ? '50% 50%' : 'bottom';
 
-    // Create figures with jumping animation
-    for (let i = 0; i < maxVisible; i++) {
-      figures.push(<StickFigure key={i} index={i} />);
-    }
-
-    return figures;
+    return (
+      <div
+        ref={wrapperRef}
+        className="inline-block mx-0.5"
+        style={{
+          animation: `${anim} ${duration}s ease-in-out ${delay}s infinite`,
+          transformOrigin: origin,
+        }}
+      >
+        <svg width="16" height="20" viewBox="0 0 16 20" className="text-teal-500">
+          <circle cx="8" cy="4" r="3.5" fill="currentColor" />
+          <line x1="8" y1="7.5" x2="8" y2="14" stroke="currentColor" strokeWidth="2" />
+          <line x1="8" y1="14" x2="5" y2="19" stroke="currentColor" strokeWidth="2" />
+          <line x1="8" y1="14" x2="11" y2="19" stroke="currentColor" strokeWidth="2" />
+          <line x1="3" y1="10" x2="13" y2="10" stroke="currentColor" strokeWidth="2" />
+        </svg>
+      </div>
+    );
   };
 
+  // ─── UI ────────────────────────────────────────────────────────────────────
   return (
     <div className="bg-white rounded-xl py-2 px-5 mb-1 shadow-sm">
-      {/* Header with title and value display */}
+      {/* Header */}
       <div className="flex items-center justify-between mb-1">
-        <div className="flex items-center">
-          <h3 className="text-lg font-semibold text-gray-800">Household Size</h3>
-        </div>
-
-        {/* Value display in top right */}
+        <h3 className="text-lg font-semibold text-gray-800 flex items-center">Household Size</h3>
         <div className="bg-teal-100 w-12 h-12 flex items-center justify-center rounded-lg">
           <span className="text-2xl font-bold text-gray-900">{normalMealServings}</span>
         </div>
       </div>
 
-      {/* Stick figures container - taller to accommodate jumping figures */}
-      <div className="flex justify-center items-center h-10 overflow-hidden mb-0 transition-all duration-300">
+      {/* Figures */}
+      <div className="flex justify-center items-center h-12 overflow-hidden mb-1">
         <div className="flex flex-wrap justify-center items-end max-w-full gap-0.5">
-          {renderStickFigures()}
+          {Array.from({ length: Math.min(normalMealServings, 12) }, (_, i) => (
+            <StickFigure key={i} index={i} />
+          ))}
         </div>
       </div>
 
-      {/* Compact full-width slider */}
+      {/* Slider */}
       <div className="relative h-4 w-full mb-2">
-        {/* Slider track background */}
-        <div className="absolute inset-0 h-2 top-1/2 -translate-y-1/2 bg-gray-200 rounded-full"></div>
-
-        {/* Slider filled portion */}
-        <div
-          className="absolute h-2 top-1/2 -translate-y-1/2 bg-teal-500 rounded-full transition-width duration-300 ease-out"
-          style={{ width: `${sliderPosition}%` }}
-        ></div>
-
-        {/* Slider thumb */}
-        <div
-          className="absolute w-8 h-8 bg-white rounded-full border-2 border-teal-500 shadow-md flex items-center justify-center z-20 transition-all duration-300 ease-out"
-          style={{
-            left: `calc(${sliderPosition}%)`,
-            top: '50%',
-            transform: 'translate(-50%, -50%)'
-          }}
-        >
+        <div className="absolute inset-0 h-2 top-1/2 -translate-y-1/2 bg-gray-200 rounded-full" />
+        <div className="absolute h-2 top-1/2 -translate-y-1/2 bg-teal-500 rounded-full transition-all duration-300" style={{ width: `${sliderPosition}%` }} />
+        <div className="absolute w-8 h-8 bg-white rounded-full border-2 border-teal-500 shadow-md flex items-center justify-center z-20 transition-all duration-300" style={{ left: `calc(${sliderPosition}% )`, top: '50%', transform: 'translate(-50%, -50%)' }}>
           <Users size={14} className="text-teal-500" />
         </div>
-
-        {/* Hidden range input for functionality */}
-        <input
-          ref={sliderRef}
-          type="range"
-          min="1"
-          max="12"
-          value={normalMealServings}
-          onChange={handleSliderChange}
-          className="absolute inset-0 w-full opacity-0 cursor-pointer z-30"
-        />
+        <input ref={sliderRef} type="range" min="1" max="12" value={normalMealServings} onChange={handleSliderChange} className="absolute inset-0 w-full opacity-0 cursor-pointer z-30" />
       </div>
 
-      {/* CSS for jumping animation */}
+      {/* Keyframes – unchanged from previous version */}
       <style jsx>{`
         @keyframes jump {
-          0% {
-            transform: translateY(0);
-          }
-          100% {
-            transform: translateY(-10px);
-          }
+          0%,100% { transform: translateY(0); }
+          50%     { transform: translateY(-12px); }
+        }
+        @keyframes hop {
+          0%,100% { transform: translateY(0); }
+          50%     { transform: translateY(-8px); }
+        }
+        @keyframes somersault {
+          0% { transform: translateY(0) rotateZ(0deg); }
+          25% { transform: translateY(-12px) rotateZ(0deg); }
+          55% { transform: translateY(-12px) rotateZ(360deg); }
+          100%{ transform: translateY(0) rotateZ(360deg); }
+        }
+        @keyframes somersaultReverse {
+          0% { transform: translateY(0) rotateZ(0deg); }
+          25% { transform: translateY(-12px) rotateZ(0deg); }
+          55% { transform: translateY(-12px) rotateZ(-360deg); }
+          100%{ transform: translateY(0) rotateZ(-360deg); }
+        }
+        @keyframes wave {
+          0%,100%{ transform: rotateZ(0deg); }
+          50%    { transform: rotateZ(15deg); }
+        }
+        @keyframes shake {
+          0%,100%{ transform: translateX(0); }
+          25%    { transform: translateX(-3px); }
+          75%    { transform: translateX(3px);  }
+        }
+        @keyframes spin {
+          0%   { transform: rotateZ(0deg); }
+          100% { transform: rotateZ(360deg); }
+        }
+        @keyframes bumpRight {
+          0%,100% { transform: translateY(0) translateX(0); }
+          40%     { transform: translateY(-4px) translateX(6px); }
+          60%     { transform: translateY(-4px) translateX(6px); }
+        }
+        @keyframes bumpLeft {
+          0%,100% { transform: translateY(0) translateX(0); }
+          40%     { transform: translateY(-4px) translateX(-6px); }
+          60%     { transform: translateY(-4px) translateX(-6px); }
         }
       `}</style>
     </div>
