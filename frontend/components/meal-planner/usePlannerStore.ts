@@ -8,6 +8,7 @@ export interface Store {
   validUntil: Date;
   filename: string;
   isAvailable: boolean;
+  logo?: string; // Add logo property
 }
 
 interface StoreIndexItem {
@@ -16,7 +17,9 @@ interface StoreIndexItem {
   location: string;
   filename: string;
   validUntil: string;
+  logo?: string; // Add logo property
 }
+
 
 export interface IngredientTags {
   importance?: 'core' | 'optional';
@@ -584,7 +587,7 @@ export const usePlannerStore = create<PlannerState>((set, get) => ({
     return summary;
   },
 
-  discoverStores: async () => {
+discoverStores: async () => {
   const logMessage = (msg: string) => console.log(`[PlannerStore] ${msg}`);
   logMessage('Discovering available stores...');
   set({ isLoading: true, error: null });
@@ -612,7 +615,8 @@ export const usePlannerStore = create<PlannerState>((set, get) => ({
         location: storeInfo.location,
         filename: storeInfo.filename,
         validUntil,
-        isAvailable
+        isAvailable,
+        logo: storeInfo.logo // Include logo property
       };
     });
 

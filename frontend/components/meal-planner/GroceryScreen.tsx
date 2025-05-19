@@ -5,6 +5,7 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { usePlannerStore, type AggregatedItem } from './usePlannerStore';
 import { GroceryItem } from './GroceryItem';
 import { GroceryListPrintable } from './GroceryListPrintable';
+import { StoreCard } from './StoreCard'; // Import the StoreCard component
 
 /* -------------------------------- types -------------------------------- */
 interface GroceryTotals {
@@ -19,6 +20,8 @@ export function GroceryScreen() {
   const {
     aggregatedIngredients,
     setIngredientTags,
+    selectedStore,
+    availableStores,
   } = usePlannerStore();
 
   // State to track expanded categories - initialize as empty object
@@ -29,6 +32,9 @@ export function GroceryScreen() {
 
   // Get grocery items directly from store rather than managing as state
   const groceryItems = Array.from(aggregatedIngredients().values());
+
+  // Get selected store information
+  const selectedStoreInfo = availableStores.find(store => store.id === selectedStore);
 
   /* ---------------------- split items by categories ---------------------- */
   // Determine if an item is essential or a pantry staple
@@ -202,6 +208,15 @@ export function GroceryScreen() {
       className="container mx-0 p-0 !px-0"
       style={{scrollPaddingTop: '80px', scrollPaddingBottom: '200px'}}
     >
+      {/* Store information card */}
+      {selectedStore && selectedStoreInfo && (
+        <div className="mb-3">
+          <StoreCard
+            store={selectedStoreInfo}
+          />
+        </div>
+      )}
+
       {/* Render each category section */}
       {sortedCategories.map(category => (
         <div key={category} className="rounded-lg border border-gray-200 overflow-hidden mb-1">
@@ -231,19 +246,50 @@ export function GroceryScreen() {
               </svg>
               <span className="text-lg font-bold">{category}</span>
             </div>
-            {/* Right-aligned item count - simplified */}
-            <span className="text-sm text-gray-600">
-              ({
+            {/* Right-aligned item count - updated to show "X needed" or "done" */}
+            <span className="text-sm">
+              {(() => {
                 // Count items that are marked as in_cart or owned
-                categorizedItems[category].filter(item =>
+                const handledCount = categorizedItems[category].filter(item =>
                   item.tags?.status === 'in_cart' || item.tags?.status === 'owned'
-                ).length
-              } of {
+                ).length;
+
                 // Total count excluding items marked as 'ignored'
-                categorizedItems[category].filter(item =>
+                const totalCount = categorizedItems[category].filter(item =>
                   item.tags?.status !== 'ignored'
-                ).length
-              })
+                ).length;
+
+                // Calculate how many are still needed
+                const neededCount = totalCount - handledCount;
+
+                if (neededCount === 0) {
+                  return (
+                    <span className="text-green-600 font-semibold flex items-center">
+                      <svg
+                        xmlns="http://www.w3.org/2000/svg"
+                        width="16"
+                        height="16"
+                        viewBox="0 0 24 24"
+                        fill="none"
+                        stroke="currentColor"
+                        strokeWidth="2"
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        className="mr-1"
+                      >
+                        <path d="M20 6 9 17l-5-5" />
+                      </svg>
+                      done
+                    </span>
+                  );
+                } else {
+                  return (
+                    <span className="text-gray-600">
+                      <strong>{neededCount}</strong> needed
+                    </span>
+                  );
+                }
+              })()}
             </span>
           </div>
 
