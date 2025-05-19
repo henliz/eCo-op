@@ -1,9 +1,10 @@
 'use client';
 
-import React, { useState } from 'react';
-import { usePlannerStore, type AggregatedItem, type IngredientTags } from './usePlannerStore';
+import React, { useState, useEffect } from 'react';
+import { motion, AnimatePresence } from 'framer-motion';
+import { usePlannerStore, type AggregatedItem } from './usePlannerStore';
 import { GroceryItem } from './GroceryItem';
-import { GroceryListPrintable } from './GroceryListPrintable'; // Add this import at the top
+import { GroceryListPrintable } from './GroceryListPrintable';
 
 /* -------------------------------- types -------------------------------- */
 interface GroceryTotals {
@@ -17,14 +18,16 @@ interface GroceryTotals {
 export function GroceryScreen() {
   const {
     aggregatedIngredients,
-    groceryCheckedItems,
-    toggleGroceryItem,
     setIngredientTags,
   } = usePlannerStore();
 
   // State to track expanded categories - initialize as empty object
   const [expandedCategories, setExpandedCategories] = useState<Record<string, boolean>>({});
 
+  // Track currently animating item
+  const [animatingItemId, setAnimatingItemId] = useState<string | null>(null);
+
+  // Get grocery items directly from store rather than managing as state
   const groceryItems = Array.from(aggregatedIngredients().values());
 
   /* ---------------------- split items by categories ---------------------- */
@@ -50,9 +53,9 @@ export function GroceryScreen() {
     return acc;
   }, {} as Record<string, AggregatedItem[]>);
 
-  // Sort items within each category using the same sortLogic
+  // Sort items within each category
   Object.keys(categorizedItems).forEach(category => {
-    categorizedItems[category].sort(sortLogic(groceryCheckedItems));
+    categorizedItems[category].sort(sortLogic());
   });
 
   // Get sorted category keys with "Other" at the end
@@ -65,7 +68,7 @@ export function GroceryScreen() {
   });
 
   // Initialize expanded state for all categories if not already set
-  React.useEffect(() => {
+  useEffect(() => {
     const initialExpandedState: Record<string, boolean> = {};
     sortedCategories.forEach(category => {
       // If category state doesn't exist yet, set it to closed by default
@@ -80,8 +83,7 @@ export function GroceryScreen() {
   }, [sortedCategories, expandedCategories]);
 
   /* ------------------------------ totals ----------------------------------- */
-  // Update the calculateGroceryTotals function in GroceryScreen.tsx to only consider 'in_cart' items
-
+  // Simplified to only consider items with 'in_cart' status
   const calculateGroceryTotals = (): GroceryTotals => {
     let mealCost = 0;
     let futureUseCost = 0;
@@ -89,11 +91,7 @@ export function GroceryScreen() {
     let totalSavings = 0;
 
     // Only consider items that are explicitly marked as 'in_cart'
-    // OR checked but not having a specific status
-    const selectedItems = groceryItems.filter(item =>
-      (item.tags?.status === 'in_cart') ||
-      (groceryCheckedItems.has(item.packageId) && !item.tags?.status)
-    );
+    const selectedItems = groceryItems.filter(item => item.tags?.status === 'in_cart');
 
     selectedItems.forEach(item => {
       // Quantity to purchase is always rounded up
@@ -132,8 +130,19 @@ export function GroceryScreen() {
   const groceryTotals = calculateGroceryTotals();
 
   /* ----------------------------- handlers ---------------------------------- */
-  const handleUpdateTags = (packageId: string, tags: Partial<IngredientTags>) =>
-    setIngredientTags(packageId, tags);
+  // Updated to handle animation coordination
+  const handleUpdateTags = (packageId: string) => {
+    // Set the animating item ID first
+    setAnimatingItemId(packageId);
+  };
+
+  // Called when checkmark animation completes
+  const handleAnimationComplete = (packageId: string) => {
+    // Clear the animating state for this item
+    if (animatingItemId === packageId) {
+      setAnimatingItemId(null);
+    }
+  };
 
   const renderItems = (items: AggregatedItem[]) => {
     return items.map((item, index) => {
@@ -155,17 +164,26 @@ export function GroceryScreen() {
       }
 
       return (
-        <div
+        <motion.div
           key={item.packageId}
           // Apply background color and border
           className={`${bgColor} ${index !== 0 ? "border-t border-gray-300" : ""}`}
+          layout
+          transition={{
+            type: "spring",
+            stiffness: 300,
+            damping: 30,
+            duration: 0.5
+          }}
         >
           <GroceryItem
             item={item}
-            onToggle={toggleGroceryItem}
-            onUpdateTags={handleUpdateTags}
+            onUpdateTags={setIngredientTags} // Pass the direct store update function
+            isAnimating={animatingItemId === item.packageId}
+            onAnimationStart={() => handleUpdateTags(item.packageId)} // Just track animation start
+            onAnimationComplete={() => handleAnimationComplete(item.packageId)}
           />
-        </div>
+        </motion.div>
       );
     });
   };
@@ -213,35 +231,34 @@ export function GroceryScreen() {
               </svg>
               <span className="text-lg font-bold">{category}</span>
             </div>
-            {/* Right-aligned item count - UPDATED to show properly "checked" items */}
+            {/* Right-aligned item count - simplified */}
             <span className="text-sm text-gray-600">
               ({
-                          // Count items that are marked as in_cart
-                          categorizedItems[category].filter(item =>
-                              item.tags?.status === 'in_cart' || (groceryCheckedItems.has(item.packageId) && !item.tags?.status)
-                          ).length
-                        } of {
-                          // Total count excluding items marked as 'owned' or 'ignored'
-                          categorizedItems[category].filter(item =>
-                              item.tags?.status !== 'owned' && item.tags?.status !== 'ignored'
-                          ).length
-                        })
+                // Count items that are marked as in_cart or owned
+                categorizedItems[category].filter(item =>
+                  item.tags?.status === 'in_cart' || item.tags?.status === 'owned'
+                ).length
+              } of {
+                // Total count excluding items marked as 'ignored'
+                categorizedItems[category].filter(item =>
+                  item.tags?.status !== 'ignored'
+                ).length
+              })
             </span>
           </div>
 
           {/* Category items - conditionally rendered based on expanded state */}
-          {/* Category items - conditionally rendered based on expanded state */}
           {expandedCategories[category] && (
             <div>
-              {/* Column headers removed */}
-
-              {categorizedItems[category].length ? (
-                renderItems(categorizedItems[category])
-              ) : (
-                <div className="p-2 text-center text-gray-500">
-                  No items in this category
-                </div>
-              )}
+              <AnimatePresence>
+                {categorizedItems[category].length ? (
+                  renderItems(categorizedItems[category])
+                ) : (
+                  <div className="p-2 text-center text-gray-500">
+                    No items in this category
+                  </div>
+                )}
+              </AnimatePresence>
             </div>
           )}
         </div>
@@ -294,10 +311,8 @@ export function GroceryScreen() {
 }
 
 /* ----------------------------- helpers ---------------------------------- */
-// Update the sortLogic function to account for the new 'in_cart' status
-function sortLogic(
-  checked: Set<string>
-): (a: AggregatedItem, b: AggregatedItem) => number {
+// Simplified sortLogic function - no longer needs checked parameter
+function sortLogic(): (a: AggregatedItem, b: AggregatedItem) => number {
   return (a, b) => {
     // Updated priority order: in_cart, bought, owned, ignored
     const statusOrder: Record<'in_cart' | 'owned' | 'bought' | 'ignored', number> = {
@@ -312,10 +327,7 @@ function sortLogic(
 
     if (aStatus !== bStatus) return statusOrder[aStatus] - statusOrder[bStatus];
 
-    const aChecked = checked.has(a.packageId);
-    const bChecked = checked.has(b.packageId);
-    if (aChecked !== bChecked) return aChecked ? 1 : -1;
-
+    // Sort by cost if status is the same
     return b.lineCost - a.lineCost;
   };
 }

@@ -49,12 +49,26 @@ export default function MealPlannerPage() {
   const isTabEnabled = (tabId: View) =>
     tabId === 'store' || (!!selectedStore && isDataLoaded);
 
+  // Enhanced scroll to top function that ensures consistent behavior
+  const scrollToTop = useCallback(() => {
+    // First try the smooth scroll
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+
+    // As a fallback, also set a timeout to ensure the scroll happens
+    // This helps in cases where the smooth scroll might be interrupted
+    setTimeout(() => {
+      window.scrollTo({ top: 0, behavior: 'auto' });
+    }, 100);
+  }, []);
+
   // Handle view changes and scroll to top when switching views
   const handleViewChange = (newView: View) => {
     if (isTabEnabled(newView)) {
-      // Scroll to top when changing views
-      window.scrollTo({ top: 0, behavior: 'smooth' });
+      // Set the view first
       setView(newView);
+
+      // Then scroll to top
+      scrollToTop();
     }
   };
 
@@ -103,6 +117,14 @@ export default function MealPlannerPage() {
       // The switch to 'plan' will happen at 40% progress via the handleLoadingProgress callback
     }
   }, [selectedStore, isDataLoaded, isLoading, view]);
+
+  // Add an effect to ensure scroll to top specifically when switching to groceries view
+  useEffect(() => {
+    if (view === 'groceries') {
+      // Ensure we're at the top when the groceries view is active
+      scrollToTop();
+    }
+  }, [view, scrollToTop]);
 
 return (
   <>
