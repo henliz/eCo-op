@@ -481,14 +481,12 @@ header {
 /* HERO STYLES                              */
 /* ---------------------------------------- */
 .hero {
-  background: url("/hero_img.png") center/cover no-repeat;
   min-height: 650px;
   display: flex;
   align-items: center;
   justify-content: center;
   text-align: center;
   position: relative;
-  overflow: hidden;
 }
 
 .hero::before {
@@ -502,7 +500,6 @@ header {
 .hero-content {
   position: relative;
   z-index: 1;
-  max-width: 800px;
   padding: 0 1rem;
 }
 

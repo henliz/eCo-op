@@ -1,191 +1,789 @@
-'use client';
+"use client";
 
-import React, { useRef, useState, useEffect, useCallback } from 'react';
+import React, { useEffect, useRef } from 'react';
 import Link from 'next/link';
 
-/* ----------------------------- RotatingLines ----------------------------- */
-function RotatingLines({ lines, pause = 2000, animDur = 600 }) {
-  const containerRef = useRef(null);
-  const spansRef     = useRef([]);
-  const [lineH, setLineH]   = useState(0);
-  const [items, setItems]   = useState([
-    lines[lines.length - 1],
-    ...lines,
-    lines[0],
-  ]);
+const Hero = () => {
+  const videoRefs = useRef([]);
+  const buttonRef = useRef(null);
 
-  // measure line height
-  const measure = useCallback(() => {
-    const el = spansRef.current[1];
-    if (el) setLineH(el.offsetHeight);
-  }, []);
   useEffect(() => {
-    measure();
-    window.addEventListener('resize', measure);
-    return () => window.removeEventListener('resize', measure);
-  }, [measure]);
-
-  // slide / rotate / snap loop
-  useEffect(() => {
-    if (!lineH) return;
-    const c = containerRef.current;
-    let animTimeout, cycleTimeout;
-
-    // center & feature the middle
-    c.style.transform = `translateY(-${lineH}px)`;
-    spansRef.current.forEach((el, i) =>
-      el.classList.toggle('featured', i === 2)
-    );
-
-    function runCycle() {
-      // prep transitions
-      c.style.transition = `transform ${animDur}ms ease-in-out`;
-      spansRef.current.forEach(el => {
-        el.style.transition = `
-          opacity   ${animDur}ms ease-in-out,
-          transform ${animDur}ms ease-in-out
-        `;
-      });
-
-      // fade out old, fade in next
-      spansRef.current[2].classList.remove('featured');
-      spansRef.current[3].classList.add('featured');
-
-      // slide up
-      c.style.transform = `translateY(-${2 * lineH}px)`;
-
-      // after slide, snap back hidden
-      animTimeout = setTimeout(() => {
-        c.style.visibility = 'hidden';
-
-        // rotate
-        setItems(old => {
-          const [first, ...rest] = old;
-          return [...rest, first];
-        });
-
-        // reset
-        c.style.transition = 'none';
-        spansRef.current.forEach(el => (el.style.transition = 'none'));
-        c.style.transform = `translateY(-${lineH}px)`;
-
-        // un-hide & re-feature
-        requestAnimationFrame(() => {
-          spansRef.current.forEach((el, i) =>
-            el.classList.toggle('featured', i === 2)
-          );
-          c.style.visibility = '';
-        });
-      }, animDur);
-
-      // queue next
-      cycleTimeout = setTimeout(runCycle, pause + animDur);
+    // Force font loading - applying Montserrat Alternates explicitly
+    const heading = document.querySelector('.montserrat-alt-heading');
+    if (heading) {
+      heading.style.fontFamily = "'Montserrat Alternates', sans-serif";
+      heading.style.fontWeight = "700";
     }
 
-    cycleTimeout = setTimeout(runCycle, pause);
-    return () => {
-      clearTimeout(animTimeout);
-      clearTimeout(cycleTimeout);
-    };
-  }, [lineH, pause, animDur]);
+    // Initialize video refs array
+    videoRefs.current = videoRefs.current.slice(0, 4);
+
+    // Tab functionality
+    const tabs = document.querySelectorAll('.tab');
+
+    tabs.forEach((tab, index) => {
+      tab.addEventListener('click', () => {
+        // Remove active class from all tabs
+        tabs.forEach(t => t.classList.remove('active'));
+
+        // Add active class to clicked tab
+        tab.classList.add('active');
+
+        // Hide all tab contents
+        document.querySelectorAll('.tab-content').forEach(content => {
+          content.classList.remove('active');
+        });
+
+        // Show the corresponding tab content
+        const tabId = tab.getAttribute('data-tab');
+        const content = document.getElementById(tabId);
+        content.classList.add('active');
+      });
+    });
+
+    // Make sure all videos play and loop without controls
+    const videos = document.querySelectorAll('video');
+    videos.forEach(video => {
+      video.play().catch(e => console.log("Auto-play prevented:", e));
+
+      // Ensure videos continue playing even if they're in an inactive tab
+      video.addEventListener('pause', () => {
+        video.play().catch(e => console.log("Auto-play prevented:", e));
+      });
+    });
+
+    // Add button click animation
+    const button = buttonRef.current;
+    if (button) {
+      button.addEventListener('mousedown', () => {
+        button.classList.add('cta-button-clicked');
+      });
+
+      button.addEventListener('mouseup', () => {
+        button.classList.remove('cta-button-clicked');
+      });
+
+      button.addEventListener('mouseleave', () => {
+        button.classList.remove('cta-button-clicked');
+      });
+    }
+  }, []);
 
   return (
-    <div
-      className="relative inline-block w-full overflow-visible"
-      style={{
-        height: lineH ? `${lineH * 3}px` : 'auto',
-        maskImage:
-          'linear-gradient(to bottom, transparent 0%, black 20%, black 80%, transparent 100%)',
-        WebkitMaskImage:
-          'linear-gradient(to bottom, transparent 0%, black 20%, black 80%, transparent 100%)',
-      }}
-    >
-      <div ref={containerRef} className="flex flex-col">
-        {items.map((text, i) => (
-          <span
-            key={`${text}-${i}`}
-            ref={el => (spansRef.current[i] = el)}
-            className={`
-              h-[1.2em] flex items-center justify-center whitespace-nowrap
-              font-montserratAlt font-semibold
-              text-base        /* mobile smaller */
-              sm:text-xl       /* small screens & up */
-              md:text-3xl      /* medium+ */
-              text-black
-              opacity-20 transform scale-100
-              ${i === 2 ? 'featured' : ''}
-            `}
-          >
-            {text}
-          </span>
-        ))}
-      </div>
+    <>
       <style jsx>{`
-        .featured {
-          opacity: 1 !important;
-          transform: scale(1.2) !important;
+        /* Reset and base styles */
+        * {
+          margin: 0;
+          padding: 0;
+          box-sizing: border-box;
+        }
+
+        body {
+          background-color: #f5f5ff;
+          color: #333;
+          font-family: 'Montserrat', sans-serif;
+          min-height: 100vh;
+          overflow-x: hidden;
+        }
+
+        .bg-gradient {
+          position: fixed;
+          top: 0;
+          left: 0;
+          width: 100%;
+          height: 100%;
+          z-index: -10;
+          background: linear-gradient(135deg, #e6ffff 0%, #fff9f5 100%);
+        }
+
+        .bg-blob {
+          position: fixed;
+          border-radius: 50%;
+          filter: blur(80px);
+          opacity: 0.5;
+          z-index: -5;
+        }
+
+        .bg-blob-1 {
+          top: -10%;
+          left: -10%;
+          width: 60%;
+          height: 60%;
+          background: radial-gradient(circle, rgba(135, 255, 255, 0.2) 0%, rgba(135, 255, 255, 0) 70%);
+          animation: float 25s infinite alternate ease-in-out;
+        }
+
+        .bg-blob-2 {
+          bottom: -20%;
+          right: -20%;
+          width: 70%;
+          height: 70%;
+          background: radial-gradient(circle, rgba(200, 255, 225, 0.2) 0%, rgba(200, 255, 225, 0) 70%);
+          animation: float 30s infinite alternate-reverse ease-in-out;
+        }
+
+        .bg-blob-3 {
+          top: 30%;
+          right: 10%;
+          width: 40%;
+          height: 40%;
+          background: radial-gradient(circle, rgba(160, 210, 255, 0.2) 0%, rgba(160, 210, 255, 0) 70%);
+          animation: float 35s infinite alternate ease-in-out;
+        }
+
+        @keyframes float {
+          0% {
+            transform: translate(0, 0) scale(1);
+          }
+          50% {
+            transform: translate(3%, 3%) scale(1.05);
+          }
+          100% {
+            transform: translate(-3%, -2%) scale(0.95);
+          }
+        }
+
+        .wrapper {
+          position: relative;
+          width: 100%;
+          max-width: 100vw;
+          overflow-x: hidden;
+        }
+
+        .container {
+          max-width: 1200px;
+          margin: 0 auto;
+          padding: 2rem 1rem;
+          position: relative;
+          z-index: 1;
+        }
+
+        .hero {
+          display: flex;
+          flex-direction: column;
+          align-items: center;
+          text-align: center;
+          padding: 3rem 0;
+          position: relative;
+        }
+
+        /* Side Images - Positioned relative to viewport, not content */
+        .side-images {
+          position: absolute;
+          top: 0;
+          left: 0;
+          width: 100%;
+          height: 100%;
+          pointer-events: none;
+          z-index: 0;
+        }
+
+        .side-image {
+          position: absolute;
+          background: rgba(255, 255, 255, 0.6);
+          border-radius: 16px;
+          box-shadow: 0 15px 30px rgba(0, 0, 0, 0.08);
+          border: 1px solid rgba(255, 255, 255, 0.3);
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          color: #888;
+          animation-duration: 6s;
+          animation-iteration-count: infinite;
+          animation-direction: alternate;
+          animation-timing-function: ease-in-out;
+          font-size: 1.2rem;
+          color: #aaa;
+        }
+
+        .left-image {
+          left: calc(50% - 850px);
+          top: 25%;
+          width: 350px;
+          height: 350px;
+          transform: rotate(-5deg);
+          animation-name: float-left;
+        }
+
+        .right-image {
+          right: calc(50% - 850px);
+          top: 25%;
+          width: 350px;
+          height: 350px;
+          transform: rotate(5deg);
+          animation-delay: 2s;
+          animation-name: float-right;
+        }
+
+        @media (max-width: 1600px) {
+          .left-image {
+            left: 5%;
+          }
+
+          .right-image {
+            right: 5%;
+          }
+        }
+
+        @media (max-width: 1400px) {
+          .side-image {
+            width: 300px;
+            height: 300px;
+          }
+        }
+
+        @media (max-width: 1200px) {
+          .left-image {
+            left: 2%;
+          }
+
+          .right-image {
+            right: 2%;
+          }
+        }
+
+        @media (max-width: 1000px) {
+          .side-image {
+            width: 200px;
+            height: 200px;
+          }
+        }
+
+        @media (max-width: 768px) {
+          .side-image {
+            display: none;
+          }
+        }
+
+        @keyframes float-left {
+          0% {
+            transform: translateY(0) rotate(-5deg);
+          }
+          100% {
+            transform: translateY(-20px) rotate(-3deg);
+          }
+        }
+
+        @keyframes float-right {
+          0% {
+            transform: translateY(0) rotate(5deg);
+          }
+          100% {
+            transform: translateY(-20px) rotate(7deg);
+          }
+        }
+
+        /* Powered By Conrad School */
+        .powered-by-wrapper {
+          margin-bottom: 3rem;
+          position: relative;
+          display: inline-block;
+        }
+
+        .powered-by {
+          background: rgba(0, 162, 162, 0.1);
+          padding: 0.6rem 1.2rem;
+          border-radius: 50px;
+          font-size: 0.9rem;
+          color: #00a2a2;
+          backdrop-filter: blur(10px);
+          -webkit-backdrop-filter: blur(10px);
+          border: 1px solid rgba(0, 162, 162, 0.15);
+        }
+
+        .powered-by strong {
+          color: #00a2a2;
+          font-weight: 600;
+          text-decoration: underline;
+          cursor: pointer;
+        }
+
+        /* Border-only animation */
+        .border-animation {
+          position: absolute;
+          top: -3px;
+          left: -3px;
+          right: -3px;
+          bottom: -3px;
+          border-radius: 50px;
+          pointer-events: none;
+          border: 1px solid transparent;
+          overflow: hidden;
+        }
+
+        .border-animation::before {
+          content: '';
+          position: absolute;
+          height: 3px;
+          width: 40%;
+          top: 0;
+          background: linear-gradient(90deg,
+            transparent,
+            rgba(0, 162, 162, 0.3),
+            rgba(0, 162, 162, 0.7),
+            rgba(0, 162, 162, 0.3),
+            transparent
+          );
+          animation: border-trace-top 2s linear infinite;
+        }
+
+        .border-animation::after {
+          content: '';
+          position: absolute;
+          height: 3px;
+          width: 40%;
+          bottom: 0;
+          background: linear-gradient(90deg,
+            transparent,
+            rgba(0, 162, 162, 0.3),
+            rgba(0, 162, 162, 0.7),
+            rgba(0, 162, 162, 0.3),
+            transparent
+          );
+          animation: border-trace-bottom 2s linear infinite;
+        }
+
+        @keyframes border-trace-top {
+          0% {
+            left: -40%;
+          }
+          100% {
+            left: 100%;
+          }
+        }
+
+        @keyframes border-trace-bottom {
+          0% {
+            right: -40%;
+          }
+          100% {
+            right: 100%;
+          }
+        }
+
+        /* Main Heading with Montserrat Alternates */
+        .montserrat-alt-heading {
+          font-family: 'Montserrat Alternates', sans-serif !important;
+          font-weight: 700;
+          font-size: 2.5rem;
+          line-height: 1.3;
+          margin-bottom: 1.5rem;
+          max-width: 700px;
+          color: #333;
+        }
+
+        /* Mobile responsive heading */
+        @media (max-width: 768px) {
+          .montserrat-alt-heading {
+            font-size: 2rem;
+          }
+        }
+
+        .highlight {
+          font-family: 'Montserrat', sans-serif !important;
+          font-style: italic !important;
+          color: #00a2a2;
+          font-weight: 600;
+          position: relative;
+          display: inline-block;
+        }
+
+        .highlight::after {
+          content: '';
+          position: absolute;
+          bottom: 5px;
+          left: 0;
+          width: 100%;
+          height: 8px;
+          background: linear-gradient(90deg, rgba(0, 162, 162, 0.3), rgba(0, 162, 162, 0.1));
+          border-radius: 4px;
+        }
+
+        .sub-heading {
+          font-size: 1.25rem;
+          color: #555;
+          margin-bottom: 2rem;
+          max-width: 600px;
+          line-height: 1.5;
+        }
+
+        /* Mobile responsive subheading */
+        @media (max-width: 768px) {
+          .sub-heading {
+            font-size: 1.1rem;
+            padding: 0 1rem;
+          }
+        }
+
+        /* Peach Button with Glassmorphism */
+        .cta-button {
+          background-color: rgba(255, 183, 153, 0.8);
+          color: white;
+          border: none;
+          padding: 0.8rem 1.8rem;
+          border-radius: 50px;
+          font-size: 1rem;
+          font-weight: 600;
+          cursor: pointer;
+          transition: all 0.3s ease;
+          margin-bottom: 3rem;
+          backdrop-filter: blur(5px);
+          -webkit-backdrop-filter: blur(5px);
+          box-shadow: 0 4px 15px rgba(255, 183, 153, 0.25);
+          border: 1px solid rgba(255, 255, 255, 0.1);
+          position: relative;
+          overflow: hidden;
+          z-index: 1;
+        }
+
+        .cta-button::before {
+          content: '';
+          position: absolute;
+          top: 0;
+          left: 0;
+          width: 100%;
+          height: 100%;
+          background: linear-gradient(45deg, rgba(255, 183, 153, 0.6), rgba(255, 153, 133, 0.8));
+          z-index: -1;
+          transform: scaleX(0);
+          transform-origin: 0 50%;
+          transition: transform 0.5s ease;
+        }
+
+        .cta-button:hover::before {
+          transform: scaleX(1);
+        }
+
+        .cta-button:hover {
+          transform: translateY(-2px);
+          box-shadow: 0 6px 20px rgba(255, 183, 153, 0.35);
+        }
+
+        .cta-button-clicked {
+          transform: translateY(2px) !important;
+          box-shadow: 0 2px 10px rgba(255, 183, 153, 0.2) !important;
+          transition: all 0.1s ease !important;
+        }
+
+        .cta-button span {
+          position: relative;
+          z-index: 2;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+        }
+
+        .cta-button-icon {
+          margin-left: 8px;
+          transition: transform 0.3s ease;
+        }
+
+        .cta-button:hover .cta-button-icon {
+          transform: translateX(4px);
+        }
+
+        /* Demo Tabs - Responsive */
+        .demo-container {
+          width: 100%;
+          max-width: 800px;
+          background: rgba(255, 255, 255, 0.7);
+          border-radius: 16px;
+          overflow: hidden;
+          backdrop-filter: blur(15px);
+          -webkit-backdrop-filter: blur(15px);
+          border: 1px solid rgba(255, 255, 255, 0.2);
+          box-shadow: 0 10px 30px rgba(0, 0, 0, 0.05);
+          margin-bottom: 4rem;
+          position: relative;
+          z-index: 1;
+        }
+
+        .tabs {
+          display: flex;
+          border-bottom: 1px solid rgba(0, 0, 0, 0.05);
+          background: rgba(255, 255, 255, 0.5);
+        }
+
+        /* Mobile responsive tabs */
+        @media (max-width: 768px) {
+          .tabs {
+            flex-wrap: wrap;
+          }
+
+          .tab {
+            width: 50%;
+            flex: none;
+            font-size: 0.8rem;
+            padding: 0.8rem 0;
+          }
+        }
+
+        @media (max-width: 480px) {
+          .tab {
+            width: 100%;
+            padding: 0.6rem 0;
+          }
+        }
+
+        .tab {
+          flex: 1;
+          padding: 1rem 0;
+          text-align: center;
+          cursor: pointer;
+          color: #555;
+          font-weight: 500;
+          position: relative;
+          transition: color 0.3s;
+        }
+
+        .tab.active {
+          color: #00a2a2;
+        }
+
+        .tab.active::after {
+          content: '';
+          position: absolute;
+          bottom: 0;
+          left: 0;
+          width: 100%;
+          height: 3px;
+          background-color: #00a2a2;
+        }
+
+        .tab-content {
+          height: 400px;
+          display: none;
+          position: relative;
+        }
+
+        /* Mobile responsive video height */
+        @media (max-width: 768px) {
+          .tab-content {
+            height: 300px;
+          }
+        }
+
+        @media (max-width: 480px) {
+          .tab-content {
+            height: 250px;
+          }
+        }
+
+        .tab-content.active {
+          display: block;
+        }
+
+        .tab-content video {
+          width: 100%;
+          object-fit: fit;
+        }
+
+        /* Company Logos Section */
+        .logos-section {
+          width: 100%;
+          max-width: 1000px;
+          margin: 0 auto 2rem;
+          text-align: center;
+        }
+
+        .logos-heading {
+          font-size: 1.8rem;
+          margin-bottom: 2.5rem;
+          color: #333;
+        }
+
+        .logos-container {
+          display: flex;
+          justify-content: center;
+          align-items: center;
+          flex-wrap: wrap;
+          gap: 1.5rem 2.5rem;
+        }
+
+        .logo-item {
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          height: 40px;
+          margin: 0 1rem;
+        }
+
+        .logo-image {
+          max-height: 40px;
+          max-width: 120px;
+          object-fit: contain;
+        }
+
+        /* Button pulse animation */
+        @keyframes pulse {
+          0% {
+            box-shadow: 0 0 0 0 rgba(255, 183, 153, 0.6);
+          }
+          70% {
+            box-shadow: 0 0 0 10px rgba(255, 183, 153, 0);
+          }
+          100% {
+            box-shadow: 0 0 0 0 rgba(255, 183, 153, 0);
+          }
+        }
+
+        .pulse {
+          animation: pulse 2s infinite;
         }
       `}</style>
-    </div>
-  );
-}
 
-/* ---------------------------------- HERO --------------------------------- */
-export default function Hero() {
-  const lines = [
-    'Keep the meals, lose the cost.',
-    'Stop skimping on what matters.',
-    'Enjoy variety without overspending.',
-    'Big flavours, smaller bills.',
-    'Feed your family, not your receipt.',
-    'We fixed the “what’s for dinner” fight.',
-    'No fine print—just fine feasts.',
-    'Turn pantry panic into plan.',
-    'From snackless nights to smart bites.',
-    'Grocery drama? Declined.',
-  ];
+      {/* Background Elements */}
+      <div className="bg-gradient"></div>
+      <div className="bg-blob bg-blob-1"></div>
+      <div className="bg-blob bg-blob-2"></div>
+      <div className="bg-blob bg-blob-3"></div>
 
-  return (
-    <section
-      className="
-        hero pt-12 pb-24
-        px-2        /* extra-tight on mobile */
-        sm:px-8     /* back to your normal on small+ */
-        md:px-10
-        overflow-visible
-      "
-      style={{ minHeight: 'calc(100vh - 4rem)' }}
-    >
-      <div className="flex flex-col items-center space-y-6 text-center">
-        <h1 className="font-extrabold text-3xl md:text-5xl text-black">
-          Inflation squeezing your budget?
-        </h1>
-
-        <div className="mb-4 self-stretch">
-          <RotatingLines lines={lines} pause={2000} animDur={600} />
+      <div className="wrapper">
+        {/* Side Images - Positioned outside the content flow */}
+        <div className="side-images">
+          <div className="side-image left-image">Image Placeholder</div>
+          <div className="side-image right-image">Image Placeholder</div>
         </div>
 
-        <strong className="font-bold text-2xl md:text-4xl text-black">
-          Skrimp it!
-        </strong>
+        <div className="container">
+          <div className="hero">
+            {/* Powered by Conrad School */}
+            <div className="powered-by-wrapper">
+              <div className="powered-by">
+                Powered by <a href="https://uwaterloo.ca/conrad-school-entrepreneurship-business/" target="_blank"><strong>Conrad School</strong></a> 🡥
+              </div>
+              <div className="border-animation"></div>
+            </div>
 
-        <p className="text-base md:text-lg max-w-xl">
-          Skrimp uses AI to help Canadians save money on groceries by creating meal
-          plans from this week’s local deals.
-        </p>
+            {/* Main Text with GUARANTEED Montserrat Alternates */}
+            <h1 className="montserrat-alt-heading">
+              Let's make the cost of living feel <span className="highlight">livable</span>
+            </h1>
 
-        <Link href="/plan">
-          <button className="
-            px-8 py-4 rounded-full font-semibold text-white
-            bg-[#FDBA74]/70 backdrop-blur-sm backdrop-saturate-150
-            ring-1 ring-inset ring-white/20 shadow-lg
-            transition-transform duration-200 ease-out
-            hover:scale-105 hover:bg-[#FDBA74]/90
-          ">
-            Try Skrimp Now!
-          </button>
-        </Link>
+            <p className="sub-heading">
+              Skrimp is your personal AI sous chef, helping you plan meals and save money.
+            </p>
+
+            {/* Animated CTA Button with Link */}
+            <Link href="https://skrimp.ai/plan" passHref>
+              <button ref={buttonRef} className="cta-button pulse">
+                <span>
+                  Start Saving Today
+                  <svg
+                    className="cta-button-icon"
+                    width="16"
+                    height="16"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    xmlns="http://www.w3.org/2000/svg"
+                  >
+                    <path
+                      d="M5 12H19M19 12L12 5M19 12L12 19"
+                      stroke="white"
+                      strokeWidth="2"
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                    />
+                  </svg>
+                </span>
+              </button>
+            </Link>
+
+            {/* Demo Tabs - Responsive with Always-Playing Videos */}
+            <div className="demo-container">
+              <div className="tabs">
+                <div className="tab active" data-tab="add-items">📋 Set Info</div>
+                <div className="tab" data-tab="compare">🥪 Plan</div>
+                <div className="tab" data-tab="optimize">💸 Shop</div>
+                <div className="tab" data-tab="save">🥪 Cook</div>
+              </div>
+
+              <div className="tab-content active" id="add-items">
+                <video
+                  ref={el => videoRefs.current[0] = el}
+                  autoPlay
+                  loop
+                  muted
+                  playsInline
+                  controls={false}
+                >
+                  <source src="/Step1_Clip.mp4" type="video/mp4" />
+                </video>
+              </div>
+
+              <div className="tab-content" id="compare">
+                <video
+                  ref={el => videoRefs.current[1] = el}
+                  autoPlay
+                  loop
+                  muted
+                  playsInline
+                  controls={false}
+                >
+                  <source src="/Step2_Clip.mp4" type="video/mp4" />
+                </video>
+              </div>
+
+              <div className="tab-content" id="optimize">
+                <video
+                  ref={el => videoRefs.current[2] = el}
+                  autoPlay
+                  loop
+                  muted
+                  playsInline
+                  controls={false}
+                >
+                  <source src="/Step3_Clip.mp4" type="video/mp4" />
+                </video>
+              </div>
+
+              <div className="tab-content" id="save">
+                <video
+                  ref={el => videoRefs.current[3] = el}
+                  autoPlay
+                  loop
+                  muted
+                  playsInline
+                  controls={false}
+                >
+                  <source src="/Step4_Clip.mp4" type="video/mp4" />
+                </video>
+              </div>
+            </div>
+
+            {/* Logo Bar - Similar to Simplify.com */}
+            <div className="logos-section">
+              <h2 className="logos-heading">Supported Grocery Stores</h2>
+              <div className="logos-container">
+                <div className="logo-item">
+                  <img src="/NoFrills_Logo.png" alt="No Frills" className="logo-image" />
+                </div>
+                <div className="logo-item">
+                  <img src="/Walmart_Logo.png" alt="Walmart" className="logo-image" />
+                </div>
+                <div className="logo-item">
+                  <img src="/Zehrs_Logo.png" alt="Zehrs" className="logo-image" />
+                </div>
+                <div className="logo-item">
+                  <img src="/FoodBasics_Logo.png" alt="Food Basics" className="logo-image" />
+                </div>
+                <div className="logo-item">
+                  <img src="/FarmBoy_Logo.png" alt="FarmBoy" className="logo-image" />
+                </div>
+                <div className="logo-item">
+                  <img src="/Sobeys_Logo.png" alt="Sobeys" className="logo-image" />
+                </div>
+                <div className="logo-item">
+                  <img src="/Metro_Logo.png" alt="Metro" className="logo-image" />
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
       </div>
-    </section>
+    </>
   );
-}
+};
+
+export default Hero;
