@@ -178,11 +178,14 @@ export function GroceryItem({
 
         {/* Bottom row - Icons and centered pricing */}
         <div className="flex items-center">
-          {/* Left side - Home icon */}
+          {/* Left side - Home icon with improved button styling */}
           <button
             onClick={handleHomeClick}
-            className={`w-10 h-10 flex items-center justify-center rounded-full 
-            ${status === 'owned' ? 'bg-blue-200 text-blue-600' : 'bg-gray-100 text-gray-500 hover:bg-gray-200'}`}
+            className={`w-10 h-10 flex items-center justify-center rounded-full border shadow-sm transition-all duration-200
+            ${status === 'owned' 
+              ? 'bg-blue-200 text-blue-600 border-blue-300 shadow-blue-100' 
+              : 'bg-gray-100 text-gray-500 hover:bg-gray-200 hover:text-gray-700 hover:shadow-md active:bg-gray-300 border-gray-300'}`}
+            title="I have this at home"
           >
             <Home size={20} />
           </button>
@@ -192,11 +195,14 @@ export function GroceryItem({
             <span className="whitespace-nowrap">{quantityToBuy} × {item.unitSize} {item.unitType} @ ${item.packPrice.toFixed(2)} = <span className="font-bold">${(quantityToBuy * item.packPrice).toFixed(2)}</span></span>
           </div>
 
-          {/* Right side - Shopping Cart icon */}
+          {/* Right side - Shopping Cart icon with improved button styling */}
           <button
             onClick={handleCartClick}
-            className={`w-10 h-10 flex items-center justify-center rounded-full 
-            ${status === 'in_cart' ? 'bg-green-200 text-green-600' : 'bg-gray-100 text-gray-500 hover:bg-gray-200'}`}
+            className={`w-10 h-10 flex items-center justify-center rounded-full border shadow-sm transition-all duration-200
+            ${status === 'in_cart' 
+              ? 'bg-green-200 text-green-600 border-green-300 shadow-green-100' 
+              : 'bg-gray-100 text-gray-500 hover:bg-gray-200 hover:text-gray-700 hover:shadow-md active:bg-gray-300 border-gray-300'}`}
+            title="Add to cart"
           >
             <ShoppingCart size={20} />
           </button>
