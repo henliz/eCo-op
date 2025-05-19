@@ -58,25 +58,8 @@ export function StoreCard({
       className={containerClassName}
       onClick={disabled ? undefined : onClick}
     >
-      <div className="flex items-center">
-        {/* Logo */}
-        {logoPath ? (
-          <div className="min-w-12 h-12 flex items-center justify-center mr-3 bg-white p-1 rounded overflow-hidden">
-            <Image
-              src={logoPath}
-              alt={`${store.name} logo`}
-              width={48}
-              height={48}
-              className="object-contain"
-            />
-          </div>
-        ) : (
-          <div className="bg-white min-w-12 h-12 flex items-center justify-center mr-3 text-xl font-medium rounded">
-            {store.name.substring(0, 1)}
-          </div>
-        )}
-
-        {/* Store information */}
+      <div className="flex items-center justify-between mx-3">
+        {/* Store information - now on the left */}
         <div>
           <div className="text-base font-semibold">
             {store.name}
@@ -92,6 +75,23 @@ export function StoreCard({
             </div>
           )}
         </div>
+
+        {/* Logo - now on the right */}
+        {logoPath ? (
+          <div className="min-w-12 h-12 flex items-center justify-center ml-3 bg-white p-0 rounded overflow-hidden">
+            <Image
+              src={logoPath}
+              alt={`${store.name} logo`}
+              width={100}
+              height={100}
+              className="object-contain"
+            />
+          </div>
+        ) : (
+          <div className="bg-white min-w-12 h-12 flex items-center justify-center ml-3 text-xl font-medium rounded">
+            {store.name.substring(0, 1)}
+          </div>
+        )}
       </div>
     </div>
   );
