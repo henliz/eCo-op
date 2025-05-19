@@ -1,11 +1,17 @@
 "use client";
 
-import React, { useEffect, useRef } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import Link from 'next/link';
 
 const Hero = () => {
   const videoRefs = useRef([]);
+  const videoContainerRefs = useRef([]);
   const buttonRef = useRef(null);
+  const [activeTab, setActiveTab] = useState(0);
+  const [transitioning, setTransitioning] = useState(false);
+
+  const tabs = ["add-items", "compare", "optimize", "save"];
+  const tabLabels = ["📋 Set", "🥪 Plan", "💸 Shop", "🍳 Cook"];
 
   useEffect(() => {
     // Force font loading - applying Montserrat Alternates explicitly
@@ -17,38 +23,29 @@ const Hero = () => {
 
     // Initialize video refs array
     videoRefs.current = videoRefs.current.slice(0, 4);
+    videoContainerRefs.current = videoContainerRefs.current.slice(0, 4);
 
-    // Tab functionality
-    const tabs = document.querySelectorAll('.tab');
+    // Make sure all videos start paused except the active one
+    videoRefs.current.forEach((video, index) => {
+      if (!video) return;
 
-    tabs.forEach((tab, index) => {
-      tab.addEventListener('click', () => {
-        // Remove active class from all tabs
-        tabs.forEach(t => t.classList.remove('active'));
-
-        // Add active class to clicked tab
-        tab.classList.add('active');
-
-        // Hide all tab contents
-        document.querySelectorAll('.tab-content').forEach(content => {
-          content.classList.remove('active');
-        });
-
-        // Show the corresponding tab content
-        const tabId = tab.getAttribute('data-tab');
-        const content = document.getElementById(tabId);
-        content.classList.add('active');
-      });
-    });
-
-    // Make sure all videos play and loop without controls
-    const videos = document.querySelectorAll('video');
-    videos.forEach(video => {
-      video.play().catch(e => console.log("Auto-play prevented:", e));
-
-      // Ensure videos continue playing even if they're in an inactive tab
-      video.addEventListener('pause', () => {
+      if (index === activeTab) {
+        // Reset current time and play the active video
+        video.currentTime = 0;
         video.play().catch(e => console.log("Auto-play prevented:", e));
+      } else {
+        // Pause all other videos and reset them
+        video.pause();
+        video.currentTime = 0;
+      }
+
+      // Add event listener to detect when video ends
+      video.addEventListener('ended', () => {
+        // Only proceed if this is the active video and not already transitioning
+        if (index === activeTab && !transitioning) {
+          const nextTab = (activeTab + 1) % 4;
+          transitionToTab(nextTab);
+        }
       });
     });
 
@@ -67,7 +64,93 @@ const Hero = () => {
         button.classList.remove('cta-button-clicked');
       });
     }
-  }, []);
+
+    // Manual tab click functionality
+    const tabElements = document.querySelectorAll('.tab');
+    tabElements.forEach((tab, index) => {
+      tab.addEventListener('click', () => {
+        // Only transition if not already transitioning
+        if (!transitioning && index !== activeTab) {
+          transitionToTab(index);
+        }
+      });
+    });
+
+    // Clean up event listeners on unmount
+    return () => {
+      videoRefs.current.forEach((video) => {
+        if (video) {
+          video.removeEventListener('ended', () => {});
+        }
+      });
+    };
+  }, [activeTab, transitioning]);
+
+  // Function to handle smooth tab transitions - only affecting the video content
+  const transitionToTab = (newTabIndex) => {
+    if (transitioning) return;
+    setTransitioning(true);
+
+    // Prepare next video but keep it hidden
+    const nextVideo = videoRefs.current[newTabIndex];
+    const nextContainer = videoContainerRefs.current[newTabIndex];
+
+    if (nextVideo) {
+      nextVideo.currentTime = 0; // Reset next video to start
+      nextVideo.pause(); // Make sure it's paused until we're ready
+    }
+
+    // Update tab indicators immediately (this won't cause flickering)
+    document.querySelectorAll('.tab').forEach((t, i) => {
+      if (i === newTabIndex) {
+        t.classList.add('active');
+      } else {
+        t.classList.remove('active');
+      }
+    });
+
+    // First, make both videos visible with the next one having opacity 0
+    if (nextContainer) {
+      nextContainer.style.opacity = '0';
+      nextContainer.style.display = 'block';
+    }
+
+    // Brief delay to ensure the display change has taken effect
+    setTimeout(() => {
+      // Start the crossfade
+      if (nextContainer) {
+        nextContainer.style.opacity = '1';
+      }
+
+      const currentContainer = videoContainerRefs.current[activeTab];
+      if (currentContainer) {
+        currentContainer.style.opacity = '0';
+      }
+
+      // Start playing the new video
+      if (nextVideo) {
+        nextVideo.play().catch(e => console.log("Video play error:", e));
+      }
+
+      // After the fade completes
+      setTimeout(() => {
+        // Hide the old container completely
+        if (currentContainer) {
+          currentContainer.style.display = 'none';
+        }
+
+        // Pause the old video
+        const currentVideo = videoRefs.current[activeTab];
+        if (currentVideo) {
+          currentVideo.pause();
+        }
+
+        // Update the state
+        setActiveTab(newTabIndex);
+        setTransitioning(false);
+      }, 300); // Duration of the crossfade
+    }, 50);
+  };
 
   return (
     <>
@@ -503,6 +586,8 @@ const Hero = () => {
           display: flex;
           border-bottom: 1px solid rgba(0, 0, 0, 0.05);
           background: rgba(255, 255, 255, 0.5);
+          position: relative;
+          z-index: 2;
         }
 
         /* Mobile responsive tabs */
@@ -551,36 +636,53 @@ const Hero = () => {
           background-color: #00a2a2;
         }
 
-        .tab-content {
-          height: 400px;
-          display: none;
+        /* Video content area */
+        .videos-container {
           position: relative;
+          height: 400px;
+          z-index: 1;
+        }
+
+        .video-wrapper {
+          position: absolute;
+          top: 0;
+          left: 0;
+          width: 100%;
+          height: 100%;
+          transition: opacity 0.3s ease;
+          opacity: 0;
+          display: none;
+        }
+
+        .video-wrapper.active {
+          opacity: 1;
+          display: block;
         }
 
         /* Mobile responsive video height */
         @media (max-width: 768px) {
-          .tab-content {
-            height:90%;
+          .videos-container {
+            height: 300px;
+          }
+
+          .video-wrapper {
+            height: 90%;
             width: 135%;
-            position: relative;
             left: 50%;
             transform: translateX(-50%);
           }
         }
 
         @media (max-width: 480px) {
-          .tab-content {
+          .videos-container {
             height: 250px;
           }
         }
 
-        .tab-content.active {
-          display: block;
-        }
-
-        .tab-content video {
+        .video-wrapper video {
           width: 100%;
-          object-fit: fit;
+          height: 100%;
+          object-fit: contain;
         }
 
         /* Company Logos Section */
@@ -655,7 +757,7 @@ const Hero = () => {
             {/* Powered by Conrad School */}
             <div className="powered-by-wrapper">
               <div className="powered-by">
-                Powered by <a href="https://uwaterloo.ca/conrad-school-entrepreneurship-business/" target="_blank"><strong>Conrad School</strong></a> 🚀
+                Powered by <a href="https://uwaterloo.ca/conrad-school-entrepreneurship-business/" target="_blank" rel="noopener noreferrer"><strong>Conrad School</strong></a> 🚀
               </div>
               <div className="border-animation"></div>
             </div>
@@ -694,65 +796,41 @@ const Hero = () => {
               </button>
             </Link>
 
-            {/* Demo Tabs - Responsive with Always-Playing Videos */}
+            {/* Demo Tabs - With seamless video transitions */}
             <div className="demo-container">
+              {/* Tabs navigation */}
               <div className="tabs">
-                <div className="tab active" data-tab="add-items">📋 Set</div>
-                <div className="tab" data-tab="compare">🥪 Plan</div>
-                <div className="tab" data-tab="optimize">💸 Shop</div>
-                <div className="tab" data-tab="save">🍳 Cook</div>
+                {tabLabels.map((label, index) => (
+                  <div
+                    key={index}
+                    className={`tab ${index === activeTab ? 'active' : ''}`}
+                    data-tab={tabs[index]}
+                  >
+                    {label}
+                  </div>
+                ))}
               </div>
 
-              <div className="tab-content active" id="add-items">
-                <video
-                  ref={el => videoRefs.current[0] = el}
-                  autoPlay
-                  loop
-                  muted
-                  playsInline
-                  controls={false}
-                >
-                  <source src="/Step1_Clip.mp4" type="video/mp4" />
-                </video>
-              </div>
-
-              <div className="tab-content" id="compare">
-                <video
-                  ref={el => videoRefs.current[1] = el}
-                  autoPlay
-                  loop
-                  muted
-                  playsInline
-                  controls={false}
-                >
-                  <source src="/Step2_Clip.mp4" type="video/mp4" />
-                </video>
-              </div>
-
-              <div className="tab-content" id="optimize">
-                <video
-                  ref={el => videoRefs.current[2] = el}
-                  autoPlay
-                  loop
-                  muted
-                  playsInline
-                  controls={false}
-                >
-                  <source src="/Step3_Clip.mp4" type="video/mp4" />
-                </video>
-              </div>
-
-              <div className="tab-content" id="save">
-                <video
-                  ref={el => videoRefs.current[3] = el}
-                  autoPlay
-                  loop
-                  muted
-                  playsInline
-                  controls={false}
-                >
-                  <source src="/Step4_Clip.mp4" type="video/mp4" />
-                </video>
+              {/* Videos container - all videos positioned absolutely for seamless transitions */}
+              <div className="videos-container">
+                {tabs.map((tab, index) => (
+                  <div
+                    key={index}
+                    className={`video-wrapper ${index === activeTab ? 'active' : ''}`}
+                    ref={el => videoContainerRefs.current[index] = el}
+                  >
+                    <video
+                      ref={el => videoRefs.current[index] = el}
+                      autoPlay={index === activeTab}
+                      loop={false}
+                      muted
+                      playsInline
+                      controls={false}
+                    >
+                      <source src={`/Step${index + 1}_Clip.mp4`} type="video/mp4" />
+                    </video>
+                  </div>
+                ))}
               </div>
             </div>
 
@@ -780,6 +858,9 @@ const Hero = () => {
                 </div>
                 <div className="logo-item">
                   <img src="/Metro_Logo.png" alt="Metro" className="logo-image" />
+                </div>
+                <div className="logo-item">
+                  <img src="/FreshCo_Logo.png" alt="FreshCo" className="logo-image" />
                 </div>
               </div>
             </div>
