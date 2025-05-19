@@ -67,59 +67,10 @@ export default function StoreSelector({ shouldNavigateToPlan }: StoreSelectorPro
   return (
     <div className="bg-white rounded-xl py-2 px-5 mb-3 shadow-sm">
       {/* Header */}
-      <div className="flex items-center justify-between mb-3">
+      <div className="flex items-center mb-3">
         <div className="flex items-center">
           <h3 className="text-lg font-semibold text-gray-800">Local Store</h3>
         </div>
-
-        {/* Search input */}
-        {isStoresLoaded && !isLoading && (
-          <div className="relative">
-            <input
-              type="text"
-              value={searchTerm}
-              onChange={(e) => setSearchTerm(e.target.value)}
-              placeholder="Search stores..."
-              className="pl-8 pr-4 py-1 rounded-full bg-gray-100 text-sm focus:outline-none focus:ring-2 focus:ring-teal-500 focus:bg-white transition-colors"
-            />
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              className="h-4 w-4 absolute left-2.5 top-1/2 transform -translate-y-1/2 text-gray-500"
-              fill="none"
-              viewBox="0 0 24 24"
-              stroke="currentColor"
-            >
-              <path
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                strokeWidth={2}
-                d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"
-              />
-            </svg>
-            {searchTerm && (
-              <button
-                onClick={() => setSearchTerm('')}
-                className="absolute right-2.5 top-1/2 transform -translate-y-1/2 text-gray-500 hover:text-gray-700"
-                aria-label="Clear search"
-              >
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  className="h-3.5 w-3.5"
-                  fill="none"
-                  viewBox="0 0 24 24"
-                  stroke="currentColor"
-                >
-                  <path
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    strokeWidth={2}
-                    d="M6 18L18 6M6 6l12 12"
-                  />
-                </svg>
-              </button>
-            )}
-          </div>
-        )}
       </div>
 
       {/* Error message */}
@@ -155,6 +106,59 @@ export default function StoreSelector({ shouldNavigateToPlan }: StoreSelectorPro
             </div>
           </div>
 
+          {/* Search input in its own card */}
+          <div className="store-card bg-gray-50 rounded-[30px] p-4">
+            <div className="relative">
+              <input
+                type="text"
+                value={searchTerm}
+                onChange={(e) => setSearchTerm(e.target.value)}
+                placeholder="Search stores..."
+                className="w-full pl-9 pr-9 py-2 rounded-full bg-white border border-gray-200 text-sm focus:outline-none focus:border-teal-500 transition-colors"
+                autoComplete="off"
+                autoCorrect="off"
+                autoCapitalize="off"
+                spellCheck="false"
+              />
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                className="h-5 w-5 absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400"
+                fill="none"
+                viewBox="0 0 24 24"
+                stroke="currentColor"
+              >
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  strokeWidth={2}
+                  d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"
+                />
+              </svg>
+              {searchTerm && (
+                <button
+                  onClick={() => setSearchTerm('')}
+                  className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-400 hover:text-gray-600"
+                  aria-label="Clear search"
+                >
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    className="h-4 w-4"
+                    fill="none"
+                    viewBox="0 0 24 24"
+                    stroke="currentColor"
+                  >
+                    <path
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      strokeWidth={2}
+                      d="M6 18L18 6M6 6l12 12"
+                    />
+                  </svg>
+                </button>
+              )}
+            </div>
+          </div>
+
           {/* Store cards */}
           {filteredStores.map(store => (
             <div key={store.id} className="store-card">
@@ -167,7 +171,7 @@ export default function StoreSelector({ shouldNavigateToPlan }: StoreSelectorPro
             </div>
           ))}
 
-          {/* No results message */}
+          {/* No results message - only shown when search has no results */}
           {filteredStores.length === 0 && searchTerm && (
             <div className="store-card bg-gray-50 rounded-[30px] p-4 text-center">
               <p className="text-gray-500">No stores match your search for &ldquo;{searchTerm}&rdquo;</p>
@@ -179,6 +183,13 @@ export default function StoreSelector({ shouldNavigateToPlan }: StoreSelectorPro
               </button>
             </div>
           )}
+
+          {/* "Don't see your store" card - always visible */}
+          <div className="store-card bg-blue-50 rounded-[30px]">
+            <p className="text-gray-700 font-medium px-6 pt-4 pb-2">
+              Don&apos;t see your store? Email us at <a href="mailto:info@skrimp.ai" className="text-blue-600 hover:underline">info@skrimp.ai</a> to get it added!
+            </p>
+          </div>
         </div>
       )}
 
