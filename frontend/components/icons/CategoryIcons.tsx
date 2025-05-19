@@ -56,7 +56,7 @@ export const meat: React.FC<IconProps> = (props) => (
 );
 
 export const pantry: React.FC<IconProps> = (props) => (
-  <EmojiIcon emoji="🧰" label="Toolbox" {...props} />
+  <EmojiIcon emoji="🥫" label="Toolbox" {...props} />
 );
 
 export const produce: React.FC<IconProps> = (props) => (
@@ -83,6 +83,14 @@ export const vegetables: React.FC<IconProps> = (props) => (
   <EmojiIcon emoji="🥕" label="Carrot" {...props} />
 );
 
+export const deli: React.FC<IconProps> = (props) => (
+  <EmojiIcon emoji="🧀" label="Package" {...props} />
+);
+
+export const breakfast: React.FC<IconProps> = (props) => (
+  <EmojiIcon emoji="🍯" label="Package" {...props} />
+);
+
 export const other: React.FC<IconProps> = (props) => (
   <EmojiIcon emoji="📦" label="Package" {...props} />
 );
@@ -90,9 +98,11 @@ export const other: React.FC<IconProps> = (props) => (
 // Export a default object with all icons
 const CategoryIcons = {
   bakery,
+  breakfast,
   beverages,
   condiments,
   dairy,
+  deli,
   meat,
   pantry,
   produce,
