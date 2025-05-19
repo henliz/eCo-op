@@ -13,6 +13,7 @@ interface GroceryItemProps {
   onAnimationComplete?: () => void;
 }
 
+// Using named export as expected in GroceryScreen.tsx
 export function GroceryItem({
   item,
   onUpdateTags,

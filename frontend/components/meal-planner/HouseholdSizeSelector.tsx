@@ -10,6 +10,10 @@ import { usePlannerStore } from './usePlannerStore';
  * Fixes the React hydration mismatch by ensuring **no random values are used
  * during server‑side rendering**. All randomness is deferred to a `useEffect`
  * that runs only in the browser after hydration completes.
+ *
+ * Added probability distribution:
+ * - 75% chance of standing still (no animation)
+ * - 25% chance split among all other animations
  */
 export function HouseholdSizeSelector() {
   // ─── Store state ───────────────────────────────────────────────────────────
@@ -56,42 +60,74 @@ export function HouseholdSizeSelector() {
     'bumpRight', 'bumpLeft'
   ] as const;
 
-  const randomAnimation = () => animations[Math.floor(Math.random() * animations.length)];
+  // New animation type that includes 'none' for standing still
+  type AnimationType = typeof animations[number] | 'none';
+
+  // Modified to apply probabilities
+  const getRandomAnimation = (): AnimationType => {
+    // 75% chance of standing still
+    if (Math.random() < 0.4) {
+      return 'none';
+    }
+
+    // 25% chance split among all other animations
+    return animations[Math.floor(Math.random() * animations.length)];
+  };
 
   // ─── Stick figure component ───────────────────────────────────────────────
   const StickFigure: React.FC<{ index: number }> = ({ index }) => {
     /**
      * IMPORTANT: initialAnim must be **deterministic** so that the markup
      * generated during SSR matches the markup on first render in the browser.
-     * We pick a safe placeholder ("jump") for everyone, then switch to a
-     * random animation as soon as the component mounts on the client.
+     * We use 'none' as our safe placeholder for everyone, then switch to a
+     * probability-based animation on mount.
      */
-    const [anim, setAnim] = useState<string>('jump');
+    const [anim, setAnim] = useState<AnimationType>('none');
     const wrapperRef = useRef<HTMLDivElement>(null);
 
-    // Swap in a random animation after hydration; then continue at each loop.
+    // Initial animation setup - runs only once after mount
     useEffect(() => {
-      setAnim(randomAnimation());
+      // Set initial animation state after component mounts
+      setAnim(getRandomAnimation());
+    }, []); // Empty dependency array means this runs only once after mount
+
+    // Handle animation changes and interval setup
+    useEffect(() => {
       const el = wrapperRef.current;
       if (!el) return;
-      const handler = () => setAnim(randomAnimation());
-      el.addEventListener('animationiteration', handler);
-      return () => el.removeEventListener('animationiteration', handler);
-    }, []);
 
-    // duration and delay remain deterministic (derived from index).
-    const duration = 0.8 + (index % 5) * 0.15;
-    const delay    = (index * 0.17) % 1;
-    const origin   = anim === 'spin' || anim.startsWith('somersault') ? '50% 50%' : 'bottom';
+      // Set up event handlers based on current animation state
+      if (anim !== 'none') {
+        // Only add listeners if currently animated
+        const handler = () => {
+          setAnim(getRandomAnimation());
+        };
+
+        el.addEventListener('animationiteration', handler);
+        return () => el.removeEventListener('animationiteration', handler);
+      } else {
+        // For still figures, periodically check if they should start moving
+        const intervalId = setInterval(() => {
+          setAnim(getRandomAnimation());
+        }, 3000 + (index % 5) * 1000); // Stagger checks by index
+
+        return () => clearInterval(intervalId);
+      }
+    }, [anim, index]);
+
+    // Only apply animation styles if not 'none'
+    const animationStyle = anim === 'none'
+      ? {}
+      : {
+          animation: `${anim} ${0.8 + (index % 5) * 0.15}s ease-in-out ${(index * 0.17) % 1}s infinite`,
+          transformOrigin: (anim === 'spin' || anim.startsWith('somersault')) ? '50% 50%' : 'bottom',
+        };
 
     return (
       <div
         ref={wrapperRef}
         className="inline-block mx-0.5"
-        style={{
-          animation: `${anim} ${duration}s ease-in-out ${delay}s infinite`,
-          transformOrigin: origin,
-        }}
+        style={animationStyle}
       >
         <svg width="16" height="20" viewBox="0 0 16 20" className="text-teal-500">
           <circle cx="8" cy="4" r="3.5" fill="currentColor" />
@@ -147,13 +183,13 @@ export function HouseholdSizeSelector() {
         @keyframes somersault {
           0% { transform: translateY(0) rotateZ(0deg); }
           25% { transform: translateY(-12px) rotateZ(0deg); }
-          55% { transform: translateY(-12px) rotateZ(360deg); }
+          75% { transform: translateY(-12px) rotateZ(360deg); }
           100%{ transform: translateY(0) rotateZ(360deg); }
         }
         @keyframes somersaultReverse {
           0% { transform: translateY(0) rotateZ(0deg); }
           25% { transform: translateY(-12px) rotateZ(0deg); }
-          55% { transform: translateY(-12px) rotateZ(-360deg); }
+          75% { transform: translateY(-12px) rotateZ(-360deg); }
           100%{ transform: translateY(0) rotateZ(-360deg); }
         }
         @keyframes wave {
