@@ -316,6 +316,11 @@ export function GroceryScreen() {
           <GroceryListPrintable
             groceryItems={groceryItems}
             groceryTotals={groceryTotals}
+            store={selectedStoreInfo ? {
+              name: selectedStoreInfo.name,
+              location: selectedStoreInfo.location
+            } : undefined}
+            selectedRecipes={usePlannerStore.getState().selectedRecipes()}
           />
         </div>
       </div>

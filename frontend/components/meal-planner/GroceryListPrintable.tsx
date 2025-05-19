@@ -12,18 +12,37 @@ interface GroceryTotals {
   totalSavings: number;
 }
 
+// Add store information to props
+interface StoreInfo {
+  name: string;
+  location: string;
+}
+
+// Add Recipe interface
+interface Recipe {
+  name: string;
+  url: string;
+  multiplier?: number;
+}
+
 interface GroceryListPrintableProps {
   groceryItems: AggregatedItem[];
   // Commenting out this prop since we're not using it anymore
   // groceryCheckedItems: Set<string>;
   groceryTotals: GroceryTotals;
+  // Add optional store prop
+  store?: StoreInfo;
+  // Add selected recipes
+  selectedRecipes?: Recipe[];
 }
 
 export function GroceryListPrintable({
   groceryItems,
   // Remove the groceryCheckedItems parameter since we're not using it
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  groceryTotals // Need to keep this prop to avoid build errors, but it's not used in this component
+  groceryTotals, // Need to keep this prop to avoid build errors, but it's not used in this component
+  store, // Add the store parameter
+  selectedRecipes = [] // Add selected recipes with default empty array
 }: GroceryListPrintableProps) {
 
   // Handle print function
@@ -71,17 +90,19 @@ export function GroceryListPrintable({
           <title>skrimp.ai Grocery List</title>
           <meta charset="utf-8">
           <meta name="viewport" content="width=device-width, initial-scale=1">
-          <!-- Hide browser URL/about:blank from headers and footers -->
-          <meta name="format-detection" content="telephone=no">
-          <meta name="format-detection" content="date=no">
-          <meta name="format-detection" content="address=no">
-          <meta name="format-detection" content="email=no">
           <style>
             /* Reset and base styles */
             * {
               margin: 0;
               padding: 0;
               box-sizing: border-box;
+            }
+            
+            html, body {
+              height: 100%;
+              overflow: auto;
+              -webkit-print-color-adjust: exact;
+              print-color-adjust: exact;
             }
             
             body {
@@ -91,18 +112,31 @@ export function GroceryListPrintable({
               background: white;
               padding: 0.5cm;
               font-size: 9pt;
+              position: relative;
             }
             
-            /* Header styles - without print button */
+            /* Header styles - with store info */
             .header {
-              text-align: center;
               padding-bottom: 3px;
               margin-bottom: 0;
               border-bottom: 1px solid #000;
+              display: flex;
+              justify-content: space-between;
+              align-items: center;
             }
             
             .title {
               font-size: 14pt;
+              font-weight: bold;
+            }
+            
+            .store-info {
+              text-align: right;
+              font-size: 10pt;
+              color: #555;
+            }
+            
+            .store-name {
               font-weight: bold;
             }
             
@@ -129,11 +163,17 @@ export function GroceryListPrintable({
               box-shadow: 0 2px 4px rgba(0,0,0,0.2);
             }
             
+            /* Main container */
+            .main-container {
+              position: relative;
+              width: 100%;
+              height: auto;
+            }
+            
             /* Items container with multi-column layout */
             .items-container {
               column-count: 3;
               column-gap: 10px;
-              column-fill: auto; /* Fill columns sequentially - important for first page content */
               margin-top: 5px; /* Small space after header */
               orphans: 3; /* Min number of lines at top of column */
               widows: 3; /* Min number of lines at bottom of column */
@@ -158,6 +198,30 @@ export function GroceryListPrintable({
               border-right: 1px solid #ddd;
               border-top-left-radius: 4px;
               border-top-right-radius: 4px;
+            }
+            
+            /* Meal planning category styling */
+            .meals-planned-category .category-header {
+              background-color: #e0e0e0;
+              font-weight: bold;
+            }
+            
+            .meals-wrapper {
+              background-color: #f5f5f5;
+            }
+            
+            .meal-item {
+              background-color: #f5f5f5;
+              border-bottom: 1px solid #e0e0e0;
+            }
+            
+            .meal-bullet {
+              display: inline-block;
+              width: 10px;
+              margin-right: 4px;
+              margin-top: 3px;
+              flex-shrink: 0;
+              text-align: center;
             }
             
             /* Items wrapper inside category */
@@ -265,63 +329,52 @@ export function GroceryListPrintable({
               margin-left: 3px;
             }
             
-            /* Print info */
-            .print-info {
-              text-align: center;
-              margin-top: 15px;
-              padding-top: 5px;
-              border-top: 1px solid #000;
+            /* Print info - footer */
+            .footer {
+              margin-top: 8px;
               font-size: 8pt;
               color: #555;
-              column-span: all; /* Make footer span all columns */
+              text-align: center;
+              border-top: 1px solid #ddd;
+              padding-top: 3px;
             }
             
-            /* Print optimization */
+            /* Print specific settings */
             @media print {
-              body {
-                padding: 0.5cm;
-              }
-              
-              .no-print {
-                display: none;
-              }
-              
-              /* Fix for header positioning on first page */
-              .header {
-                position: static;
-              }
-              
-              /* Ensure backgrounds print */
-              * {
-                -webkit-print-color-adjust: exact !important;
-                print-color-adjust: exact !important;
-              }
-              
-              /* Hide browser-generated headers and footers */
               @page {
                 size: auto;
                 margin: 0.5cm;
               }
               
-              /* Mobile-specific print adjustments */
-              @media (max-width: 600px) {
-                /* Instead of changing column count, we'll adjust their properties */
-                .items-container {
-                  column-width: auto !important; /* Let the browser decide column width */
-                  column-count: 1 !important; /* Force single column on mobile print */
-                  width: 100% !important;
-                }
-                
-                /* Make text slightly larger for readability */
-                body {
-                  font-size: 10pt !important;
-                }
+              html, body {
+                height: auto;
+                overflow: visible;
+              }
+              
+              body {
+                position: static;
+              }
+              
+              .no-print {
+                display: none !important;
+              }
+              
+              .main-container {
+                display: block;
+                position: static;
               }
             }
             
-            /* Mobile view adjustments */
-            @media (max-width: 600px) {
-              /* Any mobile-specific styles for the browser view */
+            /* Mobile adjustments */
+            @media screen and (max-width: 600px) {
+              .items-container {
+                column-count: 1;
+              }
+              
+              body {
+                font-size: 11pt;
+              }
+              
               .checkbox {
                 width: 12px;
                 height: 12px;
@@ -330,19 +383,26 @@ export function GroceryListPrintable({
           </style>
         </head>
         <body>
-          <!-- Simplified header without print button -->
-          <div class="header">
-            <h1 class="title">skrimp.ai grocery list</h1>
-          </div>
-          
-          <!-- Sticky print button at the bottom of the page -->
-          <div class="controls-sticky no-print">
-            <button onclick="window.print()" class="print-button">
-              Print List
-            </button>
-          </div>
-          
-          <div class="items-container">
+          <div class="main-container">
+            <!-- Header with store info -->
+            <div class="header">
+              <h1 class="title">skrimp.ai grocery list</h1>
+              ${store ? `
+              <div class="store-info">
+                <div class="store-name">${store.name}</div>
+                <div class="store-location">${store.location}</div>
+              </div>
+              ` : ''}
+            </div>
+            
+            <!-- Sticky print button at the bottom of the page -->
+            <div class="controls-sticky no-print">
+              <button onclick="window.print()" class="print-button">
+                Print List
+              </button>
+            </div>
+            
+            <div class="items-container">
     `;
 
     // Add categories and items
@@ -403,40 +463,70 @@ export function GroceryListPrintable({
       }
     });
 
-    // Add date info (without the total)
+    // Add Meals Planned category if there are selected recipes
+    if (selectedRecipes.length > 0) {
+      printContent += `
+        <div class="category meals-planned-category">
+          <div class="category-header">Meals Planned</div>
+          <div class="items-wrapper meals-wrapper">
+      `;
+
+      // Add recipe items
+      selectedRecipes.forEach(recipe => {
+        const multiplier = recipe.multiplier && recipe.multiplier > 1
+          ? ` (×${recipe.multiplier})`
+          : '';
+
+        printContent += `
+          <div class="item meal-item">
+            <div class="meal-bullet">•</div>
+            <div class="item-details">
+              <span class="item-name">${recipe.name}${multiplier}</span>
+            </div>
+          </div>
+        `;
+      });
+
+      printContent += `
+          </div>
+        </div>
+      `;
+    }
+
+    // Close items container and add footer
     printContent += `
-          </div>
+            </div><!-- End of items-container -->
+            
+            <div class="footer">
+              ${new Date().toLocaleDateString()} • Printed on ${new Date().toLocaleString()}
+            </div>
+          </div><!-- End of main-container -->
           
-          <div class="print-info">
-            ${new Date().toLocaleDateString()} • Printed on ${new Date().toLocaleString()}
-          </div>
-          
-          <!-- Force immediate flow of content and set document title -->
           <script>
-            // Set the document title to remove about:blank
+            // Set the document title
             document.title = "skrimp.ai grocery list";
             
-            // Set a timeout to show print dialog after content has loaded
-            document.addEventListener('DOMContentLoaded', function() {
-              // Force reflow of the page
+            // Fix extra blank page in print preview
+            window.onload = function() {
+              // Set all containers to auto height
+              document.body.style.height = 'auto';
+              
+              // Force layout calculation
               document.body.offsetHeight;
               
-              // Set a timeout to show print dialog after content has loaded
+              // Timeout before printing
               setTimeout(function() {
                 window.print();
               }, 500);
-            });
+            };
           </script>
         </body>
       </html>
     `;
 
-    // Write to the new window and trigger print
+    // Write to the new window
     printWindow.document.write(printContent);
     printWindow.document.close();
-
-    // Set the document title immediately after writing
-    printWindow.document.title = "skrimp.ai grocery list";
   };
 
   return (
