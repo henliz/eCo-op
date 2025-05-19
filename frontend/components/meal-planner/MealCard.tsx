@@ -4,11 +4,9 @@ import React from 'react';
 import { motion } from 'framer-motion';
 import {
   Card,
-  CardHeader,
-  CardTitle,
 } from '@/components/ui/card';
 import { type Recipe } from './usePlannerStore';
-import { Plus, Minus, ExternalLink } from 'lucide-react';
+import { Settings } from 'lucide-react';
 import { RecipeViewer } from './RecipeViewer';
 
 interface MealCardProps {
@@ -26,17 +24,19 @@ export function MealCard({
   onToggle,
   onMultiplierChange,
 }: MealCardProps) {
-  const dec = (e: React.MouseEvent) => {
+  // Only count as having savings if more than $1
+  const hasSavings = recipe.totalSavings > 1.0;
+  const hasFlyerItems = recipe.flyerItemsCount > 0;
+
+  // Prevent the card toggle when clicking on the gear icon area
+  const handleGearAreaClick = (e: React.MouseEvent) => {
     e.stopPropagation();
-    onMultiplierChange(recipe.url, Math.max(0, multiplier - 0.5));
-  };
-  const inc = (e: React.MouseEvent) => {
-    e.stopPropagation();
-    onMultiplierChange(recipe.url, multiplier + 0.5);
   };
 
-  const hasSavings = recipe.totalSavings > 0;
-  const hasFlyerItems = recipe.flyerItemsCount > 0;
+  // Extract ingredient names from the recipe
+  const ingredientNames = recipe.ingredients
+    ? recipe.ingredients.map(ing => ing.recipeIngredientName)
+    : [];
 
   return (
     <motion.div
@@ -68,74 +68,70 @@ export function MealCard({
           <div className="absolute inset-0 bg-black opacity-10 pointer-events-none" />
         )}
 
-        {/* content wrapper above overlay - removed flex-grow to avoid pushing buttons down */}
-        <div className="relative z-10">
-          <CardHeader className="!pl-3 !pr-2 !mb-0">
-            <CardTitle className="text-sm sm:text-lg font-semibold leading-snug break-words">
-              <div className="flex justify-between items-start">
-                <span className={recipe.img ? "px-1 bg-white/70 rounded" : ""}>{recipe.name}</span>
-                {recipe.url && (
-                  <span
-                    onClick={(e) => e.stopPropagation()}
-                    className="flex shrink-0 ml-1 text-gray-500 hover:text-teal-600"
-                  >
-                    <RecipeViewer
-                      title={recipe.name}
-                      url={recipe.url}
-                      trigger={
-                        <ExternalLink size={16} className="cursor-pointer" />
-                      }
-                    />
-                  </span>
-                )}
-              </div>
-              <div className="flex justify-between items-center text-xs sm:text-sm !ml-1 !mr-3 !mt-2">
-                <p className={`text-gray-500 !mb-0 ${recipe.img ? "px-1 bg-white/60 rounded" : ""}`}>
-                  Servings: {recipe.servings}
-                </p>
-                <p className={`text-gray-500 !mb-0 ${recipe.img ? "px-1 bg-white/60 rounded" : ""}`}>
-                  Cost: <span className="font-bold">${recipe.salePrice.toFixed(2)}</span>
-                </p>
-              </div>
-              {/* Savings or Flyer Items display - show one or the other, not both */}
-              <div className="flex justify-end text-xs sm:text-sm !mr-3">
-                {hasSavings ? (
-                  <p className={`text-green-600 font-bold !mb-0 ${recipe.img ? "px-1 bg-white/60 rounded" : ""}`}>
-                    Deals: ${recipe.totalSavings.toFixed(2)}
+        {/* Top left: Gear icon and Serves */}
+        <div
+          className="absolute top-2 left-2 z-10"
+          onClick={handleGearAreaClick}
+        >
+          {recipe.url && (
+            <RecipeViewer
+              title={recipe.name}
+              url={recipe.url}
+              isSelected={isSelected}
+              multiplier={multiplier}
+              onMultiplierChange={(newMultiplier) => onMultiplierChange(recipe.url, newMultiplier)}
+              ingredients={ingredientNames} // Pass the ingredient names here
+              trigger={
+                <div
+                  className={`flex items-start cursor-pointer ${recipe.img ? "px-1 bg-white/80 rounded" : ""}`}
+                >
+                  <Settings size={14} className="text-gray-500 mr-1 mt-0.5" />
+                  <p className="text-xs sm:text-sm text-gray-700 !mb-0">
+                    Serves: {recipe.servings}
                   </p>
-                ) : hasFlyerItems ? (
-                  <p className={`text-blue-600 font-bold !mb-0 ${recipe.img ? "px-1 bg-white/60 rounded" : ""}`}>
-                    {recipe.flyerItemsCount} flyer items
-                  </p>
-                ) : null}
-              </div>
-            </CardTitle>
-          </CardHeader>
+                </div>
+              }
+            />
+          )}
         </div>
 
-        {/* Fixed bottom multiplier controls - positioned absolutely in the Card */}
-        {isSelected && (
-          <div className="absolute bottom-2 left-0 right-0 flex items-center justify-center z-20">
-            <button
-              onClick={dec}
-              className="bg-gray-200 hover:bg-gray-400 w-12 h-10 flex items-center justify-center rounded-l"
-            >
-              <Minus size={20}/>
-            </button>
-            <div
-              className="w-16 h-10 flex items-center justify-center font-bold text-lg"
-              style={{backgroundColor: '#FFE6D9'}}
-            >
+        {/* Multiplier display - separate text block, only show if selected and multiplier != 1 */}
+        {isSelected && multiplier !== 1 && (
+          <div className="absolute top-7 left-2 z-10">
+            <p className={`text-xs sm:text-sm font-bold text-red-600 !mb-0 pt-0 ${recipe.img ? "px-1 bg-white/80 rounded" : ""}`}>
               x{multiplier.toFixed(1).replace('.0', '')}
-            </div>
-            <button
-              onClick={inc}
-              className="bg-gray-200 hover:bg-gray-400 w-12 h-10 flex items-center justify-center rounded-r"
-            >
-              <Plus size={20}/>
-            </button>
+            </p>
           </div>
         )}
+
+        {/* Top right: Cost, Flyer Items, and Deals */}
+        <div className="absolute top-2 right-2 z-10 flex flex-col items-end">
+          {/* Cost - always show, with nowrap to prevent wrapping */}
+          <p className={`text-xs sm:text-sm text-gray-700 !mb-0 text-right whitespace-nowrap ${recipe.img ? "px-1 bg-white/80 rounded" : ""}`}>
+            Cost: <span className="font-bold">${recipe.salePrice.toFixed(2)}</span>
+          </p>
+
+          {/* Flyer Items - show if available */}
+          {hasFlyerItems && (
+            <p className={`text-xs sm:text-sm text-blue-600 font-bold !mb-0 max-w-[45px] text-right ${recipe.img ? "px-1 bg-white/80 rounded mt-1" : "mt-1"}`}>
+              {recipe.flyerItemsCount} flyer items
+            </p>
+          )}
+
+          {/* Deals - show only if more than $1 */}
+          {hasSavings && (
+            <p className={`text-xs sm:text-sm text-green-600 font-bold !mb-0 max-w-[45px] text-right ${recipe.img ? "px-1 bg-white/80 rounded mt-1" : "mt-1"}`}>
+              deals ${recipe.totalSavings.toFixed(2)}
+            </p>
+          )}
+        </div>
+
+        {/* Bottom: Recipe Name - inline-block to make it fit content but still wrap if needed */}
+        <div className="absolute bottom-2 left-2 right-2 z-10">
+          <span className={`inline-block text-xs sm:text-base font-semibold leading-snug break-words ${recipe.img ? "px-1 bg-white/80 rounded" : ""}`}>
+            {recipe.name}
+          </span>
+        </div>
       </Card>
     </motion.div>
   );

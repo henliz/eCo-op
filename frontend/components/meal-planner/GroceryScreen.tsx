@@ -3,6 +3,7 @@
 import React, { useState } from 'react';
 import { usePlannerStore, type AggregatedItem, type IngredientTags } from './usePlannerStore';
 import { GroceryItem } from './GroceryItem';
+import { GroceryListPrintable } from './GroceryListPrintable'; // Add this import at the top
 
 /* -------------------------------- types -------------------------------- */
 interface GroceryTotals {
@@ -21,7 +22,7 @@ export function GroceryScreen() {
     setIngredientTags,
   } = usePlannerStore();
 
-  // State to track expanded categories
+  // State to track expanded categories - initialize as empty object
   const [expandedCategories, setExpandedCategories] = useState<Record<string, boolean>>({});
 
   const groceryItems = Array.from(aggregatedIngredients().values());
@@ -67,9 +68,9 @@ export function GroceryScreen() {
   React.useEffect(() => {
     const initialExpandedState: Record<string, boolean> = {};
     sortedCategories.forEach(category => {
-      // If category state doesn't exist yet, set it to expanded by default
+      // If category state doesn't exist yet, set it to closed by default
       if (expandedCategories[category] === undefined) {
-        initialExpandedState[category] = true;
+        initialExpandedState[category] = false;
       }
     });
 
@@ -79,17 +80,19 @@ export function GroceryScreen() {
   }, [sortedCategories, expandedCategories]);
 
   /* ------------------------------ totals ----------------------------------- */
-  // Calculate the new grocery totals with corrected math
+  // Update the calculateGroceryTotals function in GroceryScreen.tsx to only consider 'in_cart' items
+
   const calculateGroceryTotals = (): GroceryTotals => {
     let mealCost = 0;
     let futureUseCost = 0;
     let groceryBill = 0;
     let totalSavings = 0;
 
-    // Only consider items that are checked and not owned
+    // Only consider items that are explicitly marked as 'in_cart'
+    // OR checked but not having a specific status
     const selectedItems = groceryItems.filter(item =>
-      groceryCheckedItems.has(item.packageId) &&
-      item.tags?.status !== 'owned'
+      (item.tags?.status === 'in_cart') ||
+      (groceryCheckedItems.has(item.packageId) && !item.tags?.status)
     );
 
     selectedItems.forEach(item => {
@@ -133,20 +136,38 @@ export function GroceryScreen() {
     setIngredientTags(packageId, tags);
 
   const renderItems = (items: AggregatedItem[]) => {
-    return items.map(item => (
-      <div
-        key={item.packageId}
-        // Add background color for pantry staples
-        className={!isEssentialItem(item) ? "bg-[#FDE2E7]" : ""}
-      >
-        <GroceryItem
-          item={item}
-          isChecked={groceryCheckedItems.has(item.packageId)}
-          onToggle={toggleGroceryItem}
-          onUpdateTags={handleUpdateTags}
-        />
-      </div>
-    ));
+    return items.map((item, index) => {
+      // Determine background color based on both status and essentiality
+      let bgColor = '';
+      const status = item.tags?.status || 'bought';
+
+      // First check status (higher priority)
+      if (status === 'owned') {
+        bgColor = 'bg-blue-50 border-blue-200';
+      } else if (status === 'in_cart') {
+        bgColor = 'bg-green-50 border-green-200';
+      } else if (status === 'ignored') {
+        bgColor = 'bg-gray-50 border-gray-200 opacity-50';
+      }
+      // If no status background, check if pantry staple
+      else if (!isEssentialItem(item)) {
+        bgColor = 'bg-[#FDE2E7]';
+      }
+
+      return (
+        <div
+          key={item.packageId}
+          // Apply background color and border
+          className={`${bgColor} ${index !== 0 ? "border-t border-gray-300" : ""}`}
+        >
+          <GroceryItem
+            item={item}
+            onToggle={toggleGroceryItem}
+            onUpdateTags={handleUpdateTags}
+          />
+        </div>
+      );
+    });
   };
 
   // Toggle category expansion
@@ -168,7 +189,7 @@ export function GroceryScreen() {
         <div key={category} className="rounded-lg border border-gray-200 overflow-hidden mb-1">
           {/* Category header - now clickable */}
           <div
-            className="flex justify-between items-center p-2 bg-gray-200 cursor-pointer"
+            className="flex justify-between items-center px-2 py-1 bg-gray-200 cursor-pointer"
             onClick={() => toggleCategory(category)}
           >
             <div className="flex items-center">
@@ -192,24 +213,27 @@ export function GroceryScreen() {
               </svg>
               <span className="text-lg font-bold">{category}</span>
             </div>
-            {/* Right-aligned item count in round brackets */}
+            {/* Right-aligned item count - UPDATED to show properly "checked" items */}
             <span className="text-sm text-gray-600">
-              ({categorizedItems[category].filter(item => !groceryCheckedItems.has(item.packageId) && item.tags?.status !== 'owned').length} of {categorizedItems[category].length})
+              ({
+                          // Count items that are marked as in_cart
+                          categorizedItems[category].filter(item =>
+                              item.tags?.status === 'in_cart' || (groceryCheckedItems.has(item.packageId) && !item.tags?.status)
+                          ).length
+                        } of {
+                          // Total count excluding items marked as 'owned' or 'ignored'
+                          categorizedItems[category].filter(item =>
+                              item.tags?.status !== 'owned' && item.tags?.status !== 'ignored'
+                          ).length
+                        })
             </span>
           </div>
 
           {/* Category items - conditionally rendered based on expanded state */}
+          {/* Category items - conditionally rendered based on expanded state */}
           {expandedCategories[category] && (
             <div>
-              {/* Column headers - only visible when section is expanded */}
-              <div className="flex justify-end items-center p-2 bg-gray-200 border-t">
-                {/* Qty column header */}
-                <div className="w-16 text-right font-semibold text-sm text-gray-600">Qty</div>
-                {/* Each column header */}
-                <div className="w-20 text-right font-semibold text-sm text-gray-600">Each</div>
-                {/* Total column header */}
-                <div className="w-20 text-right font-semibold text-sm text-gray-600">Total</div>
-              </div>
+              {/* Column headers removed */}
 
               {categorizedItems[category].length ? (
                 renderItems(categorizedItems[category])
@@ -223,8 +247,19 @@ export function GroceryScreen() {
         </div>
       ))}
 
+      {/* Print button - sticky section above the totals bar */}
+      <div className="sticky bottom-14 left-0 right-0 w-full py-5 z-30 print:hidden">
+        <div className="flex justify-end px-0">
+          <GroceryListPrintable
+            groceryItems={groceryItems}
+            groceryTotals={groceryTotals}
+          />
+        </div>
+      </div>
+
       {/* Bottom summary bar with enhanced totals */}
-      <div className="fixed bottom-0 left-0 right-0 bg-gray-200 border-t py-2 px-3 shadow-lg pb-4">
+      <div
+        className="sticky bottom-0 left-0 right-0 w-screen ml-[calc(-50vw+50%)] bg-gray-200 border-t py-2 shadow-lg pb-4 z-10 mt-2">
         <div className="container mx-auto">
           {/* TOTALS header */}
           <div className="text-center mb-1">
@@ -233,22 +268,22 @@ export function GroceryScreen() {
 
           {/* Enhanced stats row with 4 metrics - ledger style */}
           <div className="flex justify-center items-center">
-            <div className="grid grid-cols-4 gap-4 w-full max-w-2xl">
-              <div className="flex flex-col items-end">
-                <span className="text-sm text-gray-600 text-right">Meal Cost</span>
-                <span className="font-bold text-right">${groceryTotals.mealCost.toFixed(2)}</span>
+            <div className="grid grid-cols-4 w-full max-w-2xl">
+              <div className="flex flex-col items-center text-center mx-2">
+                <span className="text-sm text-gray-600">Deals</span>
+                <span className="font-bold text-green-600">${groceryTotals.totalSavings.toFixed(2)}</span>
               </div>
-              <div className="flex flex-col items-end">
-                <span className="text-sm text-gray-600 text-right">Future Use</span>
-                <span className="font-bold text-amber-600 text-right">${groceryTotals.futureUseCost.toFixed(2)}</span>
+              <div className="flex flex-col items-center text-center mx-2">
+                <span className="text-sm text-gray-600">Bill</span>
+                <span className="font-bold">${groceryTotals.groceryBill.toFixed(2)}</span>
               </div>
-              <div className="flex flex-col items-end">
-                <span className="text-sm text-gray-600 text-right">Grocery Bill</span>
-                <span className="font-bold text-right">${groceryTotals.groceryBill.toFixed(2)}</span>
+              <div className="flex flex-col items-center text-center mx-2">
+                <span className="text-sm text-gray-600">Recipes</span>
+                <span className="font-bold">${groceryTotals.mealCost.toFixed(2)}</span>
               </div>
-              <div className="flex flex-col items-end">
-                <span className="text-sm text-gray-600 text-right">Deals</span>
-                <span className="font-bold text-green-600 text-right">${groceryTotals.totalSavings.toFixed(2)}</span>
+              <div className="flex flex-col items-center text-center mx-2">
+                <span className="text-sm text-gray-600">Leftovers</span>
+                <span className="font-bold text-amber-600">${groceryTotals.futureUseCost.toFixed(2)}</span>
               </div>
             </div>
           </div>
@@ -259,13 +294,22 @@ export function GroceryScreen() {
 }
 
 /* ----------------------------- helpers ---------------------------------- */
+// Update the sortLogic function to account for the new 'in_cart' status
 function sortLogic(
   checked: Set<string>
 ): (a: AggregatedItem, b: AggregatedItem) => number {
   return (a, b) => {
-    const statusOrder: Record<'bought' | 'owned' | 'ignored', number> = {bought: 2, owned: 1, ignored: 0};
+    // Updated priority order: in_cart, bought, owned, ignored
+    const statusOrder: Record<'in_cart' | 'owned' | 'bought' | 'ignored', number> = {
+      in_cart: 2,
+      bought: 1,
+      owned: 3,
+      ignored: 0
+    };
+
     const aStatus = a.tags?.status || 'bought';
     const bStatus = b.tags?.status || 'bought';
+
     if (aStatus !== bStatus) return statusOrder[aStatus] - statusOrder[bStatus];
 
     const aChecked = checked.has(a.packageId);

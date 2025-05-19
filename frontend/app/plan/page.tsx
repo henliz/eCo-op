@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect, useRef, useCallback } from 'react';
 import { motion } from 'framer-motion';
 
 import Header from '@/components/layout/Header';
@@ -11,21 +11,26 @@ import { MealPlanScreen } from '@/components/meal-planner/MealPlanScreen';
 import { GroceryScreen } from '@/components/meal-planner/GroceryScreen';
 import { CookScreen } from '@/components/meal-planner/CookScreen';
 import { usePlannerStore } from '@/components/meal-planner/usePlannerStore';
+import LoadingScreen from '@/components/meal-planner/LoadingScreen';
 
-type View = 'store' | 'plan' | 'groceries' | 'cook';
+type View = 'store' | 'plan' | 'groceries' | 'cook' | 'loading'; // Add loading as a view type
 
 const tabs: { label: string; value: View }[] = [
-  { label: '1. Store', value: 'store' },
-  { label: '2. Plan', value: 'plan' },
-  { label: '3. Shop', value: 'groceries' },
-  { label: '4. Cook', value: 'cook' },
+  { label: '1-Set', value: 'store' },
+  { label: '2-Plan', value: 'plan' },
+  { label: '3-Shop', value: 'groceries' },
+  { label: '4-Cook', value: 'cook' },
 ];
 
 // Contextual helper text for each step
-const instructions: Record<View, string> = {
+const instructions: Record<Exclude<View, 'loading'>, React.ReactNode> = {
   store: 'Please select a store and set your household size to continue.',
-  plan: 'Select your recipes for the week.',
-  groceries: 'Review your shopping list. Check off items as you go. Items with pink background are pantry staples: Check if you have these before buying. Recipes only need a small portion.',
+  plan: 'Select recipes by clicking on them. Deals tally flyer items where $ savings are advertised.',
+  groceries: (
+    <span>
+      Pink items are used in very small quantities.<br></br>Click <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="inline-block align-text-bottom mx-0.5"><path d="m3 9 9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path><polyline points="9 22 9 12 15 12 15 22"></polyline></svg> for any you already have at home. <br></br>Use <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="inline-block align-text-bottom mx-0.5"><circle cx="8" cy="21" r="1"></circle><circle cx="19" cy="21" r="1"></circle><path d="M2.05 2.05h2l2.66 12.42a2 2 0 0 0 2 1.58h9.78a2 2 0 0 0 1.95-1.57l1.65-7.43H5.12"></path></svg> when you add items to your cart.
+    </span>
+  ),
   cook: 'Click on a recipe to see the cooking instructions.',
 };
 
@@ -33,6 +38,8 @@ const instructions: Record<View, string> = {
 export default function MealPlannerPage() {
   const [view, setView] = useState<View>('store');
   const { selectedStore, isDataLoaded, isLoading } = usePlannerStore();
+  const [showLoading, setShowLoading] = useState(false);
+  const hasTransitionedToPlan = useRef(false);
 
   // Keep track of when we need to navigate to Plan
   const shouldNavigateToPlan = useRef(false);
@@ -51,36 +58,70 @@ export default function MealPlannerPage() {
     }
   };
 
-  // Auto-switch to Plan tab when store is selected and data is loaded
+  // Track loading progress and switch to plan view at 40%
+  const handleLoadingProgress = useCallback((progress: number) => {
+    // When we reach 40% and haven't transitioned yet, switch to plan view in the background
+    if (progress >= 40 && !hasTransitionedToPlan.current) {
+      console.log("Loading reached 40%, switching to plan view in background");
+      hasTransitionedToPlan.current = true;
+
+      // Use setTimeout to avoid React's "Cannot update a component while rendering a different component" error
+      setTimeout(() => {
+        setView('plan');
+      }, 0);
+    }
+  }, []);
+
+  // Track when loading animation completes
+  const handleLoadingComplete = useCallback(() => {
+    console.log("Loading complete callback triggered");
+
+    // Start the fade out of the loading screen
+    setTimeout(() => {
+      setShowLoading(false);
+      // Reset the transition flag when loading is completely done
+      hasTransitionedToPlan.current = false;
+    }, 300);
+  }, []);
+
+  // Modified auto-switch to show loading screen when store is selected
   useEffect(() => {
     // If we're on the store tab and data is loaded, and we've been flagged to navigate
     if (selectedStore && isDataLoaded && !isLoading && view === 'store' && shouldNavigateToPlan.current) {
+      console.log("Store selected, showing loading screen");
+
       // Reset the flag so we don't keep triggering this
       shouldNavigateToPlan.current = false;
 
-      // Add a small delay to allow the confirmation message to be seen
-      const timer = setTimeout(() => {
-        // Scroll to top before changing view
-        window.scrollTo({ top: 0, behavior: 'smooth' });
-        setView('plan');
-      }, 800);
+      // Reset transition flag for the new loading screen
+      hasTransitionedToPlan.current = false;
 
-      return () => clearTimeout(timer);
+      // First show the loading screen overlay
+      setShowLoading(true);
+
+      // AFTER a tiny delay, set the view to plan behind the loading screen
+      // The switch to 'plan' will happen at 40% progress via the handleLoadingProgress callback
     }
   }, [selectedStore, isDataLoaded, isLoading, view]);
 
 return (
   <>
-    {/* Fixed Header */}
-    <div className="fixed top-0 left-0 right-0 z-30 bg-white">
-      <Header />
+    {/* Loading screen overlay - always in DOM but conditionally visible */}
+    <div
+      className={`fixed inset-0 z-50 transition-opacity duration-700 ease-in-out ${showLoading ? 'opacity-100' : 'opacity-0 pointer-events-none'}`}
+      style={{ position: 'fixed', top: 0, left: 0, right: 0, bottom: 0 }}
+    >
+      {showLoading && <LoadingScreen onComplete={handleLoadingComplete} onProgress={handleLoadingProgress} />}
     </div>
 
-    {/* Fixed tabs section - positioned right below the header */}
-    <div className="fixed top-16 left-0 right-0 bg-white z-20 shadow-sm">
+    {/* Fixed Header */}
+    <Header />
+
+    {/* Sticky tabs section - positioned right below the header */}
+    <div className="sticky top-14 left-0 right-0 z-20">
       <div className="container mx-auto p-1">
         {/* --- 4‑step selector --- */}
-        <div className="relative mx-auto mt-2 mb-1 w-full max-w-md h-12">
+        <div className="relative mx-auto mt-0 mb-1 w-full max-w-md h-12">
           <div className="absolute inset-0 bg-teal-100 rounded-full"/>
           <div className="absolute inset-0 flex">
             {tabs.map((tab) => (
@@ -109,10 +150,7 @@ return (
       </div>
     </div>
 
-    {/* Invisible spacer div that matches the height of fixed elements */}
-    <div className="h-32"></div>
-
-    {/* Content section without the extra padding-top since we have the spacer */}
+    {/* Content section */}
     <div className="container mx-auto p-1 min-h-screen">
       {/* --- Instruction card (part of scrollable content) --- */}
       <div
@@ -137,7 +175,7 @@ return (
             <path d="M10 22h4"></path>
           </svg>
           <span className="text-sm text-gray-700 italic inline-block align-middle">
-            {instructions[view]}
+            {instructions[view as Exclude<View, 'loading'>]}
           </span>
         </div>
       </div>
@@ -160,4 +198,4 @@ return (
     </div>
   </>
 ); // Closing parenthesis for return statement
-} // Closing brace for MealPlannerPage function
+}

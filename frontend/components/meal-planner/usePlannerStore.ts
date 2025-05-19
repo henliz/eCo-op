@@ -20,7 +20,7 @@ interface StoreIndexItem {
 
 export interface IngredientTags {
   importance?: 'core' | 'optional';
-  status?: 'bought' | 'owned' | 'ignored';
+  status?: 'bought' | 'owned' | 'in_cart' | 'ignored'; // Added 'in_cart' status
   storeSection?: string;
 }
 
@@ -365,14 +365,38 @@ export const usePlannerStore = create<PlannerState>((set, get) => ({
     };
   }),
 
+  // Update toggleGroceryItem function in usePlannerStore.ts to handle status changes
   toggleGroceryItem: (packageId) => set((state) => {
     const newCheckedItems = new Set(state.groceryCheckedItems);
+    const newTags = { ...state.ingredientTags };
+
+    // Get current item status
+    const currentItemStatus = state.ingredientTags[packageId]?.status || 'bought';
+
+    // If item is already in the checkedItems set, remove it and reset status
     if (newCheckedItems.has(packageId)) {
       newCheckedItems.delete(packageId);
-    } else {
+
+      // If the status was 'in_cart' or 'owned', reset it to 'bought'
+      if (currentItemStatus === 'in_cart' || currentItemStatus === 'owned') {
+        if (!newTags[packageId]) {
+          newTags[packageId] = {};
+        }
+        newTags[packageId] = {
+          ...newTags[packageId],
+          status: 'bought'
+        };
+      }
+    }
+    // If not in checkedItems, add it
+    else {
       newCheckedItems.add(packageId);
     }
-    return { groceryCheckedItems: newCheckedItems };
+
+    return {
+      groceryCheckedItems: newCheckedItems,
+      ingredientTags: newTags
+    };
   }),
 
   setRecipeMultiplier: (url, multiplier) => set((state) => {
