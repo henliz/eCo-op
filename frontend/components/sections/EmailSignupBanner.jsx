@@ -116,7 +116,7 @@ export default function EmailSignupBanner() {
                 whileHover={{ scale: 1.02 }}
                 whileTap={{ scale: 0.97 }}
               >
-                scrimp it!!
+                skrimp it!
               </motion.button>
 
               {status === 'success' && (
