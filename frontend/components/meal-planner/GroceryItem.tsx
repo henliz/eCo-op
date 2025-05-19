@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { type AggregatedItem, type IngredientTags } from './usePlannerStore';
 import { Tag, Home, ShoppingCart, ArrowDown, Check } from 'lucide-react';
@@ -33,6 +33,13 @@ export function GroceryItem({
   const [showCheckmarkAnimation, setShowCheckmarkAnimation] = useState(false);
   // Track which button was clicked for correct checkmark color
   const [lastClickedButton, setLastClickedButton] = useState<'home' | 'cart' | null>(null);
+  // Store button position for animation
+  const [animationStartPos, setAnimationStartPos] = useState({ x: 0, y: 0 });
+  // Refs for the buttons to get their positions
+  const homeButtonRef = useRef<HTMLButtonElement>(null);
+  const cartButtonRef = useRef<HTMLButtonElement>(null);
+  // Ref for the container to calculate center position
+  const containerRef = useRef<HTMLDivElement>(null);
 
   // Update animation state when props change
   useEffect(() => {
@@ -48,6 +55,19 @@ export function GroceryItem({
     if (onAnimationComplete) {
       onAnimationComplete();
     }
+  };
+
+  // Calculate start position relative to container
+  const calculateStartPosition = (buttonRef: React.RefObject<HTMLButtonElement | null>) => {
+    if (!buttonRef.current || !containerRef.current) return { x: 0, y: 0 };
+
+    const buttonRect = buttonRef.current.getBoundingClientRect();
+    const containerRect = containerRef.current.getBoundingClientRect();
+
+    return {
+      x: (buttonRect.left + buttonRect.width / 2) - (containerRect.left + containerRect.width / 2),
+      y: (buttonRect.top + buttonRect.height / 2) - (containerRect.top + containerRect.height / 2)
+    };
   };
 
   // Handle status toggle for "owned" and "bought" states
@@ -67,6 +87,9 @@ export function GroceryItem({
         // Track which button was clicked
         setLastClickedButton('home');
 
+        // Set animation start position
+        setAnimationStartPos(calculateStartPosition(homeButtonRef));
+
         // Start animation
         setShowCheckmarkAnimation(true);
 
@@ -78,7 +101,7 @@ export function GroceryItem({
           setTimeout(() => {
             handleAnimationEnd();
           }, 500);
-        }, 300);
+        }, 500);
       }
     }
   };
@@ -100,6 +123,9 @@ export function GroceryItem({
         // Track which button was clicked
         setLastClickedButton('cart');
 
+        // Set animation start position
+        setAnimationStartPos(calculateStartPosition(cartButtonRef));
+
         // Start animation
         setShowCheckmarkAnimation(true);
 
@@ -111,7 +137,7 @@ export function GroceryItem({
           setTimeout(() => {
             handleAnimationEnd();
           }, 500);
-        }, 300);
+        }, 500);
       }
     }
   };
@@ -149,7 +175,7 @@ export function GroceryItem({
   return (
     <div
       className="px-4 py-2 relative"
-      // Removed onClick handler
+      ref={containerRef}
     >
       {/* Content container with relative positioning */}
       <div className="relative">
@@ -180,6 +206,7 @@ export function GroceryItem({
         <div className="flex items-center">
           {/* Left side - Home icon with improved button styling */}
           <button
+            ref={homeButtonRef}
             onClick={handleHomeClick}
             className={`w-10 h-10 flex items-center justify-center rounded-full border shadow-sm transition-all duration-200
             ${status === 'owned' 
@@ -197,6 +224,7 @@ export function GroceryItem({
 
           {/* Right side - Shopping Cart icon with improved button styling */}
           <button
+            ref={cartButtonRef}
             onClick={handleCartClick}
             className={`w-10 h-10 flex items-center justify-center rounded-full border shadow-sm transition-all duration-200
             ${status === 'in_cart' 
@@ -208,21 +236,64 @@ export function GroceryItem({
           </button>
         </div>
 
-        {/* Check mark overlay - with animation */}
+        {/* Check mark overlay - with enhanced animation */}
         <AnimatePresence>
-          {(isHandled || showCheckmarkAnimation) && (
+          {showCheckmarkAnimation && (
             <motion.div
               className="absolute inset-0 flex items-center justify-center"
               style={{pointerEvents: 'none', zIndex: 5}} // Lower z-index to respect page hierarchy
-              initial={{ opacity: 0, scale: 0.5 }}
-              animate={{ opacity: 1, scale: 1 }}
-              exit={{ opacity: 0, scale: 0.5 }}
-              transition={{
-                type: "spring",
-                stiffness: 500,
-                damping: 30,
-                duration: 0.3
-              }}
+            >
+              <motion.div
+                className="rounded-full shadow-lg"
+                style={{
+                  backgroundColor: 'rgba(255, 255, 255, 0.9)',
+                  padding: '8px',
+                  position: 'absolute'
+                }}
+                initial={{
+                  opacity: 0,
+                  scale: 0.2,
+                  x: animationStartPos.x,
+                  y: animationStartPos.y
+                }}
+                animate={{
+                  opacity: 1,
+                  scale: 1,
+                  x: 0,
+                  y: 0
+                }}
+                exit={{
+                  opacity: 0,
+                  scale: 0.5,
+                  x: 0,
+                  y: 0
+                }}
+                transition={{
+                  type: "spring",
+                  stiffness: 400,
+                  damping: 25,
+                  duration: 0.4
+                }}
+              >
+                <Check
+                  size={40}
+                  color={lastClickedButton === 'home' ? '#2563EB' : '#10B981'}
+                  strokeWidth={3}
+                />
+              </motion.div>
+            </motion.div>
+          )}
+        </AnimatePresence>
+
+        {/* Permanent checkmark for handled items */}
+        <AnimatePresence>
+          {isHandled && !showCheckmarkAnimation && (
+            <motion.div
+              className="absolute inset-0 flex items-center justify-center"
+              style={{pointerEvents: 'none', zIndex: 5}} // Lower z-index to respect page hierarchy
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
             >
               <motion.div
                 className="rounded-full shadow-lg"
@@ -230,19 +301,10 @@ export function GroceryItem({
                   backgroundColor: 'rgba(255, 255, 255, 0.9)',
                   padding: '8px'
                 }}
-                initial={{ rotate: -10 }}
-                animate={{ rotate: 0 }}
-                transition={{ duration: 0.2 }}
               >
                 <Check
                   size={40}
-                  color={
-                    // During animation, use the button color that was clicked
-                    showCheckmarkAnimation
-                      ? (lastClickedButton === 'home' ? '#2563EB' : '#10B981')
-                      // When not animating, use the current status color
-                      : (status === 'owned' ? '#2563EB' : '#10B981')
-                  }
+                  color={status === 'owned' ? '#2563EB' : '#10B981'}
                   strokeWidth={3}
                 />
               </motion.div>
