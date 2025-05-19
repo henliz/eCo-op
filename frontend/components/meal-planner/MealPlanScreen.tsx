@@ -3,7 +3,6 @@
 import React, { useState } from 'react';
 import { type Recipe, type MealCategory } from './usePlannerStore';
 import { usePlannerStore } from './usePlannerStore';
-import { shallow } from 'zustand/shallow';
 
 import { Collapsible, CollapsibleTrigger, CollapsibleContent } from '@/components/ui/collapsible';
 import { ChevronDown, ChevronUp } from 'lucide-react';
@@ -18,9 +17,9 @@ export function MealPlanScreen() {
   });
 
 
-  const meals             = usePlannerStore(s => s.meals, shallow);
+  const meals             = usePlannerStore(s => s.meals);
   const selectedMeals     = usePlannerStore(s => s.selectedMeals);
-  const recipeMultipliers = usePlannerStore(s => s.recipeMultipliers, shallow);
+  const recipeMultipliers = usePlannerStore(s => s.recipeMultipliers);
   const setRecipeMultiplier = usePlannerStore(s => s.setRecipeMultiplier);
   const toggleMeal        = usePlannerStore(s => s.toggleMeal);
   const mealSummary       = usePlannerStore(s => s.mealSummary);   // just the fn ref
