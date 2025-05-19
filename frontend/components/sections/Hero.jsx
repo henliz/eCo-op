@@ -660,31 +660,39 @@ const Hero = () => {
         }
 
         /* Mobile responsive video height */
-        @media (max-width: 768px) {
-          .videos-container {
-            height: 300px;
-          }
+@media (max-width: 768px) {
+  .videos-container {
+    height: 350px; /* Increased height */
+    width: 140%; /* Increased width for more zoom */
+    position: relative;
+    left: 50%;
+    transform: translateX(-50%);
+    margin-bottom: -20px; /* Pull down a bit to reduce bottom space */
+  }
 
-          .video-wrapper {
-            height: 90%;
-            width: 135%;
-            left: 50%;
-            transform: translateX(-50%);
-          }
-        }
+  .video-wrapper {
+    height: 100%;
+    width: 100%;
+    position: absolute;
+    top: 0;
+    left: 0;
+  }
 
-        @media (max-width: 480px) {
-          .videos-container {
-            height: 250px;
-          }
-        }
+  .video-wrapper video {
+    width: 100%;
+    height: 100%;
+    object-fit: cover; /* Changed from contain to cover to fill more space */
+    object-position: center; /* Center the focus point */
+  }
+}
 
-        .video-wrapper video {
-          width: 100%;
-          height: 100%;
-          object-fit: contain;
-        }
-
+@media (max-width: 480px) {
+  .videos-container {
+    height: 300px; /* Adjusted height for smallest screens */
+    width: 150%; /* Even more zoom for very small screens */
+    margin-bottom: -15px;
+  }
+}
         /* Company Logos Section */
         .logos-section {
           width: 100%;
