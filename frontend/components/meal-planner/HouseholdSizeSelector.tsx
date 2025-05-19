@@ -28,6 +28,7 @@ export function HouseholdSizeSelector() {
   const prevSizeRef       = useRef(normalMealServings);
   const initialMountRef   = useRef(true);
   const sliderRef         = useRef<HTMLInputElement>(null);
+  const sliderWrapperRef  = useRef<HTMLDivElement>(null);
 
   // ─── Sync multipliers to household size ────────────────────────────────────
   useEffect(() => {
@@ -50,6 +51,31 @@ export function HouseholdSizeSelector() {
   const handleSliderChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setNormalMealServings(parseInt(e.target.value, 10));
   };
+
+  // ─── Touch event handlers ────────────────────────────────────────────────────
+  const updateValueFromTouch = (clientX: number) => {
+    if (!sliderWrapperRef.current) return;
+
+    const rect = sliderWrapperRef.current.getBoundingClientRect();
+    const touchX = clientX - rect.left;
+    const percentage = Math.max(0, Math.min(1, touchX / rect.width));
+    const newValue = Math.round(1 + percentage * 11);
+
+    if (newValue !== normalMealServings) {
+      setNormalMealServings(newValue);
+    }
+  };
+
+  const handleTouchStart = (e: React.TouchEvent) => {
+    e.preventDefault(); // Prevent scrolling while interacting with slider
+    updateValueFromTouch(e.touches[0].clientX);
+  };
+
+  const handleTouchMove = (e: React.TouchEvent) => {
+    e.preventDefault(); // Prevent scrolling while dragging
+    updateValueFromTouch(e.touches[0].clientX);
+  };
+
   const sliderPosition = ((normalMealServings - 1) / 11) * 100;
 
   // ─── Animation helpers ─────────────────────────────────────────────────────
@@ -142,7 +168,8 @@ export function HouseholdSizeSelector() {
 
   // ─── UI ────────────────────────────────────────────────────────────────────
   return (
-    <div className="bg-white rounded-xl py-2 px-5 mb-1 shadow-sm">
+    <div className="bg-white rounded-xl py-2 px-5 mb-1 shadow-sm relative">
+      {/* Adding relative positioning to the container */}
       {/* Header */}
       <div className="flex items-center justify-between mb-1">
         <h3 className="text-lg font-semibold text-gray-800 flex items-center">Household Size</h3>
@@ -161,13 +188,39 @@ export function HouseholdSizeSelector() {
       </div>
 
       {/* Slider */}
-      <div className="relative h-4 w-full mb-2">
+      <div
+        ref={sliderWrapperRef}
+        className="relative h-10 w-full mb-2"
+        onTouchStart={handleTouchStart}
+        onTouchMove={handleTouchMove}
+      >
+        {/* Track background */}
         <div className="absolute inset-0 h-2 top-1/2 -translate-y-1/2 bg-gray-200 rounded-full" />
-        <div className="absolute h-2 top-1/2 -translate-y-1/2 bg-teal-500 rounded-full transition-all duration-300" style={{ width: `${sliderPosition}%` }} />
-        <div className="absolute w-8 h-8 bg-white rounded-full border-2 border-teal-500 shadow-md flex items-center justify-center z-20 transition-all duration-300" style={{ left: `calc(${sliderPosition}% )`, top: '50%', transform: 'translate(-50%, -50%)' }}>
+
+        {/* Filled track */}
+        <div
+          className="absolute h-2 top-1/2 -translate-y-1/2 bg-teal-500 rounded-full transition-all duration-300"
+          style={{ width: `${sliderPosition}%` }}
+        />
+
+        {/* Handle */}
+        <div
+          className="absolute w-8 h-8 bg-white rounded-full border-2 border-teal-500 shadow-md flex items-center justify-center z-1 transition-all duration-300"
+          style={{ left: `calc(${sliderPosition}% )`, top: '50%', transform: 'translate(-50%, -50%)' }}
+        >
           <Users size={14} className="text-teal-500" />
         </div>
-        <input ref={sliderRef} type="range" min="1" max="12" value={normalMealServings} onChange={handleSliderChange} className="absolute inset-0 w-full opacity-0 cursor-pointer z-30" />
+
+        {/* Invisible input range with increased height */}
+        <input
+          ref={sliderRef}
+          type="range"
+          min="1"
+          max="12"
+          value={normalMealServings}
+          onChange={handleSliderChange}
+          className="absolute inset-0 w-full h-10 opacity-0 cursor-pointer z-2"
+        />
       </div>
 
       {/* Keyframes – unchanged from previous version */}
