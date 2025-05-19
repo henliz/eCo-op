@@ -1,7 +1,10 @@
 'use client';
 
 import React, { useState } from 'react';
-import { usePlannerStore, type Recipe, type MealCategory } from './usePlannerStore';
+import { type Recipe, type MealCategory } from './usePlannerStore';
+import { usePlannerStore } from './usePlannerStore';
+import { shallow } from 'zustand/shallow';
+
 import { Collapsible, CollapsibleTrigger, CollapsibleContent } from '@/components/ui/collapsible';
 import { ChevronDown, ChevronUp } from 'lucide-react';
 import { MealCard } from './MealCard';
@@ -14,17 +17,17 @@ export function MealPlanScreen() {
     dinner: true
   });
 
-  const {
-    meals,
-    selectedMeals,
-    toggleMeal,
-    mealSummary,
-    totals,
-    recipeMultipliers,
-    setRecipeMultiplier,
-    isLoading,
-    error
-  } = usePlannerStore();
+
+  const meals             = usePlannerStore(s => s.meals, shallow);
+  const selectedMeals     = usePlannerStore(s => s.selectedMeals);
+  const recipeMultipliers = usePlannerStore(s => s.recipeMultipliers, shallow);
+  const setRecipeMultiplier = usePlannerStore(s => s.setRecipeMultiplier);
+  const toggleMeal        = usePlannerStore(s => s.toggleMeal);
+  const mealSummary       = usePlannerStore(s => s.mealSummary);   // just the fn ref
+  const totals            = usePlannerStore(s => s.totals);        // just the fn ref
+  const isLoading         = usePlannerStore(s => s.isLoading);
+  const error             = usePlannerStore(s => s.error);
+
 
   const handleSectionToggle = (section: keyof MealCategory) => {
     setOpenSections(prev => ({
