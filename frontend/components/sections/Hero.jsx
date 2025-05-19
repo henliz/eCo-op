@@ -560,7 +560,11 @@ const Hero = () => {
         /* Mobile responsive video height */
         @media (max-width: 768px) {
           .tab-content {
-            height: 300px;
+            height:90%;
+            width: 135%;
+            position: relative;
+            left: 50%;
+            transform: translateX(-50%);
           }
         }
 
@@ -651,7 +655,7 @@ const Hero = () => {
             {/* Powered by Conrad School */}
             <div className="powered-by-wrapper">
               <div className="powered-by">
-                Powered by <a href="https://uwaterloo.ca/conrad-school-entrepreneurship-business/" target="_blank"><strong>Conrad School</strong></a> 🡥
+                Powered by <a href="https://uwaterloo.ca/conrad-school-entrepreneurship-business/" target="_blank"><strong>Conrad School</strong></a> 🚀
               </div>
               <div className="border-animation"></div>
             </div>
@@ -693,10 +697,10 @@ const Hero = () => {
             {/* Demo Tabs - Responsive with Always-Playing Videos */}
             <div className="demo-container">
               <div className="tabs">
-                <div className="tab active" data-tab="add-items">📋 Set Info</div>
+                <div className="tab active" data-tab="add-items">📋 Set</div>
                 <div className="tab" data-tab="compare">🥪 Plan</div>
                 <div className="tab" data-tab="optimize">💸 Shop</div>
-                <div className="tab" data-tab="save">🥪 Cook</div>
+                <div className="tab" data-tab="save">🍳 Cook</div>
               </div>
 
               <div className="tab-content active" id="add-items">
