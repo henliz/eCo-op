@@ -9,6 +9,8 @@ export interface Store {
   filename: string;
   isAvailable: boolean;
   logo?: string; // Add logo property
+  lat?: number;
+  lng?: number;
 }
 
 interface StoreIndexItem {
