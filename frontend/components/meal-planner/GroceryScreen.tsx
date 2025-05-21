@@ -2,7 +2,8 @@
 
 import React, { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { usePlannerStore, type AggregatedItem } from './usePlannerStore';
+import { usePlannerStore } from './usePlannerStore';
+import { AggregatedItem } from './Types/ingredients';
 import { GroceryItem } from './GroceryItem';
 import { GroceryListPrintable } from './GroceryListPrintable';
 import { StoreCard } from './StoreCard'; // Import the StoreCard component

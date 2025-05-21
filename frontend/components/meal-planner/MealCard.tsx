@@ -5,7 +5,7 @@ import { motion } from 'framer-motion';
 import {
   Card,
 } from '@/components/ui/card';
-import { type Recipe } from './usePlannerStore';
+import { Recipe } from './Types/recipes';
 import { Settings } from 'lucide-react';
 import { RecipeViewer } from './RecipeViewer';
 

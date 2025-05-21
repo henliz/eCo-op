@@ -1,133 +1,9 @@
 import { create } from 'zustand';
-
-// Types
-export interface Store {
-  id: string;
-  name: string;
-  location: string;
-  validUntil: Date;
-  filename: string;
-  isAvailable: boolean;
-  logo?: string; // Add logo property
-}
-
-interface StoreIndexItem {
-  id: string;
-  name: string;
-  location: string;
-  filename: string;
-  validUntil: string;
-  logo?: string; // Add logo property
-}
-
-
-export interface IngredientTags {
-  importance?: 'core' | 'optional';
-  status?: 'bought' | 'owned' | 'in_cart' | 'ignored'; // Added 'in_cart' status
-  storeSection?: string;
-}
-
-export interface Ingredient {
-  recipeIngredientName: string;
-  saleUnitSize?: number;
-  saleUnitType?: string;
-  salePrice: number;
-  saleFractionUsed?: number;
-  regularPrice: number;
-  regularFractionUsed?: number;
-  type?: 'core' | 'optional' | 'garnish' | 'to taste';
-  source: 'flyer' | 'database' | 'skipped' | 'free';
-  sourceDate?: string;
-  productName?: string;
-  packageId?: string;
-  savingsPercentage?: number;
-  tags?: IngredientTags;
-  category?: string; // Add category property
-}
-
-export interface Recipe {
-  name: string;
-  url: string;
-  price: number;
-  servings: number;
-  salePrice: number;
-  regularPrice: number;
-  totalSavings: number;
-  flyerItemsCount: number; // Add this property to track number of flyer items
-  ingredients: Ingredient[];
-  multiplier?: number; // How many times this recipe will be made
-  img?: string;
-}
-
-export interface MealCategory {
-  breakfast: Recipe[];
-  lunch: Recipe[];
-  dinner: Recipe[];
-}
-
-export interface AggregatedItem {
-  packageId: string;
-  neededFraction: number;
-  unitSize: number;
-  unitType: string;
-  packPrice: number;
-  productName: string;
-  source: 'flyer' | 'database' | 'skipped' | 'free';
-  lineCost: number;
-  packsToBuy: number;
-  isChecked: boolean;
-  savingsPercentage?: number;
-  tags?: IngredientTags;
-  category?: string; // Add category property
-}
-
-
-interface Totals {
-  regularTotal: number;
-  saleTotal: number;
-  totalSavings: number;
-}
-
-
-interface PlannerState {
-  // Configuration
-  normalMealServings: number;
-
-  // Data state
-  meals: MealCategory;
-  selectedMeals: Set<string>;
-  groceryCheckedItems: Set<string>;
-  recipeMultipliers: Record<string, number>; // url -> multiplier (defaults to calculated value)
-  ingredientTags: Record<string, IngredientTags>; // packageId -> tags
-
-  // Store state
-  availableStores: Store[];
-  isStoresLoaded: boolean;
-  selectedStore: string | null;
-  isLoading: boolean;
-  error: string | null;
-  isDataLoaded: boolean; // Flag to track if data has been loaded
-
-  // Actions
-  setSelectedStore: (storeId: string) => void;
-  fetchMealData: () => Promise<void>;
-  setMeals: (meals: MealCategory) => void;
-  toggleMeal: (url: string) => void;
-  toggleGroceryItem: (packageId: string) => void;
-  setRecipeMultiplier: (url: string, multiplier: number) => void;
-  setIngredientTag: (packageId: string, tag: keyof IngredientTags, value: string | undefined) => void;
-  setIngredientTags: (packageId: string, tags: Partial<IngredientTags>) => void;
-  discoverStores: () => Promise<void>;
-  setNormalMealServings: (servings: number) => void;
-
-  // Computed values
-  selectedRecipes: () => Recipe[];
-  aggregatedIngredients: () => Map<string, AggregatedItem>;
-  totals: () => Totals;
-  mealSummary: () => { breakfast: number; lunch: number; dinner: number; total: number };
-  calculateInitialMultiplier: (servings: number) => number;
-}
-
+import { ItemStatus, } from './Types/common';
+import { AggregatedItem } from './Types/ingredients';
+import { PlannerState } from './Types/planner';
+import { Recipe, } from './Types/recipes';
+import { Store, StoreIndexItem } from './Types/stores';
 
 // For debugging purposes
 const logMessage = (msg: string) => {
@@ -387,7 +263,7 @@ export const usePlannerStore = create<PlannerState>((set, get) => ({
         }
         newTags[packageId] = {
           ...newTags[packageId],
-          status: 'bought'
+          status: ItemStatus.BOUGHT // 'bought'  < -- replaced this to the enum value - Mohammed
         };
       }
     }

@@ -2,8 +2,9 @@
 
 import React, { useState, useEffect, useRef } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { type AggregatedItem, type IngredientTags } from './usePlannerStore';
+import { AggregatedItem, IngredientTags } from './Types/ingredients';
 import { Tag, Home, ShoppingCart, ArrowDown, Check } from 'lucide-react';
+import { ItemStatus } from './Types/common';
 
 interface GroceryItemProps {
   item: AggregatedItem;
@@ -77,8 +78,8 @@ export function GroceryItem({
 
     if (onUpdateTags) {
       // If already owned, set to default state (bought) without animation
-      if (status === 'owned') {
-        onUpdateTags(item.packageId, { status: 'bought' });
+      if (status === ItemStatus.OWNED) {
+        onUpdateTags(item.packageId, { status: ItemStatus.BOUGHT });
       } else {
         // Set to owned with animation
         if (onAnimationStart) {
@@ -96,7 +97,7 @@ export function GroceryItem({
 
         // Apply change after a delay to show animation first
         setTimeout(() => {
-          onUpdateTags(item.packageId, { status: 'owned' });
+          onUpdateTags(item.packageId, { status: ItemStatus.OWNED });
 
           // End animation after another delay
           setTimeout(() => {
@@ -113,8 +114,8 @@ export function GroceryItem({
 
     if (onUpdateTags) {
       // If already marked as in cart, set to default state without animation
-      if (status === 'in_cart') {
-        onUpdateTags(item.packageId, { status: 'bought' });
+      if (status === ItemStatus.IN_CART) {
+        onUpdateTags(item.packageId, { status: ItemStatus.BOUGHT });
       } else {
         // Set to in_cart with animation
         if (onAnimationStart) {
@@ -132,7 +133,7 @@ export function GroceryItem({
 
         // Apply change after a delay to show animation first
         setTimeout(() => {
-          onUpdateTags(item.packageId, { status: 'in_cart' });
+          onUpdateTags(item.packageId, { status: ItemStatus.IN_CART });
 
           // End animation after another delay
           setTimeout(() => {

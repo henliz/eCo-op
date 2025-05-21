@@ -2,7 +2,8 @@
 
 import React, { useState, useMemo } from 'react';
 import Image from 'next/image';
-import { usePlannerStore, type Recipe } from './usePlannerStore';
+import { usePlannerStore } from './usePlannerStore';
+import { Recipe } from './Types/recipes';
 import { ExternalLink, Mail, Search, AlertCircle } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Card, CardHeader, CardTitle } from '@/components/ui/card';

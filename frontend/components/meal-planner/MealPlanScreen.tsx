@@ -1,7 +1,8 @@
 'use client';
 
 import React, { useState } from 'react';
-import { type Recipe, type MealCategory } from './usePlannerStore';
+import { Recipe } from './Types/recipes';
+import { MealCategory } from './Types/recipes';
 import { usePlannerStore } from './usePlannerStore';
 
 import { Collapsible, CollapsibleTrigger, CollapsibleContent } from '@/components/ui/collapsible';
