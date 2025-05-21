@@ -14,7 +14,7 @@
       "logo": "Zehrs_Logo.png",
       "location": "Hespeler",
       "filename": "Zehrs-Hespeler-2025-05-21.json",
-      "validUntil": "2025-05-21"
+      "validUntil": "2025-05-22"
     },
     {
       "id": "zehrs-beechwood",
@@ -22,7 +22,7 @@
       "logo": "Zehrs_Logo.png",
       "location": "Beechwood",
       "filename": "Zehrs-Hespeler-2025-05-21.json",
-      "validUntil": "2025-05-21"
+      "validUntil": "2025-05-22"
     },
     {
       "id": "zehrs-stcathatines-pencentre",
@@ -30,7 +30,7 @@
       "logo": "Zehrs_Logo.png",
       "location": "St. Catharines, Pen Centre",
       "filename": "Zehrs-Hespeler-2025-05-21.json",
-      "validUntil": "2025-05-21"
+      "validUntil": "2025-05-22"
     },
     {
       "id": "foodbasics-galt",
@@ -38,7 +38,7 @@
       "logo": "FoodBasics_Logo.png",
       "location": "Galt",
       "filename": "FoodBasics-Galt-2025-05-21.json",
-      "validUntil": "2025-05-21"
+      "validUntil": "2025-05-22"
     },
     {
       "id": "farmboy-all",
@@ -46,7 +46,7 @@
       "logo": "FarmBoy_Logo.png",
       "location": "Ontario",
       "filename": "FarmBoy-2025-05-21.json",
-      "validUntil": "2025-05-21"
+      "validUntil": "2025-05-22"
     },
     {
       "id": "freshco-hwy24sheldondr",
@@ -54,7 +54,7 @@
       "logo": "FreshCo_Logo.png",
       "location": "Hwy 24, Sheldon Dr",
       "filename": "FreshCo-hwy24sheldondr-2025-05-21.json",
-      "validUntil": "2025-05-21"
+      "validUntil": "2025-05-22"
     },
     {
       "id": "nofrills-preston",
@@ -62,7 +62,7 @@
       "logo": "NoFrills_Logo.png",
       "location": "Preston",
       "filename": "NoFrills-Preston-2025-05-21.json",
-      "validUntil": "2025-05-21"
+      "validUntil": "2025-05-22"
     },
     {
       "id": "metro-all",
@@ -70,7 +70,7 @@
       "logo": "Metro_Logo.png",
       "location": "Ontario",
       "filename": "Metro-All-2025-05-21.json",
-      "validUntil": "2025-05-21"
+      "validUntil": "2025-05-22"
     },
     {
       "id": "sobeys-all",
@@ -78,7 +78,7 @@
       "logo": "Sobeys_Logo.png",
       "location": "Ontario",
       "filename": "Sobeys-Ontario-2025-05-21.json",
-      "validUntil": "2025-05-21"
+      "validUntil": "2025-05-22"
     }
   ]
 }
