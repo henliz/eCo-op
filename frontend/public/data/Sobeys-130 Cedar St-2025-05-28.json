@@ -2086,6 +2086,7 @@
     {
       "name": "Favorite Fried Rice",
       "url": "https://www.gimmesomeoven.com/fried-rice-recipe/",
+      "img": "/Favourite_FriedRice.png",
       "salePrice": 7.119213268974272,
       "regularPrice": 7.314857343130088,
       "totalSavings": 0.19564407415581542,
@@ -3233,6 +3234,7 @@
     {
       "name": "Greek Grilled Chicken Salad",
       "url": "https://www.themediterraneandish.com/greek-grilled-chicken-salad-recipe/",
+      "img": "/Greek_GrilledChicken_Salad.png",
       "salePrice": 25.47514472175219,
       "regularPrice": 25.47514472175219,
       "totalSavings": 0,
@@ -3924,6 +3926,7 @@
     {
       "name": "Best Vegetable Lasagna",
       "url": "https://cookieandkate.com/best-vegetable-lasagna-recipe/",
+      "img": "/Vegetable_Lasagna.png",
       "salePrice": 23.814302847993098,
       "regularPrice": 23.814302847993098,
       "totalSavings": 0,
@@ -4663,6 +4666,7 @@
     {
       "name": "The Best Chicken and Rice",
       "url": "https://www.foodnetwork.com/recipes/food-network-kitchen/the-best-chicken-and-rice-8133711",
+      "img": "/Chicken_Rice.png",
       "salePrice": 24.656149113465418,
       "regularPrice": 24.656149113465418,
       "totalSavings": 0,
@@ -4892,6 +4896,7 @@
     {
       "name": "Beef and Broccoli",
       "url": "https://natashaskitchen.com/wprm_print/beef-and-broccoli-recipe",
+      "img": "/Beef_and_Broccoli.png",
       "salePrice": 20.26244422647241,
       "regularPrice": 20.59783406788238,
       "totalSavings": 0.3353898414099703,
@@ -5253,6 +5258,7 @@
     {
       "name": "Sesame Soba Noodles",
       "url": "https://www.loveandlemons.com/sesame-soba-noodles/",
+      "img": "/Sesame_Soba_Noodles.png",
       "salePrice": 24.687749746117078,
       "regularPrice": 24.687848346117075,
       "totalSavings": 0.00009859999999761726,
