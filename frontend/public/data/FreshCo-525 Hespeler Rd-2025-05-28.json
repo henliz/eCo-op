@@ -1480,6 +1480,7 @@
     {
       "name": "Favorite Fried Rice",
       "url": "https://www.gimmesomeoven.com/fried-rice-recipe/",
+      "img": "/Favourite_FriedRice.png",
       "salePrice": 6.777885819722145,
       "regularPrice": 8.111068132478389,
       "totalSavings": 1.3331823127562439,
@@ -2538,6 +2539,7 @@
     {
       "name": "Crispy Black Bean Tacos with Cilantro Lime Sauce",
       "url": "https://pinchofyum.com/crispy-black-bean-tacos-with-cilantro-lime-sauce",
+      "img": "/BlackBean_Tacos_CilantroLimeSauce.png",
       "salePrice": 14.077307646107402,
       "regularPrice": 14.077307646107402,
       "totalSavings": 0,
@@ -2899,6 +2901,7 @@
     {
       "name": "Greek Grilled Chicken Salad",
       "url": "https://www.themediterraneandish.com/greek-grilled-chicken-salad-recipe/",
+      "img": "/Greek_GrilledChicken_Salad.png",
       "salePrice": 25.626782431030104,
       "regularPrice": 26.003705507953182,
       "totalSavings": 0.37692307692307736,
@@ -4186,6 +4189,7 @@
     {
       "name": "The Best Chicken and Rice",
       "url": "https://www.foodnetwork.com/recipes/food-network-kitchen/the-best-chicken-and-rice-8133711",
+      "img": "/Chicken_Rice.png",
       "salePrice": 19.242955447761474,
       "regularPrice": 20.668950593392545,
       "totalSavings": 1.4259951456310702,
@@ -4591,6 +4595,7 @@
     {
       "name": "Beef and Broccoli",
       "url": "https://natashaskitchen.com/wprm_print/beef-and-broccoli-recipe",
+      "img": "/Beef_and_Broccoli.png",
       "salePrice": 19.79528375524876,
       "regularPrice": 20.198606147886796,
       "totalSavings": 0.40332239263803515,
