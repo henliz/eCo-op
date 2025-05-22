@@ -1,19 +1,99 @@
 {
   "stores": [
     {
-      "id": "walmart-22_Pinebush_Rd",
-      "name": "Walmart",
-      "logo": "Walmart_Logo.png",
-      "location": "22 Pinebush Rd",
-      "filename": "Walmart-22 Pinebush Rd-2025-05-28.json",
-      "validUntil": "2025-05-29"
-    },
-    {
       "id": "zehrs_180_Holiday_Inn_Dr",
       "name": "Zehrs",
       "logo": "Zehrs_Logo.png",
       "location": "180 Holiday Inn Dr",
       "filename": "Zehrs-180 Holiday Inn Dr-2025-05-28.json",
+      "validUntil": "2025-05-29"
+    },
+    {
+      "id": "zehrs_123_Pioneer_Dr_Pk",
+      "name": "Zehrs",
+      "logo": "Zehrs_Logo.png",
+      "location": "123 Pioneer Dr Park",
+      "filename": "Zehrs-180 Holiday Inn Dr-2025-05-28.json",
+      "validUntil": "2025-05-29"
+    },
+    {
+      "id": "zehrs_1375_Weber_St_E",
+      "name": "Zehrs",
+      "logo": "Zehrs_Logo.png",
+      "location": "1375 Weber St E",
+      "filename": "Zehrs-180 Holiday Inn Dr-2025-05-28.json",
+      "validUntil": "2025-05-29"
+    },
+    {
+      "id": "zehrs_200_Franklin_Blvd",
+      "name": "Zehrs",
+      "logo": "Zehrs_Logo.png",
+      "location": "200 Franklin Blvd",
+      "filename": "Zehrs-180 Holiday Inn Dr-2025-05-28.json",
+      "validUntil": "2025-05-29"
+    },
+    {
+      "id": "zehrs_160_Kortright_Rd_W",
+      "name": "Zehrs",
+      "logo": "Zehrs_Logo.png",
+      "location": "160 Kortright Rd W",
+      "filename": "Zehrs-180 Holiday Inn Dr-2025-05-28.json",
+      "validUntil": "2025-05-29"
+    },
+    {
+      "id": "zehrs_124_Clair_Rd_E",
+      "name": "Zehrs",
+      "logo": "Zehrs_Logo.png",
+      "location": "124 Clair Rd E",
+      "filename": "Zehrs-180 Holiday Inn Dr-2025-05-28.json",
+      "validUntil": "2025-05-29"
+    },
+    {
+      "id": "zehrs_315_Lincoln_Rd",
+      "name": "Zehrs",
+      "logo": "Zehrs_Logo.png",
+      "location": "315 Lincoln Rd",
+      "filename": "Zehrs-180 Holiday Inn Dr-2025-05-28.json",
+      "validUntil": "2025-05-29"
+    },
+    {
+      "id": "zehrs_297_Eramosa_Rd",
+      "name": "Zehrs",
+      "logo": "Zehrs_Logo.png",
+      "location": "297 Eramosa Rd",
+      "filename": "Zehrs-180 Holiday Inn Dr-2025-05-28.json",
+      "validUntil": "2025-05-29"
+    },
+    {
+      "id": "zehrs_555_Davenport_Rd",
+      "name": "Zehrs",
+      "logo": "Zehrs_Logo.png",
+      "location": "555 Davenport Rd",
+      "filename": "Zehrs-180 Holiday Inn Dr-2025-05-28.json",
+      "validUntil": "2025-05-29"
+    },
+    {
+      "id": "zehrs_290_King_George_Rd",
+      "name": "Zehrs",
+      "logo": "Zehrs_Logo.png",
+      "location": "290 King George Rd",
+      "filename": "Zehrs-180 Holiday Inn Dr-2025-05-28.json",
+      "validUntil": "2025-05-29"
+    },
+    {
+      "id": "zehrs_410_Fairview_Dr",
+      "name": "Zehrs",
+      "logo": "Zehrs_Logo.png",
+      "location": "410 Fairview Dr",
+      "filename": "Zehrs-180 Holiday Inn Dr-2025-05-28.json",
+      "validUntil": "2025-05-29"
+    },
+    {
+      "id": "walmart-22_Pinebush_Rd",
+      "name": "Walmart",
+      "logo": "Walmart_Logo.png",
+      "location": "22 Pinebush Rd",
+      "filename": "Walmart-22 Pinebush Rd-2025-05-28.json",
       "validUntil": "2025-05-29"
     },
     {
