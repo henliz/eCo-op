@@ -33,12 +33,60 @@
       "validUntil": "2025-05-21"
     },
     {
-      "id": "foodbasics-galt",
+      "id": "foodbasics-fischer-hallman-rd",
       "name": "Food Basics",
       "logo": "FoodBasics_Logo.png",
-      "location": "Galt",
-      "filename": "FoodBasics-Galt-2025-05-21.json",
-      "validUntil": "2025-05-21"
+      "location": "851 Fischer-Hallman Rd",
+      "filename": "FoodBasics-851 Fischer-Hallman Road-2025-05-28.json",
+      "validUntil": "2025-05-29"
+    },
+    {
+      "id": "foodbasics-jamieson-pkwy",
+      "name": "Food Basics",
+      "logo": "FoodBasics_Logo.png",
+      "location": "100 Jamieson Pkwy",
+      "filename": "FoodBasics-851 Fischer-Hallman Road-2025-05-28.json",
+      "validUntil": "2025-05-29"
+    },
+    {
+      "id": "foodbasics-WaterStN",
+      "name": "Food Basics",
+      "logo": "FoodBasics_Logo.png",
+      "location": "95 Water St N",
+      "filename": "FoodBasics-851 Fischer-Hallman Road-2025-05-28.json",
+      "validUntil": "2025-05-29"
+    },
+    {
+      "id": "foodbasics-OttawaStN",
+      "name": "Food Basics",
+      "logo": "FoodBasics_Logo.png",
+      "location": "1405 Ottawa St N",
+      "filename": "FoodBasics-851 Fischer-Hallman Road-2025-05-28.json",
+      "validUntil": "2025-05-29"
+    },
+    {
+      "id": "foodbasics-HighlandRdW",
+      "name": "Food Basics",
+      "logo": "FoodBasics_Logo.png",
+      "location": "370 Highland Rd W",
+      "filename": "FoodBasics-851 Fischer-Hallman Road-2025-05-28.json",
+      "validUntil": "2025-05-29"
+    },
+    {
+      "id": "foodbasics-1270-fischer-hallman-rd",
+      "name": "Food Basics",
+      "logo": "FoodBasics_Logo.png",
+      "location": "1270 Fischer-Hallman Rd",
+      "filename": "FoodBasics-851 Fischer-Hallman Road-2025-05-28.json",
+      "validUntil": "2025-05-29"
+    },
+    {
+      "id": "foodbasics-LaurelwoodDr",
+      "name": "Food Basics",
+      "logo": "FoodBasics_Logo.png",
+      "location": "600 Laurelwood Dr",
+      "filename": "FoodBasics-851 Fischer-Hallman Road-2025-05-28.json",
+      "validUntil": "2025-05-29"
     },
     {
       "id": "farmboy-all",

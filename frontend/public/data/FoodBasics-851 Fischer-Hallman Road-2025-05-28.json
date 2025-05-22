@@ -1493,6 +1493,7 @@
     {
       "name": "Best Shakshuka",
       "url": "https://www.loveandlemons.com/shakshuka-recipe/",
+      "img": "/Best_Shakshuka.png",
       "salePrice": 9.345330878805976,
       "regularPrice": 9.345330878805976,
       "totalSavings": 0,
@@ -3910,6 +3911,7 @@
     {
       "name": "Vegetable Curry",
       "url": "https://www.indianhealthyrecipes.com/wprm_print/vegetable-curry-recipe",
+      "img": "/Vegetable_Curry.png",
       "salePrice": 7.2282290088360455,
       "regularPrice": 7.2282290088360455,
       "totalSavings": 0,
@@ -4453,6 +4455,7 @@
     {
       "name": "Best Vegetable Lasagna",
       "url": "https://cookieandkate.com/best-vegetable-lasagna-recipe/",
+      "img": "/Vegetable_Lasagna.png",
       "salePrice": 17.221038285285324,
       "regularPrice": 17.221038285285324,
       "totalSavings": 0,
@@ -5088,6 +5091,7 @@
     {
       "name": "Sheet Pan Sausage and Veggies",
       "url": "https://www.chelseasmessyapron.com/one-pan-healthy-sausage-and-veggies/",
+      "img": "/SheetPan_Sausage_Veggies.png",
       "salePrice": 13.513905227407799,
       "regularPrice": 13.513905227407799,
       "totalSavings": 0,
@@ -5323,6 +5327,7 @@
     {
       "name": "Beef Stew",
       "url": "https://www.spendwithpennies.com/beef-stew-recipe/",
+      "img": "/Beef_Stew.png",
       "salePrice": 17.89326076288949,
       "regularPrice": 17.89326076288949,
       "totalSavings": 0,
