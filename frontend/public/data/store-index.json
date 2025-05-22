@@ -17,12 +17,108 @@
       "validUntil": "2025-05-29"
     },
     {
+      "id": "walmart-KingswayDr",
+      "name": "Walmart",
+      "logo": "Walmart_Logo.png",
+      "location": "2960 Kingsway Dr",
+      "filename": "Walmart-22 Pinebush Rd-2025-05-28.json",
+      "validUntil": "2025-05-29"
+    },
+    {
+      "id": "walmart-OttawaStS",
+      "name": "Walmart",
+      "logo": "Walmart_Logo.png",
+      "location": "1400 Ottawa St S",
+      "filename": "Walmart-22 Pinebush Rd-2025-05-28.json",
+      "validUntil": "2025-05-29"
+    },
+    {
+      "id": "walmart-WoodlawnRdW",
+      "name": "Walmart",
+      "logo": "Walmart_Logo.png",
+      "location": "Woodlawn Rd W",
+      "filename": "Walmart-22 Pinebush Rd-2025-05-28.json",
+      "validUntil": "2025-05-29"
+    },
+    {
+      "id": "walmart-Boardwalk",
+      "name": "Walmart",
+      "logo": "Walmart_Logo.png",
+      "location": "100 The Boardwalk",
+      "filename": "Walmart-22 Pinebush Rd-2025-05-28.json",
+      "validUntil": "2025-05-29"
+    },
+    {
+      "id": "walmart-Bridgeport",
+      "name": "Walmart",
+      "logo": "Walmart_Logo.png",
+      "location": "70 Bridgeport Rd E",
+      "filename": "Walmart-22 Pinebush Rd-2025-05-28.json",
+      "validUntil": "2025-05-29"
+    },
+    {
+      "id": "walmart-FarmersMarket",
+      "name": "Walmart",
+      "logo": "Walmart_Logo.png",
+      "location": "335 Farmer's Market Rd",
+      "filename": "Walmart-22 Pinebush Rd-2025-05-28.json",
+      "validUntil": "2025-05-29"
+    },
+    {
+      "id": "walmart-KingGeorgeRd",
+      "name": "Walmart",
+      "logo": "Walmart_Logo.png",
+      "location": "300 King George Rd",
+      "filename": "Walmart-22 Pinebush Rd-2025-05-28.json",
+      "validUntil": "2025-05-29"
+    },
+    {
+      "id": "walmart-StDavidStN",
+      "name": "Walmart",
+      "logo": "Walmart_Logo.png",
+      "location": "801 St David St N",
+      "filename": "Walmart-22 Pinebush Rd-2025-05-28.json",
+      "validUntil": "2025-05-29"
+    },
+    {
+      "id": "walmart-GarnerRdW",
+      "name": "Walmart",
+      "logo": "Walmart_Logo.png",
+      "location": "1051 Garner Rd W",
+      "filename": "Walmart-22 Pinebush Rd-2025-05-28.json",
+      "validUntil": "2025-05-29"
+    },
+    {
+      "id": "walmart-UpperJamesSt",
+      "name": "Walmart",
+      "logo": "Walmart_Logo.png",
+      "location": "675 Upper James St",
+      "filename": "Walmart-22 Pinebush Rd-2025-05-28.json",
+      "validUntil": "2025-05-29"
+    },
+    {
+      "id": "walmart-DundasStE",
+      "name": "Walmart",
+      "logo": "Walmart_Logo.png",
+      "location": "90 Dundas St E",
+      "filename": "Walmart-22 Pinebush Rd-2025-05-28.json",
+      "validUntil": "2025-05-29"
+    },
+    {
+      "id": "zehrs-hespeler",
+      "name": "Zehrs",
+      "logo": "Zehrs_Logo.png",
+      "location": "Hespeler",
+      "filename": "Zehrs-Hespeler-2025-05-21.json",
+      "validUntil": "2025-05-22"
+    },
+    {
       "id": "zehrs-beechwood",
       "name": "Zehrs",
       "logo": "Zehrs_Logo.png",
       "location": "Beechwood",
       "filename": "Zehrs-Hespeler-2025-05-21.json",
-      "validUntil": "2025-05-21"
+      "validUntil": "2025-05-22"
     },
     {
       "id": "zehrs-stcathatines-pencentre",
@@ -30,7 +126,7 @@
       "logo": "Zehrs_Logo.png",
       "location": "St. Catharines, Pen Centre",
       "filename": "Zehrs-Hespeler-2025-05-21.json",
-      "validUntil": "2025-05-21"
+      "validUntil": "2025-05-22"
     },
     {
       "id": "foodbasics-galt",
@@ -38,7 +134,7 @@
       "logo": "FoodBasics_Logo.png",
       "location": "Galt",
       "filename": "FoodBasics-Galt-2025-05-21.json",
-      "validUntil": "2025-05-21"
+      "validUntil": "2025-05-22"
     },
     {
       "id": "farmboy-all",
@@ -46,7 +142,7 @@
       "logo": "FarmBoy_Logo.png",
       "location": "Ontario",
       "filename": "FarmBoy-2025-05-21.json",
-      "validUntil": "2025-05-21"
+      "validUntil": "2025-05-22"
     },
     {
       "id": "freshco-hwy24sheldondr",
@@ -54,7 +150,7 @@
       "logo": "FreshCo_Logo.png",
       "location": "Hwy 24, Sheldon Dr",
       "filename": "FreshCo-hwy24sheldondr-2025-05-21.json",
-      "validUntil": "2025-05-21"
+      "validUntil": "2025-05-22"
     },
     {
       "id": "nofrills-preston",
@@ -62,7 +158,7 @@
       "logo": "NoFrills_Logo.png",
       "location": "Preston",
       "filename": "NoFrills-Preston-2025-05-21.json",
-      "validUntil": "2025-05-21"
+      "validUntil": "2025-05-22"
     },
     {
       "id": "metro-all",
@@ -70,7 +166,7 @@
       "logo": "Metro_Logo.png",
       "location": "Ontario",
       "filename": "Metro-All-2025-05-21.json",
-      "validUntil": "2025-05-21"
+      "validUntil": "2025-05-22"
     },
     {
       "id": "sobeys-all",
@@ -78,7 +174,7 @@
       "logo": "Sobeys_Logo.png",
       "location": "Ontario",
       "filename": "Sobeys-Ontario-2025-05-21.json",
-      "validUntil": "2025-05-21"
+      "validUntil": "2025-05-22"
     }
   ]
 }
