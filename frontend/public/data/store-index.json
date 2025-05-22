@@ -241,12 +241,44 @@
       "validUntil": "2025-05-29"
     },
     {
-      "id": "farmboy-all",
+      "id": "farmboy-hespeler-rd",
       "name": "Farm Boy",
       "logo": "FarmBoy_Logo.png",
-      "location": "Ontario",
-      "filename": "FarmBoy-2025-05-21.json",
-      "validUntil": "2025-05-22"
+      "location": "350 Hespeler Rd",
+      "filename": "FarmBoy-350 Hespeler Rd-2025-05-28.json",
+      "validUntil": "2025-05-29"
+    },
+    {
+      "id": "farmboy-fairway-plaza",
+      "name": "Farm Boy",
+      "logo": "FarmBoy_Logo.png",
+      "location": "385 Fairway Rd S",
+      "filename": "FarmBoy-350 Hespeler Rd-2025-05-28.json",
+      "validUntil": "2025-05-29"
+    },
+    {
+      "id": "farmboy-KingStN",
+      "name": "Farm Boy",
+      "logo": "FarmBoy_Logo.png",
+      "location": "370 King St N",
+      "filename": "FarmBoy-350 Hespeler Rd-2025-05-28.json",
+      "validUntil": "2025-05-29"
+    },
+    {
+      "id": "farmboy-king-george-rd",
+      "name": "Farm Boy",
+      "logo": "FarmBoy_Logo.png",
+      "location": "240 King George Rd",
+      "filename": "FarmBoy-350 Hespeler Rd-2025-05-28.json",
+      "validUntil": "2025-05-29"
+    },
+    {
+      "id": "farmboy-harvard-square",
+      "name": "Farm Boy",
+      "logo": "FarmBoy_Logo.png",
+      "location": "801 Mowkawk Rd W",
+      "filename": "FarmBoy-350 Hespeler Rd-2025-05-28.json",
+      "validUntil": "2025-05-29"
     },
     {
       "id": "freshco-525_Hespeler_Rd",
@@ -308,9 +340,41 @@
       "id": "sobeys-all",
       "name": "Sobeys",
       "logo": "Sobeys_Logo.png",
-      "location": "Ontario",
-      "filename": "Sobeys-Ontario-2025-05-21.json",
-      "validUntil": "2025-05-22"
+      "location": "130 Cedar St",
+      "filename": "Sobeys-130 Cedar St-2025-05-28.json",
+      "validUntil": "2025-05-29"
+    },
+    {
+      "id": "sobeys-HighlandRdW",
+      "name": "Sobeys",
+      "logo": "Sobeys_Logo.png",
+      "location": "274 Highland Rd W",
+      "filename": "Sobeys-130 Cedar St-2025-05-28.json",
+      "validUntil": "2025-05-29"
+    },
+    {
+      "id": "sobeys-ParksideDr",
+      "name": "Sobeys",
+      "logo": "Sobeys_Logo.png",
+      "location": "640 Parkside Dr",
+      "filename": "Sobeys-130 Cedar St-2025-05-28.json",
+      "validUntil": "2025-05-29"
+    },
+    {
+      "id": "sobeys-MillSt",
+      "name": "Sobeys",
+      "logo": "Sobeys_Logo.png",
+      "location": "Mill st Unit A",
+      "filename": "Sobeys-130 Cedar St-2025-05-28.json",
+      "validUntil": "2025-05-29"
+    },
+    {
+      "id": "sobeys-DundasStE",
+      "name": "Sobeys",
+      "logo": "Sobeys_Logo.png",
+      "location": "255 Dundas St E",
+      "filename": "Sobeys-130 Cedar St-2025-05-28.json",
+      "validUntil": "2025-05-29"
     }
   ]
 }
