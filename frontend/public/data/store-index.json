@@ -9,6 +9,14 @@
       "validUntil": "2025-05-29"
     },
     {
+      "id": "zehrs_180_Holiday_Inn_Dr",
+      "name": "Zehrs",
+      "logo": "Zehrs_Logo.png",
+      "location": "180 Holiday Inn Dr",
+      "filename": "Zehrs-180 Holiday Inn Dr-2025-05-28.json",
+      "validUntil": "2025-05-29"
+    },
+    {
       "id": "walmart-KingswayDr",
       "name": "Walmart",
       "logo": "Walmart_Logo.png",
