@@ -81,7 +81,7 @@
           "productName": "Mother's Magic Himalayan Pink Salt",
           "savingsPercentage": 0,
           "type": "core",
-          "category": "spices & seasonings"
+          "category": "spices"
         },
         {
           "recipeIngredientName": "ground black pepper",
@@ -96,7 +96,7 @@
           "productName": "pepper",
           "savingsPercentage": 0,
           "type": "core",
-          "category": "spices & seasonings"
+          "category": "spices"
         },
         {
           "recipeIngredientName": "garlic powder",
@@ -111,7 +111,7 @@
           "productName": "garlic powder",
           "savingsPercentage": 0,
           "type": "core",
-          "category": "spices & seasonings"
+          "category": "spices"
         },
         {
           "recipeIngredientName": "Cheddar cheese",
@@ -212,7 +212,7 @@
           "productName": "ground cinnamon",
           "savingsPercentage": 0,
           "type": "core",
-          "category": "spices & seasonings"
+          "category": "spices"
         },
         {
           "recipeIngredientName": "nutmeg",
@@ -227,7 +227,7 @@
           "productName": "ground nutmeg",
           "savingsPercentage": 0,
           "type": "core",
-          "category": "spices & seasonings"
+          "category": "spices"
         },
         {
           "recipeIngredientName": "white bread",
@@ -316,7 +316,7 @@
           "productName": "Mother's Magic Himalayan Pink Salt",
           "savingsPercentage": 0,
           "type": "core",
-          "category": "spices & seasonings"
+          "category": "spices"
         },
         {
           "recipeIngredientName": "black pepper",
@@ -331,7 +331,7 @@
           "productName": "pepper",
           "savingsPercentage": 0,
           "type": "core",
-          "category": "spices & seasonings"
+          "category": "spices"
         },
         {
           "recipeIngredientName": "butter",
@@ -486,7 +486,7 @@
           "productName": "ground cinnamon",
           "savingsPercentage": 0,
           "type": "core",
-          "category": "spices & seasonings"
+          "category": "spices"
         },
         {
           "recipeIngredientName": "brown sugar",
@@ -581,7 +581,7 @@
           "productName": "Mother's Magic Himalayan Pink Salt",
           "savingsPercentage": 0,
           "type": "core",
-          "category": "spices & seasonings"
+          "category": "spices"
         },
         {
           "recipeIngredientName": "egg",
@@ -805,7 +805,7 @@
           "source": "skipped",
           "savingsPercentage": 0,
           "type": "to taste",
-          "category": "spices & seasonings"
+          "category": "spices"
         }
       ],
       "img": "/Breakfast_Egg_Fried_Rice.png"
@@ -831,7 +831,7 @@
           "productName": "rolled oats",
           "savingsPercentage": 0,
           "type": "core",
-          "category": "breakfast & cereal"
+          "category": "breakfast"
         },
         {
           "recipeIngredientName": "milk",
@@ -978,7 +978,7 @@
           "source": "skipped",
           "savingsPercentage": 0,
           "type": "optional",
-          "category": "spices & seasonings"
+          "category": "spices"
         },
         {
           "recipeIngredientName": "banana",
@@ -1086,7 +1086,7 @@
           "source": "skipped",
           "savingsPercentage": 0,
           "type": "optional",
-          "category": "spices & seasonings"
+          "category": "spices"
         },
         {
           "recipeIngredientName": "brown sugar",
@@ -1113,7 +1113,7 @@
           "source": "skipped",
           "savingsPercentage": 0,
           "type": "optional",
-          "category": "spices & seasonings"
+          "category": "spices"
         },
         {
           "recipeIngredientName": "salt",
@@ -1122,7 +1122,7 @@
           "source": "skipped",
           "savingsPercentage": 0,
           "type": "optional",
-          "category": "spices & seasonings"
+          "category": "spices"
         }
       ],
       "img": "/Overnight_Oats.png"
@@ -1223,7 +1223,7 @@
           "productName": "Mother's Magic Himalayan Pink Salt",
           "savingsPercentage": 0,
           "type": "core",
-          "category": "spices & seasonings"
+          "category": "spices"
         },
         {
           "recipeIngredientName": "black pepper",
@@ -1238,7 +1238,7 @@
           "productName": "pepper",
           "savingsPercentage": 0,
           "type": "core",
-          "category": "spices & seasonings"
+          "category": "spices"
         },
         {
           "recipeIngredientName": "egg",
@@ -1358,7 +1358,7 @@
           "productName": "Mother's Magic Himalayan Pink Salt",
           "savingsPercentage": 0,
           "type": "core",
-          "category": "spices & seasonings"
+          "category": "spices"
         },
         {
           "recipeIngredientName": "black pepper",
@@ -1373,7 +1373,7 @@
           "productName": "pepper",
           "savingsPercentage": 0,
           "type": "core",
-          "category": "spices & seasonings"
+          "category": "spices"
         },
         {
           "recipeIngredientName": "egg",
@@ -1603,7 +1603,7 @@
           "productName": "everything bagel seasoning",
           "savingsPercentage": 0,
           "type": "core",
-          "category": "spices & seasonings"
+          "category": "spices"
         }
       ],
       "img": "/Breakfast_Flatbread.png"
@@ -1715,7 +1715,7 @@
           "source": "skipped",
           "savingsPercentage": 0,
           "type": "to taste",
-          "category": "spices & seasonings"
+          "category": "spices"
         },
         {
           "recipeIngredientName": "black pepper",
@@ -1724,7 +1724,7 @@
           "source": "skipped",
           "savingsPercentage": 0,
           "type": "to taste",
-          "category": "spices & seasonings"
+          "category": "spices"
         },
         {
           "recipeIngredientName": "white rice",
@@ -1828,7 +1828,7 @@
           "productName": "kosher salt",
           "savingsPercentage": 0,
           "type": "core",
-          "category": "spices & seasonings"
+          "category": "spices"
         },
         {
           "recipeIngredientName": "extra-virgin olive oil",
@@ -2023,7 +2023,7 @@
           "productName": "dried oregano",
           "savingsPercentage": 0,
           "type": "core",
-          "category": "spices & seasonings"
+          "category": "spices"
         },
         {
           "recipeIngredientName": "lemon",
@@ -2068,7 +2068,7 @@
           "productName": "pepper",
           "savingsPercentage": 0,
           "type": "core",
-          "category": "spices & seasonings"
+          "category": "spices"
         }
       ],
       "img": "/Couscous_Salad.png"
@@ -2139,7 +2139,7 @@
           "productName": "Mother's Magic Himalayan Pink Salt",
           "savingsPercentage": 0,
           "type": "core",
-          "category": "spices & seasonings"
+          "category": "spices"
         },
         {
           "recipeIngredientName": "ground cayenne pepper",
@@ -2154,7 +2154,7 @@
           "productName": "cayenne pepper",
           "savingsPercentage": 0,
           "type": "core",
-          "category": "spices & seasonings"
+          "category": "spices"
         },
         {
           "recipeIngredientName": "canned black beans",
@@ -2345,7 +2345,7 @@
           "productName": "ground cumin",
           "savingsPercentage": 0,
           "type": "core",
-          "category": "spices & seasonings"
+          "category": "spices"
         },
         {
           "recipeIngredientName": "curry powder",
@@ -2360,7 +2360,7 @@
           "productName": "curry powder",
           "savingsPercentage": 0,
           "type": "core",
-          "category": "spices & seasonings"
+          "category": "spices"
         },
         {
           "recipeIngredientName": "dried thyme",
@@ -2375,7 +2375,7 @@
           "productName": "dried thyme",
           "savingsPercentage": 0,
           "type": "core",
-          "category": "spices & seasonings"
+          "category": "spices"
         },
         {
           "recipeIngredientName": "canned diced tomatoes",
@@ -2445,7 +2445,7 @@
           "productName": "Mother's Magic Himalayan Pink Salt",
           "savingsPercentage": 0,
           "type": "core",
-          "category": "spices & seasonings"
+          "category": "spices"
         },
         {
           "recipeIngredientName": "red pepper flakes",
@@ -2454,7 +2454,7 @@
           "source": "skipped",
           "savingsPercentage": 0,
           "type": "to taste",
-          "category": "spices & seasonings"
+          "category": "spices"
         },
         {
           "recipeIngredientName": "black pepper",
@@ -2463,7 +2463,7 @@
           "source": "skipped",
           "savingsPercentage": 0,
           "type": "to taste",
-          "category": "spices & seasonings"
+          "category": "spices"
         },
         {
           "recipeIngredientName": "fresh kale",
@@ -2652,7 +2652,7 @@
           "productName": "Mother's Magic Himalayan Pink Salt",
           "savingsPercentage": 0,
           "type": "core",
-          "category": "spices & seasonings"
+          "category": "spices"
         },
         {
           "recipeIngredientName": "lemon",
@@ -2737,7 +2737,7 @@
           "productName": "chili powder",
           "savingsPercentage": 0,
           "type": "core",
-          "category": "spices & seasonings"
+          "category": "spices"
         },
         {
           "recipeIngredientName": "sea salt",
@@ -2752,7 +2752,7 @@
           "productName": "Mother's Magic Himalayan Pink Salt",
           "savingsPercentage": 0,
           "type": "core",
-          "category": "spices & seasonings"
+          "category": "spices"
         },
         {
           "recipeIngredientName": "black pepper",
@@ -2767,7 +2767,7 @@
           "productName": "pepper",
           "savingsPercentage": 0,
           "type": "core",
-          "category": "spices & seasonings"
+          "category": "spices"
         },
         {
           "recipeIngredientName": "tortilla",
@@ -3203,7 +3203,7 @@
           "productName": "Mother's Magic Himalayan Pink Salt",
           "savingsPercentage": 0,
           "type": "core",
-          "category": "spices & seasonings"
+          "category": "spices"
         },
         {
           "recipeIngredientName": "black pepper",
@@ -3212,7 +3212,7 @@
           "source": "skipped",
           "savingsPercentage": 0,
           "type": "to taste",
-          "category": "spices & seasonings"
+          "category": "spices"
         }
       ],
       "img": "/Caprese_Sandwich.png"
@@ -3307,7 +3307,7 @@
           "source": "skipped",
           "savingsPercentage": 0,
           "type": "to taste",
-          "category": "spices & seasonings"
+          "category": "spices"
         },
         {
           "recipeIngredientName": "black pepper",
@@ -3316,7 +3316,7 @@
           "source": "skipped",
           "savingsPercentage": 0,
           "type": "to taste",
-          "category": "spices & seasonings"
+          "category": "spices"
         },
         {
           "recipeIngredientName": "capers",
@@ -3513,7 +3513,7 @@
           "source": "skipped",
           "savingsPercentage": 0,
           "type": "to taste",
-          "category": "spices & seasonings"
+          "category": "spices"
         },
         {
           "recipeIngredientName": "black pepper",
@@ -3522,7 +3522,7 @@
           "source": "skipped",
           "savingsPercentage": 0,
           "type": "to taste",
-          "category": "spices & seasonings"
+          "category": "spices"
         }
       ],
       "img": "/Turkey_Apple_Cheddar_Sandwich.png"
@@ -3595,7 +3595,7 @@
           "productName": "Mother's Magic Himalayan Pink Salt",
           "savingsPercentage": 0,
           "type": "core",
-          "category": "spices & seasonings"
+          "category": "spices"
         },
         {
           "recipeIngredientName": "black pepper",
@@ -3610,7 +3610,7 @@
           "productName": "pepper",
           "savingsPercentage": 0,
           "type": "core",
-          "category": "spices & seasonings"
+          "category": "spices"
         },
         {
           "recipeIngredientName": "garlic",
@@ -3640,7 +3640,7 @@
           "productName": "paprika",
           "savingsPercentage": 0,
           "type": "core",
-          "category": "spices & seasonings"
+          "category": "spices"
         },
         {
           "recipeIngredientName": "ground cumin",
@@ -3655,7 +3655,7 @@
           "productName": "ground cumin",
           "savingsPercentage": 0,
           "type": "core",
-          "category": "spices & seasonings"
+          "category": "spices"
         },
         {
           "recipeIngredientName": "cayenne pepper",
@@ -3664,7 +3664,7 @@
           "source": "skipped",
           "savingsPercentage": 0,
           "type": "optional",
-          "category": "spices & seasonings"
+          "category": "spices"
         },
         {
           "recipeIngredientName": "canned crushed tomatoes",
@@ -3869,7 +3869,7 @@
           "productName": "Mother's Magic Himalayan Pink Salt",
           "savingsPercentage": 0,
           "type": "core",
-          "category": "spices & seasonings"
+          "category": "spices"
         },
         {
           "recipeIngredientName": "baby spinach",
@@ -3944,7 +3944,7 @@
           "productName": "red pepper flakes",
           "savingsPercentage": 0,
           "type": "core",
-          "category": "spices & seasonings"
+          "category": "spices"
         },
         {
           "recipeIngredientName": "low-fat cottage cheese",
@@ -4083,7 +4083,7 @@
           "source": "skipped",
           "savingsPercentage": 0,
           "type": "to taste",
-          "category": "spices & seasonings"
+          "category": "spices"
         },
         {
           "recipeIngredientName": "garlic",
@@ -4113,7 +4113,7 @@
           "productName": "curry powder",
           "savingsPercentage": 0,
           "type": "core",
-          "category": "spices & seasonings"
+          "category": "spices"
         },
         {
           "recipeIngredientName": "dried thyme",
@@ -4128,7 +4128,7 @@
           "productName": "dried thyme",
           "savingsPercentage": 0,
           "type": "core",
-          "category": "spices & seasonings"
+          "category": "spices"
         },
         {
           "recipeIngredientName": "canned diced tomatoes",
@@ -4183,7 +4183,7 @@
           "productName": "bay leaves",
           "savingsPercentage": 0,
           "type": "core",
-          "category": "spices & seasonings"
+          "category": "spices"
         },
         {
           "recipeIngredientName": "red pepper flakes",
@@ -4192,7 +4192,7 @@
           "source": "skipped",
           "savingsPercentage": 0,
           "type": "to taste",
-          "category": "spices & seasonings"
+          "category": "spices"
         },
         {
           "recipeIngredientName": "black pepper",
@@ -4201,7 +4201,7 @@
           "source": "skipped",
           "savingsPercentage": 0,
           "type": "to taste",
-          "category": "spices & seasonings"
+          "category": "spices"
         },
         {
           "recipeIngredientName": "kale",
@@ -4340,7 +4340,7 @@
           "source": "skipped",
           "savingsPercentage": 0,
           "type": "to taste",
-          "category": "spices & seasonings"
+          "category": "spices"
         },
         {
           "recipeIngredientName": "black pepper",
@@ -4349,7 +4349,7 @@
           "source": "skipped",
           "savingsPercentage": 0,
           "type": "to taste",
-          "category": "spices & seasonings"
+          "category": "spices"
         },
         {
           "recipeIngredientName": "mashed potato",
@@ -4513,7 +4513,7 @@
           "productName": "chili powder",
           "savingsPercentage": 0,
           "type": "core",
-          "category": "spices & seasonings"
+          "category": "spices"
         },
         {
           "recipeIngredientName": "onion",
@@ -4558,7 +4558,7 @@
           "productName": "dried thyme",
           "savingsPercentage": 0,
           "type": "core",
-          "category": "spices & seasonings"
+          "category": "spices"
         },
         {
           "recipeIngredientName": "hamburger buns",
@@ -4653,7 +4653,7 @@
           "source": "skipped",
           "savingsPercentage": 0,
           "type": "to taste",
-          "category": "spices & seasonings"
+          "category": "spices"
         },
         {
           "recipeIngredientName": "ground black pepper",
@@ -4662,7 +4662,7 @@
           "source": "skipped",
           "savingsPercentage": 0,
           "type": "to taste",
-          "category": "spices & seasonings"
+          "category": "spices"
         },
         {
           "recipeIngredientName": "onion",
@@ -4731,7 +4731,7 @@
           "source": "skipped",
           "savingsPercentage": 0,
           "type": "to taste",
-          "category": "spices & seasonings"
+          "category": "spices"
         },
         {
           "recipeIngredientName": "long-grain and wild rice",
@@ -4871,7 +4871,7 @@
           "source": "skipped",
           "savingsPercentage": 0,
           "type": "optional",
-          "category": "spices & seasonings"
+          "category": "spices"
         },
         {
           "recipeIngredientName": "paprika",
@@ -4886,7 +4886,7 @@
           "productName": "paprika",
           "savingsPercentage": 0,
           "type": "core",
-          "category": "spices & seasonings"
+          "category": "spices"
         },
         {
           "recipeIngredientName": "garlic powder",
@@ -4901,7 +4901,7 @@
           "productName": "garlic powder",
           "savingsPercentage": 0,
           "type": "core",
-          "category": "spices & seasonings"
+          "category": "spices"
         },
         {
           "recipeIngredientName": "dried oregano",
@@ -4916,7 +4916,7 @@
           "productName": "dried oregano",
           "savingsPercentage": 0,
           "type": "core",
-          "category": "spices & seasonings"
+          "category": "spices"
         },
         {
           "recipeIngredientName": "dried parsley",
@@ -4931,7 +4931,7 @@
           "productName": "dried parsley",
           "savingsPercentage": 0,
           "type": "core",
-          "category": "spices & seasonings"
+          "category": "spices"
         },
         {
           "recipeIngredientName": "salt",
@@ -4946,7 +4946,7 @@
           "productName": "Mother's Magic Himalayan Pink Salt",
           "savingsPercentage": 0,
           "type": "core",
-          "category": "spices & seasonings"
+          "category": "spices"
         },
         {
           "recipeIngredientName": "black pepper",
@@ -4961,7 +4961,7 @@
           "productName": "pepper",
           "savingsPercentage": 0,
           "type": "core",
-          "category": "spices & seasonings"
+          "category": "spices"
         },
         {
           "recipeIngredientName": "Parmesan cheese",
@@ -5097,7 +5097,7 @@
           "productName": "italian seasoning",
           "savingsPercentage": 0,
           "type": "core",
-          "category": "spices & seasonings"
+          "category": "spices"
         },
         {
           "recipeIngredientName": "paprika",
@@ -5106,7 +5106,7 @@
           "source": "skipped",
           "savingsPercentage": 0,
           "type": "optional",
-          "category": "spices & seasonings"
+          "category": "spices"
         },
         {
           "recipeIngredientName": "seasoning salt",
@@ -5124,7 +5124,7 @@
           "source": "skipped",
           "savingsPercentage": 0,
           "type": "optional",
-          "category": "spices & seasonings"
+          "category": "spices"
         },
         {
           "recipeIngredientName": "black pepper",
@@ -5133,7 +5133,7 @@
           "source": "skipped",
           "savingsPercentage": 0,
           "type": "optional",
-          "category": "spices & seasonings"
+          "category": "spices"
         },
         {
           "recipeIngredientName": "dried parsley",
@@ -5142,7 +5142,7 @@
           "source": "skipped",
           "savingsPercentage": 0,
           "type": "optional",
-          "category": "spices & seasonings"
+          "category": "spices"
         },
         {
           "recipeIngredientName": "dried thyme",
@@ -5151,7 +5151,7 @@
           "source": "skipped",
           "savingsPercentage": 0,
           "type": "optional",
-          "category": "spices & seasonings"
+          "category": "spices"
         },
         {
           "recipeIngredientName": "dried rosemary",
@@ -5160,7 +5160,7 @@
           "source": "skipped",
           "savingsPercentage": 0,
           "type": "optional",
-          "category": "spices & seasonings"
+          "category": "spices"
         }
       ]
     },
@@ -5215,7 +5215,7 @@
           "productName": "paprika",
           "savingsPercentage": 0,
           "type": "core",
-          "category": "spices & seasonings"
+          "category": "spices"
         },
         {
           "recipeIngredientName": "kosher salt",
@@ -5230,7 +5230,7 @@
           "productName": "kosher salt",
           "savingsPercentage": 0,
           "type": "core",
-          "category": "spices & seasonings"
+          "category": "spices"
         },
         {
           "recipeIngredientName": "black pepper",
@@ -5245,7 +5245,7 @@
           "productName": "pepper",
           "savingsPercentage": 0,
           "type": "core",
-          "category": "spices & seasonings"
+          "category": "spices"
         },
         {
           "recipeIngredientName": "carrot",
@@ -5429,7 +5429,7 @@
           "productName": "Mother's Magic Himalayan Pink Salt",
           "savingsPercentage": 0,
           "type": "core",
-          "category": "spices & seasonings"
+          "category": "spices"
         },
         {
           "recipeIngredientName": "ground black pepper",
@@ -5444,7 +5444,7 @@
           "productName": "pepper",
           "savingsPercentage": 0,
           "type": "core",
-          "category": "spices & seasonings"
+          "category": "spices"
         },
         {
           "recipeIngredientName": "olive oil",
@@ -5589,7 +5589,7 @@
           "productName": "bay leaves",
           "savingsPercentage": 0,
           "type": "core",
-          "category": "spices & seasonings"
+          "category": "spices"
         },
         {
           "recipeIngredientName": "dried thyme",
@@ -5604,7 +5604,7 @@
           "productName": "dried thyme",
           "savingsPercentage": 0,
           "type": "core",
-          "category": "spices & seasonings"
+          "category": "spices"
         },
         {
           "recipeIngredientName": "sugar",

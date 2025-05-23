@@ -51,7 +51,7 @@
           "productName": "ground cinnamon",
           "savingsPercentage": 0,
           "type": "core",
-          "category": "spices & seasonings"
+          "category": "spices"
         },
         {
           "recipeIngredientName": "baking soda",
@@ -81,7 +81,7 @@
           "productName": "salt",
           "savingsPercentage": 0,
           "type": "core",
-          "category": "spices & seasonings"
+          "category": "spices"
         },
         {
           "recipeIngredientName": "apple",
@@ -296,7 +296,7 @@
           "productName": "ground cinnamon",
           "savingsPercentage": 0,
           "type": "core",
-          "category": "spices & seasonings"
+          "category": "spices"
         },
         {
           "recipeIngredientName": "nutmeg",
@@ -311,7 +311,7 @@
           "productName": "ground nutmeg",
           "savingsPercentage": 0,
           "type": "core",
-          "category": "spices & seasonings"
+          "category": "spices"
         },
         {
           "recipeIngredientName": "white bread",
@@ -400,7 +400,7 @@
           "productName": "salt",
           "savingsPercentage": 0,
           "type": "core",
-          "category": "spices & seasonings"
+          "category": "spices"
         },
         {
           "recipeIngredientName": "black pepper",
@@ -415,7 +415,7 @@
           "productName": "pepper",
           "savingsPercentage": 0,
           "type": "core",
-          "category": "spices & seasonings"
+          "category": "spices"
         },
         {
           "recipeIngredientName": "butter",
@@ -525,7 +525,7 @@
           "productName": "salt",
           "savingsPercentage": 0,
           "type": "core",
-          "category": "spices & seasonings"
+          "category": "spices"
         },
         {
           "recipeIngredientName": "egg",
@@ -713,7 +713,7 @@
           "productName": "salt",
           "savingsPercentage": 0,
           "type": "core",
-          "category": "spices & seasonings"
+          "category": "spices"
         },
         {
           "recipeIngredientName": "black pepper",
@@ -728,7 +728,7 @@
           "productName": "pepper",
           "savingsPercentage": 0,
           "type": "core",
-          "category": "spices & seasonings"
+          "category": "spices"
         },
         {
           "recipeIngredientName": "extra virgin olive oil",
@@ -770,7 +770,7 @@
           "source": "skipped",
           "savingsPercentage": 0,
           "type": "optional",
-          "category": "spices & seasonings"
+          "category": "spices"
         },
         {
           "recipeIngredientName": "feta cheese",
@@ -904,7 +904,7 @@
           "productName": "rolled oats",
           "savingsPercentage": 0,
           "type": "core",
-          "category": "breakfast & cereal"
+          "category": "breakfast"
         },
         {
           "recipeIngredientName": "milk",
@@ -1051,7 +1051,7 @@
           "source": "skipped",
           "savingsPercentage": 0,
           "type": "optional",
-          "category": "spices & seasonings"
+          "category": "spices"
         },
         {
           "recipeIngredientName": "banana",
@@ -1159,7 +1159,7 @@
           "source": "skipped",
           "savingsPercentage": 0,
           "type": "optional",
-          "category": "spices & seasonings"
+          "category": "spices"
         },
         {
           "recipeIngredientName": "brown sugar",
@@ -1186,7 +1186,7 @@
           "source": "skipped",
           "savingsPercentage": 0,
           "type": "optional",
-          "category": "spices & seasonings"
+          "category": "spices"
         },
         {
           "recipeIngredientName": "salt",
@@ -1195,7 +1195,7 @@
           "source": "skipped",
           "savingsPercentage": 0,
           "type": "optional",
-          "category": "spices & seasonings"
+          "category": "spices"
         }
       ],
       "img": "/Overnight_Oats.png"
@@ -1266,7 +1266,7 @@
           "productName": "salt",
           "savingsPercentage": 0,
           "type": "core",
-          "category": "spices & seasonings"
+          "category": "spices"
         },
         {
           "recipeIngredientName": "black pepper",
@@ -1281,7 +1281,7 @@
           "productName": "pepper",
           "savingsPercentage": 0,
           "type": "core",
-          "category": "spices & seasonings"
+          "category": "spices"
         },
         {
           "recipeIngredientName": "garlic",
@@ -1311,7 +1311,7 @@
           "productName": "paprika",
           "savingsPercentage": 0,
           "type": "core",
-          "category": "spices & seasonings"
+          "category": "spices"
         },
         {
           "recipeIngredientName": "ground cumin",
@@ -1326,7 +1326,7 @@
           "productName": "ground cumin",
           "savingsPercentage": 0,
           "type": "core",
-          "category": "spices & seasonings"
+          "category": "spices"
         },
         {
           "recipeIngredientName": "cayenne pepper",
@@ -1335,7 +1335,7 @@
           "source": "skipped",
           "savingsPercentage": 0,
           "type": "optional",
-          "category": "spices & seasonings"
+          "category": "spices"
         },
         {
           "recipeIngredientName": "canned crushed tomatoes",
@@ -1540,7 +1540,7 @@
           "productName": "salt",
           "savingsPercentage": 0,
           "type": "core",
-          "category": "spices & seasonings"
+          "category": "spices"
         },
         {
           "recipeIngredientName": "black pepper",
@@ -1555,7 +1555,7 @@
           "productName": "pepper",
           "savingsPercentage": 0,
           "type": "core",
-          "category": "spices & seasonings"
+          "category": "spices"
         },
         {
           "recipeIngredientName": "egg",
@@ -1675,7 +1675,7 @@
           "productName": "salt",
           "savingsPercentage": 0,
           "type": "core",
-          "category": "spices & seasonings"
+          "category": "spices"
         },
         {
           "recipeIngredientName": "black pepper",
@@ -1690,7 +1690,7 @@
           "productName": "pepper",
           "savingsPercentage": 0,
           "type": "core",
-          "category": "spices & seasonings"
+          "category": "spices"
         },
         {
           "recipeIngredientName": "egg",
@@ -1920,7 +1920,7 @@
           "productName": "everything bagel seasoning",
           "savingsPercentage": 0,
           "type": "core",
-          "category": "spices & seasonings"
+          "category": "spices"
         }
       ],
       "img": "/Breakfast_Flatbread.png"
@@ -2002,7 +2002,7 @@
           "source": "skipped",
           "savingsPercentage": 0,
           "type": "optional",
-          "category": "spices & seasonings"
+          "category": "spices"
         },
         {
           "recipeIngredientName": "salt",
@@ -2011,7 +2011,7 @@
           "source": "skipped",
           "savingsPercentage": 0,
           "type": "to taste",
-          "category": "spices & seasonings"
+          "category": "spices"
         },
         {
           "recipeIngredientName": "black pepper",
@@ -2020,7 +2020,7 @@
           "source": "skipped",
           "savingsPercentage": 0,
           "type": "to taste",
-          "category": "spices & seasonings"
+          "category": "spices"
         }
       ],
       "img": "/Egg_Salad.png"
@@ -2056,7 +2056,7 @@
           "productName": "kosher salt",
           "savingsPercentage": 0,
           "type": "core",
-          "category": "spices & seasonings"
+          "category": "spices"
         },
         {
           "recipeIngredientName": "extra-virgin olive oil",
@@ -2251,7 +2251,7 @@
           "productName": "dried oregano",
           "savingsPercentage": 0,
           "type": "core",
-          "category": "spices & seasonings"
+          "category": "spices"
         },
         {
           "recipeIngredientName": "lemon",
@@ -2296,7 +2296,7 @@
           "productName": "pepper",
           "savingsPercentage": 0,
           "type": "core",
-          "category": "spices & seasonings"
+          "category": "spices"
         }
       ],
       "img": "/Couscous_Salad.png"
@@ -2472,7 +2472,7 @@
           "productName": "dried oregano",
           "savingsPercentage": 0,
           "type": "core",
-          "category": "spices & seasonings"
+          "category": "spices"
         },
         {
           "recipeIngredientName": "dried mint",
@@ -2487,7 +2487,7 @@
           "productName": "dried mint",
           "savingsPercentage": 0,
           "type": "core",
-          "category": "spices & seasonings"
+          "category": "spices"
         },
         {
           "recipeIngredientName": "garlic",
@@ -2511,7 +2511,7 @@
           "source": "skipped",
           "savingsPercentage": 0,
           "type": "to taste",
-          "category": "spices & seasonings"
+          "category": "spices"
         },
         {
           "recipeIngredientName": "black pepper",
@@ -2520,7 +2520,7 @@
           "source": "skipped",
           "savingsPercentage": 0,
           "type": "to taste",
-          "category": "spices & seasonings"
+          "category": "spices"
         }
       ],
       "img": "/Mediterranean_Pasta_Salad.png"
@@ -2561,7 +2561,7 @@
           "productName": "salt",
           "savingsPercentage": 0,
           "type": "core",
-          "category": "spices & seasonings"
+          "category": "spices"
         },
         {
           "recipeIngredientName": "water",
@@ -2676,7 +2676,7 @@
           "productName": "pepper",
           "savingsPercentage": 0,
           "type": "core",
-          "category": "spices & seasonings"
+          "category": "spices"
         },
         {
           "recipeIngredientName": "garlic powder",
@@ -2691,7 +2691,7 @@
           "productName": "garlic powder",
           "savingsPercentage": 0,
           "type": "core",
-          "category": "spices & seasonings"
+          "category": "spices"
         },
         {
           "recipeIngredientName": "oregano",
@@ -2706,7 +2706,7 @@
           "productName": "dried oregano",
           "savingsPercentage": 0,
           "type": "core",
-          "category": "spices & seasonings"
+          "category": "spices"
         },
         {
           "recipeIngredientName": "parsley",
@@ -2810,7 +2810,7 @@
           "productName": "ground cumin",
           "savingsPercentage": 0,
           "type": "core",
-          "category": "spices & seasonings"
+          "category": "spices"
         },
         {
           "recipeIngredientName": "curry powder",
@@ -2825,7 +2825,7 @@
           "productName": "curry powder",
           "savingsPercentage": 0,
           "type": "core",
-          "category": "spices & seasonings"
+          "category": "spices"
         },
         {
           "recipeIngredientName": "dried thyme",
@@ -2840,7 +2840,7 @@
           "productName": "dried thyme",
           "savingsPercentage": 0,
           "type": "core",
-          "category": "spices & seasonings"
+          "category": "spices"
         },
         {
           "recipeIngredientName": "canned diced tomatoes",
@@ -2910,7 +2910,7 @@
           "productName": "salt",
           "savingsPercentage": 0,
           "type": "core",
-          "category": "spices & seasonings"
+          "category": "spices"
         },
         {
           "recipeIngredientName": "red pepper flakes",
@@ -2919,7 +2919,7 @@
           "source": "skipped",
           "savingsPercentage": 0,
           "type": "to taste",
-          "category": "spices & seasonings"
+          "category": "spices"
         },
         {
           "recipeIngredientName": "black pepper",
@@ -2928,7 +2928,7 @@
           "source": "skipped",
           "savingsPercentage": 0,
           "type": "to taste",
-          "category": "spices & seasonings"
+          "category": "spices"
         },
         {
           "recipeIngredientName": "fresh kale",
@@ -3023,7 +3023,7 @@
           "productName": "salt",
           "savingsPercentage": 0,
           "type": "core",
-          "category": "spices & seasonings"
+          "category": "spices"
         },
         {
           "recipeIngredientName": "ground cayenne pepper",
@@ -3038,7 +3038,7 @@
           "productName": "cayenne pepper",
           "savingsPercentage": 0,
           "type": "core",
-          "category": "spices & seasonings"
+          "category": "spices"
         },
         {
           "recipeIngredientName": "canned black beans",
@@ -3313,7 +3313,7 @@
           "productName": "salt",
           "savingsPercentage": 0,
           "type": "core",
-          "category": "spices & seasonings"
+          "category": "spices"
         },
         {
           "recipeIngredientName": "black pepper",
@@ -3322,7 +3322,7 @@
           "source": "skipped",
           "savingsPercentage": 0,
           "type": "to taste",
-          "category": "spices & seasonings"
+          "category": "spices"
         }
       ],
       "img": "/Caprese_Sandwich.png"
@@ -3487,7 +3487,7 @@
           "productName": "salt",
           "savingsPercentage": 0,
           "type": "core",
-          "category": "spices & seasonings"
+          "category": "spices"
         },
         {
           "recipeIngredientName": "lemon",
@@ -3641,7 +3641,7 @@
           "source": "skipped",
           "savingsPercentage": 0,
           "type": "to taste",
-          "category": "spices & seasonings"
+          "category": "spices"
         },
         {
           "recipeIngredientName": "black pepper",
@@ -3650,7 +3650,7 @@
           "source": "skipped",
           "savingsPercentage": 0,
           "type": "to taste",
-          "category": "spices & seasonings"
+          "category": "spices"
         }
       ],
       "img": "/BLT.png"
@@ -3808,7 +3808,7 @@
           "source": "skipped",
           "savingsPercentage": 0,
           "type": "to taste",
-          "category": "spices & seasonings"
+          "category": "spices"
         },
         {
           "recipeIngredientName": "black pepper",
@@ -3817,7 +3817,7 @@
           "source": "skipped",
           "savingsPercentage": 0,
           "type": "to taste",
-          "category": "spices & seasonings"
+          "category": "spices"
         }
       ],
       "img": "/Turkey_Apple_Cheddar_Sandwich.png"
@@ -3854,7 +3854,7 @@
           "source": "skipped",
           "savingsPercentage": 0,
           "type": "to taste",
-          "category": "spices & seasonings"
+          "category": "spices"
         },
         {
           "recipeIngredientName": "black pepper",
@@ -3863,7 +3863,7 @@
           "source": "skipped",
           "savingsPercentage": 0,
           "type": "to taste",
-          "category": "spices & seasonings"
+          "category": "spices"
         },
         {
           "recipeIngredientName": "onion powder",
@@ -3878,7 +3878,7 @@
           "productName": "onion powder",
           "savingsPercentage": 0,
           "type": "core",
-          "category": "spices & seasonings"
+          "category": "spices"
         },
         {
           "recipeIngredientName": "unsalted butter",
@@ -4072,7 +4072,7 @@
           "productName": "bay leaves",
           "savingsPercentage": 0,
           "type": "core",
-          "category": "spices & seasonings"
+          "category": "spices"
         },
         {
           "recipeIngredientName": "fresh thyme",
@@ -4102,7 +4102,7 @@
           "productName": "salt",
           "savingsPercentage": 0,
           "type": "core",
-          "category": "spices & seasonings"
+          "category": "spices"
         },
         {
           "recipeIngredientName": "black pepper",
@@ -4117,7 +4117,7 @@
           "productName": "pepper",
           "savingsPercentage": 0,
           "type": "core",
-          "category": "spices & seasonings"
+          "category": "spices"
         },
         {
           "recipeIngredientName": "spaghetti",
@@ -4236,7 +4236,7 @@
           "productName": "chili powder",
           "savingsPercentage": 0,
           "type": "core",
-          "category": "spices & seasonings"
+          "category": "spices"
         },
         {
           "recipeIngredientName": "cumin",
@@ -4251,7 +4251,7 @@
           "productName": "ground cumin",
           "savingsPercentage": 0,
           "type": "core",
-          "category": "spices & seasonings"
+          "category": "spices"
         },
         {
           "recipeIngredientName": "green bell pepper",
@@ -4374,7 +4374,7 @@
           "source": "skipped",
           "savingsPercentage": 0,
           "type": "to taste",
-          "category": "spices & seasonings"
+          "category": "spices"
         },
         {
           "recipeIngredientName": "black pepper",
@@ -4383,7 +4383,7 @@
           "source": "skipped",
           "savingsPercentage": 0,
           "type": "to taste",
-          "category": "spices & seasonings"
+          "category": "spicess"
         }
       ],
       "img": "/Best_Chilli.png"
@@ -4478,7 +4478,7 @@
           "source": "skipped",
           "savingsPercentage": 0,
           "type": "to taste",
-          "category": "spices & seasonings"
+          "category": "spices"
         },
         {
           "recipeIngredientName": "garlic",
@@ -4508,7 +4508,7 @@
           "productName": "curry powder",
           "savingsPercentage": 0,
           "type": "core",
-          "category": "spices & seasonings"
+          "category": "spices"
         },
         {
           "recipeIngredientName": "dried thyme",
@@ -4523,7 +4523,7 @@
           "productName": "dried thyme",
           "savingsPercentage": 0,
           "type": "core",
-          "category": "spices & seasonings"
+          "category": "spices"
         },
         {
           "recipeIngredientName": "canned diced tomatoes",
@@ -4578,7 +4578,7 @@
           "productName": "bay leaves",
           "savingsPercentage": 0,
           "type": "core",
-          "category": "spices & seasonings"
+          "category": "spices"
         },
         {
           "recipeIngredientName": "red pepper flakes",
@@ -4587,7 +4587,7 @@
           "source": "skipped",
           "savingsPercentage": 0,
           "type": "to taste",
-          "category": "spices & seasonings"
+          "category": "spices"
         },
         {
           "recipeIngredientName": "black pepper",
@@ -4596,7 +4596,7 @@
           "source": "skipped",
           "savingsPercentage": 0,
           "type": "to taste",
-          "category": "spices & seasonings"
+          "category": "spices"
         },
         {
           "recipeIngredientName": "kale",
@@ -4726,7 +4726,7 @@
           "productName": "italian seasoning",
           "savingsPercentage": 0,
           "type": "core",
-          "category": "spices & seasonings"
+          "category": "spices"
         },
         {
           "recipeIngredientName": "paprika",
@@ -4735,7 +4735,7 @@
           "source": "skipped",
           "savingsPercentage": 0,
           "type": "optional",
-          "category": "spices & seasonings"
+          "category": "spices"
         },
         {
           "recipeIngredientName": "seasoning salt",
@@ -4753,7 +4753,7 @@
           "source": "skipped",
           "savingsPercentage": 0,
           "type": "optional",
-          "category": "spices & seasonings"
+          "category": "spices"
         },
         {
           "recipeIngredientName": "black pepper",
@@ -4762,7 +4762,7 @@
           "source": "skipped",
           "savingsPercentage": 0,
           "type": "optional",
-          "category": "spices & seasonings"
+          "category": "spices"
         },
         {
           "recipeIngredientName": "dried parsley",
@@ -4771,7 +4771,7 @@
           "source": "skipped",
           "savingsPercentage": 0,
           "type": "optional",
-          "category": "spices & seasonings"
+          "category": "spices"
         },
         {
           "recipeIngredientName": "dried thyme",
@@ -4780,7 +4780,7 @@
           "source": "skipped",
           "savingsPercentage": 0,
           "type": "optional",
-          "category": "spices & seasonings"
+          "category": "spices"
         },
         {
           "recipeIngredientName": "dried rosemary",
@@ -4789,7 +4789,7 @@
           "source": "skipped",
           "savingsPercentage": 0,
           "type": "optional",
-          "category": "spices & seasonings"
+          "category": "spices"
         }
       ]
     },
@@ -4889,7 +4889,7 @@
           "productName": "kosher salt",
           "savingsPercentage": 0,
           "type": "core",
-          "category": "spices & seasonings"
+          "category": "spices"
         },
         {
           "recipeIngredientName": "ground black pepper",
@@ -4904,7 +4904,7 @@
           "productName": "pepper",
           "savingsPercentage": 0,
           "type": "core",
-          "category": "spices & seasonings"
+          "category": "spices"
         },
         {
           "recipeIngredientName": "honey",
@@ -4992,7 +4992,7 @@
           "source": "skipped",
           "savingsPercentage": 0,
           "type": "to taste",
-          "category": "spices & seasonings"
+          "category": "spices"
         },
         {
           "recipeIngredientName": "ground black pepper",
@@ -5001,7 +5001,7 @@
           "source": "skipped",
           "savingsPercentage": 0,
           "type": "to taste",
-          "category": "spices & seasonings"
+          "category": "spices"
         },
         {
           "recipeIngredientName": "onion",
@@ -5070,7 +5070,7 @@
           "source": "skipped",
           "savingsPercentage": 0,
           "type": "to taste",
-          "category": "spices & seasonings"
+          "category": "spices"
         },
         {
           "recipeIngredientName": "long-grain and wild rice",
@@ -5210,7 +5210,7 @@
           "source": "skipped",
           "savingsPercentage": 0,
           "type": "optional",
-          "category": "spices & seasonings"
+          "category": "spices"
         },
         {
           "recipeIngredientName": "paprika",
@@ -5225,7 +5225,7 @@
           "productName": "paprika",
           "savingsPercentage": 0,
           "type": "core",
-          "category": "spices & seasonings"
+          "category": "spices"
         },
         {
           "recipeIngredientName": "garlic powder",
@@ -5240,7 +5240,7 @@
           "productName": "garlic powder",
           "savingsPercentage": 0,
           "type": "core",
-          "category": "spices & seasonings"
+          "category": "spices"
         },
         {
           "recipeIngredientName": "dried oregano",
@@ -5255,7 +5255,7 @@
           "productName": "dried oregano",
           "savingsPercentage": 0,
           "type": "core",
-          "category": "spices & seasonings"
+          "category": "spices"
         },
         {
           "recipeIngredientName": "dried parsley",
@@ -5270,7 +5270,7 @@
           "productName": "dried parsley",
           "savingsPercentage": 0,
           "type": "core",
-          "category": "spices & seasonings"
+          "category": "spices"
         },
         {
           "recipeIngredientName": "salt",
@@ -5285,7 +5285,7 @@
           "productName": "salt",
           "savingsPercentage": 0,
           "type": "core",
-          "category": "spices & seasonings"
+          "category": "spices"
         },
         {
           "recipeIngredientName": "black pepper",
@@ -5300,7 +5300,7 @@
           "productName": "pepper",
           "savingsPercentage": 0,
           "type": "core",
-          "category": "spices & seasonings"
+          "category": "spices"
         },
         {
           "recipeIngredientName": "Parmesan cheese",
@@ -5421,7 +5421,7 @@
           "productName": "kosher salt",
           "savingsPercentage": 0,
           "type": "core",
-          "category": "spices & seasonings"
+          "category": "spices"
         },
         {
           "recipeIngredientName": "black pepper",
@@ -5436,7 +5436,7 @@
           "productName": "pepper",
           "savingsPercentage": 0,
           "type": "core",
-          "category": "spices & seasonings"
+          "category": "spices"
         },
         {
           "recipeIngredientName": "garlic",
@@ -5671,7 +5671,7 @@
           "productName": "kosher salt",
           "savingsPercentage": 0,
           "type": "core",
-          "category": "spices & seasonings"
+          "category": "spices"
         },
         {
           "recipeIngredientName": "black pepper",
@@ -5686,7 +5686,7 @@
           "productName": "pepper",
           "savingsPercentage": 0,
           "type": "core",
-          "category": "spices & seasonings"
+          "category": "spices"
         },
         {
           "recipeIngredientName": "plum tomato",
