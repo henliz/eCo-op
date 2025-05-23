@@ -3,9 +3,9 @@
     {
       "name": "Healthy Apple Muffins",
       "url": "https://cookieandkate.com/healthy-apple-muffins-recipe/",
-      "salePrice": 6.184779263287406,
-      "regularPrice": 6.917816882998511,
-      "totalSavings": 0.733037619711105,
+      "salePrice": 7.103529263287406,
+      "regularPrice": 10.59281688299851,
+      "totalSavings": 3.4892876197111047,
       "servings": 12,
       "ingredients": [
         {
@@ -160,16 +160,16 @@
         },
         {
           "recipeIngredientName": "plain Greek yogurt",
-          "saleUnitSize": "4x100",
+          "saleUnitSize": 400,
           "saleUnitType": "g",
           "salePrice": 3,
-          "saleFractionUsed": null,
-          "regularPrice": 3,
-          "regularFractionUsed": null,
+          "saleFractionUsed": 0.30625,
+          "regularPrice": 12,
+          "regularFractionUsed": 0.30625,
           "source": "flyer",
           "sourceDate": "2025-05-29",
-          "productName": "OIKOS GREEK YOGURT",
-          "savingsPercentage": 0,
+          "productName": "OIKOS GREEK YOGURT (4x100)",
+          "savingsPercentage": 75,
           "type": "core",
           "category": "dairy"
         },
@@ -886,9 +886,9 @@
     {
       "name": "Easy Overnight Oats",
       "url": "https://feelgoodfoodie.net/wprm_print/easy-overnight-oats",
-      "salePrice": 0.9736906738704088,
-      "regularPrice": 0.9736906738704088,
-      "totalSavings": 0,
+      "salePrice": 1.4330656738704088,
+      "regularPrice": 2.8111906738704087,
+      "totalSavings": 1.3781249999999998,
       "servings": 1,
       "ingredients": [
         {
@@ -923,16 +923,16 @@
         },
         {
           "recipeIngredientName": "Greek yogurt",
-          "saleUnitSize": "4x100",
+          "saleUnitSize": 400,
           "saleUnitType": "g",
           "salePrice": 3,
-          "saleFractionUsed": null,
-          "regularPrice": 3,
-          "regularFractionUsed": null,
+          "saleFractionUsed": 0.153125,
+          "regularPrice": 12,
+          "regularFractionUsed": 0.153125,
           "source": "flyer",
           "sourceDate": "2025-05-29",
-          "productName": "OIKOS GREEK YOGURT",
-          "savingsPercentage": 0,
+          "productName": "OIKOS GREEK YOGURT (4x100)",
+          "savingsPercentage": 75,
           "type": "core",
           "category": "dairy"
         },
@@ -1203,7 +1203,6 @@
     {
       "name": "Best Shakshuka",
       "url": "https://www.loveandlemons.com/shakshuka-recipe/",
-      "img": "/Best_Shakshuka.png",
       "salePrice": 7.60217179733136,
       "regularPrice": 7.69032019733136,
       "totalSavings": 0.08814839999999968,
@@ -1578,7 +1577,7 @@
           "salePrice": 0,
           "regularPrice": 0,
           "source": "free",
-          "sourceDate": "2025-05-22",
+          "sourceDate": "2025-05-23",
           "savingsPercentage": 0,
           "type": "core",
           "category": "beverages"
@@ -2039,7 +2038,7 @@
           "salePrice": 0,
           "regularPrice": 0,
           "source": "free",
-          "sourceDate": "2025-05-22",
+          "sourceDate": "2025-05-23",
           "savingsPercentage": 0,
           "type": "core",
           "category": "beverages"
@@ -2569,7 +2568,7 @@
           "salePrice": 0,
           "regularPrice": 0,
           "source": "free",
-          "sourceDate": "2025-05-22",
+          "sourceDate": "2025-05-23",
           "savingsPercentage": 0,
           "type": "core",
           "category": "beverages"
@@ -2893,7 +2892,7 @@
           "salePrice": 0,
           "regularPrice": 0,
           "source": "free",
-          "sourceDate": "2025-05-22",
+          "sourceDate": "2025-05-23",
           "savingsPercentage": 0,
           "type": "core",
           "category": "beverages"
@@ -3331,7 +3330,6 @@
     {
       "name": "Crispy Black Bean Tacos with Cilantro Lime Sauce",
       "url": "https://pinchofyum.com/crispy-black-bean-tacos-with-cilantro-lime-sauce",
-      "img": "/BlackBean_Tacos_CilantroLimeSauce.png",
       "salePrice": 12.56998846304691,
       "regularPrice": 12.92250756304691,
       "totalSavings": 0.3525191000000003,
@@ -3426,7 +3424,7 @@
           "salePrice": 0,
           "regularPrice": 0,
           "source": "free",
-          "sourceDate": "2025-05-22",
+          "sourceDate": "2025-05-23",
           "savingsPercentage": 0,
           "type": "core",
           "category": "beverages"
@@ -4160,8 +4158,8 @@
     {
       "name": "The Best Chili Recipe",
       "url": "https://www.spendwithpennies.com/wprm_print/the-best-chili-recipe",
-      "salePrice": 9.931605237673145,
-      "regularPrice": 11.892130659895367,
+      "salePrice": 10.264275214198966,
+      "regularPrice": 12.224800636421188,
       "totalSavings": 1.9605254222222221,
       "servings": 4,
       "ingredients": [
@@ -4332,15 +4330,15 @@
         },
         {
           "recipeIngredientName": "beer",
-          "saleUnitSize": "6x355",
+          "saleUnitSize": 2130,
           "saleUnitType": "ml",
           "salePrice": 5.99,
-          "saleFractionUsed": null,
+          "saleFractionUsed": 0.05553755868544601,
           "regularPrice": 5.99,
-          "regularFractionUsed": null,
+          "regularFractionUsed": 0.05553755868544601,
           "source": "flyer",
           "sourceDate": "2025-05-22",
-          "productName": "PC Craft Beer",
+          "productName": "PC Craft Beer (6x355)",
           "savingsPercentage": 0,
           "type": "core",
           "category": "other"
@@ -4393,7 +4391,6 @@
     {
       "name": "Seriously Good Vegetable Soup",
       "url": "https://cookieandkate.com/vegetable-soup-recipe/",
-      "img": "/Vegetable_Soup.png",
       "salePrice": 15.485062374228292,
       "regularPrice": 15.661359174228293,
       "totalSavings": 0.17629680000000114,
@@ -4563,7 +4560,7 @@
           "salePrice": 0,
           "regularPrice": 0,
           "source": "free",
-          "sourceDate": "2025-05-22",
+          "sourceDate": "2025-05-23",
           "savingsPercentage": 0,
           "type": "core",
           "category": "beverages"
@@ -4636,7 +4633,6 @@
     {
       "name": "Roast Chicken & Vegetables",
       "url": "https://www.spendwithpennies.com/roast-chicken-vegetables/",
-      "img": "/Chicken_Vegetables.png",
       "salePrice": 10.400683556569245,
       "regularPrice": 17.973361670569247,
       "totalSavings": 7.572678114000002,
@@ -4800,7 +4796,6 @@
     {
       "name": "Lemon and Garlic Baked Chicken Thighs",
       "url": "https://www.foodandwine.com/recipes/lemon-and-garlic-baked-chicken-thighs?print",
-      "img": "/LemonGarlic_ChickenThigh.png",
       "salePrice": 15.38472999395983,
       "regularPrice": 15.516952593959829,
       "totalSavings": 0.13222259999999864,
@@ -5113,7 +5108,6 @@
     {
       "name": "Sheet Pan Sausage and Veggies",
       "url": "https://www.chelseasmessyapron.com/one-pan-healthy-sausage-and-veggies/",
-      "img": "/SheetPan_Sausage_Veggies.png",
       "salePrice": 15.878912052903065,
       "regularPrice": 16.143357252903066,
       "totalSavings": 0.2644452000000008,
@@ -5349,7 +5343,6 @@
     {
       "name": "The Best Turkey Meatloaf",
       "url": "https://www.foodnetwork.com/recipes/food-network-kitchen/best-turkey-meatloaf-recipe-7217376",
-      "img": "/Turkey_Meatloaf.png",
       "salePrice": 29.38045959111196,
       "regularPrice": 29.556719141111962,
       "totalSavings": 0.17625955000000104,
