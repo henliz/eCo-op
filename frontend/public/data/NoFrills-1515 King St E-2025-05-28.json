@@ -1733,6 +1733,7 @@
     {
       "name": "Favorite Fried Rice",
       "url": "https://www.gimmesomeoven.com/fried-rice-recipe/",
+      "img": "/Favourite_FriedRice.png",
       "salePrice": 4.955864325723322,
       "regularPrice": 5.312914325723322,
       "totalSavings": 0.3570500000000001,
@@ -4256,6 +4257,7 @@
     {
       "name": "Best Vegetable Lasagna",
       "url": "https://cookieandkate.com/best-vegetable-lasagna-recipe/",
+      "img": "/Vegetable_Lasagna.png",
       "salePrice": 19.097283597813558,
       "regularPrice": 19.097283597813558,
       "totalSavings": 0,
@@ -4476,6 +4478,7 @@
     {
       "name": "The Best Chicken and Rice",
       "url": "https://www.foodnetwork.com/recipes/food-network-kitchen/the-best-chicken-and-rice-8133711",
+      "img": "/Chicken_Rice.png",
       "salePrice": 18.92601264553704,
       "regularPrice": 19.01527514553704,
       "totalSavings": 0.08926250000000024,
@@ -5382,6 +5385,7 @@
     },
     {
       "name": "Steelhead Trout with Mango Salsa",
+      "img": "/SteelheadTrout_MangoSalsa.png",
       "url": "https://foodrulesguy.wordpress.com/2011/03/14/steelhead-trout-with-mango-salsa/",
       "salePrice": 12.78039543966005,
       "regularPrice": 13.285325156233533,
