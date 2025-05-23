@@ -321,12 +321,12 @@
       "validUntil": "2025-05-29"
     },
     {
-      "id": "nofrills-preston",
+      "id": "nofrills-king-st-e",
       "name": "NoFrills",
       "logo": "NoFrills_Logo.png",
-      "location": "Preston",
-      "filename": "NoFrills-Preston-2025-05-21.json",
-      "validUntil": "2025-05-22"
+      "location": "1515 King St E",
+      "filename": "NoFrills-1515 King St E-2025-05-28.json",
+      "validUntil": "2025-05-29"
     },
     {
       "id": "metro-all",
