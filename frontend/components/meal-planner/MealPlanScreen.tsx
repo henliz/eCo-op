@@ -92,7 +92,7 @@ export function MealPlanScreen() {
         </CollapsibleTrigger>
 
         <CollapsibleContent>
-          <div className="grid grid-cols-2 md:grid-cols-2 lg:grid-cols-3 gap-1 pt-3"> {/* Reduced from gap-4 p-4 */}
+          <div className="grid grid-cols-2 md:grid-cols-2 lg:grid-cols-3 gap-1 pt-3">
             {recipes.map((recipe, idx) => (
               <MealCard
                 key={recipe.url + idx}
@@ -103,6 +103,24 @@ export function MealPlanScreen() {
                 onMultiplierChange={setRecipeMultiplier}
               />
             ))}
+
+            {/* Recipe suggestion card */}
+            <div className="bg-blue-50 rounded-lg p-3 border-2 border-dashed border-blue-200 flex flex-col items-center justify-center text-center min-h-[10rem] max-h-[10rem] overflow-hidden cursor-pointer hover:bg-blue-100 transition-colors">
+              <div className="text-blue-600 mb-2">
+                <svg className="w-6 h-6 mx-auto" fill="currentColor" viewBox="0 0 20 20">
+                  <path fillRule="evenodd" d="M10 3a1 1 0 011 1v5h5a1 1 0 110 2h-5v5a1 1 0 11-2 0v-5H4a1 1 0 110-2h5V4a1 1 0 011-1z" clipRule="evenodd" />
+                </svg>
+              </div>
+              <p className="text-xs sm:text-sm text-gray-700 font-semibold mb-1 leading-snug">
+                Have a favourite recipe you&apos;d like to see included?
+              </p>
+              <p className="text-xs text-gray-600 leading-snug">
+                Please <a href="mailto:info@skrimp.ai?subject=Recipe Suggestion"
+                   className="text-blue-600 hover:underline">
+                  email us
+                </a> at info@skrimp.ai
+              </p>
+            </div>
           </div>
         </CollapsibleContent>
       </Collapsible>
