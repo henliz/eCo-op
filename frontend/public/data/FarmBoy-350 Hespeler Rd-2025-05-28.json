@@ -51,7 +51,7 @@
           "productName": "ground cinnamon",
           "savingsPercentage": 0,
           "type": "core",
-          "category": "spices & seasonings"
+          "category": "spices"
         },
         {
           "recipeIngredientName": "baking soda",
@@ -81,7 +81,7 @@
           "productName": "salt",
           "savingsPercentage": 0,
           "type": "core",
-          "category": "spices & seasonings"
+          "category": "spices"
         },
         {
           "recipeIngredientName": "apple",
@@ -296,7 +296,7 @@
           "productName": "salt",
           "savingsPercentage": 0,
           "type": "core",
-          "category": "spices & seasonings"
+          "category": "spices"
         },
         {
           "recipeIngredientName": "ground black pepper",
@@ -311,7 +311,7 @@
           "productName": "pepper",
           "savingsPercentage": 0,
           "type": "core",
-          "category": "spices & seasonings"
+          "category": "spices"
         },
         {
           "recipeIngredientName": "garlic powder",
@@ -326,7 +326,7 @@
           "productName": "garlic powder",
           "savingsPercentage": 0,
           "type": "core",
-          "category": "spices & seasonings"
+          "category": "spices"
         },
         {
           "recipeIngredientName": "Cheddar cheese",
@@ -427,7 +427,7 @@
           "productName": "ground cinnamon",
           "savingsPercentage": 0,
           "type": "core",
-          "category": "spices & seasonings"
+          "category": "spices"
         },
         {
           "recipeIngredientName": "nutmeg",
@@ -442,7 +442,7 @@
           "productName": "ground nutmeg",
           "savingsPercentage": 0,
           "type": "core",
-          "category": "spices & seasonings"
+          "category": "spices"
         },
         {
           "recipeIngredientName": "white bread",
@@ -531,7 +531,7 @@
           "productName": "salt",
           "savingsPercentage": 0,
           "type": "core",
-          "category": "spices & seasonings"
+          "category": "spices"
         },
         {
           "recipeIngredientName": "black pepper",
@@ -546,7 +546,7 @@
           "productName": "pepper",
           "savingsPercentage": 0,
           "type": "core",
-          "category": "spices & seasonings"
+          "category": "spices"
         },
         {
           "recipeIngredientName": "butter",
@@ -611,7 +611,7 @@
           "productName": "rolled oats",
           "savingsPercentage": 0,
           "type": "core",
-          "category": "breakfast & cereal"
+          "category": "breakfast"
         },
         {
           "recipeIngredientName": "milk",
@@ -758,7 +758,7 @@
           "source": "skipped",
           "savingsPercentage": 0,
           "type": "optional",
-          "category": "spices & seasonings"
+          "category": "spices"
         },
         {
           "recipeIngredientName": "banana",
@@ -866,7 +866,7 @@
           "source": "skipped",
           "savingsPercentage": 0,
           "type": "optional",
-          "category": "spices & seasonings"
+          "category": "spices"
         },
         {
           "recipeIngredientName": "brown sugar",
@@ -893,7 +893,7 @@
           "source": "skipped",
           "savingsPercentage": 0,
           "type": "optional",
-          "category": "spices & seasonings"
+          "category": "spices"
         },
         {
           "recipeIngredientName": "salt",
@@ -902,7 +902,7 @@
           "source": "skipped",
           "savingsPercentage": 0,
           "type": "optional",
-          "category": "spices & seasonings"
+          "category": "spices"
         }
       ],
       "img": "/Overnight_Oats.png"
@@ -1175,7 +1175,7 @@
           "productName": "salt",
           "savingsPercentage": 0,
           "type": "core",
-          "category": "spices & seasonings"
+          "category": "spices"
         },
         {
           "recipeIngredientName": "black pepper",
@@ -1190,7 +1190,7 @@
           "productName": "pepper",
           "savingsPercentage": 0,
           "type": "core",
-          "category": "spices & seasonings"
+          "category": "spices"
         },
         {
           "recipeIngredientName": "egg",
@@ -1310,7 +1310,7 @@
           "productName": "salt",
           "savingsPercentage": 0,
           "type": "core",
-          "category": "spices & seasonings"
+          "category": "spices"
         },
         {
           "recipeIngredientName": "black pepper",
@@ -1325,7 +1325,7 @@
           "productName": "pepper",
           "savingsPercentage": 0,
           "type": "core",
-          "category": "spices & seasonings"
+          "category": "spices"
         },
         {
           "recipeIngredientName": "egg",
@@ -1555,7 +1555,7 @@
           "productName": "everything bagel seasoning",
           "savingsPercentage": 0,
           "type": "core",
-          "category": "spices & seasonings"
+          "category": "spices"
         }
       ],
       "img": "/Breakfast_Flatbread.png"
@@ -1673,7 +1673,7 @@
           "productName": "garlic powder",
           "savingsPercentage": 0,
           "type": "core",
-          "category": "spices & seasonings"
+          "category": "spices"
         },
         {
           "recipeIngredientName": "black pepper",
@@ -1682,7 +1682,7 @@
           "source": "skipped",
           "savingsPercentage": 0,
           "type": "to taste",
-          "category": "spices & seasonings"
+          "category": "spices"
         },
         {
           "recipeIngredientName": "dry mustard powder",
@@ -1697,7 +1697,7 @@
           "productName": "dry mustard powder",
           "savingsPercentage": 0,
           "type": "core",
-          "category": "spices & seasonings"
+          "category": "spices"
         },
         {
           "recipeIngredientName": "paprika",
@@ -1712,7 +1712,7 @@
           "productName": "paprika",
           "savingsPercentage": 0,
           "type": "core",
-          "category": "spices & seasonings"
+          "category": "spices"
         },
         {
           "recipeIngredientName": "salt",
@@ -1721,7 +1721,7 @@
           "source": "skipped",
           "savingsPercentage": 0,
           "type": "to taste",
-          "category": "spices & seasonings"
+          "category": "spices"
         },
         {
           "recipeIngredientName": "cream cheese",
@@ -1953,7 +1953,7 @@
           "productName": "salt",
           "savingsPercentage": 0,
           "type": "core",
-          "category": "spices & seasonings"
+          "category": "spices"
         },
         {
           "recipeIngredientName": "black pepper",
@@ -1968,7 +1968,7 @@
           "productName": "pepper",
           "savingsPercentage": 0,
           "type": "core",
-          "category": "spices & seasonings"
+          "category": "spices"
         },
         {
           "recipeIngredientName": "garlic",
@@ -2153,7 +2153,7 @@
           "productName": "chili powder",
           "savingsPercentage": 0,
           "type": "core",
-          "category": "spices & seasonings"
+          "category": "spices"
         },
         {
           "recipeIngredientName": "sea salt",
@@ -2168,7 +2168,7 @@
           "productName": "salt",
           "savingsPercentage": 0,
           "type": "core",
-          "category": "spices & seasonings"
+          "category": "spices"
         },
         {
           "recipeIngredientName": "black pepper",
@@ -2183,7 +2183,7 @@
           "productName": "pepper",
           "savingsPercentage": 0,
           "type": "core",
-          "category": "spices & seasonings"
+          "category": "spices"
         },
         {
           "recipeIngredientName": "tortilla",
@@ -2483,7 +2483,7 @@
           "productName": "salt",
           "savingsPercentage": 0,
           "type": "core",
-          "category": "spices & seasonings"
+          "category": "spices"
         },
         {
           "recipeIngredientName": "lemon",
@@ -2637,7 +2637,7 @@
           "source": "skipped",
           "savingsPercentage": 0,
           "type": "to taste",
-          "category": "spices & seasonings"
+          "category": "spices"
         },
         {
           "recipeIngredientName": "black pepper",
@@ -2646,7 +2646,7 @@
           "source": "skipped",
           "savingsPercentage": 0,
           "type": "to taste",
-          "category": "spices & seasonings"
+          "category": "spices"
         }
       ],
       "img": "/BLT.png"
@@ -2786,7 +2786,7 @@
           "source": "skipped",
           "savingsPercentage": 0,
           "type": "to taste",
-          "category": "spices & seasonings"
+          "category": "spices"
         },
         {
           "recipeIngredientName": "black pepper",
@@ -2795,7 +2795,7 @@
           "source": "skipped",
           "savingsPercentage": 0,
           "type": "to taste",
-          "category": "spices & seasonings"
+          "category": "spices"
         },
         {
           "recipeIngredientName": "broccoli florets",
@@ -2950,7 +2950,7 @@
           "source": "skipped",
           "savingsPercentage": 0,
           "type": "to taste",
-          "category": "spices & seasonings"
+          "category": "spices"
         }
       ],
       "img": "Cucumber_Turkey_Sub.png"
@@ -3108,7 +3108,7 @@
           "source": "skipped",
           "savingsPercentage": 0,
           "type": "to taste",
-          "category": "spices & seasonings"
+          "category": "spices"
         },
         {
           "recipeIngredientName": "black pepper",
@@ -3117,7 +3117,7 @@
           "source": "skipped",
           "savingsPercentage": 0,
           "type": "to taste",
-          "category": "spices & seasonings"
+          "category": "spices"
         }
       ],
       "img": "/Turkey_Apple_Cheddar_Sandwich.png"
@@ -3236,7 +3236,7 @@
           "source": "skipped",
           "savingsPercentage": 0,
           "type": "to taste",
-          "category": "spices & seasonings"
+          "category": "spices"
         },
         {
           "recipeIngredientName": "black pepper",
@@ -3245,7 +3245,7 @@
           "source": "skipped",
           "savingsPercentage": 0,
           "type": "to taste",
-          "category": "spices & seasonings"
+          "category": "spices"
         },
         {
           "recipeIngredientName": "Cheddar cheese",
@@ -3333,7 +3333,7 @@
           "productName": "ground cumin",
           "savingsPercentage": 0,
           "type": "core",
-          "category": "spices & seasonings"
+          "category": "spices"
         },
         {
           "recipeIngredientName": "cayenne pepper",
@@ -3348,7 +3348,7 @@
           "productName": "cayenne pepper",
           "savingsPercentage": 0,
           "type": "core",
-          "category": "spices & seasonings"
+          "category": "spices"
         },
         {
           "recipeIngredientName": "salt",
@@ -3363,7 +3363,7 @@
           "productName": "salt",
           "savingsPercentage": 0,
           "type": "core",
-          "category": "spices & seasonings"
+          "category": "spices"
         },
         {
           "recipeIngredientName": "black pepper",
@@ -3378,7 +3378,7 @@
           "productName": "pepper",
           "savingsPercentage": 0,
           "type": "core",
-          "category": "spices & seasonings"
+          "category": "spices"
         },
         {
           "recipeIngredientName": "olive oil",
@@ -3552,7 +3552,7 @@
           "productName": "garlic powder",
           "savingsPercentage": 0,
           "type": "core",
-          "category": "spices & seasonings"
+          "category": "spices"
         },
         {
           "recipeIngredientName": "Sriracha sauce",
@@ -3647,7 +3647,7 @@
           "productName": "ground cumin",
           "savingsPercentage": 0,
           "type": "core",
-          "category": "spices & seasonings"
+          "category": "spices"
         },
         {
           "recipeIngredientName": "smoked paprika",
@@ -3662,7 +3662,7 @@
           "productName": "paprika",
           "savingsPercentage": 0,
           "type": "core",
-          "category": "spices & seasonings"
+          "category": "spices"
         },
         {
           "recipeIngredientName": "brown sugar",
@@ -3692,7 +3692,7 @@
           "productName": "chili powder",
           "savingsPercentage": 0,
           "type": "core",
-          "category": "spices & seasonings"
+          "category": "spices"
         },
         {
           "recipeIngredientName": "salt",
@@ -3701,7 +3701,7 @@
           "source": "skipped",
           "savingsPercentage": 0,
           "type": "to taste",
-          "category": "spices & seasonings"
+          "category": "spices"
         },
         {
           "recipeIngredientName": "black pepper",
@@ -3710,7 +3710,7 @@
           "source": "skipped",
           "savingsPercentage": 0,
           "type": "to taste",
-          "category": "spices & seasonings"
+          "category": "spices"
         },
         {
           "recipeIngredientName": "lime",
@@ -3871,7 +3871,7 @@
           "productName": "salt",
           "savingsPercentage": 0,
           "type": "core",
-          "category": "spices & seasonings"
+          "category": "spices"
         },
         {
           "recipeIngredientName": "black pepper",
@@ -3886,7 +3886,7 @@
           "productName": "pepper",
           "savingsPercentage": 0,
           "type": "core",
-          "category": "spices & seasonings"
+          "category": "spices"
         },
         {
           "recipeIngredientName": "paprika",
@@ -3901,7 +3901,7 @@
           "productName": "paprika",
           "savingsPercentage": 0,
           "type": "core",
-          "category": "spices & seasonings"
+          "category": "spices"
         }
       ],
       "img": "/Baked_Mac_and_Cheese.png"
@@ -4002,7 +4002,7 @@
           "productName": "salt",
           "savingsPercentage": 0,
           "type": "core",
-          "category": "spices & seasonings"
+          "category": "spices"
         },
         {
           "recipeIngredientName": "baby spinach",
@@ -4077,7 +4077,7 @@
           "productName": "red pepper flakes",
           "savingsPercentage": 0,
           "type": "core",
-          "category": "spices & seasonings"
+          "category": "spices"
         },
         {
           "recipeIngredientName": "low-fat cottage cheese",
@@ -4162,7 +4162,7 @@
           "productName": "kosher salt",
           "savingsPercentage": 0,
           "type": "core",
-          "category": "spices & seasonings"
+          "category": "spices"
         },
         {
           "recipeIngredientName": "black pepper",
@@ -4177,7 +4177,7 @@
           "productName": "pepper",
           "savingsPercentage": 0,
           "type": "core",
-          "category": "spices & seasonings"
+          "category": "spices"
         },
         {
           "recipeIngredientName": "unsalted butter",
@@ -4252,7 +4252,7 @@
           "productName": "cayenne pepper",
           "savingsPercentage": 0,
           "type": "core",
-          "category": "spices & seasonings"
+          "category": "spices"
         },
         {
           "recipeIngredientName": "cheddar cheese",
@@ -4312,7 +4312,7 @@
           "productName": "cornflakes",
           "savingsPercentage": 0,
           "type": "core",
-          "category": "breakfast & cereal"
+          "category": "breakfast"
         }
       ],
       "img": "/Cheesy_Potatoes.png"
@@ -4458,7 +4458,7 @@
           "productName": "chili powder",
           "savingsPercentage": 0,
           "type": "core",
-          "category": "spices & seasonings"
+          "category": "spices"
         },
         {
           "recipeIngredientName": "onion",
@@ -4503,7 +4503,7 @@
           "productName": "dried thyme",
           "savingsPercentage": 0,
           "type": "core",
-          "category": "spices & seasonings"
+          "category": "spices"
         },
         {
           "recipeIngredientName": "hamburger buns",
@@ -4758,7 +4758,7 @@
           "source": "skipped",
           "savingsPercentage": 0,
           "type": "to taste",
-          "category": "spices & seasonings"
+          "category": "spices"
         },
         {
           "recipeIngredientName": "black pepper",
@@ -4767,7 +4767,7 @@
           "source": "skipped",
           "savingsPercentage": 0,
           "type": "to taste",
-          "category": "spices & seasonings"
+          "category": "spices"
         },
         {
           "recipeIngredientName": "fresh basil",
@@ -4958,7 +4958,7 @@
           "source": "skipped",
           "savingsPercentage": 0,
           "type": "to taste",
-          "category": "spices & seasonings"
+          "category": "spices"
         },
         {
           "recipeIngredientName": "black pepper",
@@ -4967,7 +4967,7 @@
           "source": "skipped",
           "savingsPercentage": 0,
           "type": "to taste",
-          "category": "spices & seasonings"
+          "category": "spices"
         }
       ],
       "img": "/Ginger_Shrimp_StirFry.png"
@@ -5092,7 +5092,7 @@
           "source": "skipped",
           "savingsPercentage": 0,
           "type": "to taste",
-          "category": "spices & seasonings"
+          "category": "spices"
         },
         {
           "recipeIngredientName": "black pepper",
@@ -5101,7 +5101,7 @@
           "source": "skipped",
           "savingsPercentage": 0,
           "type": "to taste",
-          "category": "spices & seasonings"
+          "category": "spices"
         }
       ]
     }
