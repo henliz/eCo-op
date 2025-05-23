@@ -516,323 +516,6 @@
       "img": "/French_Toast_Casserole.png"
     },
     {
-      "name": "Easy Overnight Oats",
-      "url": "https://feelgoodfoodie.net/wprm_print/easy-overnight-oats",
-      "salePrice": 1.0215117988704088,
-      "regularPrice": 1.0451707988704086,
-      "totalSavings": 0.023658999999999875,
-      "servings": 1,
-      "ingredients": [
-        {
-          "recipeIngredientName": "rolled oats",
-          "saleUnitSize": 1000,
-          "saleUnitType": "g",
-          "salePrice": 3.27,
-          "saleFractionUsed": 0.045,
-          "regularPrice": 3.27,
-          "regularFractionUsed": 0.045,
-          "source": "database",
-          "sourceDate": "2025-04-22",
-          "productName": "rolled oats",
-          "savingsPercentage": 0,
-          "type": "core",
-          "category": "breakfast & cereal"
-        },
-        {
-          "recipeIngredientName": "milk",
-          "saleUnitSize": 4,
-          "saleUnitType": "l",
-          "salePrice": 5.98,
-          "saleFractionUsed": 0.02957375,
-          "regularPrice": 6.780000000000001,
-          "regularFractionUsed": 0.02957375,
-          "source": "flyer",
-          "sourceDate": "2025-05-29",
-          "productName": "Natrel Filtered 1%",
-          "savingsPercentage": 11.799410029498532,
-          "type": "core",
-          "category": "dairy"
-        },
-        {
-          "recipeIngredientName": "Greek yogurt",
-          "saleUnitSize": "12x95",
-          "saleUnitType": "g",
-          "salePrice": 5.46,
-          "saleFractionUsed": null,
-          "regularPrice": 5.46,
-          "regularFractionUsed": null,
-          "source": "flyer",
-          "sourceDate": "2025-05-29",
-          "productName": "Activia Probiotic Yogurt",
-          "savingsPercentage": 0,
-          "type": "core",
-          "category": "dairy"
-        },
-        {
-          "recipeIngredientName": "chia seeds",
-          "saleUnitSize": 200,
-          "saleUnitType": "g",
-          "salePrice": 4.99,
-          "saleFractionUsed": 0.05313622722853882,
-          "regularPrice": 4.99,
-          "regularFractionUsed": 0.05313622722853882,
-          "source": "database",
-          "sourceDate": "2025-04-22",
-          "productName": "chia seeds",
-          "savingsPercentage": 0,
-          "type": "core",
-          "category": "pantry"
-        },
-        {
-          "recipeIngredientName": "maple syrup",
-          "saleUnitSize": 375,
-          "saleUnitType": "ml",
-          "salePrice": 7.97,
-          "saleFractionUsed": 0.039439999999999996,
-          "regularPrice": 7.97,
-          "regularFractionUsed": 0.039439999999999996,
-          "source": "flyer",
-          "sourceDate": "2025-05-14",
-          "productName": "Our Finest 100% Pure Grade A Amber, Rich Maple Syrup",
-          "savingsPercentage": 0,
-          "type": "core",
-          "category": "pantry"
-        },
-        {
-          "recipeIngredientName": "vanilla extract",
-          "saleUnitSize": 125,
-          "saleUnitType": "ml",
-          "salePrice": 11.97,
-          "saleFractionUsed": 0.009859999999999999,
-          "regularPrice": 11.97,
-          "regularFractionUsed": 0.009859999999999999,
-          "source": "database",
-          "sourceDate": "2025-04-22",
-          "productName": "vanilla extract",
-          "savingsPercentage": 0,
-          "type": "core",
-          "category": "other"
-        },
-        {
-          "recipeIngredientName": "strawberry jam",
-          "salePrice": 0,
-          "regularPrice": 0,
-          "source": "skipped",
-          "savingsPercentage": 0,
-          "type": "optional",
-          "category": "other"
-        },
-        {
-          "recipeIngredientName": "peanut butter",
-          "salePrice": 0,
-          "regularPrice": 0,
-          "source": "skipped",
-          "savingsPercentage": 0,
-          "type": "optional",
-          "category": "other"
-        },
-        {
-          "recipeIngredientName": "strawberries",
-          "salePrice": 0,
-          "regularPrice": 0,
-          "source": "skipped",
-          "savingsPercentage": 0,
-          "type": "optional",
-          "category": "produce"
-        },
-        {
-          "recipeIngredientName": "peanuts",
-          "salePrice": 0,
-          "regularPrice": 0,
-          "source": "skipped",
-          "savingsPercentage": 0,
-          "type": "optional",
-          "category": "pantry"
-        },
-        {
-          "recipeIngredientName": "apple",
-          "salePrice": 0,
-          "regularPrice": 0,
-          "source": "skipped",
-          "savingsPercentage": 0,
-          "type": "optional",
-          "category": "produce"
-        },
-        {
-          "recipeIngredientName": "pecans",
-          "salePrice": 0,
-          "regularPrice": 0,
-          "source": "skipped",
-          "savingsPercentage": 0,
-          "type": "optional",
-          "category": "other"
-        },
-        {
-          "recipeIngredientName": "maple syrup",
-          "salePrice": 0,
-          "regularPrice": 0,
-          "source": "skipped",
-          "savingsPercentage": 0,
-          "type": "optional",
-          "category": "pantry"
-        },
-        {
-          "recipeIngredientName": "cinnamon",
-          "salePrice": 0,
-          "regularPrice": 0,
-          "source": "skipped",
-          "savingsPercentage": 0,
-          "type": "optional",
-          "category": "spices & seasonings"
-        },
-        {
-          "recipeIngredientName": "banana",
-          "salePrice": 0,
-          "regularPrice": 0,
-          "source": "skipped",
-          "savingsPercentage": 0,
-          "type": "optional",
-          "category": "other"
-        },
-        {
-          "recipeIngredientName": "Nutella",
-          "salePrice": 0,
-          "regularPrice": 0,
-          "source": "skipped",
-          "savingsPercentage": 0,
-          "type": "optional",
-          "category": "other"
-        },
-        {
-          "recipeIngredientName": "hazelnuts",
-          "salePrice": 0,
-          "regularPrice": 0,
-          "source": "skipped",
-          "savingsPercentage": 0,
-          "type": "optional",
-          "category": "other"
-        },
-        {
-          "recipeIngredientName": "chocolate chips",
-          "salePrice": 0,
-          "regularPrice": 0,
-          "source": "skipped",
-          "savingsPercentage": 0,
-          "type": "optional",
-          "category": "other"
-        },
-        {
-          "recipeIngredientName": "shredded coconut",
-          "salePrice": 0,
-          "regularPrice": 0,
-          "source": "skipped",
-          "savingsPercentage": 0,
-          "type": "optional",
-          "category": "other"
-        },
-        {
-          "recipeIngredientName": "almonds",
-          "salePrice": 0,
-          "regularPrice": 0,
-          "source": "skipped",
-          "savingsPercentage": 0,
-          "type": "optional",
-          "category": "pantry"
-        },
-        {
-          "recipeIngredientName": "chocolate chips",
-          "salePrice": 0,
-          "regularPrice": 0,
-          "source": "skipped",
-          "savingsPercentage": 0,
-          "type": "optional",
-          "category": "other"
-        },
-        {
-          "recipeIngredientName": "maple syrup",
-          "salePrice": 0,
-          "regularPrice": 0,
-          "source": "skipped",
-          "savingsPercentage": 0,
-          "type": "optional",
-          "category": "pantry"
-        },
-        {
-          "recipeIngredientName": "blueberries",
-          "salePrice": 0,
-          "regularPrice": 0,
-          "source": "skipped",
-          "savingsPercentage": 0,
-          "type": "optional",
-          "category": "produce"
-        },
-        {
-          "recipeIngredientName": "lemon zest",
-          "salePrice": 0,
-          "regularPrice": 0,
-          "source": "skipped",
-          "savingsPercentage": 0,
-          "type": "optional",
-          "category": "other"
-        },
-        {
-          "recipeIngredientName": "honey",
-          "salePrice": 0,
-          "regularPrice": 0,
-          "source": "skipped",
-          "savingsPercentage": 0,
-          "type": "optional",
-          "category": "pantry"
-        },
-        {
-          "recipeIngredientName": "salt",
-          "salePrice": 0,
-          "regularPrice": 0,
-          "source": "skipped",
-          "savingsPercentage": 0,
-          "type": "optional",
-          "category": "spices & seasonings"
-        },
-        {
-          "recipeIngredientName": "brown sugar",
-          "salePrice": 0,
-          "regularPrice": 0,
-          "source": "skipped",
-          "savingsPercentage": 0,
-          "type": "optional",
-          "category": "pantry"
-        },
-        {
-          "recipeIngredientName": "maple syrup",
-          "salePrice": 0,
-          "regularPrice": 0,
-          "source": "skipped",
-          "savingsPercentage": 0,
-          "type": "optional",
-          "category": "pantry"
-        },
-        {
-          "recipeIngredientName": "cinnamon",
-          "salePrice": 0,
-          "regularPrice": 0,
-          "source": "skipped",
-          "savingsPercentage": 0,
-          "type": "optional",
-          "category": "spices & seasonings"
-        },
-        {
-          "recipeIngredientName": "salt",
-          "salePrice": 0,
-          "regularPrice": 0,
-          "source": "skipped",
-          "savingsPercentage": 0,
-          "type": "optional",
-          "category": "spices & seasonings"
-        }
-      ],
-      "img": "/Overnight_Oats.png"
-    },
-    {
       "name": "Strawberry Pancakes",
       "url": "https://feelgoodfoodie.net/wprm_print/strawberry-pancakes",
       "salePrice": 4.101471961259027,
@@ -1128,6 +811,323 @@
       "img": "/Breakfast_Egg_Fried_Rice.png"
     },
     {
+      "name": "Easy Overnight Oats",
+      "url": "https://feelgoodfoodie.net/wprm_print/easy-overnight-oats",
+      "salePrice": 1.3148670620283034,
+      "regularPrice": 1.3385260620283035,
+      "totalSavings": 0.023659000000000097,
+      "servings": 1,
+      "ingredients": [
+        {
+          "recipeIngredientName": "rolled oats",
+          "saleUnitSize": 1000,
+          "saleUnitType": "g",
+          "salePrice": 3.27,
+          "saleFractionUsed": 0.045,
+          "regularPrice": 3.27,
+          "regularFractionUsed": 0.045,
+          "source": "database",
+          "sourceDate": "2025-04-22",
+          "productName": "rolled oats",
+          "savingsPercentage": 0,
+          "type": "core",
+          "category": "breakfast & cereal"
+        },
+        {
+          "recipeIngredientName": "milk",
+          "saleUnitSize": 4,
+          "saleUnitType": "l",
+          "salePrice": 5.98,
+          "saleFractionUsed": 0.02957375,
+          "regularPrice": 6.780000000000001,
+          "regularFractionUsed": 0.02957375,
+          "source": "flyer",
+          "sourceDate": "2025-05-29",
+          "productName": "Natrel Filtered 1%",
+          "savingsPercentage": 11.799410029498532,
+          "type": "core",
+          "category": "dairy"
+        },
+        {
+          "recipeIngredientName": "Greek yogurt",
+          "saleUnitSize": 1140,
+          "saleUnitType": "g",
+          "salePrice": 5.46,
+          "saleFractionUsed": 0.0537280701754386,
+          "regularPrice": 5.46,
+          "regularFractionUsed": 0.0537280701754386,
+          "source": "flyer",
+          "sourceDate": "2025-05-29",
+          "productName": "Activia Probiotic Yogurt (12x95)",
+          "savingsPercentage": 0,
+          "type": "core",
+          "category": "dairy"
+        },
+        {
+          "recipeIngredientName": "chia seeds",
+          "saleUnitSize": 200,
+          "saleUnitType": "g",
+          "salePrice": 4.99,
+          "saleFractionUsed": 0.05313622722853882,
+          "regularPrice": 4.99,
+          "regularFractionUsed": 0.05313622722853882,
+          "source": "database",
+          "sourceDate": "2025-04-22",
+          "productName": "chia seeds",
+          "savingsPercentage": 0,
+          "type": "core",
+          "category": "pantry"
+        },
+        {
+          "recipeIngredientName": "maple syrup",
+          "saleUnitSize": 375,
+          "saleUnitType": "ml",
+          "salePrice": 7.97,
+          "saleFractionUsed": 0.039439999999999996,
+          "regularPrice": 7.97,
+          "regularFractionUsed": 0.039439999999999996,
+          "source": "flyer",
+          "sourceDate": "2025-05-14",
+          "productName": "Our Finest 100% Pure Grade A Amber, Rich Maple Syrup",
+          "savingsPercentage": 0,
+          "type": "core",
+          "category": "pantry"
+        },
+        {
+          "recipeIngredientName": "vanilla extract",
+          "saleUnitSize": 125,
+          "saleUnitType": "ml",
+          "salePrice": 11.97,
+          "saleFractionUsed": 0.009859999999999999,
+          "regularPrice": 11.97,
+          "regularFractionUsed": 0.009859999999999999,
+          "source": "database",
+          "sourceDate": "2025-04-22",
+          "productName": "vanilla extract",
+          "savingsPercentage": 0,
+          "type": "core",
+          "category": "other"
+        },
+        {
+          "recipeIngredientName": "strawberry jam",
+          "salePrice": 0,
+          "regularPrice": 0,
+          "source": "skipped",
+          "savingsPercentage": 0,
+          "type": "optional",
+          "category": "other"
+        },
+        {
+          "recipeIngredientName": "peanut butter",
+          "salePrice": 0,
+          "regularPrice": 0,
+          "source": "skipped",
+          "savingsPercentage": 0,
+          "type": "optional",
+          "category": "other"
+        },
+        {
+          "recipeIngredientName": "strawberries",
+          "salePrice": 0,
+          "regularPrice": 0,
+          "source": "skipped",
+          "savingsPercentage": 0,
+          "type": "optional",
+          "category": "produce"
+        },
+        {
+          "recipeIngredientName": "peanuts",
+          "salePrice": 0,
+          "regularPrice": 0,
+          "source": "skipped",
+          "savingsPercentage": 0,
+          "type": "optional",
+          "category": "pantry"
+        },
+        {
+          "recipeIngredientName": "apple",
+          "salePrice": 0,
+          "regularPrice": 0,
+          "source": "skipped",
+          "savingsPercentage": 0,
+          "type": "optional",
+          "category": "produce"
+        },
+        {
+          "recipeIngredientName": "pecans",
+          "salePrice": 0,
+          "regularPrice": 0,
+          "source": "skipped",
+          "savingsPercentage": 0,
+          "type": "optional",
+          "category": "other"
+        },
+        {
+          "recipeIngredientName": "maple syrup",
+          "salePrice": 0,
+          "regularPrice": 0,
+          "source": "skipped",
+          "savingsPercentage": 0,
+          "type": "optional",
+          "category": "pantry"
+        },
+        {
+          "recipeIngredientName": "cinnamon",
+          "salePrice": 0,
+          "regularPrice": 0,
+          "source": "skipped",
+          "savingsPercentage": 0,
+          "type": "optional",
+          "category": "spices & seasonings"
+        },
+        {
+          "recipeIngredientName": "banana",
+          "salePrice": 0,
+          "regularPrice": 0,
+          "source": "skipped",
+          "savingsPercentage": 0,
+          "type": "optional",
+          "category": "other"
+        },
+        {
+          "recipeIngredientName": "Nutella",
+          "salePrice": 0,
+          "regularPrice": 0,
+          "source": "skipped",
+          "savingsPercentage": 0,
+          "type": "optional",
+          "category": "other"
+        },
+        {
+          "recipeIngredientName": "hazelnuts",
+          "salePrice": 0,
+          "regularPrice": 0,
+          "source": "skipped",
+          "savingsPercentage": 0,
+          "type": "optional",
+          "category": "other"
+        },
+        {
+          "recipeIngredientName": "chocolate chips",
+          "salePrice": 0,
+          "regularPrice": 0,
+          "source": "skipped",
+          "savingsPercentage": 0,
+          "type": "optional",
+          "category": "other"
+        },
+        {
+          "recipeIngredientName": "shredded coconut",
+          "salePrice": 0,
+          "regularPrice": 0,
+          "source": "skipped",
+          "savingsPercentage": 0,
+          "type": "optional",
+          "category": "other"
+        },
+        {
+          "recipeIngredientName": "almonds",
+          "salePrice": 0,
+          "regularPrice": 0,
+          "source": "skipped",
+          "savingsPercentage": 0,
+          "type": "optional",
+          "category": "pantry"
+        },
+        {
+          "recipeIngredientName": "chocolate chips",
+          "salePrice": 0,
+          "regularPrice": 0,
+          "source": "skipped",
+          "savingsPercentage": 0,
+          "type": "optional",
+          "category": "other"
+        },
+        {
+          "recipeIngredientName": "maple syrup",
+          "salePrice": 0,
+          "regularPrice": 0,
+          "source": "skipped",
+          "savingsPercentage": 0,
+          "type": "optional",
+          "category": "pantry"
+        },
+        {
+          "recipeIngredientName": "blueberries",
+          "salePrice": 0,
+          "regularPrice": 0,
+          "source": "skipped",
+          "savingsPercentage": 0,
+          "type": "optional",
+          "category": "produce"
+        },
+        {
+          "recipeIngredientName": "lemon zest",
+          "salePrice": 0,
+          "regularPrice": 0,
+          "source": "skipped",
+          "savingsPercentage": 0,
+          "type": "optional",
+          "category": "other"
+        },
+        {
+          "recipeIngredientName": "honey",
+          "salePrice": 0,
+          "regularPrice": 0,
+          "source": "skipped",
+          "savingsPercentage": 0,
+          "type": "optional",
+          "category": "pantry"
+        },
+        {
+          "recipeIngredientName": "salt",
+          "salePrice": 0,
+          "regularPrice": 0,
+          "source": "skipped",
+          "savingsPercentage": 0,
+          "type": "optional",
+          "category": "spices & seasonings"
+        },
+        {
+          "recipeIngredientName": "brown sugar",
+          "salePrice": 0,
+          "regularPrice": 0,
+          "source": "skipped",
+          "savingsPercentage": 0,
+          "type": "optional",
+          "category": "pantry"
+        },
+        {
+          "recipeIngredientName": "maple syrup",
+          "salePrice": 0,
+          "regularPrice": 0,
+          "source": "skipped",
+          "savingsPercentage": 0,
+          "type": "optional",
+          "category": "pantry"
+        },
+        {
+          "recipeIngredientName": "cinnamon",
+          "salePrice": 0,
+          "regularPrice": 0,
+          "source": "skipped",
+          "savingsPercentage": 0,
+          "type": "optional",
+          "category": "spices & seasonings"
+        },
+        {
+          "recipeIngredientName": "salt",
+          "salePrice": 0,
+          "regularPrice": 0,
+          "source": "skipped",
+          "savingsPercentage": 0,
+          "type": "optional",
+          "category": "spices & seasonings"
+        }
+      ],
+      "img": "/Overnight_Oats.png"
+    },
+    {
       "name": "Veggie Omelet",
       "url": "https://feelgoodfoodie.net/wprm_print/veggie-omelet",
       "salePrice": 2.1956047275427566,
@@ -1260,7 +1260,7 @@
           "salePrice": 0,
           "regularPrice": 0,
           "source": "free",
-          "sourceDate": "2025-05-22",
+          "sourceDate": "2025-05-23",
           "savingsPercentage": 0,
           "type": "core",
           "category": "beverages"
@@ -1613,7 +1613,6 @@
     {
       "name": "Favorite Fried Rice",
       "url": "https://www.gimmesomeoven.com/fried-rice-recipe/",
-      "img": "/Favourite_FriedRice.png",
       "salePrice": 4.556102680462472,
       "regularPrice": 4.781645582453689,
       "totalSavings": 0.22554290199121674,
@@ -1811,7 +1810,7 @@
           "salePrice": 0,
           "regularPrice": 0,
           "source": "free",
-          "sourceDate": "2025-05-22",
+          "sourceDate": "2025-05-23",
           "savingsPercentage": 0,
           "type": "core",
           "category": "beverages"
@@ -2428,7 +2427,7 @@
           "salePrice": 0,
           "regularPrice": 0,
           "source": "free",
-          "sourceDate": "2025-05-22",
+          "sourceDate": "2025-05-23",
           "savingsPercentage": 0,
           "type": "core",
           "category": "beverages"
@@ -2496,7 +2495,6 @@
     {
       "name": "Crispy Black Bean Tacos with Cilantro Lime Sauce",
       "url": "https://pinchofyum.com/crispy-black-bean-tacos-with-cilantro-lime-sauce",
-      "img": "/BlackBean_Tacos_CilantroLimeSauce.png",
       "salePrice": 8.649516642620007,
       "regularPrice": 9.122696642620006,
       "totalSavings": 0.47317999999999927,
@@ -2591,7 +2589,7 @@
           "salePrice": 0,
           "regularPrice": 0,
           "source": "free",
-          "sourceDate": "2025-05-22",
+          "sourceDate": "2025-05-23",
           "savingsPercentage": 0,
           "type": "core",
           "category": "beverages"
@@ -2691,8 +2689,8 @@
     {
       "name": "Avocado Sweet Potato Tacos",
       "url": "https://www.loveandlemons.com/avocado-sweet-potato-tacos/",
-      "salePrice": 8.995665382292298,
-      "regularPrice": 9.113985382292299,
+      "salePrice": 10.169086434923877,
+      "regularPrice": 10.287406434923877,
       "totalSavings": 0.11832000000000065,
       "servings": 4,
       "ingredients": [
@@ -2818,15 +2816,15 @@
         },
         {
           "recipeIngredientName": "Greek yogurt",
-          "saleUnitSize": "12x95",
+          "saleUnitSize": 1140,
           "saleUnitType": "g",
           "salePrice": 5.46,
-          "saleFractionUsed": null,
+          "saleFractionUsed": 0.2149122807017544,
           "regularPrice": 5.46,
-          "regularFractionUsed": null,
+          "regularFractionUsed": 0.2149122807017544,
           "source": "flyer",
           "sourceDate": "2025-05-29",
-          "productName": "Activia Probiotic Yogurt",
+          "productName": "Activia Probiotic Yogurt (12x95)",
           "savingsPercentage": 0,
           "type": "core",
           "category": "dairy"
@@ -3534,7 +3532,6 @@
     {
       "name": "Best Shakshuka",
       "url": "https://www.loveandlemons.com/shakshuka-recipe/",
-      "img": "/Best_Shakshuka.png",
       "salePrice": 5.418854066167878,
       "regularPrice": 5.623174066167877,
       "totalSavings": 0.20431999999999917,
@@ -3779,7 +3776,6 @@
     {
       "name": "Best Vegetable Lasagna",
       "url": "https://cookieandkate.com/best-vegetable-lasagna-recipe/",
-      "img": "/Vegetable_Lasagna.png",
       "salePrice": 18.642942119471446,
       "regularPrice": 19.15339647245827,
       "totalSavings": 0.5104543529868231,
@@ -4000,7 +3996,6 @@
     {
       "name": "Seriously Good Vegetable Soup",
       "url": "https://cookieandkate.com/vegetable-soup-recipe/",
-      "img": "/Vegetable_Soup.png",
       "salePrice": 14.077620647884881,
       "regularPrice": 14.588075000871706,
       "totalSavings": 0.5104543529868248,
@@ -4170,7 +4165,7 @@
           "salePrice": 0,
           "regularPrice": 0,
           "source": "free",
-          "sourceDate": "2025-05-22",
+          "sourceDate": "2025-05-23",
           "savingsPercentage": 0,
           "type": "core",
           "category": "beverages"
@@ -4774,7 +4769,6 @@
     {
       "name": "Sheet Pan Sausage and Veggies",
       "url": "https://www.chelseasmessyapron.com/one-pan-healthy-sausage-and-veggies/",
-      "img": "/SheetPan_Sausage_Veggies.png",
       "salePrice": 14.55058331177358,
       "regularPrice": 14.905543311773581,
       "totalSavings": 0.35496000000000016,
@@ -5010,7 +5004,6 @@
     {
       "name": "Roast Chicken & Vegetables",
       "url": "https://www.spendwithpennies.com/roast-chicken-vegetables/",
-      "img": "/Chicken_Vegetables.png",
       "salePrice": 18.45634146146287,
       "regularPrice": 18.81205347195336,
       "totalSavings": 0.35571201049048895,
@@ -5174,7 +5167,6 @@
     {
       "name": "The Best Chicken and Rice",
       "url": "https://www.foodnetwork.com/recipes/food-network-kitchen/the-best-chicken-and-rice-8133711",
-      "img": "/Chicken_Rice.png",
       "salePrice": 26.417049418816212,
       "regularPrice": 26.78213522279865,
       "totalSavings": 0.3650858039824385,
@@ -5404,7 +5396,6 @@
     {
       "name": "Classic Beef Stew",
       "url": "https://www.onceuponachef.com/recipes/beef-stew-with-carrots-potatoes.html",
-      "img": "/Beef_Stew.png",
       "salePrice": 36.49882984894252,
       "regularPrice": 37.057614402924955,
       "totalSavings": 0.5587845539824343,
@@ -5580,7 +5571,7 @@
           "salePrice": 0,
           "regularPrice": 0,
           "source": "free",
-          "sourceDate": "2025-05-22",
+          "sourceDate": "2025-05-23",
           "savingsPercentage": 0,
           "type": "core",
           "category": "beverages"
