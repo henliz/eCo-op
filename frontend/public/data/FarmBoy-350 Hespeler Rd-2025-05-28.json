@@ -2326,6 +2326,7 @@
     {
       "name": "Crispy Black Bean Tacos with Cilantro Lime Sauce",
       "url": "https://pinchofyum.com/crispy-black-bean-tacos-with-cilantro-lime-sauce",
+      "img": "/BlackBean_Tacos_CilantroLimeSauce.png",
       "salePrice": 13.79873618736279,
       "regularPrice": 15.354814618735341,
       "totalSavings": 1.5560784313725513,
@@ -3909,6 +3910,7 @@
     {
       "name": "Best Vegetable Lasagna",
       "url": "https://cookieandkate.com/best-vegetable-lasagna-recipe/",
+      "img": "/Vegetable_Lasagna.png",
       "salePrice": 19.238859917548275,
       "regularPrice": 19.843659917548276,
       "totalSavings": 0.6048000000000009,
@@ -4541,6 +4543,7 @@
     {
       "name": "Refried Bean and Cheese Enchiladas",
       "url": "https://www.allrecipes.com/recipe/237269/refried-bean-and-cheese-enchiladas/",
+      "img": "/Bean_Cheese_Enchilada.png",
       "salePrice": 22.391907658873745,
       "regularPrice": 24.72602530593257,
       "totalSavings": 2.334117647058825,
@@ -4975,6 +4978,7 @@
     {
       "name": "Steelhead Trout with Mango Salsa",
       "url": "https://foodrulesguy.wordpress.com/2011/03/14/steelhead-trout-with-mango-salsa/",
+      "img": "/SteelheadTrout_MangoSalsa.png",
       "salePrice": 16.386035424113476,
       "regularPrice": 17.38603542411348,
       "totalSavings": 1.0000000000000036,
