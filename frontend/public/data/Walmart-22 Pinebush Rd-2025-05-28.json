@@ -1613,6 +1613,7 @@
     {
       "name": "Favorite Fried Rice",
       "url": "https://www.gimmesomeoven.com/fried-rice-recipe/",
+      "img": "/Favourite_FriedRice.png",
       "salePrice": 4.556102680462472,
       "regularPrice": 4.781645582453689,
       "totalSavings": 0.22554290199121674,
@@ -2495,6 +2496,7 @@
     {
       "name": "Crispy Black Bean Tacos with Cilantro Lime Sauce",
       "url": "https://pinchofyum.com/crispy-black-bean-tacos-with-cilantro-lime-sauce",
+      "img": "/BlackBean_Tacos_CilantroLimeSauce.png",
       "salePrice": 8.649516642620007,
       "regularPrice": 9.122696642620006,
       "totalSavings": 0.47317999999999927,
@@ -3532,6 +3534,7 @@
     {
       "name": "Best Shakshuka",
       "url": "https://www.loveandlemons.com/shakshuka-recipe/",
+      "img": "/Best_Shakshuka.png",
       "salePrice": 5.418854066167878,
       "regularPrice": 5.623174066167877,
       "totalSavings": 0.20431999999999917,
@@ -3776,6 +3779,7 @@
     {
       "name": "Best Vegetable Lasagna",
       "url": "https://cookieandkate.com/best-vegetable-lasagna-recipe/",
+      "img": "/Vegetable_Lasagna.png",
       "salePrice": 18.642942119471446,
       "regularPrice": 19.15339647245827,
       "totalSavings": 0.5104543529868231,
@@ -3996,6 +4000,7 @@
     {
       "name": "Seriously Good Vegetable Soup",
       "url": "https://cookieandkate.com/vegetable-soup-recipe/",
+      "img": "/Vegetable_Soup.png",
       "salePrice": 14.077620647884881,
       "regularPrice": 14.588075000871706,
       "totalSavings": 0.5104543529868248,
@@ -4769,6 +4774,7 @@
     {
       "name": "Sheet Pan Sausage and Veggies",
       "url": "https://www.chelseasmessyapron.com/one-pan-healthy-sausage-and-veggies/",
+      "img": "/SheetPan_Sausage_Veggies.png",
       "salePrice": 14.55058331177358,
       "regularPrice": 14.905543311773581,
       "totalSavings": 0.35496000000000016,
@@ -5004,6 +5010,7 @@
     {
       "name": "Roast Chicken & Vegetables",
       "url": "https://www.spendwithpennies.com/roast-chicken-vegetables/",
+      "img": "/Chicken_Vegetables.png",
       "salePrice": 18.45634146146287,
       "regularPrice": 18.81205347195336,
       "totalSavings": 0.35571201049048895,
@@ -5167,6 +5174,7 @@
     {
       "name": "The Best Chicken and Rice",
       "url": "https://www.foodnetwork.com/recipes/food-network-kitchen/the-best-chicken-and-rice-8133711",
+      "img": "/Chicken_Rice.png",
       "salePrice": 26.417049418816212,
       "regularPrice": 26.78213522279865,
       "totalSavings": 0.3650858039824385,
@@ -5396,6 +5404,7 @@
     {
       "name": "Classic Beef Stew",
       "url": "https://www.onceuponachef.com/recipes/beef-stew-with-carrots-potatoes.html",
+      "img": "/Beef_Stew.png",
       "salePrice": 36.49882984894252,
       "regularPrice": 37.057614402924955,
       "totalSavings": 0.5587845539824343,
