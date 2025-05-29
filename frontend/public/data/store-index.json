@@ -333,7 +333,39 @@
       "name": "NoFrills",
       "logo": "NoFrills_Logo.png",
       "location": "1515 King St E",
-      "filename": "NoFrills-1515 King St E-2025-05-28.json",
+      "filename": "NoFrills-1515 King St E-2025-06-05.json",
+      "validUntil": "2025-06-05"
+    },
+    {
+      "id": "nofrills-harvard-rd",
+      "name": "NoFrills",
+      "logo": "NoFrills_Logo.png",
+      "location": "35 Harvard Rd",
+      "filename": "NoFrills-1515 King St E-2025-06-05.json",
+      "validUntil": "2025-06-05"
+    },
+    {
+      "id": "nofrills-rymal-rd-e",
+      "name": "NoFrills",
+      "logo": "NoFrills_Logo.png",
+      "location": "675 Rymal Rd E",
+      "filename": "NoFrills-1515 King St E-2025-06-05.json",
+      "validUntil": "2025-06-05"
+    },
+    {
+      "id": "nofrills-derry-rd",
+      "name": "NoFrills",
+      "logo": "NoFrills_Logo.png",
+      "location": "6520 Derry Rd",
+      "filename": "NoFrills-1515 King St E-2025-06-05.json",
+      "validUntil": "2025-06-05"
+    },
+    {
+      "id": "nofrills-franklin-blvd",
+      "name": "NoFrills",
+      "logo": "NoFrills_Logo.png",
+      "location": "980 Franklin Blvd",
+      "filename": "NoFrills-1515 King St E-2025-06-05.json",
       "validUntil": "2025-06-05"
     },
     {
