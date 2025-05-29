@@ -334,7 +334,55 @@
       "logo": "NoFrills_Logo.png",
       "location": "1515 King St E",
       "filename": "NoFrills-1515 King St E-2025-05-28.json",
-      "validUntil": "2025-05-29"
+      "validUntil": "2025-06-05"
+    },
+    {
+      "id": "nofrills-haysville-rd",
+      "name": "NoFrills",
+      "logo": "NoFrills_Logo.png",
+      "location": "1540 Haysville Rd",
+      "filename": "NoFrills-1540 Haysville Rd-2025-06-05.json",
+      "validUntil": "2025-06-05"
+    },
+    {
+      "id": "nofrills-dundas-st-e",
+      "name": "NoFrills",
+      "logo": "NoFrills_Logo.png",
+      "location": "71 Dundas St E",
+      "filename": "NoFrills-1540 Haysville Rd-2025-06-05.json",
+      "validUntil": "2025-06-05"
+    },
+    {
+      "id": "nofrills-colborne-st-e",
+      "name": "NoFrills",
+      "logo": "NoFrills_Logo.png",
+      "location": "603 Colborne St E",
+      "filename": "NoFrills-1540 Haysville Rd-2025-06-05.json",
+      "validUntil": "2025-06-05"
+    },
+    {
+      "id": "nofrills-brant-st",
+      "name": "NoFrills",
+      "logo": "NoFrills_Logo.png",
+      "location": "571 Brant St",
+      "filename": "NoFrills-1540 Haysville Rd-2025-06-05.json",
+      "validUntil": "2025-06-05"
+    },
+    {
+      "id": "nofrills-colborne-st-w",
+      "name": "NoFrills",
+      "logo": "NoFrills_Logo.png",
+      "location": "108 Colborne St W",
+      "filename": "NoFrills-1540 Haysville Rd-2025-06-05.json",
+      "validUntil": "2025-06-05"
+    },
+    {
+      "id": "nofrills-abbeywood-dr",
+      "name": "NoFrills",
+      "logo": "NoFrills_Logo.png",
+      "location": "1395 Abbeywood Dr",
+      "filename": "NoFrills-1540 Haysville Rd-2025-06-05.json",
+      "validUntil": "2025-06-05"
     },
     {
       "id": "metro-all",
