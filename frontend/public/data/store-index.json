@@ -329,6 +329,22 @@
       "validUntil": "2025-06-05"
     },
     {
+      "id": "nofrills-strasburg-rd",
+      "name": "NoFrills",
+      "logo": "NoFrills_Logo.png",
+      "location": "700 Strasburg Rd",
+      "filename": "NoFrills-700 Strasburg Rd-2025-06-05.json",
+      "validUntil": "2025-06-05"
+    },
+    {
+      "id": "nofrills-silvercreek-pkwy-n",
+      "name": "NoFrills",
+      "logo": "NoFrills_Logo.png",
+      "location": "191 Silvercreek Pkwy N",
+      "filename": "NoFrills-700 Strasburg Rd-2025-06-05.json",
+      "validUntil": "2025-06-05"
+    },
+    {
       "id": "nofrills-king-st-e",
       "name": "NoFrills",
       "logo": "NoFrills_Logo.png",
