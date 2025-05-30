@@ -8,7 +8,13 @@ export interface Store {
   validUntil: Date;
   filename: string;
   isAvailable: boolean;
-  logo?: string; // Add logo property
+  logo?: string;
+  // New fields from CSV
+  location_name?: string;
+  city?: string;
+  postal_code?: string;
+  coordinates?: string;
+  flyer?: string;
 }
 
 interface StoreIndexItem {
@@ -17,7 +23,13 @@ interface StoreIndexItem {
   location: string;
   filename: string;
   validUntil: string;
-  logo?: string; // Add logo property
+  logo?: string;
+  // New fields from CSV
+  location_name?: string;
+  city?: string;
+  postal_code?: string;
+  coordinates?: string;
+  flyer?: string;
 }
 
 
@@ -616,7 +628,13 @@ discoverStores: async () => {
         filename: storeInfo.filename,
         validUntil,
         isAvailable,
-        logo: storeInfo.logo // Include logo property
+        logo: storeInfo.logo,
+        // Include all new fields
+        location_name: storeInfo.location_name,
+        city: storeInfo.city,
+        postal_code: storeInfo.postal_code,
+        coordinates: storeInfo.coordinates,
+        flyer: storeInfo.flyer
       };
     });
 
@@ -639,5 +657,4 @@ discoverStores: async () => {
     });
   }
 }
-
 }));

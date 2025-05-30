@@ -46,23 +46,28 @@ export default function StoreSelector({ shouldNavigateToPlan }: StoreSelectorPro
 
   // Sort stores: available first, then alphabetically, then filter by search term
   const filteredStores = [...availableStores]
-    .sort((a, b) => {
-      if (a.isAvailable !== b.isAvailable) {
-        return a.isAvailable ? -1 : 1;
-      }
-      return a.name.localeCompare(b.name);
-    })
-    .filter(store => {
-      if (!searchTerm) return true;
+  .sort((a, b) => {
+    if (a.isAvailable !== b.isAvailable) {
+      return a.isAvailable ? -1 : 1;
+    }
+    return a.name.localeCompare(b.name);
+  })
+  .filter(store => {
+    if (!searchTerm) return true;
 
-      const searchLower = searchTerm.toLowerCase();
-      return (
-        store.name.toLowerCase().includes(searchLower) ||
-        store.location.toLowerCase().includes(searchLower) ||
-        store.id.toLowerCase().includes(searchLower) ||
-        (store.filename && store.filename.toLowerCase().includes(searchLower))
-      );
-    });
+    const searchLower = searchTerm.toLowerCase();
+    return (
+      store.name.toLowerCase().includes(searchLower) ||
+      store.location.toLowerCase().includes(searchLower) ||
+      store.id.toLowerCase().includes(searchLower) ||
+      // Search new fields (excluding filename)
+      (store.location_name && store.location_name.toLowerCase().includes(searchLower)) ||
+      (store.city && store.city.toLowerCase().includes(searchLower)) ||
+      (store.postal_code && store.postal_code.toLowerCase().includes(searchLower)) ||
+      (store.coordinates && store.coordinates.toLowerCase().includes(searchLower)) ||
+      (store.flyer && store.flyer.toLowerCase().includes(searchLower))
+    );
+  });
 
   return (
     <div className="bg-white rounded-xl py-2 px-5 mb-3 shadow-sm">
