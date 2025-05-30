@@ -60,8 +60,7 @@ export default function StoreSelector({ shouldNavigateToPlan }: StoreSelectorPro
       store.name.toLowerCase().includes(searchLower) ||
       store.location.toLowerCase().includes(searchLower) ||
       store.id.toLowerCase().includes(searchLower) ||
-      (store.filename && store.filename.toLowerCase().includes(searchLower)) ||
-      // Search new fields
+      // Search new fields (excluding filename)
       (store.location_name && store.location_name.toLowerCase().includes(searchLower)) ||
       (store.city && store.city.toLowerCase().includes(searchLower)) ||
       (store.postal_code && store.postal_code.toLowerCase().includes(searchLower)) ||
