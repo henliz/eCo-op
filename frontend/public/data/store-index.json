@@ -677,11 +677,11 @@
       "flyer": "Sobeys-1500 Upper Middle Rd W-2025-06-05.pdf"
     },
     {
-      "id": "No Frills-1515 King St E",
+      "id": "NoFrills-1515 King St E",
       "name": "No Frills",
       "logo": "NoFrills_Logo.png",
       "location": "1515 King St E",
-      "filename": "No Frills-1515 King St E-2025-06-05.json",
+      "filename": "NoFrills-1515 King St E-2025-06-05.json",
       "validUntil": "2025-06-05",
       "location_name": "Javid & Salma's",
       "city": "Cambridge",
@@ -690,11 +690,11 @@
       "flyer": "No Frills-1515 King St E-2025-06-05.pdf"
     },
     {
-      "id": "No Frills-980 Franklin Blvd",
+      "id": "NoFrills-980 Franklin Blvd",
       "name": "No Frills",
       "logo": "NoFrills_Logo.png",
       "location": "980 Franklin Blvd",
-      "filename": "No Frills-1515 King St E-2025-06-05.json",
+      "filename": "NoFrills-1515 King St E-2025-06-05.json",
       "validUntil": "2025-06-05",
       "location_name": "Ross and Lindsay's",
       "city": "Cambridge",
@@ -703,11 +703,11 @@
       "flyer": "No Frills-980 Franklin Blvd-2025-06-05.pdf"
     },
     {
-      "id": "No Frills-700 Strasburg Rd",
+      "id": "NoFrills-700 Strasburg Rd",
       "name": "No Frills",
       "logo": "NoFrills_Logo.png",
       "location": "700 Strasburg Rd",
-      "filename": "No Frills-700 Strasburg Rd-2025-06-05.json",
+      "filename": "NoFrills-700 Strasburg Rd-2025-06-05.json",
       "validUntil": "2025-06-05",
       "location_name": "Derek & Laura's",
       "city": "Kitchener",
@@ -716,11 +716,11 @@
       "flyer": "No Frills-700 Strasburg Rd-2025-06-05.pdf"
     },
     {
-      "id": "No Frills-191 Silvercreek Pkwy N",
+      "id": "NoFrills-191 Silvercreek Pkwy N",
       "name": "No Frills",
       "logo": "NoFrills_Logo.png",
       "location": "191 Silvercreek Pkwy N",
-      "filename": "No Frills-700 Strasburg Rd-2025-06-05.json",
+      "filename": "NoFrills-700 Strasburg Rd-2025-06-05.json",
       "validUntil": "2025-06-05",
       "location_name": "Shannon & Richard's",
       "city": "Guelph",
@@ -729,11 +729,11 @@
       "flyer": "No Frills-191 Silvercreek Pkwy N-2025-06-05.pdf"
     },
     {
-      "id": "No Frills-35 Harvard Rd",
+      "id": "NoFrills-35 Harvard Rd",
       "name": "No Frills",
       "logo": "NoFrills_Logo.png",
       "location": "35 Harvard Rd",
-      "filename": "No Frills-1515 King St E-2025-06-05.json",
+      "filename": "NoFrills-1515 King St E-2025-06-05.json",
       "validUntil": "2025-06-05",
       "location_name": "Domenic's",
       "city": "Guelph",
@@ -742,11 +742,11 @@
       "flyer": "No Frills-35 Harvard Rd-2025-06-05.pdf"
     },
     {
-      "id": "No Frills-71 Dundas St E",
+      "id": "NoFrills-71 Dundas St E",
       "name": "No Frills",
       "logo": "NoFrills_Logo.png",
       "location": "71 Dundas St E",
-      "filename": "No Frills-1540 Haysville Rd-2025-06-05.json",
+      "filename": "NoFrills-1540 Haysville Rd-2025-06-05.json",
       "validUntil": "2025-06-05",
       "location_name": "Jay's",
       "city": "Paris",
@@ -755,11 +755,11 @@
       "flyer": "No Frills-71 Dundas St E-2025-06-05.pdf"
     },
     {
-      "id": "No Frills-603 Colborne St E",
+      "id": "NoFrills-603 Colborne St E",
       "name": "No Frills",
       "logo": "NoFrills_Logo.png",
       "location": "603 Colborne St E",
-      "filename": "No Frills-1540 Haysville Rd-2025-06-05.json",
+      "filename": "NoFrills-1540 Haysville Rd-2025-06-05.json",
       "validUntil": "2025-06-05",
       "location_name": "Walker's",
       "city": "Brantford",
@@ -768,11 +768,11 @@
       "flyer": "No Frills-603 Colborne St E-2025-06-05.pdf"
     },
     {
-      "id": "No Frills-108 Colborne St W",
+      "id": "NoFrills-108 Colborne St W",
       "name": "No Frills",
       "logo": "NoFrills_Logo.png",
       "location": "108 Colborne St W",
-      "filename": "No Frills-1540 Haysville Rd-2025-06-05.json",
+      "filename": "NoFrills-1540 Haysville Rd-2025-06-05.json",
       "validUntil": "2025-06-05",
       "location_name": "Rusty's",
       "city": "Brantford",
@@ -781,11 +781,11 @@
       "flyer": "No Frills-108 Colborne St W-2025-06-05.pdf"
     },
     {
-      "id": "No Frills-675 Rymal Rd E",
+      "id": "NoFrills-675 Rymal Rd E",
       "name": "No Frills",
       "logo": "NoFrills_Logo.png",
       "location": "675 Rymal Rd E",
-      "filename": "No Frills-1515 King St E-2025-06-05.json",
+      "filename": "NoFrills-1515 King St E-2025-06-05.json",
       "validUntil": "2025-06-05",
       "location_name": "Chris & Jenn's",
       "city": "Hamilton",
@@ -794,11 +794,11 @@
       "flyer": "No Frills-675 Rymal Rd E-2025-06-05.pdf"
     },
     {
-      "id": "No Frills-6520 Derry Rd",
+      "id": "NoFrills-6520 Derry Rd",
       "name": "No Frills",
       "logo": "NoFrills_Logo.png",
       "location": "6520 Derry Rd",
-      "filename": "No Frills-1515 King St E-2025-06-05.json",
+      "filename": "NoFrills-1515 King St E-2025-06-05.json",
       "validUntil": "2025-06-05",
       "location_name": "John's",
       "city": "Milton",
@@ -807,11 +807,11 @@
       "flyer": "No Frills-6520 Derry Rd-2025-06-05.pdf"
     },
     {
-      "id": "No Frills-1540 Haysville Rd",
+      "id": "NoFrills-1540 Haysville Rd",
       "name": "No Frills",
       "logo": "NoFrills_Logo.png",
       "location": "1540 Haysville Rd",
-      "filename": "No Frills-1540 Haysville Rd-2025-06-05.json",
+      "filename": "NoFrills-1540 Haysville Rd-2025-06-05.json",
       "validUntil": "2025-06-05",
       "location_name": "Mackay's",
       "city": "New Hamburg",
@@ -820,11 +820,11 @@
       "flyer": "No Frills-1540 Haysville Rd-2025-06-05.pdf"
     },
     {
-      "id": "No Frills-571 Brant St",
+      "id": "NoFrills-571 Brant St",
       "name": "No Frills",
       "logo": "NoFrills_Logo.png",
       "location": "571 Brant St",
-      "filename": "No Frills-1540 Haysville Rd-2025-06-05.json",
+      "filename": "NoFrills-1540 Haysville Rd-2025-06-05.json",
       "validUntil": "2025-06-05",
       "location_name": "Daniel's",
       "city": "Burlington",
@@ -833,11 +833,11 @@
       "flyer": "No Frills-571 Brant St-2025-06-05.pdf"
     },
     {
-      "id": "No Frills-1395 Abbeywood Dr",
+      "id": "NoFrills-1395 Abbeywood Dr",
       "name": "No Frills",
       "logo": "NoFrills_Logo.png",
       "location": "1395 Abbeywood Dr",
-      "filename": "No Frills-1540 Haysville Rd-2025-06-05.json",
+      "filename": "NoFrills-1540 Haysville Rd-2025-06-05.json",
       "validUntil": "2025-06-05",
       "location_name": "Oleg's",
       "city": "Oakville",
@@ -1054,11 +1054,11 @@
       "flyer": "FreshCo -875 St David St N-2025-06-05.pdf"
     },
     {
-      "id": "Food Basics-851 Fischer-Hallman Road",
+      "id": "FoodBasics-851 Fischer-Hallman Road",
       "name": "Food Basics",
       "logo": "FoodBasics_Logo.png",
       "location": "851 Fischer-Hallman Road",
-      "filename": "Food Basics-100 Jamieson Pkwy-2025-06-05.json",
+      "filename": "FoodBasics-100 Jamieson Pkwy-2025-06-05.json",
       "validUntil": "2025-06-05",
       "location_name": "",
       "city": "",
@@ -1067,11 +1067,11 @@
       "flyer": "Food Basics-851 Fischer-Hallman Road-2025-06-05.pdf"
     },
     {
-      "id": "Food Basics-100 Jamieson Pkwy",
+      "id": "FoodBasics-100 Jamieson Pkwy",
       "name": "Food Basics",
       "logo": "FoodBasics_Logo.png",
       "location": "100 Jamieson Pkwy",
-      "filename": "Food Basics-100 Jamieson Pkwy-2025-06-05.json",
+      "filename": "FoodBasics-100 Jamieson Pkwy-2025-06-05.json",
       "validUntil": "2025-06-05",
       "location_name": "",
       "city": "",
@@ -1080,11 +1080,11 @@
       "flyer": "Food Basics-100 Jamieson Pkwy-2025-06-05.pdf"
     },
     {
-      "id": "Food Basics-95 Water St N",
+      "id": "FoodBasics-95 Water St N",
       "name": "Food Basics",
       "logo": "FoodBasics_Logo.png",
       "location": "95 Water St N",
-      "filename": "Food Basics-100 Jamieson Pkwy-2025-06-05.json",
+      "filename": "FoodBasics-100 Jamieson Pkwy-2025-06-05.json",
       "validUntil": "2025-06-05",
       "location_name": "",
       "city": "",
@@ -1093,11 +1093,11 @@
       "flyer": "Food Basics-95 Water St N-2025-06-05.pdf"
     },
     {
-      "id": "Food Basics-1405 Ottawa St N",
+      "id": "FoodBasics-1405 Ottawa St N",
       "name": "Food Basics",
       "logo": "FoodBasics_Logo.png",
       "location": "1405 Ottawa St N",
-      "filename": "Food Basics-100 Jamieson Pkwy-2025-06-05.json",
+      "filename": "FoodBasics-100 Jamieson Pkwy-2025-06-05.json",
       "validUntil": "2025-06-05",
       "location_name": "",
       "city": "",
@@ -1106,11 +1106,11 @@
       "flyer": "Food Basics-1405 Ottawa St N-2025-06-05.pdf"
     },
     {
-      "id": "Food Basics-655 Fairway Rd S",
+      "id": "FoodBasics-655 Fairway Rd S",
       "name": "Food Basics",
       "logo": "FoodBasics_Logo.png",
       "location": "655 Fairway Rd S",
-      "filename": "Food Basics-100 Jamieson Pkwy-2025-06-05.json",
+      "filename": "FoodBasics-100 Jamieson Pkwy-2025-06-05.json",
       "validUntil": "2025-06-05",
       "location_name": "",
       "city": "",
@@ -1119,11 +1119,11 @@
       "flyer": "Food Basics-655 Fairway Rd S-2025-06-05.pdf"
     },
     {
-      "id": "Food Basics-370 Highland Rd W",
+      "id": "FoodBasics-370 Highland Rd W",
       "name": "Food Basics",
       "logo": "FoodBasics_Logo.png",
       "location": "370 Highland Rd W",
-      "filename": "Food Basics-100 Jamieson Pkwy-2025-06-05.json",
+      "filename": "FoodBasics-100 Jamieson Pkwy-2025-06-05.json",
       "validUntil": "2025-06-05",
       "location_name": "",
       "city": "",
@@ -1132,11 +1132,11 @@
       "flyer": "Food Basics-370 Highland Rd W-2025-06-05.pdf"
     },
     {
-      "id": "Food Basics-3 Clair Rd W",
+      "id": "FoodBasics-3 Clair Rd W",
       "name": "Food Basics",
       "logo": "FoodBasics_Logo.png",
       "location": "3 Clair Rd W",
-      "filename": "Food Basics-222 Silvercreek Pkwy N-2025-06-05.json",
+      "filename": "FoodBasics-222 Silvercreek Pkwy N-2025-06-05.json",
       "validUntil": "2025-06-05",
       "location_name": "",
       "city": "",
@@ -1145,11 +1145,11 @@
       "flyer": "Food Basics-3 Clair Rd W-2025-06-05.pdf"
     },
     {
-      "id": "Food Basics-1270 Fischer-Hallman Rd",
+      "id": "FoodBasics-1270 Fischer-Hallman Rd",
       "name": "Food Basics",
       "logo": "FoodBasics_Logo.png",
       "location": "1270 Fischer-Hallman Rd",
-      "filename": "Food Basics-100 Jamieson Pkwy-2025-06-05.json",
+      "filename": "FoodBasics-100 Jamieson Pkwy-2025-06-05.json",
       "validUntil": "2025-06-05",
       "location_name": "",
       "city": "",
@@ -1158,11 +1158,11 @@
       "flyer": "Food Basics-1270 Fischer-Hallman Rd-2025-06-05.pdf"
     },
     {
-      "id": "Food Basics-380 Eramosa Rd",
+      "id": "FoodBasics-380 Eramosa Rd",
       "name": "Food Basics",
       "logo": "FoodBasics_Logo.png",
       "location": "380 Eramosa Rd",
-      "filename": "Food Basics-222 Silvercreek Pkwy N-2025-06-05.json",
+      "filename": "FoodBasics-222 Silvercreek Pkwy N-2025-06-05.json",
       "validUntil": "2025-06-05",
       "location_name": "",
       "city": "",
@@ -1171,11 +1171,11 @@
       "flyer": "Food Basics-380 Eramosa Rd-2025-06-05.pdf"
     },
     {
-      "id": "Food Basics-600 Laurelwood Dr",
+      "id": "FoodBasics-600 Laurelwood Dr",
       "name": "Food Basics",
       "logo": "FoodBasics_Logo.png",
       "location": "600 Laurelwood Dr",
-      "filename": "Food Basics-100 Jamieson Pkwy-2025-06-05.json",
+      "filename": "FoodBasics-100 Jamieson Pkwy-2025-06-05.json",
       "validUntil": "2025-06-05",
       "location_name": "",
       "city": "",
@@ -1184,11 +1184,11 @@
       "flyer": "Food Basics-600 Laurelwood Dr-2025-06-05.pdf"
     },
     {
-      "id": "Food Basics-222 Silvercreek Pkwy N",
+      "id": "FoodBasics-222 Silvercreek Pkwy N",
       "name": "Food Basics",
       "logo": "FoodBasics_Logo.png",
       "location": "222 Silvercreek Pkwy N",
-      "filename": "Food Basics-222 Silvercreek Pkwy N-2025-06-05.json",
+      "filename": "FoodBasics-222 Silvercreek Pkwy N-2025-06-05.json",
       "validUntil": "2025-06-05",
       "location_name": "",
       "city": "",
@@ -1197,11 +1197,11 @@
       "flyer": "Food Basics-222 Silvercreek Pkwy N-2025-06-05.pdf"
     },
     {
-      "id": "Food Basics-232 Arthur St S",
+      "id": "FoodBasics-232 Arthur St S",
       "name": "Food Basics",
       "logo": "FoodBasics_Logo.png",
       "location": "232 Arthur St S",
-      "filename": "Food Basics-222 Silvercreek Pkwy N-2025-06-05.json",
+      "filename": "FoodBasics-222 Silvercreek Pkwy N-2025-06-05.json",
       "validUntil": "2025-06-05",
       "location_name": "",
       "city": "",
@@ -1210,11 +1210,11 @@
       "flyer": "Food Basics-232 Arthur St S-2025-06-05.pdf"
     },
     {
-      "id": "Food Basics-265 King George Rd",
+      "id": "FoodBasics-265 King George Rd",
       "name": "Food Basics",
       "logo": "FoodBasics_Logo.png",
       "location": "265 King George Rd",
-      "filename": "Food Basics-222 Silvercreek Pkwy N-2025-06-05.json",
+      "filename": "FoodBasics-222 Silvercreek Pkwy N-2025-06-05.json",
       "validUntil": "2025-06-05",
       "location_name": "",
       "city": "",
@@ -1223,11 +1223,11 @@
       "flyer": "Food Basics-265 King George Rd-2025-06-05.pdf"
     },
     {
-      "id": "Food Basics-845 King St W",
+      "id": "FoodBasics-845 King St W",
       "name": "Food Basics",
       "logo": "FoodBasics_Logo.png",
       "location": "845 King St W",
-      "filename": "Food Basics-135 Barton St E-2025-06-05.json",
+      "filename": "FoodBasics-135 Barton St E-2025-06-05.json",
       "validUntil": "2025-06-05",
       "location_name": "",
       "city": "",
@@ -1236,11 +1236,11 @@
       "flyer": "Food Basics-845 King St W-2025-06-05.pdf"
     },
     {
-      "id": "Food Basics-135 Barton St E",
+      "id": "FoodBasics-135 Barton St E",
       "name": "Food Basics",
       "logo": "FoodBasics_Logo.png",
       "location": "135 Barton St E",
-      "filename": "Food Basics-135 Barton St E-2025-06-05.json",
+      "filename": "FoodBasics-135 Barton St E-2025-06-05.json",
       "validUntil": "2025-06-05",
       "location_name": "",
       "city": "",
@@ -1249,11 +1249,11 @@
       "flyer": "Food Basics-135 Barton St E-2025-06-05.pdf"
     },
     {
-      "id": "Food Basics-84 Lynden Rd",
+      "id": "FoodBasics-84 Lynden Rd",
       "name": "Food Basics",
       "logo": "FoodBasics_Logo.png",
       "location": "84 Lynden Rd",
-      "filename": "Food Basics-222 Silvercreek Pkwy N-2025-06-05.json",
+      "filename": "FoodBasics-222 Silvercreek Pkwy N-2025-06-05.json",
       "validUntil": "2025-06-05",
       "location_name": "",
       "city": "",
@@ -1262,7 +1262,7 @@
       "flyer": "Food Basics-84 Lynden Rd-2025-06-05.pdf"
     },
     {
-      "id": "Farm Boy-350 Hespeler Rd",
+      "id": "FarmBoy-350 Hespeler Rd",
       "name": "Farm Boy",
       "logo": "FarmBoy_Logo.png",
       "location": "350 Hespeler Rd",
@@ -1275,7 +1275,7 @@
       "flyer": "Farm Boy-350 Hespeler Rd-2025-06-05.pdf"
     },
     {
-      "id": "Farm Boy-Fairway Plaza, 385 Fairway Rd S",
+      "id": "FarmBoy-Fairway Plaza, 385 Fairway Rd S",
       "name": "Farm Boy",
       "logo": "FarmBoy_Logo.png",
       "location": "Fairway Plaza, 385 Fairway Rd S",
@@ -1288,7 +1288,7 @@
       "flyer": "Farm Boy-Fairway Plaza, 385 Fairway Rd S-2025-06-05.pdf"
     },
     {
-      "id": "Farm Boy-417 King St N",
+      "id": "FarmBoy-417 King St N",
       "name": "Farm Boy",
       "logo": "FarmBoy_Logo.png",
       "location": "417 King St N",
@@ -1301,7 +1301,7 @@
       "flyer": "Farm Boy-417 King St N-2025-06-05.pdf"
     },
     {
-      "id": "Farm Boy-370 Stone Rd W",
+      "id": "FarmBoy-370 Stone Rd W",
       "name": "Farm Boy",
       "logo": "FarmBoy_Logo.png",
       "location": "370 Stone Rd W",
@@ -1314,7 +1314,7 @@
       "flyer": "Farm Boy-370 Stone Rd W-2025-06-05.pdf"
     },
     {
-      "id": "Farm Boy-240 King George Rd",
+      "id": "FarmBoy-240 King George Rd",
       "name": "Farm Boy",
       "logo": "FarmBoy_Logo.png",
       "location": "240 King George Rd",
@@ -1327,7 +1327,7 @@
       "flyer": "Farm Boy-240 King George Rd-2025-06-05.pdf"
     },
     {
-      "id": "Farm Boy-Harvard Square, 801 Mohawk Rd W",
+      "id": "FarmBoy-Harvard Square, 801 Mohawk Rd W",
       "name": "Farm Boy",
       "logo": "FarmBoy_Logo.png",
       "location": "Harvard Square, 801 Mohawk Rd W",
