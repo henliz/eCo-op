@@ -607,7 +607,7 @@
           "salePrice": 0,
           "regularPrice": 0,
           "source": "free",
-          "sourceDate": "2025-05-29",
+          "sourceDate": "2025-05-30",
           "savingsPercentage": 0,
           "type": "core",
           "category": "beverages"
@@ -2224,7 +2224,7 @@
           "salePrice": 0,
           "regularPrice": 0,
           "source": "free",
-          "sourceDate": "2025-05-29",
+          "sourceDate": "2025-05-30",
           "savingsPercentage": 0,
           "type": "core",
           "category": "beverages"
@@ -4915,7 +4915,8 @@
           "savingsPercentage": 0,
           "type": "optional"
         }
-      ]
+      ],
+      "img": "/SheetPan_Sausage_Veggies.png"
     },
     {
       "name": "Baked Lemon Garlic Salmon",
