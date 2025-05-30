@@ -1002,6 +1002,19 @@
       "flyer": "FreshCo -720 Westmount Rd E-2025-06-05.pdf"
     },
     {
+      "id": "FreshCo -425 University Ave E",
+      "name": "FreshCo",
+      "logo": "FreshCo_Logo.png",
+      "location": "425 University Ave E",
+      "filename": "FreshCo-1 Hespeler Rd-2025-06-05.json",
+      "validUntil": "2025-06-05",
+      "location_name": "University & Bridge",
+      "city": "",
+      "postal_code": "N2K 4C9",
+      "coordinates": "",
+      "flyer": "FreshCo -425 University Ave E-2025-06-05.pdf"
+    },
+    {
       "id": "FreshCo -330 Speedvale Ave E",
       "name": "FreshCo",
       "logo": "FreshCo_Logo.png",
