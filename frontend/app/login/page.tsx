@@ -1,9 +1,12 @@
-import React, { useState } from "react";
-import { useAuth } from "@/contexts/AuthContext";
-import { useRouter } from "next/router";
-import Link from "next/link";
-import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
+// app/login/page.tsx
+'use client';
+
+import React, { useState } from 'react';
+import { useAuth } from '@/contexts/AuthContext';
+import { useRouter } from 'next/navigation';
+import Link from 'next/link';
+import { Button } from '@/components/ui/button';
+import { Input } from '@/components/ui/input';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Alert, AlertDescription } from '@/components/ui/alert';
 import { Separator } from '@/components/ui/separator';
@@ -17,7 +20,6 @@ export default function LoginPage() {
   const { login, signInWithGoogle, currentUser } = useAuth();
   const router = useRouter();
 
-  // Redirect if already logged in
   React.useEffect(() => {
     if (currentUser) {
       router.push('/plan');
@@ -52,7 +54,7 @@ export default function LoginPage() {
   }
 
   if (currentUser) {
-    return null; // Will redirect
+    return null;
   }
 
   return (
