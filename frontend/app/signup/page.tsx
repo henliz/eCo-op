@@ -10,20 +10,15 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Alert, AlertDescription } from '@/components/ui/alert';
 import { Separator } from '@/components/ui/separator';
 
-export default function LoginPage() {
+export default function SignupPage() {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+  const [confirmPassword, setConfirmPassword] = useState('');
+  const [displayName, setDisplayName] = useState('');
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(false);
 
-  const authContext = useAuth();
-  
-  // Debug: Check if context is working
-  if (!authContext) {
-    return <div>Loading auth context...</div>;
-  }
-  
-  const { login, signInWithGoogle, currentUser } = authContext;
+  const { signup, signInWithGoogle, currentUser } = useAuth();
   const router = useRouter();
 
   // Redirect if already logged in
@@ -36,33 +31,31 @@ export default function LoginPage() {
   async function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
 
-    if (!email || !password) {
-      return setError('Please fill in all fields');
+    if (password !== confirmPassword) {
+      return setError('Passwords do not match');
+    }
+
+    if (password.length < 6) {
+      return setError('Password must be at least 6 characters');
+    }
+
+    if (!displayName.trim()) {
+      return setError('Please enter your full name');
     }
 
     try {
       setError('');
       setLoading(true);
-      await login(email, password);
+      await signup(email, password, displayName);
       router.push('/');
-    } catch (error: any) {
-      console.error('Login error:', error);
-      // Provide user-friendly error messages
-      let errorMessage = 'Failed to sign in';
-      if (error.code === 'auth/user-not-found') {
-        errorMessage = 'No account found with this email address';
-      } else if (error.code === 'auth/wrong-password') {
-        errorMessage = 'Incorrect password';
-      } else if (error.code === 'auth/invalid-email') {
-        errorMessage = 'Invalid email address';
-      } else if (error.code === 'auth/too-many-requests') {
-        errorMessage = 'Too many failed attempts. Please try again later';
-      } else if (error.message) {
-        errorMessage = error.message;
-      }
-      setError(errorMessage);
+    } catch (error: unknown) {
+        console.error("Signup Error", error);
+        if (error instanceof Error){
+            setError("Failed to create an account: " + error.message);
+        } else {
+            setError("An unknown error occurred during signup.");
+        }
     }
-
     setLoading(false);
   }
 
@@ -72,29 +65,27 @@ export default function LoginPage() {
       setLoading(true);
       await signInWithGoogle();
       router.push('/');
-    } catch (error: any) {
-      console.error('Google sign in error:', error);
-      let errorMessage = 'Failed to sign in with Google';
-      if (error.code === 'auth/popup-closed-by-user') {
-        errorMessage = 'Sign in was cancelled';
-      } else if (error.message) {
-        errorMessage = error.message;
-      }
-      setError(errorMessage);
+    } catch (error: unknown) {
+        console.error("Google sign in error", error);
+        if (error instanceof Error){
+            setError("Failed to sign in with google: " + error.message);
+        } else {
+            setError("Unknown error occured while signing in with Google");
+        }
     }
     setLoading(false);
   }
 
   if (currentUser) {
-    return null; // Will redirect
+    return null; // Put some spinner animation here
   }
 
   return (
     <div className="min-h-screen flex items-center justify-center bg-gray-50 py-12 px-4 sm:px-6 lg:px-8">
       <Card className="w-full max-w-md">
         <CardHeader className="text-center">
-          <CardTitle className="text-2xl font-bold">Sign In to Skrimp</CardTitle>
-          <p className="text-gray-600">Welcome back! Please sign in to your account.</p>
+          <CardTitle className="text-2xl font-bold">Create Your Account</CardTitle>
+          <p className="text-gray-600">Join Skrimp and start saving on groceries!</p>
         </CardHeader>
         <CardContent className="space-y-4">
           {error && (
@@ -104,6 +95,21 @@ export default function LoginPage() {
           )}
 
           <form onSubmit={handleSubmit} className="space-y-4">
+            <div>
+              <label htmlFor="displayName" className="block text-sm font-medium text-gray-700 mb-1">
+                Full Name
+              </label>
+              <Input
+                id="displayName"
+                type="text"
+                value={displayName}
+                onChange={(e) => setDisplayName(e.target.value)}
+                placeholder="Enter your full name"
+                disabled={loading}
+                required
+              />
+            </div>
+
             <div>
               <label htmlFor="email" className="block text-sm font-medium text-gray-700 mb-1">
                 Email Address
@@ -132,6 +138,22 @@ export default function LoginPage() {
                 placeholder="Enter your password"
                 disabled={loading}
               />
+              <p className="text-xs text-gray-500 mt-1">Must be at least 6 characters</p>
+            </div>
+
+            <div>
+              <label htmlFor="confirmPassword" className="block text-sm font-medium text-gray-700 mb-1">
+                Confirm Password
+              </label>
+              <Input
+                id="confirmPassword"
+                type="password"
+                value={confirmPassword}
+                onChange={(e) => setConfirmPassword(e.target.value)}
+                required
+                placeholder="Confirm your password"
+                disabled={loading}
+              />
             </div>
 
             <Button
@@ -139,7 +161,7 @@ export default function LoginPage() {
               className="w-full"
               disabled={loading}
             >
-              {loading ? 'Signing In...' : 'Sign In'}
+              {loading ? 'Creating Account...' : 'Create Account'}
             </Button>
           </form>
 
@@ -172,22 +194,17 @@ export default function LoginPage() {
               />
               <path
                 fill="currentColor"
-                d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z"
+                d="M12 1C7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z"
               />
             </svg>
             Continue with Google
           </Button>
 
-          <div className="text-center space-y-2">
+          <div className="text-center">
             <p className="text-sm text-gray-600">
-              Don't have an account?{' '}
-              <Link href="/signup" className="text-blue-600 hover:text-blue-500 font-medium">
-                Sign up
-              </Link>
-            </p>
-            <p className="text-sm">
-              <Link href="/forgot-password" className="text-blue-600 hover:text-blue-500">
-                Forgot your password?
+              Already have an account?{' '}
+              <Link href="/login" className="text-blue-600 hover:text-blue-500 font-medium">
+                Sign in
               </Link>
             </p>
           </div>

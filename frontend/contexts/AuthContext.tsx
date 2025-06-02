@@ -1,3 +1,4 @@
+'use client';
 import React, { createContext, useContext, useEffect, useState } from 'react';
 import {
   User,
@@ -9,6 +10,7 @@ import {
   sendPasswordResetEmail,
   GoogleAuthProvider,
   signInWithPopup,
+  //sendEmailVerification  <-- This can be added in the future to avoid spam
 } from 'firebase/auth';
 import { auth } from '@/lib/firebase';
 
@@ -22,10 +24,14 @@ interface AuthContextType {
   signInWithGoogle: () => Promise<void>;
 }
 
-const AuthContext = createContext<AuthContextType>({} as AuthContextType);
+const AuthContext = createContext<AuthContextType | undefined>(undefined);
 
 export function useAuth() {
-  return useContext(AuthContext);
+  const context = useContext(AuthContext);
+  if (!context){
+    throw new Error('useAuth must be within an AuthProvider');
+  }
+  return context;
 }
 
 interface AuthProviderProps {
@@ -37,17 +43,29 @@ export function AuthProvider({ children }: AuthProviderProps) {
   const [loading, setLoading] = useState(true);
 
   async function signup(email: string, password: string, displayName?: string) {
-    const result = await createUserWithEmailAndPassword(auth, email, password);
+    try {
+        const result = await createUserWithEmailAndPassword(auth, email, password);
     
-    if (displayName && result.user) {
-      await updateProfile(result.user, {
-        displayName: displayName,
-      });
+        if (displayName && result.user) {
+            await updateProfile(result.user, {
+                displayName: displayName,
+            });
+        }
+    } catch (error) {
+        console.error('Signup Error:', error);
+        throw error;
     }
-  }
+    }
+    
 
   async function login(email: string, password: string): Promise<void> {
-    await signInWithEmailAndPassword(auth, email, password);
+    try{
+        await signInWithEmailAndPassword(auth, email, password);
+    } catch (error) {
+        console.error('Login Error:', error);
+        throw error;
+    }
+    
   }
 
   function logout() {
@@ -59,8 +77,14 @@ export function AuthProvider({ children }: AuthProviderProps) {
   }
 
   async function signInWithGoogle(): Promise<void> {
-    const provider = new GoogleAuthProvider();
-    await signInWithPopup(auth, provider);
+    try{
+        const provider = new GoogleAuthProvider();
+        await signInWithPopup(auth, provider);
+    } catch (error) {
+        console.error('Goggle Sign-in Error', error);
+        throw error;
+    }
+    
   }
 
   useEffect(() => {
@@ -72,7 +96,7 @@ export function AuthProvider({ children }: AuthProviderProps) {
     return unsubscribe;
   }, []);
 
-  const value = {
+  const value = React.useMemo(() => ({
     currentUser,
     loading,
     signup,
@@ -80,7 +104,7 @@ export function AuthProvider({ children }: AuthProviderProps) {
     logout,
     resetPassword,
     signInWithGoogle,
-  };
+  }), [currentUser, loading]);
 
   return (
     <AuthContext.Provider value={value}>
