@@ -35,8 +35,8 @@ export default function SignupPage() {
       return setError('Passwords do not match');
     }
 
-    if (password.length < 6) {
-      return setError('Password must be at least 6 characters');
+    if (password.length < 8) {
+      return setError('Password must be at least 8 characters');
     }
 
     if (!displayName.trim()) {
@@ -68,7 +68,10 @@ export default function SignupPage() {
     } catch (error: unknown) {
         console.error("Google sign in error", error);
         if (error instanceof Error){
-            setError("Failed to sign in with google: " + error.message);
+            const errorMessage = ( error as any).code === "auth/popup-closed-by-user"
+            ? "Google sign-in was cancelled."
+            : "Failed to sign in with Google: " + error.message;
+            setError(errorMessage);
         } else {
             setError("Unknown error occured while signing in with Google");
         }
