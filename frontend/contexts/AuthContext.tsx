@@ -10,7 +10,7 @@ import {
   sendPasswordResetEmail,
   GoogleAuthProvider,
   signInWithPopup,
-  //sendEmailVerification  <-- This can be added in the future to avoid spam
+  sendEmailVerification
 } from 'firebase/auth';
 import { auth } from '@/lib/firebase';
 
@@ -45,27 +45,36 @@ export function AuthProvider({ children }: AuthProviderProps) {
   async function signup(email: string, password: string, displayName?: string) {
     try {
         const result = await createUserWithEmailAndPassword(auth, email, password);
-    
-        if (displayName && result.user) {
+
+        if (displayName && result.user){
             await updateProfile(result.user, {
                 displayName: displayName,
             });
         }
+
+        if (result.user) {
+            await sendEmailVerification(result.user);
+        }
+        await signOut(auth);
     } catch (error) {
         console.error('Signup Error:', error);
         throw error;
     }
-    }
+  }
     
-
   async function login(email: string, password: string): Promise<void> {
     try{
-        await signInWithEmailAndPassword(auth, email, password);
+        const result = await signInWithEmailAndPassword(auth, email, password);
+
+        if (!result.user.emailVerified){
+            await signOut(auth);
+            throw new Error("Please verify your email address before logging in.");
+        }
+
     } catch (error) {
         console.error('Login Error:', error);
         throw error;
     }
-    
   }
 
   function logout() {
@@ -79,17 +88,21 @@ export function AuthProvider({ children }: AuthProviderProps) {
   async function signInWithGoogle(): Promise<void> {
     try{
         const provider = new GoogleAuthProvider();
-        await signInWithPopup(auth, provider);
+        const result = await signInWithPopup(auth, provider);
+        
     } catch (error) {
-        console.error('Goggle Sign-in Error', error);
+        console.error('Google Sign-in Error', error);
         throw error;
     }
-    
   }
 
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, (user) => {
-      setCurrentUser(user);
+      if (user && user.emailVerified) {
+        setCurrentUser(user);
+      } else {
+        setCurrentUser(null);
+      }
       setLoading(false);
     });
 

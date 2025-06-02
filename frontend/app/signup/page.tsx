@@ -17,13 +17,13 @@ export default function SignupPage() {
   const [displayName, setDisplayName] = useState('');
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(false);
+  const [showVerificationMessage, setShowVerificationMessage] = useState(false);
 
   const { signup, signInWithGoogle, currentUser } = useAuth();
   const router = useRouter();
 
-  // Redirect if already logged in
   React.useEffect(() => {
-    if (currentUser) {
+    if (currentUser && currentUser.emailVerified) {
       router.push('/');
     }
   }, [currentUser, router]);
@@ -47,7 +47,14 @@ export default function SignupPage() {
       setError('');
       setLoading(true);
       await signup(email, password, displayName);
-      router.push('/');
+
+      setShowVerificationMessage(true);
+
+      setEmail('');
+      setPassword('');
+      setConfirmPassword('');
+      setDisplayName('');
+      
     } catch (error: unknown) {
         console.error("Signup Error", error);
         if (error instanceof Error){
@@ -79,8 +86,57 @@ export default function SignupPage() {
     setLoading(false);
   }
 
-  if (currentUser) {
-    return null; // Put some spinner animation here
+  if (currentUser && currentUser.emailVerified) {
+    return null;
+  }
+
+  if (showVerificationMessage) {
+    return (
+      <div className="min-h-screen flex items-center justify-center bg-gray-50 py-12 px-4 sm:px-6 lg:px-8">
+        <Card className="w-full max-w-md">
+          <CardHeader className="text-center">
+            <CardTitle className="text-2xl font-bold text-green-600">Check Your Email!</CardTitle>
+          </CardHeader>
+          <CardContent className="space-y-4 text-center">
+            <div className="flex justify-center mb-4">
+              <div className="w-16 h-16 bg-green-100 rounded-full flex items-center justify-center">
+                <svg className="w-8 h-8 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 8l7.89 4.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
+                </svg>
+              </div>
+            </div>
+            
+            <Alert className="border-green-200 bg-green-50">
+              <AlertDescription className="text-green-800">
+                <strong>Account created successfully!</strong><br />
+                We've sent a verification email to your inbox. Please click the link in the email to verify your account before signing in.
+              </AlertDescription>
+            </Alert>
+
+            <div className="space-y-3">
+              <p className="text-sm text-gray-600">
+                Don't see the email? Check your spam folder or try refreshing your inbox.
+              </p>
+              
+              <Button 
+                variant="outline" 
+                onClick={() => setShowVerificationMessage(false)}
+                className="w-full"
+              >
+                Back to Sign Up
+              </Button>
+              
+              <p className="text-sm text-gray-600">
+                Already verified your email?{' '}
+                <Link href="/login" className="text-blue-600 hover:text-blue-500 font-medium">
+                  Sign in here
+                </Link>
+              </p>
+            </div>
+          </CardContent>
+        </Card>
+      </div>
+    );
   }
 
   return (
@@ -141,7 +197,7 @@ export default function SignupPage() {
                 placeholder="Enter your password"
                 disabled={loading}
               />
-              <p className="text-xs text-gray-500 mt-1">Must be at least 6 characters</p>
+              <p className="text-xs text-gray-500 mt-1">Must be at least 8 characters</p>
             </div>
 
             <div>

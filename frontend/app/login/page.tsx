@@ -16,17 +16,9 @@ export default function LoginPage() {
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(false);
 
-  const authContext = useAuth();
-  
-  // Debug: Check if context is working
-  if (!authContext) {
-    return <div>Loading auth context...</div>;
-  }
-  
-  const { login, signInWithGoogle, currentUser } = authContext;
+  const { login, signInWithGoogle, currentUser } = useAuth();
   const router = useRouter();
 
-  // Redirect if already logged in
   React.useEffect(() => {
     if (currentUser) {
       router.push('/');
@@ -45,27 +37,25 @@ export default function LoginPage() {
       setLoading(true);
       await login(email, password);
       router.push('/');
-    } catch (error: unknown) {
-        console.error("Login Error: ", error);
-        let errorMessage = "Failed to sign in";
-        if (error && typeof error === 'object' && 'code' in error) {
-            const firebaseError = error as { code: string; message: string };
-            if (firebaseError.code === 'auth/user-not-found') {
-                errorMessage = 'No account found with this email address';
-            } else if (firebaseError.code === 'auth/wrong-password') {
-                errorMessage = 'Incorrect password';
-            } else if (firebaseError.code === 'auth/invalid-email') {
-                errorMessage = 'Invalid email address';
-            } else if (firebaseError.code === 'auth/too-many-requests') {
-                errorMessage = 'Too many failed attempts. Please try again later';
-            } else {
-                errorMessage = firebaseError.message;
-            }
-        }
+    } catch (error: any) {
+      console.error('Login error:', error);
+      
+      let errorMessage = 'Failed to sign in';
+      if (error.code === 'auth/user-not-found') {
+        errorMessage = 'No account found with this email address';
+      } else if (error.code === 'auth/wrong-password') {
+        errorMessage = 'Incorrect password';
+      } else if (error.code === 'auth/invalid-email') {
+        errorMessage = 'Invalid email address';
+      } else if (error.code === 'auth/too-many-requests') {
+        errorMessage = 'Too many failed attempts. Please try again later';
+      } else if (error.message) {
+        errorMessage = error.message;
+      }
       setError(errorMessage);
+    } finally {
+      setLoading(false);
     }
-
-    setLoading(false);
   }
 
   async function handleGoogleSignIn() {
@@ -83,12 +73,13 @@ export default function LoginPage() {
         errorMessage = error.message;
       }
       setError(errorMessage);
+    } finally {
+      setLoading(false);
     }
-    setLoading(false);
   }
 
   if (currentUser) {
-    return null; // Add a spinner or some loading animation
+    return null;
   }
 
   return (
@@ -100,7 +91,7 @@ export default function LoginPage() {
         </CardHeader>
         <CardContent className="space-y-4">
           {error && (
-            <Alert variant="destructive" role='alert'>
+            <Alert variant="destructive">
               <AlertDescription>{error}</AlertDescription>
             </Alert>
           )}
