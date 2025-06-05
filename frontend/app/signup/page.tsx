@@ -9,12 +9,14 @@ import { Input } from '@/components/ui/input';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Alert, AlertDescription } from '@/components/ui/alert';
 import { Separator } from '@/components/ui/separator';
+import { Switch } from '@/components/ui/switch';
 
 export default function SignupPage() {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
   const [displayName, setDisplayName] = useState('');
+  const [notificationsEnabled, setNotificationsEnabled] = useState(true);
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(false);
   const [showVerificationMessage, setShowVerificationMessage] = useState(false);
@@ -46,7 +48,7 @@ export default function SignupPage() {
     try {
       setError('');
       setLoading(true);
-      await signup(email, password, displayName);
+      await signup(email, password, displayName, notificationsEnabled);
 
       setShowVerificationMessage(true);
 
@@ -215,6 +217,24 @@ export default function SignupPage() {
               />
             </div>
 
+            {/* Notification Preference */}
+            <div className="flex items-center justify-between space-x-2 p-4 bg-gray-50 rounded-lg">
+              <div className="flex-1">
+                <label htmlFor="notifications" className="text-sm font-medium text-gray-700">
+                  Email Notifications
+                </label>
+                <p className="text-xs text-gray-500">
+                  Receive notifications about new flyers and deals
+                </p>
+              </div>
+              <Switch
+                id="notifications"
+                checked={notificationsEnabled}
+                onCheckedChange={setNotificationsEnabled}
+                disabled={loading}
+              />
+            </div>
+
             <Button
               type="submit"
               className="w-full"
@@ -253,7 +273,7 @@ export default function SignupPage() {
               />
               <path
                 fill="currentColor"
-                d="M12 1C7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z"
+                d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z"
               />
             </svg>
             Continue with Google

@@ -1,13 +1,17 @@
-// components/layout/Header.jsx
+// components/layout/Header.tsx
 'use client';
 
 import React, { useEffect, useState } from 'react';
 import Link from 'next/link';
+import { useAuth } from '@/contexts/AuthContext';
+import { Switch } from '@/components/ui/switch';
 
 export default function Header() {
-  /* ------------------------------------------------- */
   const [open, setOpen] = useState(false);
   const [mobile, setMob] = useState(false);
+  const [showProfileMenu, setShowProfileMenu] = useState(false);
+  
+  const { currentUser, userPreferences, logout, updateNotificationPreference } = useAuth();
 
   useEffect(() => {
     if (typeof window === 'undefined') return;
@@ -17,17 +21,47 @@ export default function Header() {
     return () => window.removeEventListener('resize', check);
   }, []);
 
+  const handleLogin = () => {
+    window.location.href = '/login';
+  };
+
+  const handleLogout = async () => {
+    try {
+      await logout();
+      setShowProfileMenu(false);
+    } catch (error) {
+      console.error('Logout error:', error);
+    }
+  };
+
+  const handleNotificationToggle = async (enabled) => {
+    try {
+      await updateNotificationPreference(enabled);
+    } catch (error) {
+      console.error('Error updating notifications:', error);
+    }
+  };
+
+  const getInitials = (name) => {
+    if (!name) return 'U';
+    return name
+      .split(' ')
+      .map(word => word[0])
+      .join('')
+      .toUpperCase()
+      .slice(0, 2);
+  };
+
   const NAV = [
     { label: 'How It Works', href: '/#how-it-works' },
-    { label: 'About',        href: '#about' },
+    { label: 'About', href: '#about' },
     {
       label: 'Feedback Form',
-      href:  'https://docs.google.com/forms/d/e/1FAIpQLSeaWg3pAelFtLZTBslhFiI_wxldA6muBfeidd_eTpIYTs5ZQQ/viewform?usp=header',
+      href: 'https://docs.google.com/forms/d/e/1FAIpQLSeaWg3pAelFtLZTBslhFiI_wxldA6muBfeidd_eTpIYTs5ZQQ/viewform?usp=header',
       external: true,
     },
   ];
 
-  /* ------------------------------------------------- */
   return (
     <>
       {/* fonts */}
@@ -40,14 +74,14 @@ export default function Header() {
         className="sticky top-0 z-50 h-14 w-full font-montserrat relative isolate"
         style={{ background: 'transparent' }}
       >
-        {/* glass tint (8 % spearmint) */}
+        {/* glass tint (8 % spearmint) */}
         <div
           className="
             absolute inset-0 -z-10 pointer-events-none
             backdrop-blur-md backdrop-saturate-150
             ring-1 ring-inset ring-white/15
           "
-          style={{ background: 'rgba(69,176,140,0.65)' }}   /* ← mint */
+          style={{ background: 'rgba(69,176,140,0.65)' }}
         />
 
         {/* nav row */}
@@ -57,7 +91,7 @@ export default function Header() {
             <img
               src="/SmartCart_White.png"
               alt="SmartCart logo"
-              className="h-6 w-15"             /* 24 px cap */
+              className="h-6 w-15"
             />
             <span className="font-montserratAlt font-bold text-lg tracking-tight whitespace-nowrap text-white">
               skrimp.ai
@@ -99,22 +133,96 @@ export default function Header() {
               )
             )}
 
-            {/* CTA */}
-            <Link
-              href="/plan"
-              className="
-                rounded-full bg-[#FDBA74] px-4 py-2 font-semibold text-white
-                transition-transform duration-200 ease-out
-                hover:scale-105 hover:brightness-110
-              "
-            >
-              Try It Free
-            </Link>
+            {/* CTA and Auth buttons */}
+            <div className="flex items-center gap-3">
+              <Link
+                href="/plan"
+                className="
+                  rounded-full bg-[#FDBA74] px-4 py-2 font-semibold text-white
+                  transition-transform duration-200 ease-out
+                  hover:scale-105 hover:brightness-110
+                "
+              >
+                Try It Free
+              </Link>
+
+              {/* Login/Profile Button */}
+              {currentUser ? (
+                <div className="relative">
+                  <button
+                    onClick={() => setShowProfileMenu(!showProfileMenu)}
+                    className="
+                      w-8 h-8 rounded-full bg-white/20 backdrop-blur-sm
+                      flex items-center justify-center text-white font-semibold text-sm
+                      hover:bg-white/30 transition-colors duration-200
+                      ring-2 ring-white/30 hover:ring-white/50
+                    "
+                  >
+                    {getInitials(currentUser.displayName || currentUser.email)}
+                  </button>
+
+                  {/* Profile Dropdown */}
+                  {showProfileMenu && (
+                    <div className="
+                      absolute right-0 top-full mt-2 w-64 py-2
+                      bg-white rounded-lg shadow-xl border border-gray-200
+                      z-50
+                    ">
+                      {/* User Info */}
+                      <div className="px-4 py-3 border-b border-gray-100">
+                        <p className="font-semibold text-gray-900">{currentUser.displayName || 'User'}</p>
+                        <p className="text-sm text-gray-600 truncate">{currentUser.email}</p>
+                      </div>
+
+                      {/* Notification Toggle */}
+                      <div className="px-4 py-3 border-t border-gray-100">
+                        <div className="flex items-center justify-between">
+                          <div className="flex items-center space-x-2">
+                            {/* Bell Icon (using emoji instead of heroicon) */}
+                            <span className="text-gray-500">🔔</span>
+                            <span className="text-sm text-gray-700">New Flyer Notifications</span>
+                          </div>
+                          <Switch
+                            checked={userPreferences?.newFlyerNotifications ?? true}
+                            onCheckedChange={handleNotificationToggle}
+                            disabled={!userPreferences}
+                          />
+                        </div>
+                        <p className="text-xs text-gray-500 mt-1 ml-6">
+                          Get notified about new deals and flyers
+                        </p>
+                      </div>
+
+                      {/* Sign Out */}
+                      <div className="border-t border-gray-100">
+                        <button
+                          onClick={handleLogout}
+                          className="block w-full text-left px-4 py-2 text-gray-700 hover:bg-gray-50"
+                        >
+                          Sign Out
+                        </button>
+                      </div>
+                    </div>
+                  )}
+                </div>
+              ) : (
+                <button
+                  onClick={handleLogin}
+                  className="
+                    rounded-full border-2 border-white/30 px-4 py-2 font-semibold text-white
+                    transition-all duration-200 ease-out
+                    hover:border-white/60 hover:bg-white/10
+                  "
+                >
+                  Log In
+                </button>
+              )}
+            </div>
           </nav>
 
           {/* hamburger */}
           <button
-            className="md:hidden text-3xl leading-none transition-transform duration-200 hover:scale-110"
+            className="md:hidden text-3xl leading-none transition-transform duration-200 hover:scale-110 text-white"
             onClick={() => setOpen(!open)}
             aria-label={open ? 'Close menu' : 'Open menu'}
           >
@@ -125,15 +233,13 @@ export default function Header() {
         {/* mobile drawer */}
         {mobile && open && (
           <nav
-              className={`
-                md:hidden absolute top-14 left-0 w-full shadow-xl
-                transform-gpu transition-[opacity,transform] duration-300 ease-out
-                ${open ? 'opacity-100 translate-y-0' : 'opacity-0 -translate-y-4 pointer-events-none'}
-              `}
-              style={{ background: 'rgba(69,176,140,0.92)', backdropFilter: 'blur(8px)' }}
-            >
-
-
+            className={`
+              md:hidden absolute top-14 left-0 w-full shadow-xl
+              transform-gpu transition-[opacity,transform] duration-300 ease-out
+              ${open ? 'opacity-100 translate-y-0' : 'opacity-0 -translate-y-4 pointer-events-none'}
+            `}
+            style={{ background: 'rgba(69,176,140,0.92)', backdropFilter: 'blur(8px)' }}
+          >
             {NAV.map(({ label, href, external }) =>
               external ? (
                 <a
@@ -165,20 +271,106 @@ export default function Header() {
                 </Link>
               )
             )}
+            
             <Link
               href="/plan"
               onClick={() => setOpen(false)}
               className="
                 block text-center text-lg font-semibold text-white
                 bg-[#FDBA74] hover:bg-[#FDBA74]/90 transition-colors
-                px-6 py-6
+                px-6 py-6 border-b
               "
             >
-              Try It Free
+              Try It Free
             </Link>
+
+            {/* Mobile Auth Section */}
+            {currentUser ? (
+              <>
+                <div className="px-6 py-4 border-b border-white/20">
+                  <p className="font-semibold text-white">{currentUser.displayName || 'User'}</p>
+                  <p className="text-sm text-white/80">{currentUser.email}</p>
+                </div>
+                
+                <Link
+                  href="/profile"
+                  onClick={() => setOpen(false)}
+                  className="
+                    block text-center text-lg font-medium text-gray-900
+                    px-6 py-6 border-b last:border-0
+                    hover:bg-white/10 transition-colors
+                  "
+                >
+                  Profile
+                </Link>
+                
+                <Link
+                  href="/dashboard"
+                  onClick={() => setOpen(false)}
+                  className="
+                    block text-center text-lg font-medium text-gray-900
+                    px-6 py-6 border-b last:border-0
+                    hover:bg-white/10 transition-colors
+                  "
+                >
+                  Dashboard
+                </Link>
+
+                {/* Mobile Notification Toggle */}
+                <div className="px-6 py-4 border-b border-white/20">
+                  <div className="flex items-center justify-between">
+                    <div className="flex items-center space-x-2">
+                      <span className="text-white">🔔</span>
+                      <span className="text-sm text-white">New Flyer Notifications</span>
+                    </div>
+                    <Switch
+                      checked={userPreferences?.newFlyerNotifications ?? true}
+                      onCheckedChange={handleNotificationToggle}
+                      disabled={!userPreferences}
+                    />
+                  </div>
+                </div>
+                
+                <button
+                  onClick={() => {
+                    handleLogout();
+                    setOpen(false);
+                  }}
+                  className="
+                    block w-full text-center text-lg font-medium text-gray-900
+                    px-6 py-6
+                    hover:bg-white/10 transition-colors
+                  "
+                >
+                  Sign Out
+                </button>
+              </>
+            ) : (
+              <button
+                onClick={() => {
+                  handleLogin();
+                  setOpen(false);
+                }}
+                className="
+                  block w-full text-center text-lg font-semibold text-white
+                  border-2 border-white/30 hover:border-white/60 hover:bg-white/10
+                  transition-colors px-6 py-6
+                "
+              >
+                Log In
+              </button>
+            )}
           </nav>
         )}
       </header>
+
+      {/* Click outside to close profile menu */}
+      {showProfileMenu && (
+        <div
+          className="fixed inset-0 z-40"
+          onClick={() => setShowProfileMenu(false)}
+        />
+      )}
     </>
   );
 }
