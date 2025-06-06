@@ -10,6 +10,7 @@ const Hero = () => {
   const [activeTab, setActiveTab] = useState(0);
   const [transitioning, setTransitioning] = useState(false);
 
+
   const tabs = ["add-items", "compare", "optimize", "save"];
   const tabLabels = ["📋 Set", "🥪 Plan", "💸 Shop", "🍳 Cook"];
 
@@ -80,7 +81,7 @@ const Hero = () => {
     return () => {
       videoRefs.current.forEach((video) => {
         if (video) {
-          video.removeEventListener('ended', () => {});
+          video.removeEventListener('ended', () => { });
         }
       });
     };
@@ -163,7 +164,7 @@ const Hero = () => {
         }
 
         body {
-          background-color: #f5f5ff;
+          background-color: transparent;
           color: #333;
           font-family: 'Montserrat', sans-serif;
           min-height: 100vh;
@@ -232,6 +233,12 @@ const Hero = () => {
           width: 100%;
           max-width: 100vw;
           overflow-x: hidden;
+          background: transparent !important;
+        }
+
+        .wrapper::before,
+        .wrapper::after {
+          display: none !important;
         }
 
         .container {
@@ -240,6 +247,12 @@ const Hero = () => {
           padding: 2rem 1rem;
           position: relative;
           z-index: 1;
+          background: transparent !important;
+        }
+
+        .container::before,
+        .container::after {
+          display: none !important;
         }
 
         .hero {
@@ -249,6 +262,12 @@ const Hero = () => {
           text-align: center;
           padding: 3rem 0;
           position: relative;
+          background: transparent !important;
+        }
+
+        .hero::before,
+        .hero::after {
+          display: none !important;
         }
 
         /* Side Images - Positioned relative to viewport, not content */
@@ -264,25 +283,26 @@ const Hero = () => {
 
         .side-image {
           position: absolute;
-          background: rgba(255, 255, 255, 0.6);
-          border-radius: 16px;
-          box-shadow: 0 15px 30px rgba(0, 0, 0, 0.08);
-          border: 1px solid rgba(255, 255, 255, 0.3);
+          background: transparent;
           display: flex;
           align-items: center;
           justify-content: center;
-          color: #888;
           animation-duration: 6s;
           animation-iteration-count: infinite;
           animation-direction: alternate;
           animation-timing-function: ease-in-out;
-          font-size: 1.2rem;
-          color: #aaa;
+          opacity: 0.6;
+        }
+
+        .side-image img {
+          width: 100%;
+          height: 100%;
+          object-fit: contain;
         }
 
         .left-image {
           left: calc(50% - 850px);
-          top: 25%;
+          top: 15%;
           width: 350px;
           height: 350px;
           transform: rotate(-5deg);
@@ -291,7 +311,7 @@ const Hero = () => {
 
         .right-image {
           right: calc(50% - 850px);
-          top: 25%;
+          top: 15%;
           width: 350px;
           height: 350px;
           transform: rotate(5deg);
@@ -499,25 +519,24 @@ const Hero = () => {
           }
         }
 
-        /* Peach Button with Glassmorphism */
+        /* Bright Attention-Grabbing CTA Button */
         .cta-button {
-          background-color: rgba(255, 183, 153, 0.8);
+          background: linear-gradient(45deg, #FF9A7B, #FFB299);
           color: white;
           border: none;
-          padding: 0.8rem 1.8rem;
+          padding: 0.9rem 2rem;
           border-radius: 50px;
           font-size: 1rem;
-          font-weight: 600;
+          font-weight: 700;
           cursor: pointer;
           transition: all 0.3s ease;
           margin-bottom: 3rem;
-          backdrop-filter: blur(5px);
-          -webkit-backdrop-filter: blur(5px);
-          box-shadow: 0 4px 15px rgba(255, 183, 153, 0.25);
-          border: 1px solid rgba(255, 255, 255, 0.1);
+          box-shadow: 0 8px 25px rgba(255, 154, 123, 0.4);
+          border: 2px solid rgba(255, 255, 255, 0.3);
           position: relative;
           overflow: hidden;
           z-index: 1;
+          letter-spacing: 0.3px;
         }
 
         .cta-button::before {
@@ -527,7 +546,7 @@ const Hero = () => {
           left: 0;
           width: 100%;
           height: 100%;
-          background: linear-gradient(45deg, rgba(255, 183, 153, 0.6), rgba(255, 153, 133, 0.8));
+          background: linear-gradient(45deg, #FFB299, #FFC4B0);
           z-index: -1;
           transform: scaleX(0);
           transform-origin: 0 50%;
@@ -539,8 +558,8 @@ const Hero = () => {
         }
 
         .cta-button:hover {
-          transform: translateY(-2px);
-          box-shadow: 0 6px 20px rgba(255, 183, 153, 0.35);
+          transform: translateY(-3px) scale(1.05);
+          box-shadow: 0 12px 35px rgba(255, 154, 123, 0.6);
         }
 
         .cta-button-clicked {
@@ -570,13 +589,9 @@ const Hero = () => {
         .demo-container {
           width: 100%;
           max-width: 800px;
-          background: rgba(255, 255, 255, 0.7);
+          background: transparent;
           border-radius: 16px;
           overflow: hidden;
-          backdrop-filter: blur(15px);
-          -webkit-backdrop-filter: blur(15px);
-          border: 1px solid rgba(255, 255, 255, 0.2);
-          box-shadow: 0 10px 30px rgba(0, 0, 0, 0.05);
           margin-bottom: 4rem;
           position: relative;
           z-index: 1;
@@ -585,9 +600,10 @@ const Hero = () => {
         .tabs {
           display: flex;
           border-bottom: 1px solid rgba(0, 0, 0, 0.05);
-          background: rgba(255, 255, 255, 0.5);
+          background: rgba(255, 255, 255, 0.8);
           position: relative;
           z-index: 2;
+          border-radius: 16px 16px 0 0;
         }
 
         /* Mobile responsive tabs */
@@ -641,6 +657,7 @@ const Hero = () => {
           position: relative;
           height: 400px;
           z-index: 1;
+          background: transparent;
         }
 
         .video-wrapper {
@@ -652,6 +669,9 @@ const Hero = () => {
           transition: opacity 0.3s ease;
           opacity: 0;
           display: none;
+          background: transparent;
+          border-radius: 0 0 16px 16px;
+          overflow: hidden;
         }
 
         .video-wrapper.active {
@@ -729,16 +749,16 @@ const Hero = () => {
           object-fit: contain;
         }
 
-        /* Button pulse animation */
+        /* Button pulse animation - Updated for peach orange */
         @keyframes pulse {
           0% {
-            box-shadow: 0 0 0 0 rgba(255, 183, 153, 0.6);
+            box-shadow: 0 0 0 0 rgba(255, 154, 123, 0.7);
           }
           70% {
-            box-shadow: 0 0 0 10px rgba(255, 183, 153, 0);
+            box-shadow: 0 0 0 15px rgba(255, 154, 123, 0);
           }
           100% {
-            box-shadow: 0 0 0 0 rgba(255, 183, 153, 0);
+            box-shadow: 0 0 0 0 rgba(255, 154, 123, 0);
           }
         }
 
@@ -756,8 +776,8 @@ const Hero = () => {
       <div className="wrapper">
         {/* Side Images - Positioned outside the content flow */}
         <div className="side-images">
-          <div className="side-image left-image">Image Placeholder</div>
-          <div className="side-image right-image">Image Placeholder</div>
+          <div className="side-image left-image"><img src="/HeroSide1.png" alt="Description of Img1" /></div>
+          <div className="side-image right-image"><img src="/HeroSide2.png" alt="Description of Img2" /></div>
         </div>
 
         <div className="container">
@@ -780,10 +800,10 @@ const Hero = () => {
             </p>
 
             {/* Animated CTA Button with Link */}
-            <Link href="https://skrimp.ai/plan" passHref>
+            <Link href="/plan" passHref>
               <button ref={buttonRef} className="cta-button pulse">
                 <span>
-                  Start Saving Today
+                  Start saving— it's free!
                   <svg
                     className="cta-button-icon"
                     width="16"

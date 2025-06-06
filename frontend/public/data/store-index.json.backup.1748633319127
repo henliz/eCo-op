@@ -1472,11 +1472,7 @@
     "city": "",
     "postal_code": "N2M 5J9",
     "coordinates": "",
-    "flyer": "Food Basics-370 Highland Rd W-2025-06-05.pdf",
-    "lat": 43.438635,
-    "lng": -80.511833,
-    "geocoded_address": "370 Highland Rd W, Kitchener, ON N2M",
-    "geocoded_at": "2025-05-30T19:28:30.627Z"
+    "flyer": "Food Basics-370 Highland Rd W-2025-06-05.pdf"
   },
   {
     "id": "FoodBasics-3 Clair Rd W",
@@ -1506,11 +1502,7 @@
     "city": "",
     "postal_code": "N2E 3X7",
     "coordinates": "",
-    "flyer": "Food Basics-1270 Fischer-Hallman Rd-2025-06-05.pdf",
-    "lat": 43.400111,
-    "lng": -80.494136,
-    "geocoded_address": "1270 Fischer Hallman Rd, Kitchener, ON N2E",
-    "geocoded_at": "2025-05-30T19:28:35.104Z"
+    "flyer": "Food Basics-1270 Fischer-Hallman Rd-2025-06-05.pdf"
   },
   {
     "id": "FoodBasics-380 Eramosa Rd",

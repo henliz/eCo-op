@@ -1,76 +1,26 @@
 'use client';
 
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useMemo } from 'react';
 import Image from 'next/image';
-import { usePlannerStore, type Store } from './usePlannerStore';
+import { usePlannerStore, type Store, parseCoordinates } from './usePlannerStore';
 import { StoreCard } from './StoreCard';
-import { MapPin, AlertTriangle, ChevronDown } from 'lucide-react';
+import { MapPin, AlertTriangle, Navigation } from 'lucide-react';
+import { LocationPermission } from '@/components/location/LocationPermission';
+import { locationService } from '@/lib/location';
+
+type ExtendedStore = Store & {
+  location_name?: string;
+  city?: string;
+  postal_code?: string;
+  coordinates?: string;
+  flyer?: string;
+  distance?: number;
+};
 
 // The parent page will pass this ref so we can set it when a store is selected
 interface StoreSelectorProps {
   shouldNavigateToPlan: React.MutableRefObject<boolean>;
 }
-
-// Interface for user's coordinates
-interface Coordinates {
-  latitude: number;
-  longitude: number;
-}
-
-// Sorting options enum
-type SortOption = 'alphabetical' | 'distance';
-
-// Function to calculate distance between two coordinates using Haversine formula
-const calculateDistance = (
-  lat1: number, 
-  lon1: number, 
-  lat2: number, 
-  lon2: number
-): number => {
-  const R = 6371; // Earth's radius in km
-  const dLat = (lat2 - lat1) * Math.PI / 180;
-  const dLon = (lon2 - lon1) * Math.PI / 180;
-  
-  const a = 
-    Math.sin(dLat/2) * Math.sin(dLat/2) +
-    Math.cos(lat1 * Math.PI / 180) * Math.cos(lat2 * Math.PI / 180) * 
-    Math.sin(dLon/2) * Math.sin(dLon/2);
-  
-  const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1-a));
-  const distance = R * c; // Distance in km
-  
-  return distance;
-};
-
-// Geocode store address to get coordinates
-const geocodeStore = async (store: Store): Promise<[number, number] | null> => {
-  try {
-    const addressParts = store.location.split(',');
-    
-    // Simulate coordinates based on store name and location
-    // We need geocode for actual coords
-    const simulatedCoordinates = {
-      'Walmart': [43.8563, -79.0403],
-      'Zehrs': [43.8939, -78.9420],
-      'Food Basics': [43.8771, -79.0265],
-      'Farm Boy': [43.9026, -79.0103],
-      'FreshCo': [43.8488, -79.0519],
-      'NoFrills': [43.8704, -79.0356],
-      'Metro': [43.8620, -79.0222],
-      'Sobeys': [43.8841, -79.0341]
-    };
-    
-    // Get coordinates by store name or provide random nearby coordinates
-    return (
-      simulatedCoordinates[store.name as keyof typeof simulatedCoordinates] ??
-      [43.85 + Math.random() * 0.05, -79.03 + Math.random() * 0.05]
-    ) as [number, number];
-
-  } catch (error) {
-    console.error(`Error geocoding store ${store.name}:`, error);
-    return null;
-  }
-};
 
 export default function StoreSelector({ shouldNavigateToPlan }: StoreSelectorProps) {
   const {
@@ -80,192 +30,22 @@ export default function StoreSelector({ shouldNavigateToPlan }: StoreSelectorPro
     error,
     availableStores,
     isStoresLoaded,
-    discoverStores
+    discoverStores,
+    userLocation,
+    setUserLocation,
   } = usePlannerStore();
 
   // State for search filter
-  const [searchTerm, setSearchTerm] = useState('');
-  
-  // State for user location
-  const [userLocation, setUserLocation] = useState<Coordinates | null>(null);
-  const [locationError, setLocationError] = useState<string | null>(null);
-  const [locationEnabled, setLocationEnabled] = useState(false);
-  const [storesWithDistance, setStoresWithDistance] = useState<(Store & { distance?: number, coordinates?: [number, number] })[]>([]);
-  const [isProcessingLocation, setIsProcessingLocation] = useState(false);
-  
-  // New state for sort method
-  const [sortMethod, setSortMethod] = useState<SortOption>('alphabetical');
-  const [isSortDropdownOpen, setIsSortDropdownOpen] = useState(false);
+  const [searchTerm, setSearchTerm] = React.useState('');
+  const [showLocationPrompt, setShowLocationPrompt] = React.useState(true);
+  const [locationEnabled, setLocationEnabled] = React.useState(false);
+  const [isClient, setIsClient] = React.useState(false);
 
-  // Request user's location on component mount
-  useEffect(() => {
-    getUserLocation();
+  // Prevent hydration mismatch
+  React.useEffect(() => {
+    setIsClient(true);
   }, []);
 
-  // Get user's location
-const getUserLocation = () => {
-  setIsProcessingLocation(true);
-  setLocationError(null);
-  
-  if (navigator.geolocation) {
-    navigator.geolocation.getCurrentPosition(
-      (position) => {
-        // Only set location as enabled if we actually get coordinates
-        if (position && position.coords && position.coords.latitude && position.coords.longitude) {
-          const { latitude, longitude } = position.coords;
-          setUserLocation({ latitude, longitude });
-          setLocationEnabled(true);
-          setLocationError(null);
-          
-          // If sorting by distance was previously selected, we can now apply it
-          if (sortMethod === 'distance') {
-            // Keep distance sorting active
-          } else {
-            // Leave current sort method unchanged
-          }
-        } else {
-          // We got a position object but no valid coordinates
-          setLocationError('Unable to get precise location. Please try again.');
-          setLocationEnabled(false);
-          setUserLocation(null);
-        }
-        setIsProcessingLocation(false);
-      },
-      (error) => {
-        console.error('Error getting location:', error);
-        // Clear user location data
-        setUserLocation(null);
-        
-        let errorMessage = 'Unable to get your location. Please try again later.';
-        
-        switch (error.code) {
-          case 1: // PERMISSION_DENIED
-            errorMessage = 'Location permission denied by your browser. Please enable location in your browser settings.';
-            break;
-          case 2: // POSITION_UNAVAILABLE
-            errorMessage = 'Location information is unavailable. Please check your device settings.';
-            break;
-          case 3: // TIMEOUT
-            errorMessage = 'Location request timed out. Please try again.';
-            break;
-        }
-        
-        setLocationError(errorMessage);
-        setLocationEnabled(false);
-        
-        // Reset sort method to alphabetical if we were trying to sort by distance
-        if (sortMethod === 'distance') {
-          setSortMethod('alphabetical');
-        }
-        
-        setIsProcessingLocation(false);
-      },
-      { enableHighAccuracy: true, timeout: 10000, maximumAge: 60000 }
-    );
-  } else {
-    setLocationError('Geolocation is not supported by your browser.');
-    setLocationEnabled(false);
-    setSortMethod('alphabetical'); // Force alphabetical sort when geolocation not supported
-    setIsProcessingLocation(false);
-  }
-};
-
-  // Toggle location permissions
-const toggleLocationPermission = async () => {
-  if (locationEnabled) {
-    // User wants to disable location
-    setLocationEnabled(false);
-    setUserLocation(null);
-    // If we're disabling location and currently sorting by distance, revert to alphabetical
-    if (sortMethod === 'distance') {
-      setSortMethod('alphabetical');
-    }
-    setLocationError('Location disabled in app. Your browser may still have location permission.');
-  } else {
-    // User wants to enable location - check browser permission first
-    try {
-      const permissionStatus = await navigator.permissions.query({ name: 'geolocation' });
-      
-      if (permissionStatus.state === 'denied') {
-        // Browser has explicitly denied permission
-        setLocationError('Location is blocked by your browser. Please enable location in your browser settings and try again.');
-      } else {
-        // Permission is granted or prompt will appear - attempt to get location
-        getUserLocation();
-      }
-    } catch (err) {
-      // Permissions API not available, fall back to direct geolocation request
-      getUserLocation();
-    }
-  }
-};
-
-  // Handle sort method change
-  const changeSortMethod = async (method: SortOption) => {
-    // If switching to distance sorting
-    if (method === 'distance') {
-      if (locationEnabled && userLocation) {
-        // We already have location enabled and coordinates, just change sort method
-        setSortMethod(method);
-      } else {
-        // We need to enable location first
-        try {
-          // Check browser permission state
-          const permissionStatus = await navigator.permissions.query({ name: 'geolocation' });
-          
-          if (permissionStatus.state === 'denied') {
-            // Browser has explicitly denied - show error and don't change sort method
-            setLocationError('Location is blocked by your browser. Please enable location in your browser settings to sort by distance.');
-          } else {
-            // Attempt to get location
-            setIsProcessingLocation(true);
-            
-            // Try to get location - this will show the browser permission dialog if needed
-            navigator.geolocation.getCurrentPosition(
-              (position) => {
-                // Success - we can now enable distance sorting
-                if (position && position.coords) {
-                  setUserLocation({
-                    latitude: position.coords.latitude,
-                    longitude: position.coords.longitude
-                  });
-                  setLocationEnabled(true);
-                  setLocationError(null);
-                  setSortMethod(method);
-                }
-                setIsProcessingLocation(false);
-              },
-              (error) => {
-                // Error - show appropriate message and don't change sort method
-                setIsProcessingLocation(false);
-                
-                let errorMessage = 'Unable to access location. Please try again.';
-                
-                if (error.code === 1) { // PERMISSION_DENIED
-                  errorMessage = 'Location permission denied by your browser. Please enable location in browser settings to sort by distance.';
-                }
-                
-                setLocationError(errorMessage);
-              }
-            );
-          }
-        } catch (err) {
-          // Permissions API not available, fall back to direct geolocation request
-          getUserLocation();
-          
-          // Only change sort method if we successfully get location
-          if (locationEnabled && userLocation) {
-            setSortMethod(method);
-          }
-        }
-      }
-    } else {
-      // For alphabetical sorting, just change it directly
-      setSortMethod(method);
-    }
-    
-    setIsSortDropdownOpen(false);
-  };
 
   // Discover stores on component mount
   useEffect(() => {
@@ -274,43 +54,20 @@ const toggleLocationPermission = async () => {
     }
   }, [isStoresLoaded, isLoading, discoverStores]);
 
-  // Process stores with geocoding and distance calculation
+  // Check for existing location on mount
   useEffect(() => {
-    const processStores = async () => {
-      if (availableStores.length > 0) {
-        const processedStores = await Promise.all(
-          availableStores.map(async (store) => {
-            const storeWithLocation = { ...store };
-            
-            // Get store coordinates
-            const coordinates = await geocodeStore(store);
-            
-            if (coordinates && userLocation && locationEnabled) {
-              // Calculate distance
-              const distance = calculateDistance(
-                userLocation.latitude,
-                userLocation.longitude,
-                coordinates[0],
-                coordinates[1]
-              );
-              
-              return {
-                ...storeWithLocation,
-                coordinates,
-                distance
-              };
-            }
-            
-            return storeWithLocation;
-          })
-        );
-        
-        setStoresWithDistance(processedStores);
-      }
-    };
-    
-    processStores();
-  }, [availableStores, userLocation, locationEnabled]);
+    const existingLocation = locationService.getStoredLocation();
+    if (existingLocation) {
+      setUserLocation({
+        latitude: existingLocation.latitude,
+        longitude: existingLocation.longitude,
+        address: existingLocation.address,
+        source: existingLocation.source,
+      });
+      setShowLocationPrompt(false);
+      setLocationEnabled(true); // Enable location when loaded from storage
+    }
+  }, [setUserLocation]);
 
   const handleStoreSelect = (storeId: string) => {
     console.log("Selected store:", storeId);
@@ -325,131 +82,159 @@ const toggleLocationPermission = async () => {
     }, 100);
   };
 
-  // Sort and filter stores
-  const filteredStores = (() => {
-    let stores = [...storesWithDistance];
-    
-    // Sort stores based on availability first
-    stores.sort((a, b) => {
-      // Availability is always highest priority
-      if (a.isAvailable !== b.isAvailable) {
-        return a.isAvailable ? -1 : 1;
-      }
-      
-      // Apply selected sort method
-      if (sortMethod === 'distance' && locationEnabled && userLocation && 
-          a.distance !== undefined && b.distance !== undefined) {
-        // Only sort by distance if:
-        // 1. Distance sort is selected
-        // 2. Location is enabled
-        // 3. We have actual user coordinates
-        // 4. Both stores have distance values
-        return a.distance - b.distance;
-      } else {
-        // Default/alphabetical sorting
-        return a.name.localeCompare(b.name);
-      }
+  // Handle location being set
+  const handleLocationSet = (location: { latitude: number; longitude: number }) => {
+    console.log('🐛 User location coordinates:', location);
+    console.log('🐛 User location (Google Maps link):', `https://www.google.com/maps?q=${location.latitude},${location.longitude}`);
+    setUserLocation({
+      ...location,
+      source: 'browser' as const,
     });
-    
-    // Apply search filter
-    if (searchTerm) {
-      const searchLower = searchTerm.toLowerCase();
-      stores = stores.filter(store => (
-        store.name.toLowerCase().includes(searchLower) ||
-        store.location.toLowerCase().includes(searchLower) ||
-        store.id.toLowerCase().includes(searchLower) ||
-        (store.filename && store.filename.toLowerCase().includes(searchLower))
-      ));
+    setShowLocationPrompt(false);
+    setLocationEnabled(true); // Enable location when first set
+  };
+
+  // Calculate distances and sort stores
+  const storesWithDistance = useMemo(() => {
+    if (!userLocation) {
+      return availableStores.map(store => ({ ...store, distance: undefined })) as ExtendedStore[];
     }
-    
-    return stores;
-  })();
+
+    return availableStores.map(store => {
+      const extendedStore = store as ExtendedStore;
+      let distance: number | undefined = undefined;
+
+      // Try to get store coordinates from various sources
+      let storeCoords: { latitude: number; longitude: number } | null = null;
+
+      // Check if store already has location data
+      if (extendedStore.lat && extendedStore.lng) {
+        storeCoords = {
+          latitude: extendedStore.lat,
+          longitude: extendedStore.lng,
+        };
+        console.log(`📍 Using geocoded coordinates for ${extendedStore.name}:`, storeCoords);
+      }
+      // Check if store already has location data in storeLocation format
+      else if (extendedStore.storeLocation) {
+        storeCoords = {
+          latitude: extendedStore.storeLocation.latitude,
+          longitude: extendedStore.storeLocation.longitude,
+        };
+      }
+
+      // Calculate distance if we have store coordinates
+      if (storeCoords) {
+        const distanceInfo = locationService.getDistanceToStore(
+          {
+            latitude: userLocation.latitude,
+            longitude: userLocation.longitude,
+            source: userLocation.source,
+            timestamp: Date.now(),
+          },
+          storeCoords
+        );
+        distance = distanceInfo.distance;
+      }
+
+      return {
+        ...extendedStore,
+        distance,
+      } as ExtendedStore;
+    });
+  }, [availableStores, userLocation]);
+
+  useEffect(() => {
+    console.log('🐛 DEBUG - userLocation:', userLocation);
+    console.log('🐛 DEBUG - storesWithDistance sample:', storesWithDistance.slice(0, 3));
+
+    const storesWithDistanceInfo = storesWithDistance.filter(s => s.distance !== undefined);
+    console.log(`🐛 DEBUG - ${storesWithDistanceInfo.length} stores have distance calculations`);
+
+    if (storesWithDistanceInfo.length > 0) {
+      console.log('🐛 DEBUG - Stores with distances:', storesWithDistanceInfo.map(s => ({
+        name: s.name,
+        distance: s.distance
+      })));
+    }
+  }, [userLocation, storesWithDistance]);
+
+  // Sort stores: available first, then by distance OR alphabetically
+  const sortedStores = useMemo((): ExtendedStore[] => {
+    return [...storesWithDistance]
+      .sort((a, b) => {
+        // First sort by availability
+        if (a.isAvailable !== b.isAvailable) {
+          return a.isAvailable ? -1 : 1;
+        }
+
+        // If we have user location AND location is enabled, sort by distance
+        if (userLocation && locationEnabled) {
+          // Stores with distance first
+          if (a.distance !== undefined && b.distance === undefined) return -1;
+          if (a.distance === undefined && b.distance !== undefined) return 1;
+
+          // Both have distance - sort by distance
+          if (a.distance !== undefined && b.distance !== undefined) {
+            return a.distance - b.distance;
+          }
+        }
+
+        // Always fall back to alphabetical (this will be the primary sort when location is disabled)
+        return a.name.localeCompare(b.name);
+      })
+      .filter(store => {
+        if (!searchTerm) return true;
+
+        const extendedStore = store as ExtendedStore;
+        const searchLower = searchTerm.toLowerCase();
+        return (
+          extendedStore.name.toLowerCase().includes(searchLower) ||
+          extendedStore.location.toLowerCase().includes(searchLower) ||
+          extendedStore.id.toLowerCase().includes(searchLower) ||
+          (extendedStore.location_name && extendedStore.location_name.toLowerCase().includes(searchLower)) ||
+          (extendedStore.city && extendedStore.city.toLowerCase().includes(searchLower)) ||
+          (extendedStore.postal_code && extendedStore.postal_code.toLowerCase().includes(searchLower))
+        );
+      });
+  }, [storesWithDistance, userLocation, locationEnabled, searchTerm]);
 
   return (
     <div className="bg-white rounded-xl py-2 px-5 mb-3 shadow-sm">
       {/* Header */}
-      <div className="flex items-center mb-3">
+      <div className="flex items-center justify-between mb-3">
         <div className="flex items-center">
           <h3 className="text-lg font-semibold text-gray-800">Local Store</h3>
-        </div>
-      </div>
-
-      {/* Location and sorting controls */}
-      <div className="flex items-center justify-between mb-3">
-        {/* Location permission button */}
-        <button
-          onClick={toggleLocationPermission}
-          className={`flex items-center px-3 py-1.5 rounded-lg text-sm font-medium transition-colors ${
-            locationEnabled 
-              ? 'bg-teal-100 text-teal-700 hover:bg-teal-200' 
-              : 'bg-gray-100 text-gray-600 hover:bg-gray-200'
-          }`}
-          disabled={isProcessingLocation}
-        >
-          <MapPin size={16} className={`mr-1.5 ${isProcessingLocation ? 'animate-pulse' : ''}`} />
-          {isProcessingLocation 
-            ? 'Getting location...' 
-            : locationEnabled 
-              ? 'Location enabled' 
-              : 'Enable location'
-          }
-        </button>
-        
-        {/* Sort dropdown */}
-        <div className="relative">
-          <button
-            onClick={() => setIsSortDropdownOpen(!isSortDropdownOpen)}
-            className="flex items-center px-3 py-1.5 rounded-lg text-sm font-medium bg-gray-100 text-gray-700 hover:bg-gray-200 transition-colors"
-          >
-            Sort: {sortMethod === 'alphabetical' ? 'A-Z' : 'By distance'}
-            <ChevronDown size={16} className="ml-1.5" />
-          </button>
-          
-          {isSortDropdownOpen && (
-            <div className="absolute right-0 mt-1 w-40 rounded-md shadow-lg bg-white ring-1 ring-black ring-opacity-5 z-10">
-              <div className="py-1">
-                <button
-                  onClick={() => changeSortMethod('alphabetical')}
-                  className={`block w-full text-left px-4 py-2 text-sm ${
-                    sortMethod === 'alphabetical' 
-                      ? 'text-teal-700 bg-teal-50' 
-                      : 'text-gray-700 hover:bg-gray-100'
-                  }`}
-                >
-                  Alphabetical (A-Z)
-                </button>
-                <button
-                  onClick={() => changeSortMethod('distance')}
-                  className={`block w-full text-left px-4 py-2 text-sm ${
-                    sortMethod === 'distance' 
-                      ? 'text-teal-700 bg-teal-50' 
-                      : 'text-gray-700 hover:bg-gray-100'
-                  } ${!locationEnabled || !userLocation ? 'opacity-50' : ''}`}
-                  disabled={!locationEnabled || !userLocation}
-                >
-                  By distance
-                  {(!locationEnabled || !userLocation) && (
-                    <span className="ml-1 text-xs text-gray-500">(enable location first)</span>
-                  )}
-                </button>
-              </div>
+          {userLocation && locationEnabled && (
+            <div className="ml-2 flex items-center text-sm text-green-600">
+              <MapPin className="h-4 w-4 mr-1" />
+              <span>Location enabled</span>
             </div>
           )}
         </div>
-      </div>
-      
-      {/* Location error message */}
-      {locationError && (
-        <div className="text-amber-600 text-sm flex items-center mb-3">
-          <AlertTriangle size={16} className="mr-1.5" />
-          {locationError}
-        </div>
-      )}
 
-      {/* Error message */}
-      {error && (
-        <div className="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded mb-3">
-          {error}
+        {/* Location Toggle */}
+        {userLocation && (
+          <button
+            onClick={() => setLocationEnabled(!locationEnabled)}
+            className={`flex items-center px-3 py-1.5 rounded-lg text-sm font-medium transition-colors ${locationEnabled
+                ? 'bg-green-100 text-green-700 hover:bg-green-200'
+                : 'bg-gray-100 text-gray-600 hover:bg-gray-200'
+              }`}
+          >
+            <MapPin className="h-4 w-4 mr-1.5" />
+            {locationEnabled ? 'Distance sorting ON' : 'Distance sorting OFF'}
+          </button>
+        )}
+      </div>
+
+      {/* Location Permission Component */}
+      {isClient && !userLocation && showLocationPrompt && (
+        <div className="mb-4">
+          <LocationPermission
+            onLocationSet={handleLocationSet}
+            className="border-teal-200 bg-teal-50"
+          />
         </div>
       )}
 
@@ -472,9 +257,21 @@ const toggleLocationPermission = async () => {
             />
             <div className="mt-3 text-center">
               {isStoresLoaded && (
-                <p className="text-gray-700 font-medium text-lg">
-                  {availableStores.filter(s => s.isAvailable).length} stores available
-                </p>
+                <>
+                  <p className="text-gray-700 font-medium text-lg">
+                    {availableStores.filter(s => s.isAvailable).length} stores available
+                  </p>
+                  {userLocation && locationEnabled && sortedStores.some(s => s.distance !== undefined) && (
+                    <p className="text-sm text-teal-600 mt-1">
+                      📍 Sorted by distance from you
+                    </p>
+                  )}
+                  {userLocation && !locationEnabled && (
+                    <p className="text-sm text-gray-600 mt-1">
+                      📝 Sorted alphabetically
+                    </p>
+                  )}
+                </>
               )}
             </div>
           </div>
@@ -533,19 +330,20 @@ const toggleLocationPermission = async () => {
           </div>
 
           {/* Store cards */}
-          {filteredStores.map(store => (
+          {sortedStores.map(store => (
             <div key={store.id} className="store-card">
               <StoreCard
                 store={store}
                 isSelected={selectedStore === store.id}
                 disabled={!store.isAvailable}
                 onClick={() => store.isAvailable && handleStoreSelect(store.id)}
+                showDistance={userLocation !== null && locationEnabled}
               />
             </div>
           ))}
 
           {/* No results message - only shown when search has no results */}
-          {filteredStores.length === 0 && searchTerm && (
+          {sortedStores.length === 0 && searchTerm && (
             <div className="store-card bg-gray-50 rounded-[30px] p-4 text-center">
               <p className="text-gray-500">No stores match your search for &ldquo;{searchTerm}&rdquo;</p>
               <button
@@ -557,12 +355,37 @@ const toggleLocationPermission = async () => {
             </div>
           )}
 
-          {/* "Don't see your store" card - always visible */}
-          <div className="store-card bg-blue-50 rounded-[30px]">
-            <p className="text-gray-700 font-medium px-6 pt-4 pb-2">
-              Don&apos;t see your store? Email us at <a href="mailto:info@skrimp.ai" className="text-blue-600 hover:underline">info@skrimp.ai</a> to get it added!
-            </p>
-          </div>
+          {/* Location prompt card */}
+          {!userLocation && !showLocationPrompt && (
+            <div className="store-card bg-blue-50 rounded-[30px] p-4">
+              <div className="text-center">
+                <Navigation className="h-8 w-8 text-blue-500 mx-auto mb-2" />
+                <p className="text-gray-700 font-medium mb-2">Want stores sorted by distance?</p>
+                <button
+                  onClick={() => setShowLocationPrompt(true)}
+                  className="text-blue-600 hover:text-blue-800 text-sm font-medium"
+                >
+                  Set your location
+                </button>
+              </div>
+            </div>
+          )}
+
+          {/* Re-enable location card */}
+          {userLocation && !locationEnabled && (
+            <div className="store-card bg-blue-50 rounded-[30px] p-4">
+              <div className="text-center">
+                <MapPin className="h-8 w-8 text-blue-500 mx-auto mb-2" />
+                <p className="text-gray-700 font-medium mb-2">Want to see stores by distance again?</p>
+                <button
+                  onClick={() => setLocationEnabled(true)}
+                  className="text-blue-600 hover:text-blue-800 text-sm font-medium"
+                >
+                  Enable distance sorting
+                </button>
+              </div>
+            </div>
+          )}
         </div>
       )}
 
@@ -611,4 +434,4 @@ const toggleLocationPermission = async () => {
       `}</style>
     </div>
   );
-} 
+}
