@@ -866,28 +866,31 @@ const Hero = () => {
               <h2 className="logos-heading">Supported Grocery Stores</h2>
               <div className="logos-container">
                 <div className="logo-item">
-                  <img src="/NoFrills_Logo.png" alt="No Frills" className="logo-image" />
+                  <img src="/Logo_NoFrills.png" alt="No Frills" className="logo-image"/>
                 </div>
                 <div className="logo-item">
-                  <img src="/Walmart_Logo.png" alt="Walmart" className="logo-image" />
+                  <img src="/Logo_Walmart.png" alt="Walmart" className="logo-image"/>
                 </div>
                 <div className="logo-item">
-                  <img src="/Zehrs_Logo.png" alt="Zehrs" className="logo-image" />
+                  <img src="/Logo_Zehrs.png" alt="Zehrs" className="logo-image"/>
                 </div>
                 <div className="logo-item">
-                  <img src="/FoodBasics_Logo.png" alt="Food Basics" className="logo-image" />
+                  <img src="/Logo_FoodBasics.png" alt="Food Basics" className="logo-image"/>
                 </div>
                 <div className="logo-item">
-                  <img src="/FarmBoy_Logo.png" alt="FarmBoy" className="logo-image" />
+                  <img src="/Logo_FarmBoy.png" alt="FarmBoy" className="logo-image"/>
                 </div>
                 <div className="logo-item">
-                  <img src="/Sobeys_Logo.png" alt="Sobeys" className="logo-image" />
+                  <img src="/Logo_Sobeys.png" alt="Sobeys" className="logo-image"/>
                 </div>
                 <div className="logo-item">
-                  <img src="/Metro_Logo.png" alt="Metro" className="logo-image" />
+                  <img src="/Logo_Metro.png" alt="Metro" className="logo-image"/>
                 </div>
                 <div className="logo-item">
-                  <img src="/FreshCo_Logo.png" alt="FreshCo" className="logo-image" />
+                  <img src="/Logo_FreshCo.png" alt="FreshCo" className="logo-image"/>
+                </div>
+                <div className="logo-item">
+                  <img src="/Logo_RealCanadianSuperstore.png" alt="FreshCo" className="logo-image"/>
                 </div>
               </div>
             </div>

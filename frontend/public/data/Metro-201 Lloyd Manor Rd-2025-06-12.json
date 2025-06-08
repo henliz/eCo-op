@@ -314,7 +314,8 @@
           "regularPrice": 0,
           "source": "skipped",
           "savingsPercentage": 0,
-          "type": "optional"
+          "type": "optional",
+          "category": "pantry"
         },
         {
           "recipeIngredientName": "maple syrup",
@@ -607,7 +608,7 @@
           "salePrice": 0,
           "regularPrice": 0,
           "source": "free",
-          "sourceDate": "2025-06-06",
+          "sourceDate": "2025-06-07",
           "savingsPercentage": 0,
           "type": "core",
           "category": "beverages"
@@ -1125,7 +1126,8 @@
           "regularPrice": 0,
           "source": "skipped",
           "savingsPercentage": 0,
-          "type": "optional"
+          "type": "optional",
+          "category": "produce"
         },
         {
           "recipeIngredientName": "frozen peas",
@@ -2026,7 +2028,7 @@
           "salePrice": 0,
           "regularPrice": 0,
           "source": "free",
-          "sourceDate": "2025-06-06",
+          "sourceDate": "2025-06-07",
           "savingsPercentage": 0,
           "type": "core",
           "category": "beverages"
@@ -2291,9 +2293,9 @@
     {
       "name": "Cucumber Turkey Sub Sandwich",
       "url": "https://www.eatingwell.com/recipe/261898/cucumber-turkey-sub-sandwich/",
-      "salePrice": 5.346069876404495,
-      "regularPrice": 5.510403209737827,
-      "totalSavings": 0.16433333333333255,
+      "salePrice": 6.234558876404495,
+      "regularPrice": 6.398892209737828,
+      "totalSavings": 0.16433333333333344,
       "servings": 1,
       "ingredients": [
         {
@@ -2343,14 +2345,14 @@
         },
         {
           "recipeIngredientName": "deli turkey breast",
-          "saleUnitSize": 1,
-          "saleUnitType": "kg",
-          "salePrice": 24.23,
-          "saleFractionUsed": 0.0567,
-          "regularPrice": 24.23,
-          "regularFractionUsed": 0.0567,
+          "saleUnitSize": 100,
+          "saleUnitType": "g",
+          "salePrice": 3.99,
+          "saleFractionUsed": 0.5670000000000001,
+          "regularPrice": 3.99,
+          "regularFractionUsed": 0.5670000000000001,
           "source": "database",
-          "sourceDate": "2024-10-10",
+          "sourceDate": "2025-04-16",
           "productName": "deli turkey",
           "savingsPercentage": 0,
           "type": "core",
@@ -3057,7 +3059,7 @@
           "salePrice": 0,
           "regularPrice": 0,
           "source": "free",
-          "sourceDate": "2025-06-06",
+          "sourceDate": "2025-06-07",
           "savingsPercentage": 0,
           "type": "core",
           "category": "beverages"
@@ -5244,21 +5246,21 @@
     {
       "name": "Beef and Broccoli",
       "url": "https://natashaskitchen.com/wprm_print/beef-and-broccoli-recipe",
-      "salePrice": 19.688808119704348,
-      "regularPrice": 20.364405292585705,
+      "salePrice": 15.70317798754576,
+      "regularPrice": 16.378775160427118,
       "totalSavings": 0.675597172881357,
       "servings": 4,
       "ingredients": [
         {
           "recipeIngredientName": "flank steak",
-          "saleUnitSize": 454,
-          "saleUnitType": "g",
-          "salePrice": 15.99,
-          "saleFractionUsed": 0.999101321585903,
-          "regularPrice": 15.99,
-          "regularFractionUsed": 0.999101321585903,
+          "saleUnitSize": 1,
+          "saleUnitType": "lb",
+          "salePrice": 11.99,
+          "saleFractionUsed": 1,
+          "regularPrice": 11.99,
+          "regularFractionUsed": 1,
           "source": "database",
-          "sourceDate": "2025-04-30",
+          "sourceDate": "2025-06-07",
           "productName": "flank steak",
           "savingsPercentage": 0,
           "type": "core",
@@ -5337,7 +5339,7 @@
           "salePrice": 0,
           "regularPrice": 0,
           "source": "free",
-          "sourceDate": "2025-06-06",
+          "sourceDate": "2025-06-07",
           "savingsPercentage": 0,
           "type": "core",
           "category": "beverages"
