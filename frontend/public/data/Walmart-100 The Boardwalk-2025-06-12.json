@@ -205,7 +205,8 @@
           "regularPrice": 0,
           "source": "skipped",
           "savingsPercentage": 0,
-          "type": "optional"
+          "type": "optional",
+          "category": "pantry"
         },
         {
           "recipeIngredientName": "maple syrup",
@@ -629,7 +630,7 @@
           "salePrice": 0,
           "regularPrice": 0,
           "source": "free",
-          "sourceDate": "2025-06-06",
+          "sourceDate": "2025-06-07",
           "savingsPercentage": 0,
           "type": "core",
           "category": "beverages"
@@ -1711,9 +1712,9 @@
     {
       "name": "Cucumber Turkey Sub Sandwich",
       "url": "https://www.eatingwell.com/recipe/261898/cucumber-turkey-sub-sandwich/",
-      "salePrice": 4.510261220224719,
-      "regularPrice": 5.068016276404494,
-      "totalSavings": 0.5577550561797748,
+      "salePrice": 5.398750220224719,
+      "regularPrice": 5.956505276404495,
+      "totalSavings": 0.5577550561797757,
       "servings": 1,
       "ingredients": [
         {
@@ -1763,14 +1764,14 @@
         },
         {
           "recipeIngredientName": "deli turkey breast",
-          "saleUnitSize": 1,
-          "saleUnitType": "kg",
-          "salePrice": 24.23,
-          "saleFractionUsed": 0.0567,
-          "regularPrice": 24.23,
-          "regularFractionUsed": 0.0567,
+          "saleUnitSize": 100,
+          "saleUnitType": "g",
+          "salePrice": 3.99,
+          "saleFractionUsed": 0.5670000000000001,
+          "regularPrice": 3.99,
+          "regularFractionUsed": 0.5670000000000001,
           "source": "database",
-          "sourceDate": "2024-10-10",
+          "sourceDate": "2025-04-16",
           "productName": "deli turkey",
           "savingsPercentage": 0,
           "type": "core",
@@ -1846,7 +1847,7 @@
           "salePrice": 0,
           "regularPrice": 0,
           "source": "free",
-          "sourceDate": "2025-06-06",
+          "sourceDate": "2025-06-07",
           "savingsPercentage": 0,
           "type": "core",
           "category": "beverages"
@@ -2493,7 +2494,7 @@
           "salePrice": 0,
           "regularPrice": 0,
           "source": "free",
-          "sourceDate": "2025-06-06",
+          "sourceDate": "2025-06-07",
           "savingsPercentage": 0,
           "type": "core",
           "category": "beverages"
@@ -3256,7 +3257,8 @@
           "regularPrice": 0,
           "source": "skipped",
           "savingsPercentage": 0,
-          "type": "optional"
+          "type": "optional",
+          "category": "pantry"
         },
         {
           "recipeIngredientName": "hot water",
@@ -4012,8 +4014,8 @@
     {
       "name": "Rainbow Trout Chowder",
       "url": "https://www.seasonsandsuppers.ca/wprm_print/rainbow-trout-chowder",
-      "salePrice": 13.332172053703522,
-      "regularPrice": 14.878863000701637,
+      "salePrice": 13.332903636271116,
+      "regularPrice": 14.879594583269231,
       "totalSavings": 1.5466909469981154,
       "servings": 4,
       "ingredients": [
@@ -4110,11 +4112,11 @@
         {
           "recipeIngredientName": "rainbow trout fillet",
           "saleUnitSize": 1,
-          "saleUnitType": "kg",
-          "salePrice": 22,
-          "saleFractionUsed": 0.34,
-          "regularPrice": 22,
-          "regularFractionUsed": 0.34,
+          "saleUnitType": "lb",
+          "salePrice": 9.98,
+          "saleFractionUsed": 0.7495723028624843,
+          "regularPrice": 9.98,
+          "regularFractionUsed": 0.7495723028624843,
           "source": "database",
           "sourceDate": "2025-05-02",
           "productName": "rainbow trout fillet",
@@ -4324,8 +4326,8 @@
     {
       "name": "Fish Tacos with Best Fish Taco Sauce",
       "url": "https://natashaskitchen.com/wprm_print/fish-tacos-recipe-with-best-fish-taco-sauce",
-      "salePrice": 19.04962692542654,
-      "regularPrice": 19.324654610370363,
+      "salePrice": 19.055908687541077,
+      "regularPrice": 19.3309363724849,
       "totalSavings": 0.27502768494382224,
       "servings": 16,
       "ingredients": [
@@ -4346,12 +4348,12 @@
         },
         {
           "recipeIngredientName": "tilapia",
-          "saleUnitSize": 454,
-          "saleUnitType": "g",
+          "saleUnitSize": 1,
+          "saleUnitType": "lb",
           "salePrice": 6.99,
-          "saleFractionUsed": 0.999101321585903,
+          "saleFractionUsed": 1,
           "regularPrice": 6.99,
-          "regularFractionUsed": 0.999101321585903,
+          "regularFractionUsed": 1,
           "source": "database",
           "sourceDate": "2025-04-16",
           "productName": "tilapia fillets",

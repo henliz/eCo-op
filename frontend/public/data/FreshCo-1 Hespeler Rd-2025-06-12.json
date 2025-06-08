@@ -314,7 +314,8 @@
           "regularPrice": 0,
           "source": "skipped",
           "savingsPercentage": 0,
-          "type": "optional"
+          "type": "optional",
+          "category": "pantry"
         },
         {
           "recipeIngredientName": "maple syrup",
@@ -707,7 +708,7 @@
           "salePrice": 0,
           "regularPrice": 0,
           "source": "free",
-          "sourceDate": "2025-06-06",
+          "sourceDate": "2025-06-07",
           "savingsPercentage": 0,
           "type": "core",
           "category": "beverages"
@@ -1364,7 +1365,8 @@
           "regularPrice": 0,
           "source": "skipped",
           "savingsPercentage": 0,
-          "type": "optional"
+          "type": "optional",
+          "category": "produce"
         },
         {
           "recipeIngredientName": "frozen peas",
@@ -1856,8 +1858,8 @@
     {
       "name": "Cucumber Turkey Sub Sandwich",
       "url": "https://www.eatingwell.com/recipe/261898/cucumber-turkey-sub-sandwich/",
-      "salePrice": 4.582355826966292,
-      "regularPrice": 5.072355826966292,
+      "salePrice": 5.470844826966292,
+      "regularPrice": 5.960844826966293,
       "totalSavings": 0.4900000000000002,
       "servings": 1,
       "ingredients": [
@@ -1908,14 +1910,14 @@
         },
         {
           "recipeIngredientName": "deli turkey breast",
-          "saleUnitSize": 1,
-          "saleUnitType": "kg",
-          "salePrice": 24.23,
-          "saleFractionUsed": 0.0567,
-          "regularPrice": 24.23,
-          "regularFractionUsed": 0.0567,
+          "saleUnitSize": 100,
+          "saleUnitType": "g",
+          "salePrice": 3.99,
+          "saleFractionUsed": 0.5670000000000001,
+          "regularPrice": 3.99,
+          "regularFractionUsed": 0.5670000000000001,
           "source": "database",
-          "sourceDate": "2024-10-10",
+          "sourceDate": "2025-04-16",
           "productName": "deli turkey",
           "savingsPercentage": 0,
           "type": "core",
@@ -2308,7 +2310,7 @@
           "salePrice": 0,
           "regularPrice": 0,
           "source": "free",
-          "sourceDate": "2025-06-06",
+          "sourceDate": "2025-06-07",
           "savingsPercentage": 0,
           "type": "core",
           "category": "beverages"
@@ -3560,19 +3562,19 @@
     {
       "name": "Easy Baked Tilapia",
       "url": "https://www.allrecipes.com/recipe/70163/easy-baked-tilapia/",
-      "salePrice": 7.706389570821632,
-      "regularPrice": 8.256477773688225,
-      "totalSavings": 0.5500882028665925,
+      "salePrice": 7.712671443727579,
+      "regularPrice": 8.262759646594173,
+      "totalSavings": 0.5500882028665934,
       "servings": 4,
       "ingredients": [
         {
           "recipeIngredientName": "tilapia",
-          "saleUnitSize": 454,
-          "saleUnitType": "g",
+          "saleUnitSize": 1,
+          "saleUnitType": "lb",
           "salePrice": 6.99,
-          "saleFractionUsed": 0.9991189427312775,
+          "saleFractionUsed": 1.0000176369953615,
           "regularPrice": 6.99,
-          "regularFractionUsed": 0.9991189427312775,
+          "regularFractionUsed": 1.0000176369953615,
           "source": "database",
           "sourceDate": "2025-04-16",
           "productName": "tilapia fillets",
@@ -4627,7 +4629,7 @@
           "salePrice": 0,
           "regularPrice": 0,
           "source": "free",
-          "sourceDate": "2025-06-06",
+          "sourceDate": "2025-06-07",
           "savingsPercentage": 0,
           "type": "core",
           "category": "beverages"

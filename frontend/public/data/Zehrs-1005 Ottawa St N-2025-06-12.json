@@ -314,7 +314,8 @@
           "regularPrice": 0,
           "source": "skipped",
           "savingsPercentage": 0,
-          "type": "optional"
+          "type": "optional",
+          "category": "pantry"
         },
         {
           "recipeIngredientName": "maple syrup",
@@ -607,7 +608,7 @@
           "salePrice": 0,
           "regularPrice": 0,
           "source": "free",
-          "sourceDate": "2025-06-06",
+          "sourceDate": "2025-06-07",
           "savingsPercentage": 0,
           "type": "core",
           "category": "beverages"
@@ -1520,7 +1521,7 @@
           "salePrice": 0,
           "regularPrice": 0,
           "source": "free",
-          "sourceDate": "2025-06-06",
+          "sourceDate": "2025-06-07",
           "savingsPercentage": 0,
           "type": "core",
           "category": "beverages"
@@ -3373,7 +3374,8 @@
           "regularPrice": 0,
           "source": "skipped",
           "savingsPercentage": 0,
-          "type": "optional"
+          "type": "optional",
+          "category": "pantry"
         },
         {
           "recipeIngredientName": "hot water",

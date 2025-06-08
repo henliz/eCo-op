@@ -314,7 +314,8 @@
           "regularPrice": 0,
           "source": "skipped",
           "savingsPercentage": 0,
-          "type": "optional"
+          "type": "optional",
+          "category": "pantry"
         },
         {
           "recipeIngredientName": "maple syrup",
@@ -607,7 +608,7 @@
           "salePrice": 0,
           "regularPrice": 0,
           "source": "free",
-          "sourceDate": "2025-06-06",
+          "sourceDate": "2025-06-07",
           "savingsPercentage": 0,
           "type": "core",
           "category": "beverages"
@@ -1568,9 +1569,9 @@
     {
       "name": "Cucumber Turkey Sub Sandwich",
       "url": "https://www.eatingwell.com/recipe/261898/cucumber-turkey-sub-sandwich/",
-      "salePrice": 3.8737375845906903,
-      "regularPrice": 7.681789718175955,
-      "totalSavings": 3.808052133585265,
+      "salePrice": 4.762226584590691,
+      "regularPrice": 8.570278718175954,
+      "totalSavings": 3.8080521335852637,
       "servings": 1,
       "ingredients": [
         {
@@ -1620,14 +1621,14 @@
         },
         {
           "recipeIngredientName": "deli turkey breast",
-          "saleUnitSize": 1,
-          "saleUnitType": "kg",
-          "salePrice": 24.23,
-          "saleFractionUsed": 0.0567,
-          "regularPrice": 24.23,
-          "regularFractionUsed": 0.0567,
+          "saleUnitSize": 100,
+          "saleUnitType": "g",
+          "salePrice": 3.99,
+          "saleFractionUsed": 0.5670000000000001,
+          "regularPrice": 3.99,
+          "regularFractionUsed": 0.5670000000000001,
           "source": "database",
-          "sourceDate": "2024-10-10",
+          "sourceDate": "2025-04-16",
           "productName": "deli turkey",
           "savingsPercentage": 0,
           "type": "core",
@@ -1910,7 +1911,7 @@
           "salePrice": 0,
           "regularPrice": 0,
           "source": "free",
-          "sourceDate": "2025-06-06",
+          "sourceDate": "2025-06-07",
           "savingsPercentage": 0,
           "type": "core",
           "category": "beverages"
@@ -3133,7 +3134,7 @@
           "salePrice": 0,
           "regularPrice": 0,
           "source": "free",
-          "sourceDate": "2025-06-06",
+          "sourceDate": "2025-06-07",
           "savingsPercentage": 0,
           "type": "core",
           "category": "beverages"
@@ -3949,19 +3950,19 @@
     {
       "name": "Easy Baked Tilapia",
       "url": "https://www.allrecipes.com/recipe/70163/easy-baked-tilapia/",
-      "salePrice": 7.493241321264724,
-      "regularPrice": 8.271064189005862,
-      "totalSavings": 0.7778228677411381,
+      "salePrice": 7.4995231941706715,
+      "regularPrice": 8.27734606191181,
+      "totalSavings": 0.777822867741139,
       "servings": 4,
       "ingredients": [
         {
           "recipeIngredientName": "tilapia",
-          "saleUnitSize": 454,
-          "saleUnitType": "g",
+          "saleUnitSize": 1,
+          "saleUnitType": "lb",
           "salePrice": 6.99,
-          "saleFractionUsed": 0.9991189427312775,
+          "saleFractionUsed": 1.0000176369953615,
           "regularPrice": 6.99,
-          "regularFractionUsed": 0.9991189427312775,
+          "regularFractionUsed": 1.0000176369953615,
           "source": "database",
           "sourceDate": "2025-04-16",
           "productName": "tilapia fillets",
@@ -4273,7 +4274,8 @@
           "regularPrice": 0,
           "source": "skipped",
           "savingsPercentage": 0,
-          "type": "optional"
+          "type": "optional",
+          "category": "pantry"
         },
         {
           "recipeIngredientName": "hot water",
@@ -4561,23 +4563,23 @@
     {
       "name": "Beef and Broccoli",
       "url": "https://natashaskitchen.com/wprm_print/beef-and-broccoli-recipe",
-      "salePrice": 15.048943080427117,
-      "regularPrice": 26.114439879252377,
-      "totalSavings": 11.06549679882526,
+      "salePrice": 17.038943080427114,
+      "regularPrice": 22.128809747093783,
+      "totalSavings": 5.089866666666669,
       "servings": 4,
       "ingredients": [
         {
           "recipeIngredientName": "flank steak",
           "saleUnitSize": 1,
           "saleUnitType": "lb",
-          "salePrice": 10,
+          "salePrice": 11.99,
           "saleFractionUsed": 1,
-          "regularPrice": 15.975630132158592,
+          "regularPrice": 11.99,
           "regularFractionUsed": 1,
-          "source": "flyer",
-          "sourceDate": "2025-06-12",
-          "productName": "Beef Steaks",
-          "savingsPercentage": 37.40465998977893,
+          "source": "database",
+          "sourceDate": "2025-06-07",
+          "productName": "flank steak",
+          "savingsPercentage": 0,
           "type": "core",
           "category": "meat"
         },
@@ -4654,7 +4656,7 @@
           "salePrice": 0,
           "regularPrice": 0,
           "source": "free",
-          "sourceDate": "2025-06-06",
+          "sourceDate": "2025-06-07",
           "savingsPercentage": 0,
           "type": "core",
           "category": "beverages"
