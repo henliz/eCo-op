@@ -4,9 +4,9 @@ import React, { useEffect, useMemo } from 'react';
 import Image from 'next/image';
 import { usePlannerStore, type Store, parseCoordinates } from './usePlannerStore';
 import { StoreCard } from './StoreCard';
-import { MapPin, AlertTriangle, Navigation } from 'lucide-react';
-import { LocationPermission } from '@/components/location/LocationPermission';
+import { MapPin, AlertTriangle, Navigation, Loader2, AlertCircle } from 'lucide-react';
 import { locationService } from '@/lib/location';
+import { useLocation } from '@/hooks/useLocation';
 
 type ExtendedStore = Store & {
   location_name?: string;
@@ -17,7 +17,6 @@ type ExtendedStore = Store & {
   distance?: number;
 };
 
-// The parent page will pass this ref so we can set it when a store is selected
 interface StoreSelectorProps {
   shouldNavigateToPlan: React.MutableRefObject<boolean>;
 }
@@ -35,17 +34,29 @@ export default function StoreSelector({ shouldNavigateToPlan }: StoreSelectorPro
     setUserLocation,
   } = usePlannerStore();
 
-  // State for search filter
+  // Location hook for permissions and geocoding
+  const {
+    location: hookLocation,
+    isLoading: locationLoading,
+    error: locationError,
+    isPermissionDenied,
+    hasAskedPermission,
+    requestLocation,
+    geocodeAddress,
+    clearError,
+  } = useLocation();
+
+  // State for search filter and location UI
   const [searchTerm, setSearchTerm] = React.useState('');
-  const [showLocationPrompt, setShowLocationPrompt] = React.useState(true);
   const [locationEnabled, setLocationEnabled] = React.useState(false);
   const [isClient, setIsClient] = React.useState(false);
+  const [addressInput, setAddressInput] = React.useState('');
+  const [showLocationUI, setShowLocationUI] = React.useState(false);
 
   // Prevent hydration mismatch
   React.useEffect(() => {
     setIsClient(true);
   }, []);
-
 
   // Discover stores on component mount
   useEffect(() => {
@@ -64,34 +75,44 @@ export default function StoreSelector({ shouldNavigateToPlan }: StoreSelectorPro
         address: existingLocation.address,
         source: existingLocation.source,
       });
-      setShowLocationPrompt(false);
-      setLocationEnabled(true); // Enable location when loaded from storage
+      setLocationEnabled(true);
+    } else {
+      // Show location UI if no existing location
+      setShowLocationUI(true);
     }
   }, [setUserLocation]);
+
+  // Sync hook location with store location
+  useEffect(() => {
+    if (hookLocation) {
+      setUserLocation({
+        latitude: hookLocation.latitude,
+        longitude: hookLocation.longitude,
+        address: hookLocation.address,
+        source: hookLocation.source,
+      });
+      setLocationEnabled(true);
+      setShowLocationUI(false);
+    }
+  }, [hookLocation, setUserLocation]);
 
   const handleStoreSelect = (storeId: string) => {
     console.log("Selected store:", storeId);
     setSelectedStore(storeId);
-
-    // Signal that we should navigate to the Plan tab after loading
     shouldNavigateToPlan.current = true;
-
-    // Add a short delay then explicitly trigger fetchMealData
     setTimeout(() => {
       usePlannerStore.getState().fetchMealData();
     }, 100);
   };
 
-  // Handle location being set
-  const handleLocationSet = (location: { latitude: number; longitude: number }) => {
-    console.log('🐛 User location coordinates:', location);
-    console.log('🐛 User location (Google Maps link):', `https://www.google.com/maps?q=${location.latitude},${location.longitude}`);
-    setUserLocation({
-      ...location,
-      source: 'browser' as const,
-    });
-    setShowLocationPrompt(false);
-    setLocationEnabled(true); // Enable location when first set
+  const handleLocationRequest = async () => {
+    clearError();
+    await requestLocation();
+  };
+
+  const handleAddressSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    await geocodeAddress(addressInput);
   };
 
   // Calculate distances and sort stores
@@ -103,27 +124,20 @@ export default function StoreSelector({ shouldNavigateToPlan }: StoreSelectorPro
     return availableStores.map(store => {
       const extendedStore = store as ExtendedStore;
       let distance: number | undefined = undefined;
-
-      // Try to get store coordinates from various sources
       let storeCoords: { latitude: number; longitude: number } | null = null;
 
-      // Check if store already has location data
       if (extendedStore.lat && extendedStore.lng) {
         storeCoords = {
           latitude: extendedStore.lat,
           longitude: extendedStore.lng,
         };
-        console.log(`📍 Using geocoded coordinates for ${extendedStore.name}:`, storeCoords);
-      }
-      // Check if store already has location data in storeLocation format
-      else if (extendedStore.storeLocation) {
+      } else if (extendedStore.storeLocation) {
         storeCoords = {
           latitude: extendedStore.storeLocation.latitude,
           longitude: extendedStore.storeLocation.longitude,
         };
       }
 
-      // Calculate distance if we have store coordinates
       if (storeCoords) {
         const distanceInfo = locationService.getDistanceToStore(
           {
@@ -144,48 +158,26 @@ export default function StoreSelector({ shouldNavigateToPlan }: StoreSelectorPro
     });
   }, [availableStores, userLocation]);
 
-  useEffect(() => {
-    console.log('🐛 DEBUG - userLocation:', userLocation);
-    console.log('🐛 DEBUG - storesWithDistance sample:', storesWithDistance.slice(0, 3));
-
-    const storesWithDistanceInfo = storesWithDistance.filter(s => s.distance !== undefined);
-    console.log(`🐛 DEBUG - ${storesWithDistanceInfo.length} stores have distance calculations`);
-
-    if (storesWithDistanceInfo.length > 0) {
-      console.log('🐛 DEBUG - Stores with distances:', storesWithDistanceInfo.map(s => ({
-        name: s.name,
-        distance: s.distance
-      })));
-    }
-  }, [userLocation, storesWithDistance]);
-
-  // Sort stores: available first, then by distance OR alphabetically
+  // Sort stores
   const sortedStores = useMemo((): ExtendedStore[] => {
     return [...storesWithDistance]
       .sort((a, b) => {
-        // First sort by availability
         if (a.isAvailable !== b.isAvailable) {
           return a.isAvailable ? -1 : 1;
         }
 
-        // If we have user location AND location is enabled, sort by distance
         if (userLocation && locationEnabled) {
-          // Stores with distance first
           if (a.distance !== undefined && b.distance === undefined) return -1;
           if (a.distance === undefined && b.distance !== undefined) return 1;
-
-          // Both have distance - sort by distance
           if (a.distance !== undefined && b.distance !== undefined) {
             return a.distance - b.distance;
           }
         }
 
-        // Always fall back to alphabetical (this will be the primary sort when location is disabled)
         return a.name.localeCompare(b.name);
       })
       .filter(store => {
         if (!searchTerm) return true;
-
         const extendedStore = store as ExtendedStore;
         const searchLower = searchTerm.toLowerCase();
         return (
@@ -217,26 +209,17 @@ export default function StoreSelector({ shouldNavigateToPlan }: StoreSelectorPro
         {userLocation && (
           <button
             onClick={() => setLocationEnabled(!locationEnabled)}
-            className={`flex items-center px-3 py-1.5 rounded-lg text-sm font-medium transition-colors ${locationEnabled
+            className={`flex items-center px-3 py-1.5 rounded-lg text-sm font-medium transition-colors ${
+              locationEnabled
                 ? 'bg-green-100 text-green-700 hover:bg-green-200'
                 : 'bg-gray-100 text-gray-600 hover:bg-gray-200'
-              }`}
+            }`}
           >
             <MapPin className="h-4 w-4 mr-1.5" />
             {locationEnabled ? 'Distance sorting ON' : 'Distance sorting OFF'}
           </button>
         )}
       </div>
-
-      {/* Location Permission Component */}
-      {isClient && !userLocation && showLocationPrompt && (
-        <div className="mb-4">
-          <LocationPermission
-            onLocationSet={handleLocationSet}
-            className="border-teal-200 bg-teal-50"
-          />
-        </div>
-      )}
 
       {/* Loading state */}
       {isLoading && !isStoresLoaded ? (
@@ -246,7 +229,7 @@ export default function StoreSelector({ shouldNavigateToPlan }: StoreSelectorPro
         </div>
       ) : (
         <div className="store-columns">
-          {/* First card is robot */}
+          {/* Enhanced Robot Chef Card with Search & Location Integration */}
           <div className="store-card bg-teal-50 rounded-[30px] p-4 flex flex-col items-center justify-center">
             <Image
               src="/Robo_Chef.png"
@@ -255,8 +238,9 @@ export default function StoreSelector({ shouldNavigateToPlan }: StoreSelectorPro
               height={150}
               className="mx-auto"
             />
-            <div className="mt-3 text-center">
-              {isStoresLoaded && (
+
+            <div className="mt-3 text-center w-full">
+              {isStoresLoaded ? (
                 <>
                   <p className="text-gray-700 font-medium text-lg">
                     {availableStores.filter(s => s.isAvailable).length} stores available
@@ -272,62 +256,256 @@ export default function StoreSelector({ shouldNavigateToPlan }: StoreSelectorPro
                     </p>
                   )}
                 </>
+              ) : (
+                <p className="text-gray-600">Finding stores...</p>
+              )}
+
+              {/* Location UI Integration - Primary Option */}
+              {isClient && !userLocation && showLocationUI && (
+                <div className="mt-4 space-y-3">
+                  <div className="text-center">
+                    <p className="text-sm text-gray-700 font-medium mb-2">
+                      Find stores near you!
+                    </p>
+                  </div>
+
+                  {locationError && (
+                    <div className="flex items-start space-x-2 p-2 bg-red-50 border border-red-200 rounded-md">
+                      <AlertCircle className="h-4 w-4 text-red-500 mt-0.5 flex-shrink-0" />
+                      <p className="text-xs text-red-700">{locationError}</p>
+                    </div>
+                  )}
+
+                  {/* Primary: Browser location - Less aggressive styling */}
+                  {!isPermissionDenied && (
+                    <button
+                      onClick={handleLocationRequest}
+                      disabled={locationLoading}
+                      className="w-full bg-teal-500 hover:bg-teal-600 text-white px-4 py-2.5 rounded-lg text-sm font-medium transition-colors disabled:opacity-50 shadow-sm"
+                    >
+                      {locationLoading ? (
+                        <>
+                          <Loader2 className="h-4 w-4 mr-2 animate-spin inline" />
+                          Getting location...
+                        </>
+                      ) : (
+                        <>
+                          <Navigation className="h-4 w-4 mr-2 inline" />
+                          Use My Location
+                        </>
+                      )}
+                    </button>
+                  )}
+
+                  {/* Fallback: Manual entry */}
+                  {(isPermissionDenied || hasAskedPermission) && (
+                    <form onSubmit={handleAddressSubmit} className="space-y-2">
+                      <input
+                        type="text"
+                        placeholder="Enter postal code (M4B 1B3)"
+                        value={addressInput}
+                        onChange={(e) => setAddressInput(e.target.value)}
+                        className="w-full px-3 py-2 text-sm border border-gray-200 rounded-lg focus:outline-none focus:border-teal-500"
+                      />
+                      <button
+                        type="submit"
+                        disabled={locationLoading || !addressInput.trim()}
+                        className="w-full bg-gray-500 hover:bg-gray-600 text-white px-3 py-2 rounded-lg text-sm font-medium transition-colors disabled:opacity-50"
+                      >
+                        {locationLoading ? (
+                          <>
+                            <Loader2 className="h-4 w-4 mr-2 animate-spin inline" />
+                            Finding...
+                          </>
+                        ) : (
+                          <>
+                            <MapPin className="h-4 w-4 mr-2 inline" />
+                            Set Location
+                          </>
+                        )}
+                      </button>
+                    </form>
+                  )}
+
+                  <div className="text-xs text-gray-500 text-center">
+                    <p>🔒 Stored for this session only</p>
+                  </div>
+
+                  {/* Divider */}
+                  <div className="relative my-4">
+                    <div className="absolute inset-0 flex items-center">
+                      <span className="w-full border-t border-gray-200" />
+                    </div>
+                    <div className="relative flex justify-center text-xs uppercase">
+                      <span className="bg-teal-50 px-2 text-gray-500">
+                        Or search manually
+                      </span>
+                    </div>
+                  </div>
+
+                  {/* Search Bar - Secondary Option */}
+                  <div className="w-full">
+                    <div className="relative">
+                      <input
+                        type="text"
+                        value={searchTerm}
+                        onChange={(e) => setSearchTerm(e.target.value)}
+                        placeholder="Type store name, city, or postal code..."
+                        className="w-full pl-4 pr-10 py-2.5 rounded-lg bg-white border border-gray-200 text-sm focus:outline-none focus:border-teal-400 focus:ring-1 focus:ring-teal-200 transition-all"
+                        autoComplete="off"
+                        autoCorrect="off"
+                        autoCapitalize="off"
+                        spellCheck="false"
+                      />
+                      <div className="absolute right-3 top-1/2 transform -translate-y-1/2">
+                        {searchTerm ? (
+                          <button
+                            onClick={() => setSearchTerm('')}
+                            className="text-gray-400 hover:text-gray-600 p-1"
+                            aria-label="Clear search"
+                          >
+                            <svg
+                              xmlns="http://www.w3.org/2000/svg"
+                              className="h-4 w-4"
+                              fill="none"
+                              viewBox="0 0 24 24"
+                              stroke="currentColor"
+                            >
+                              <path
+                                strokeLinecap="round"
+                                strokeLinejoin="round"
+                                strokeWidth={2}
+                                d="M6 18L18 6M6 6l12 12"
+                              />
+                            </svg>
+                          </button>
+                        ) : (
+                          <svg
+                            xmlns="http://www.w3.org/2000/svg"
+                            className="h-4 w-4 text-gray-400"
+                            fill="none"
+                            viewBox="0 0 24 24"
+                            stroke="currentColor"
+                          >
+                            <path
+                              strokeLinecap="round"
+                              strokeLinejoin="round"
+                              strokeWidth={2}
+                              d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"
+                            />
+                          </svg>
+                        )}
+                      </div>
+                    </div>
+                    {searchTerm && (
+                      <p className="text-xs text-gray-600 mt-1">
+                        Showing {sortedStores.length} result{sortedStores.length !== 1 ? 's' : ''} for "{searchTerm}"
+                      </p>
+                    )}
+                  </div>
+
+                  <button
+                    onClick={() => setShowLocationUI(false)}
+                    className="text-xs text-gray-500 hover:text-gray-700 underline"
+                  >
+                    Skip for now
+                  </button>
+                </div>
+              )}
+
+              {/* Search Bar - When Location UI is Hidden */}
+              {(!showLocationUI || userLocation) && (
+                <div className="mt-4 w-full">
+                  <label className="block text-sm font-medium text-gray-700 mb-2">
+                    🔍 Search Stores
+                  </label>
+                  <div className="relative">
+                    <input
+                      type="text"
+                      value={searchTerm}
+                      onChange={(e) => setSearchTerm(e.target.value)}
+                      placeholder="Type store name, city, or postal code..."
+                      className="w-full pl-4 pr-10 py-3 rounded-xl bg-white border-2 border-teal-200 text-sm focus:outline-none focus:border-teal-500 focus:ring-2 focus:ring-teal-200 transition-all shadow-sm"
+                      autoComplete="off"
+                      autoCorrect="off"
+                      autoCapitalize="off"
+                      spellCheck="false"
+                    />
+                    <div className="absolute right-3 top-1/2 transform -translate-y-1/2">
+                      {searchTerm ? (
+                        <button
+                          onClick={() => setSearchTerm('')}
+                          className="text-gray-400 hover:text-gray-600 p-1"
+                          aria-label="Clear search"
+                        >
+                          <svg
+                            xmlns="http://www.w3.org/2000/svg"
+                            className="h-4 w-4"
+                            fill="none"
+                            viewBox="0 0 24 24"
+                            stroke="currentColor"
+                          >
+                            <path
+                              strokeLinecap="round"
+                              strokeLinejoin="round"
+                              strokeWidth={2}
+                              d="M6 18L18 6M6 6l12 12"
+                            />
+                          </svg>
+                        </button>
+                      ) : (
+                        <svg
+                          xmlns="http://www.w3.org/2000/svg"
+                          className="h-5 w-5 text-teal-400"
+                          fill="none"
+                          viewBox="0 0 24 24"
+                          stroke="currentColor"
+                        >
+                          <path
+                            strokeLinecap="round"
+                            strokeLinejoin="round"
+                            strokeWidth={2}
+                            d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"
+                          />
+                        </svg>
+                      )}
+                    </div>
+                  </div>
+                  {searchTerm && (
+                    <p className="text-xs text-gray-600 mt-1">
+                      Showing {sortedStores.length} result{sortedStores.length !== 1 ? 's' : ''} for "{searchTerm}"
+                    </p>
+                  )}
+                </div>
+              )}
+
+              {/* Show location prompt if hidden and no location */}
+              {!userLocation && !showLocationUI && (
+                <div className="mt-4">
+                  <button
+                    onClick={() => setShowLocationUI(true)}
+                    className="text-teal-600 hover:text-teal-800 text-sm font-medium"
+                  >
+                    📍 Set location for distance sorting
+                  </button>
+                </div>
+              )}
+
+              {/* Re-enable distance sorting */}
+              {userLocation && !locationEnabled && (
+                <div className="mt-4">
+                  <button
+                    onClick={() => setLocationEnabled(true)}
+                    className="text-blue-600 hover:text-blue-800 text-sm font-medium"
+                  >
+                    📍 Enable distance sorting
+                  </button>
+                </div>
               )}
             </div>
           </div>
 
-          {/* Search input in its own card */}
-          <div className="store-card bg-gray-50 rounded-[30px] p-4">
-            <div className="relative">
-              <input
-                type="text"
-                value={searchTerm}
-                onChange={(e) => setSearchTerm(e.target.value)}
-                placeholder="Search stores..."
-                className="w-full pl-9 pr-9 py-2 rounded-full bg-white border border-gray-200 text-sm focus:outline-none focus:border-teal-500 transition-colors"
-                autoComplete="off"
-                autoCorrect="off"
-                autoCapitalize="off"
-                spellCheck="false"
-              />
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                className="h-5 w-5 absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400"
-                fill="none"
-                viewBox="0 0 24 24"
-                stroke="currentColor"
-              >
-                <path
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  strokeWidth={2}
-                  d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"
-                />
-              </svg>
-              {searchTerm && (
-                <button
-                  onClick={() => setSearchTerm('')}
-                  className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-400 hover:text-gray-600"
-                  aria-label="Clear search"
-                >
-                  <svg
-                    xmlns="http://www.w3.org/2000/svg"
-                    className="h-4 w-4"
-                    fill="none"
-                    viewBox="0 0 24 24"
-                    stroke="currentColor"
-                  >
-                    <path
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                      strokeWidth={2}
-                      d="M6 18L18 6M6 6l12 12"
-                    />
-                  </svg>
-                </button>
-              )}
-            </div>
-          </div>
+
 
           {/* Store cards */}
           {sortedStores.map(store => (
@@ -342,7 +520,7 @@ export default function StoreSelector({ shouldNavigateToPlan }: StoreSelectorPro
             </div>
           ))}
 
-          {/* No results message - only shown when search has no results */}
+          {/* No results message */}
           {sortedStores.length === 0 && searchTerm && (
             <div className="store-card bg-gray-50 rounded-[30px] p-4 text-center">
               <p className="text-gray-500">No stores match your search for &ldquo;{searchTerm}&rdquo;</p>
@@ -352,38 +530,6 @@ export default function StoreSelector({ shouldNavigateToPlan }: StoreSelectorPro
               >
                 Clear search
               </button>
-            </div>
-          )}
-
-          {/* Location prompt card */}
-          {!userLocation && !showLocationPrompt && (
-            <div className="store-card bg-blue-50 rounded-[30px] p-4">
-              <div className="text-center">
-                <Navigation className="h-8 w-8 text-blue-500 mx-auto mb-2" />
-                <p className="text-gray-700 font-medium mb-2">Want stores sorted by distance?</p>
-                <button
-                  onClick={() => setShowLocationPrompt(true)}
-                  className="text-blue-600 hover:text-blue-800 text-sm font-medium"
-                >
-                  Set your location
-                </button>
-              </div>
-            </div>
-          )}
-
-          {/* Re-enable location card */}
-          {userLocation && !locationEnabled && (
-            <div className="store-card bg-blue-50 rounded-[30px] p-4">
-              <div className="text-center">
-                <MapPin className="h-8 w-8 text-blue-500 mx-auto mb-2" />
-                <p className="text-gray-700 font-medium mb-2">Want to see stores by distance again?</p>
-                <button
-                  onClick={() => setLocationEnabled(true)}
-                  className="text-blue-600 hover:text-blue-800 text-sm font-medium"
-                >
-                  Enable distance sorting
-                </button>
-              </div>
             </div>
           )}
         </div>
@@ -406,26 +552,24 @@ export default function StoreSelector({ shouldNavigateToPlan }: StoreSelectorPro
       {/* CSS for column-based layout */}
       <style jsx>{`
         .store-columns {
-          column-count: 2; /* Default to 2 columns on mobile */
+          column-count: 2;
           column-gap: 12px;
           width: 100%;
         }
-        
+
         .store-card {
           break-inside: avoid;
           margin-bottom: 12px;
           display: inline-block;
           width: 100%;
         }
-        
-        /* Very small screens: 1 column */
+
         @media (max-width: 480px) {
           .store-columns {
             column-count: 1;
           }
         }
-        
-        /* Desktop: 3 columns */
+
         @media (min-width: 768px) {
           .store-columns {
             column-count: 3;
