@@ -25,7 +25,7 @@ export default function SignupPage() {
   const router = useRouter();
 
   React.useEffect(() => {
-    if (currentUser && currentUser.emailVerified) {
+    if (currentUser) {
       router.push('/');
     }
   }, [currentUser, router]);
@@ -37,8 +37,8 @@ export default function SignupPage() {
       return setError('Passwords do not match');
     }
 
-    if (password.length < 8) {
-      return setError('Password must be at least 8 characters');
+    if (password.length < 6) {
+      return setError('Password must be at least 6 characters');
     }
 
     if (!displayName.trim()) {
@@ -48,6 +48,7 @@ export default function SignupPage() {
     try {
       setError('');
       setLoading(true);
+      
       await signup(email, password, displayName, notificationsEnabled);
 
       setShowVerificationMessage(true);
@@ -60,7 +61,7 @@ export default function SignupPage() {
     } catch (error: unknown) {
         console.error("Signup Error", error);
         if (error instanceof Error){
-            setError("Failed to create an account: " + error.message);
+            setError(error.message);
         } else {
             setError("An unknown error occurred during signup.");
         }
@@ -77,18 +78,15 @@ export default function SignupPage() {
     } catch (error: unknown) {
         console.error("Google sign in error", error);
         if (error instanceof Error){
-            const errorMessage = ( error as any).code === "auth/popup-closed-by-user"
-            ? "Google sign-in was cancelled."
-            : "Failed to sign in with Google: " + error.message;
-            setError(errorMessage);
+            setError(error.message);
         } else {
-            setError("Unknown error occured while signing in with Google");
+            setError("Unknown error occurred while signing in with Google");
         }
     }
     setLoading(false);
   }
 
-  if (currentUser && currentUser.emailVerified) {
+  if (currentUser) {
     return null;
   }
 
@@ -199,7 +197,7 @@ export default function SignupPage() {
                 placeholder="Enter your password"
                 disabled={loading}
               />
-              <p className="text-xs text-gray-500 mt-1">Must be at least 8 characters</p>
+              <p className="text-xs text-gray-500 mt-1">Must be at least 6 characters</p>
             </div>
 
             <div>
@@ -221,7 +219,7 @@ export default function SignupPage() {
             <div className="flex items-center justify-between space-x-2 p-4 bg-gray-50 rounded-lg">
               <div className="flex-1">
                 <label htmlFor="notifications" className="text-sm font-medium text-gray-700">
-                  Email Notifications
+                  New Flyer Notifications
                 </label>
                 <p className="text-xs text-gray-500">
                   Receive notifications about new flyers and deals

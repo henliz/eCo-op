@@ -39,20 +39,7 @@ export default function LoginPage() {
       router.push('/');
     } catch (error: any) {
       console.error('Login error:', error);
-      
-      let errorMessage = 'Failed to sign in';
-      if (error.code === 'auth/user-not-found') {
-        errorMessage = 'No account found with this email address';
-      } else if (error.code === 'auth/wrong-password') {
-        errorMessage = 'Incorrect password';
-      } else if (error.code === 'auth/invalid-email') {
-        errorMessage = 'Invalid email address';
-      } else if (error.code === 'auth/too-many-requests') {
-        errorMessage = 'Too many failed attempts. Please try again later';
-      } else if (error.message) {
-        errorMessage = error.message;
-      }
-      setError(errorMessage);
+      setError(error.message || 'Failed to sign in');
     } finally {
       setLoading(false);
     }
@@ -66,13 +53,7 @@ export default function LoginPage() {
       router.push('/');
     } catch (error: any) {
       console.error('Google sign in error:', error);
-      let errorMessage = 'Failed to sign in with Google';
-      if (error.code === 'auth/popup-closed-by-user') {
-        errorMessage = 'Sign in was cancelled';
-      } else if (error.message) {
-        errorMessage = error.message;
-      }
-      setError(errorMessage);
+      setError(error.message || 'Failed to sign in with Google');
     } finally {
       setLoading(false);
     }

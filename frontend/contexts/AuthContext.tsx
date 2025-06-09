@@ -1,19 +1,5 @@
 'use client';
 import React, { createContext, useContext, useEffect, useState } from 'react';
-import {
-  User,
-  signInWithEmailAndPassword,
-  createUserWithEmailAndPassword,
-  signOut,
-  onAuthStateChanged,
-  updateProfile,
-  sendPasswordResetEmail,
-  GoogleAuthProvider,
-  signInWithPopup,
-  sendEmailVerification
-} from 'firebase/auth';
-import { doc, setDoc, getDoc, updateDoc, serverTimestamp, Timestamp } from 'firebase/firestore';
-import { auth, db } from '@/lib/firebase';
 
 interface UserPreferences {
   newFlyerNotifications: boolean;
@@ -21,16 +7,31 @@ interface UserPreferences {
   updatedAt: Date;
 }
 
+interface BackendUser {
+  id: number;
+  uid: string;
+  email: string;
+  displayName: string;
+  emailVerified: boolean;
+  photoURL?: string;
+  newFlyerNotifications: boolean;
+  createdAt: string;
+  updatedAt: string;
+  lastLoginAt?: string;
+}
+
 interface AuthContextType {
-  currentUser: User | null;
+  currentUser: BackendUser | null;
   userPreferences: UserPreferences | null;
   loading: boolean;
+  accessToken: string | null;
   signup: (email: string, password: string, displayName?: string, notifications?: boolean) => Promise<void>;
   login: (email: string, password: string) => Promise<void>;
   logout: () => Promise<void>;
   resetPassword: (email: string) => Promise<void>;
   signInWithGoogle: () => Promise<void>;
   updateNotificationPreference: (enabled: boolean) => Promise<void>;
+  refreshProfile: () => Promise<void>;
 }
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
@@ -47,224 +48,324 @@ interface AuthProviderProps {
   children: React.ReactNode;
 }
 
+const API_BASE_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:3001';
+
 export function AuthProvider({ children }: AuthProviderProps) {
-  const [currentUser, setCurrentUser] = useState<User | null>(null);
+  const [currentUser, setCurrentUser] = useState<BackendUser | null>(null);
   const [userPreferences, setUserPreferences] = useState<UserPreferences | null>(null);
+  const [accessToken, setAccessToken] = useState<string | null>(null);
   const [loading, setLoading] = useState(true);
 
-  async function loadUserPreferences(userId: string) {
+  // Helper function to make API calls to your backend
+  async function makeAPICall(endpoint: string, method = 'GET', body?: any, useAuth = false) {
+    const url = `${API_BASE_URL}${endpoint}`;
+    
+    const headers: any = {
+      'Content-Type': 'application/json',
+    };
+    
+    if (useAuth && accessToken) {
+      headers['Authorization'] = `Bearer ${accessToken}`;
+    }
+    
+    const config: RequestInit = {
+      method,
+      headers,
+      mode: 'cors',
+      credentials: 'include'
+    };
+    
+    if (body) {
+      config.body = JSON.stringify(body);
+    }
+    
     try {
-      const userDocRef = doc(db, 'users', userId);
-      const userDoc = await getDoc(userDocRef);
+      const response = await fetch(url, config);
+      const data = await response.json();
       
-      if (userDoc.exists()) {
-        const data = userDoc.data();
-        setUserPreferences({
-          newFlyerNotifications: data.newFlyerNotifications ?? true,
-          createdAt: data.createdAt?.toDate() || new Date(),
-          updatedAt: data.updatedAt?.toDate() || new Date(),
-        });
-      } else {
-        // Create default preferences if document doesn't exist
-        const defaultPrefs = {
-          newFlyerNotifications: true,
-          createdAt: serverTimestamp(),
-          updatedAt: serverTimestamp(),
-        };
-        await setDoc(userDocRef, defaultPrefs);
-        setUserPreferences({
-          newFlyerNotifications: true,
-          createdAt: new Date(),
-          updatedAt: new Date(),
-        });
+      if (!response.ok) {
+        throw new Error(data.error || data.message || `HTTP ${response.status}: ${response.statusText}`);
       }
-    } catch (error) {
-      console.error('Error loading user preferences:', error);
-      // Set default preferences on error
-      setUserPreferences({
-        newFlyerNotifications: true,
-        createdAt: new Date(),
-        updatedAt: new Date(),
-      });
+      
+      return data;
+    } catch (error: any) {
+      console.error(`API call to ${endpoint} failed:`, error);
+      throw error;
     }
   }
 
-  async function signup(email: string, password: string, displayName?: string, notifications: boolean = true) {
+  async function refreshProfile() {
+    if (!accessToken) return;
+    
     try {
-        const result = await createUserWithEmailAndPassword(auth, email, password);
+      const response = await makeAPICall('/auth/profile', 'GET', null, true);
+      
+      if (response.success && response.data) {
+        const userData = response.data;
+        setCurrentUser(userData);
+        setUserPreferences({
+          newFlyerNotifications: userData.newFlyerNotifications || false,
+          createdAt: new Date(userData.createdAt),
+          updatedAt: new Date(userData.updatedAt),
+        });
+      }
+    } catch (error) {
+      console.error('Error refreshing profile:', error);
+      // If profile fetch fails, user might be logged out
+      logout();
+    }
+  }
 
-        if (displayName && result.user){
-            await updateProfile(result.user, {
-                displayName: displayName,
-            });
-        }
+  async function signup(email: string, password: string, displayName?: string, notifications: boolean = false) {
+    try {
+      const response = await makeAPICall('/auth/register', 'POST', {
+        email,
+        password,
+        displayName: displayName || '',
+      });
 
-        // Create user document in Firestore with preferences
-        if (result.user) {
-            await setDoc(doc(db, 'users', result.user.uid), {
-                email: result.user.email, // Keep original case from Firebase Auth
-                displayName: displayName || '', // Fixed: was creating object instead of string
-                newFlyerNotifications: notifications,
-                createdAt: serverTimestamp(),
-                updatedAt: serverTimestamp(),
-            });
-
-            await sendEmailVerification(result.user);
-        }
-        
-        await signOut(auth);
+      if (response.success) {
+        console.log('Registration successful:', response.data);
+        // Note: User needs to verify email before they can sign in
+      } else {
+        throw new Error(response.error || 'Registration failed');
+      }
     } catch (error: any) {
-        console.error('Signup Error:', error);
-        
-        // Provide specific error messages based on Firebase error codes
-        let errorMessage = 'Failed to create account';
-        if (error.code === 'auth/email-already-in-use') {
-            errorMessage = 'An account with this email already exists';
-        } else if (error.code === 'auth/invalid-email') {
-            errorMessage = 'Invalid email address';
-        } else if (error.code === 'auth/operation-not-allowed') {
-            errorMessage = 'Email/password accounts are not enabled';
-        } else if (error.code === 'auth/weak-password') {
-            errorMessage = 'Password is too weak';
-        } else if (error.message) {
-            errorMessage = error.message;
-        }
-        
-        throw new Error(errorMessage);
+      console.error('Signup Error:', error);
+      
+      let errorMessage = 'Failed to create account';
+      if (error.message.includes('email-already-in-use') || error.message.includes('already registered')) {
+        errorMessage = 'An account with this email already exists';
+      } else if (error.message.includes('invalid-email')) {
+        errorMessage = 'Invalid email address';
+      } else if (error.message.includes('weak-password')) {
+        errorMessage = 'Password is too weak (minimum 6 characters)';
+      } else if (error.message) {
+        errorMessage = error.message;
+      }
+      
+      throw new Error(errorMessage);
     }
   }
     
   async function login(email: string, password: string): Promise<void> {
-    try{
-        const result = await signInWithEmailAndPassword(auth, email, password);
+    try {
+      const response = await makeAPICall('/auth/login', 'POST', {
+        email,
+        password,
+      });
 
-        if (!result.user.emailVerified){
-            await signOut(auth);
-            throw new Error("Please verify your email address before logging in.");
-        }
+      if (response.success && response.data) {
+        console.log('Login successful:', response.data);
+        
+        // Store access token and user data
+        setAccessToken(response.data.accessToken);
+        setCurrentUser(response.data.user);
+        setUserPreferences({
+          newFlyerNotifications: response.data.user.newFlyerNotifications || false,
+          createdAt: new Date(response.data.user.createdAt || new Date()),
+          updatedAt: new Date(response.data.user.updatedAt || new Date()),
+        });
 
+        // Store in localStorage for persistence
+        localStorage.setItem('accessToken', response.data.accessToken);
+        localStorage.setItem('user', JSON.stringify(response.data.user));
+      } else {
+        throw new Error(response.error || 'Login failed');
+      }
     } catch (error: any) {
-        console.error('Login Error:', error);
-        
-        // Provide specific error messages based on Firebase error codes
-        let errorMessage = 'Failed to sign in';
-        if (error.code === 'auth/user-not-found') {
-            errorMessage = 'No account found with this email address';
-        } else if (error.code === 'auth/wrong-password') {
-            errorMessage = 'Incorrect password';
-        } else if (error.code === 'auth/invalid-email') {
-            errorMessage = 'Invalid email address';
-        } else if (error.code === 'auth/too-many-requests') {
-            errorMessage = 'Too many failed attempts. Please try again later';
-        } else if (error.code === 'auth/user-disabled') {
-            errorMessage = 'This account has been disabled';
-        } else if (error.message) {
-            errorMessage = error.message;
-        }
-        
-        throw new Error(errorMessage);
+      console.error('Login Error:', error);
+      
+      let errorMessage = 'Failed to sign in';
+      if (error.message.includes('user-not-found') || error.message.includes('No account found')) {
+        errorMessage = 'No account found with this email address';
+      } else if (error.message.includes('wrong-password') || error.message.includes('Incorrect password')) {
+        errorMessage = 'Incorrect password';
+      } else if (error.message.includes('invalid-email')) {
+        errorMessage = 'Invalid email address';
+      } else if (error.message.includes('too-many-requests')) {
+        errorMessage = 'Too many failed attempts. Please try again later';
+      } else if (error.message.includes('user-disabled')) {
+        errorMessage = 'This account has been disabled';
+      } else if (error.message.includes('verify your email')) {
+        errorMessage = 'Please verify your email address before logging in';
+      } else if (error.message) {
+        errorMessage = error.message;
+      }
+      
+      throw new Error(errorMessage);
     }
   }
 
-  function logout() {
+  async function logout() {
+    try {
+      if (accessToken) {
+        await makeAPICall('/auth/logout', 'POST', null, true);
+      }
+    } catch (error) {
+      console.error('Backend logout failed:', error);
+    }
+    
+    // Clear local state and storage
+    setCurrentUser(null);
     setUserPreferences(null);
-    return signOut(auth);
+    setAccessToken(null);
+    localStorage.removeItem('accessToken');
+    localStorage.removeItem('user');
   }
 
-  function resetPassword(email: string) {
-    return sendPasswordResetEmail(auth, email);
+  async function resetPassword(email: string) {
+    try {
+      // You'll need to add this endpoint to your backend
+      const response = await makeAPICall('/auth/reset-password', 'POST', { email });
+      
+      if (!response.success) {
+        throw new Error(response.error || 'Failed to send reset email');
+      }
+    } catch (error: any) {
+      console.error('Reset password error:', error);
+      throw new Error(error.message || 'Failed to send reset email');
+    }
   }
 
   async function signInWithGoogle(): Promise<void> {
-    try{
-        const provider = new GoogleAuthProvider();
-        const result = await signInWithPopup(auth, provider);
+    try {
+      // Initialize Firebase Auth for Google sign-in
+      const { GoogleAuthProvider, signInWithPopup } = await import('firebase/auth');
+      const { auth } = await import('@/lib/firebase');
+      
+      const provider = new GoogleAuthProvider();
+      provider.addScope('email');
+      provider.addScope('profile');
+      
+      const result = await signInWithPopup(auth, provider);
+      
+      if (result.user) {
+        // Get the ID token and send to backend
+        const idToken = await result.user.getIdToken();
         
-        if (result.user) {
-            // Check if user document exists, create if not
-            const userDocRef = doc(db, 'users', result.user.uid);
-            const userDoc = await getDoc(userDocRef);
-            
-            if (!userDoc.exists()) {
-                await setDoc(userDocRef, {
-                    email: result.user.email, // Keep original case from Firebase Auth
-                    displayName: result.user.displayName || '',
-                    newFlyerNotifications: true,
-                    createdAt: serverTimestamp(),
-                    updatedAt: serverTimestamp(),
-                });
-            }
+        const response = await makeAPICall('/auth/google-login', 'POST', {
+          idToken: idToken
+        });
+
+        if (response.success && response.data) {
+          console.log('Google login successful:', response.data);
+          
+          // Store access token and user data
+          setAccessToken(response.data.accessToken);
+          setCurrentUser(response.data.user);
+          setUserPreferences({
+            newFlyerNotifications: response.data.user.newFlyerNotifications || false,
+            createdAt: new Date(response.data.user.createdAt || new Date()),
+            updatedAt: new Date(response.data.user.updatedAt || new Date()),
+          });
+
+          // Store in localStorage for persistence
+          localStorage.setItem('accessToken', response.data.accessToken);
+          localStorage.setItem('user', JSON.stringify(response.data.user));
+        } else {
+          throw new Error(response.error || 'Google sign-in failed');
         }
-        
+      }
     } catch (error: any) {
-        console.error('Google Sign-in Error', error);
-        
-        // Provide specific error messages
-        let errorMessage = 'Failed to sign in with Google';
-        if (error.code === 'auth/popup-closed-by-user') {
-            errorMessage = 'Sign in was cancelled';
-        } else if (error.code === 'auth/popup-blocked') {
-            errorMessage = 'Popup was blocked. Please allow popups and try again';
-        } else if (error.code === 'auth/cancelled-popup-request') {
-            errorMessage = 'Sign in was cancelled';
-        } else if (error.message) {
-            errorMessage = error.message;
-        }
-        
-        throw new Error(errorMessage);
+      console.error('Google Sign-in Error:', error);
+      
+      let errorMessage = 'Failed to sign in with Google';
+      if (error.code === 'auth/popup-closed-by-user') {
+        errorMessage = 'Sign in was cancelled';
+      } else if (error.code === 'auth/popup-blocked') {
+        errorMessage = 'Popup was blocked. Please allow popups and try again';
+      } else if (error.code === 'auth/cancelled-popup-request') {
+        errorMessage = 'Sign in was cancelled';
+      } else if (error.message) {
+        errorMessage = error.message;
+      }
+      
+      throw new Error(errorMessage);
     }
   }
 
   async function updateNotificationPreference(enabled: boolean): Promise<void> {
-    if (!currentUser) {
+    if (!currentUser || !accessToken) {
       throw new Error('No user logged in');
     }
 
     try {
-      const userDocRef = doc(db, 'users', currentUser.uid);
-      await updateDoc(userDocRef, {
+      const response = await makeAPICall('/auth/notifications', 'PUT', {
         newFlyerNotifications: enabled,
-        updatedAt: serverTimestamp(),
-      });
+      }, true);
 
-      // Update local state immediately for better UX
-      setUserPreferences(prev => prev ? {
-        ...prev,
-        newFlyerNotifications: enabled,
-        updatedAt: new Date(), // Use actual Date for local state
-      } : null);
+      if (response.success) {
+        console.log('Notification preference updated:', response);
+        
+        // Update local state immediately for better UX
+        setUserPreferences(prev => prev ? {
+          ...prev,
+          newFlyerNotifications: enabled,
+          updatedAt: response.updatedAt ? new Date(response.updatedAt) : new Date(),
+        } : null);
+
+        // Update current user state
+        setCurrentUser(prev => prev ? {
+          ...prev,
+          newFlyerNotifications: enabled,
+          updatedAt: response.updatedAt || new Date().toISOString(),
+        } : null);
+      } else {
+        throw new Error(response.error || 'Failed to update notification preference');
+      }
     } catch (error: any) {
-        console.error('Error updating notification preference:', error);
-        throw new Error('Failed to update notification preference. Please try again.');
+      console.error('Error updating notification preference:', error);
+      throw new Error(error.message || 'Failed to update notification preference. Please try again.');
     }
   }
 
+  // Load user from localStorage on mount
   useEffect(() => {
-    const unsubscribe = onAuthStateChanged(auth, async (user) => {
-      if (user && user.emailVerified) {
-        setCurrentUser(user);
-        await loadUserPreferences(user.uid);
-      } else {
-        setCurrentUser(null);
-        setUserPreferences(null);
+    const loadStoredUser = () => {
+      try {
+        const storedToken = localStorage.getItem('accessToken');
+        const storedUser = localStorage.getItem('user');
+        
+        if (storedToken && storedUser) {
+          const user = JSON.parse(storedUser);
+          setAccessToken(storedToken);
+          setCurrentUser(user);
+          setUserPreferences({
+            newFlyerNotifications: user.newFlyerNotifications || false,
+            createdAt: new Date(user.createdAt || new Date()),
+            updatedAt: new Date(user.updatedAt || new Date()),
+          });
+          
+          // Refresh profile to ensure data is current
+          refreshProfile();
+        }
+      } catch (error) {
+        console.error('Error loading stored user:', error);
+        // Clear invalid data
+        localStorage.removeItem('accessToken');
+        localStorage.removeItem('user');
+      } finally {
+        setLoading(false);
       }
-      setLoading(false);
-    });
+    };
 
-    return unsubscribe;
+    loadStoredUser();
   }, []);
 
   const value = React.useMemo(() => ({
     currentUser,
     userPreferences,
     loading,
+    accessToken,
     signup,
     login,
     logout,
     resetPassword,
     signInWithGoogle,
     updateNotificationPreference,
-  }), [currentUser, userPreferences, loading]);
+    refreshProfile,
+  }), [currentUser, userPreferences, loading, accessToken]);
 
   return (
     <AuthContext.Provider value={value}>

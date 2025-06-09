@@ -10,6 +10,7 @@ export default function Header() {
   const [open, setOpen] = useState(false);
   const [mobile, setMob] = useState(false);
   const [showProfileMenu, setShowProfileMenu] = useState(false);
+  const [notificationLoading, setNotificationLoading] = useState(false);
   
   const { currentUser, userPreferences, logout, updateNotificationPreference } = useAuth();
 
@@ -36,9 +37,12 @@ export default function Header() {
 
   const handleNotificationToggle = async (enabled) => {
     try {
+      setNotificationLoading(true);
       await updateNotificationPreference(enabled);
     } catch (error) {
       console.error('Error updating notifications:', error);
+    } finally {
+      setNotificationLoading(false);
     }
   };
 
@@ -164,40 +168,82 @@ export default function Header() {
                   {/* Profile Dropdown */}
                   {showProfileMenu && (
                     <div className="
-                      absolute right-0 top-full mt-2 w-64 py-2
+                      absolute right-0 top-full mt-2 w-72 py-2
                       bg-white rounded-lg shadow-xl border border-gray-200
                       z-50
                     ">
                       {/* User Info */}
                       <div className="px-4 py-3 border-b border-gray-100">
-                        <p className="font-semibold text-gray-900">{currentUser.displayName || 'User'}</p>
+                        <p className="font-semibold text-gray-900">
+                          {currentUser.displayName || 'User'}
+                        </p>
                         <p className="text-sm text-gray-600 truncate">{currentUser.email}</p>
+                        {currentUser.emailVerified ? (
+                          <p className="text-xs text-green-600 mt-1">✓ Email verified</p>
+                        ) : (
+                          <p className="text-xs text-orange-600 mt-1">⚠ Email not verified</p>
+                        )}
+                      </div>
+
+                      {/* Account Info */}
+                      <div className="px-4 py-3 border-b border-gray-100">
+                        <div className="grid grid-cols-2 gap-2 text-xs">
+                          <div>
+                            <span className="text-gray-500">Member since:</span>
+                            <p className="text-gray-700 font-medium">
+                              {userPreferences?.createdAt.toLocaleDateString('en-US', {
+                                month: 'short',
+                                year: 'numeric'
+                              })}
+                            </p>
+                          </div>
+                          <div>
+                            <span className="text-gray-500">Account ID:</span>
+                            <p className="text-gray-700 font-mono">#{currentUser.id}</p>
+                          </div>
+                        </div>
                       </div>
 
                       {/* Notification Toggle */}
-                      <div className="px-4 py-3 border-t border-gray-100">
+                      <div className="px-4 py-3 border-b border-gray-100">
                         <div className="flex items-center justify-between">
                           <div className="flex items-center space-x-2">
-                            {/* Bell Icon (using emoji instead of heroicon) */}
                             <span className="text-gray-500">🔔</span>
-                            <span className="text-sm text-gray-700">New Flyer Notifications</span>
+                            <div>
+                              <span className="text-sm text-gray-700 font-medium">
+                                New Flyer Notifications
+                              </span>
+                              <p className="text-xs text-gray-500">
+                                Get notified about new deals and flyers
+                              </p>
+                            </div>
                           </div>
                           <Switch
-                            checked={userPreferences?.newFlyerNotifications ?? true}
+                            checked={userPreferences?.newFlyerNotifications ?? false}
                             onCheckedChange={handleNotificationToggle}
-                            disabled={!userPreferences}
+                            disabled={!userPreferences || notificationLoading}
                           />
                         </div>
-                        <p className="text-xs text-gray-500 mt-1 ml-6">
-                          Get notified about new deals and flyers
-                        </p>
+                        {userPreferences && (
+                          <p className="text-xs text-gray-400 mt-2">
+                            Last updated: {userPreferences.updatedAt.toLocaleString('en-US', {
+                              month: 'short',
+                              day: 'numeric',
+                              hour: '2-digit',
+                              minute: '2-digit'
+                            })}
+                          </p>
+                        )}
                       </div>
 
                       {/* Sign Out */}
                       <div className="border-t border-gray-100">
                         <button
                           onClick={handleLogout}
-                          className="block w-full text-left px-4 py-2 text-gray-700 hover:bg-gray-50"
+                          className="
+                            block w-full text-left px-4 py-3 text-red-600 hover:bg-red-50
+                            transition-colors duration-150 font-medium
+                          "
                         >
                           Sign Out
                         </button>
@@ -288,47 +334,45 @@ export default function Header() {
             {currentUser ? (
               <>
                 <div className="px-6 py-4 border-b border-white/20">
-                  <p className="font-semibold text-white">{currentUser.displayName || 'User'}</p>
+                  <p className="font-semibold text-white">
+                    {currentUser.displayName || 'User'}
+                  </p>
                   <p className="text-sm text-white/80">{currentUser.email}</p>
+                  <p className="text-xs text-white/60 mt-1">
+                    Account #{currentUser.id} • Member since {userPreferences?.createdAt.toLocaleDateString('en-US', { month: 'short', year: 'numeric' })}
+                  </p>
                 </div>
-                
-                <Link
-                  href="/profile"
-                  onClick={() => setOpen(false)}
-                  className="
-                    block text-center text-lg font-medium text-gray-900
-                    px-6 py-6 border-b last:border-0
-                    hover:bg-white/10 transition-colors
-                  "
-                >
-                  Profile
-                </Link>
-                
-                <Link
-                  href="/dashboard"
-                  onClick={() => setOpen(false)}
-                  className="
-                    block text-center text-lg font-medium text-gray-900
-                    px-6 py-6 border-b last:border-0
-                    hover:bg-white/10 transition-colors
-                  "
-                >
-                  Dashboard
-                </Link>
 
                 {/* Mobile Notification Toggle */}
                 <div className="px-6 py-4 border-b border-white/20">
                   <div className="flex items-center justify-between">
                     <div className="flex items-center space-x-2">
                       <span className="text-white">🔔</span>
-                      <span className="text-sm text-white">New Flyer Notifications</span>
+                      <div>
+                        <span className="text-sm text-white font-medium">
+                          New Flyer Notifications
+                        </span>
+                        <p className="text-xs text-white/80">
+                          Get notified about deals
+                        </p>
+                      </div>
                     </div>
                     <Switch
-                      checked={userPreferences?.newFlyerNotifications ?? true}
+                      checked={userPreferences?.newFlyerNotifications ?? false}
                       onCheckedChange={handleNotificationToggle}
-                      disabled={!userPreferences}
+                      disabled={!userPreferences || notificationLoading}
                     />
                   </div>
+                  {userPreferences && (
+                    <p className="text-xs text-white/60 mt-2">
+                      Last updated: {userPreferences.updatedAt.toLocaleString('en-US', {
+                        month: 'short',
+                        day: 'numeric',
+                        hour: '2-digit',
+                        minute: '2-digit'
+                      })}
+                    </p>
+                  )}
                 </div>
                 
                 <button
@@ -337,9 +381,9 @@ export default function Header() {
                     setOpen(false);
                   }}
                   className="
-                    block w-full text-center text-lg font-medium text-gray-900
+                    block w-full text-center text-lg font-medium text-red-200
                     px-6 py-6
-                    hover:bg-white/10 transition-colors
+                    hover:bg-red-500/20 transition-colors
                   "
                 >
                   Sign Out
