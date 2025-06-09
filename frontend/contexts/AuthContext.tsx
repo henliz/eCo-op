@@ -8,7 +8,7 @@ interface UserPreferences {
 }
 
 interface BackendUser {
-  id: number;
+  id: string;
   uid: string;
   email: string;
   displayName: string;
@@ -106,7 +106,7 @@ export function AuthProvider({ children }: AuthProviderProps) {
         setUserPreferences({
           newFlyerNotifications: userData.newFlyerNotifications || false,
           createdAt: new Date(userData.createdAt),
-          updatedAt: new Date(userData.updatedAt),
+          updatedAt: new Date(userData.updatedAt || new Date()),
         });
       }
     } catch (error) {
@@ -116,12 +116,13 @@ export function AuthProvider({ children }: AuthProviderProps) {
     }
   }
 
-  async function signup(email: string, password: string, displayName?: string, notifications: boolean = false) {
+  async function signup(email: string, password: string, displayName?: string, notifications: boolean = true) {
     try {
       const response = await makeAPICall('/auth/register', 'POST', {
         email,
         password,
         displayName: displayName || '',
+        newFlyerNotifications: notifications,
       });
 
       if (response.success) {
@@ -216,7 +217,6 @@ export function AuthProvider({ children }: AuthProviderProps) {
 
   async function resetPassword(email: string) {
     try {
-      // You'll need to add this endpoint to your backend
       const response = await makeAPICall('/auth/reset-password', 'POST', { email });
       
       if (!response.success) {
@@ -311,6 +311,15 @@ export function AuthProvider({ children }: AuthProviderProps) {
           newFlyerNotifications: enabled,
           updatedAt: response.updatedAt || new Date().toISOString(),
         } : null);
+
+        // Update localStorage
+        const storedUser = localStorage.getItem('user');
+        if (storedUser) {
+          const userData = JSON.parse(storedUser);
+          userData.newFlyerNotifications = enabled;
+          userData.updatedAt = response.updatedAt || new Date().toISOString();
+          localStorage.setItem('user', JSON.stringify(userData));
+        }
       } else {
         throw new Error(response.error || 'Failed to update notification preference');
       }
