@@ -21,24 +21,32 @@ export function StoreCard({
   disabled = false,
   showDistance = false
 }: StoreCardProps) {
-  // Get logo filename from store name
-  const getLogoFileName = (storeName: string): string => {
-    const logoMap: Record<string, string> = {
-      'Walmart': 'Walmart_Logo.png',
-      'Zehrs': 'Zehrs_Logo.png',
-      'Food Basics': 'FoodBasics_Logo.png',
-      'Farm Boy': 'FarmBoy_Logo.png',
-      'FreshCo': 'FreshCo_Logo.png',
-      'NoFrills': 'NoFrills_Logo.png',
-      'Metro': 'Metro_Logo.png',
-      'Sobeys': 'Sobeys_Logo.png'
-    };
-    return logoMap[storeName] || '';
+  // Use the logo from the store data (from store-index.json)
+  // Add validation to ensure it's a valid URL or path
+  const getValidLogoPath = (logo: string | undefined): string => {
+    if (!logo || logo.trim() === '') return '';
+
+    // Check if it's a valid URL or starts with / for local paths
+    try {
+      // Try to create a URL - this will throw if invalid
+      if (logo.startsWith('http://') || logo.startsWith('https://')) {
+        new URL(logo);
+        return logo;
+      }
+      // For local paths, ensure they start with /
+      if (logo.startsWith('/')) {
+        return logo;
+      }
+      // If it doesn't start with /, assume it's a filename and prepend /
+      return `/${logo}`;
+    } catch {
+      // Invalid URL, return empty string to fall back to letter
+      console.warn(`Invalid logo URL for ${store.name}: ${logo}`);
+      return '';
+    }
   };
 
-  // Get logo path
-  const logoFileName = getLogoFileName(store.name);
-  const logoPath = logoFileName ? `/${logoFileName}` : '';
+  const logoPath = getValidLogoPath(store.logo);
 
   // Determine style based on whether it's selected (for store selector)
   const containerClassName = `
