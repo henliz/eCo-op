@@ -722,28 +722,59 @@ export const usePlannerStore = create<PlannerState>((set, get) => ({
   },
 
   discoverStores: async () => {
-    const logMessage = (msg: string) => console.log(`[PlannerStore] ${msg}`);
-    logMessage('Discovering available stores...');
-    set({ isLoading: true, error: null });
+  const logMessage = (msg: string) => console.log(`[PlannerStore] ${msg}`);
+  logMessage('Discovering available stores...');
 
-    try {
-      // Fetch the store index file
-      const response = await fetch('/data/store-index.json');
+  set({ isLoading: true, error: null });
 
-      if (!response.ok) {
-        throw new Error('Failed to load store index file');
-      }
+  try {
+    logMessage('Attempting to fetch store index...');
 
-      const indexData = await response.json();
-      const currentDate = new Date();
-      currentDate.setHours(0, 0, 0, 0); // Compare dates only
+    const response = await fetch('/data/store-index.json');
 
-      // Process the stores from the index
-      const stores: Store[] = indexData.map((storeInfo: StoreIndexItem) => {
+    logMessage(`Fetch response status: ${response.status}`);
+
+    if (!response.ok) {
+      throw new Error(`Failed to load store index file: ${response.status} ${response.statusText}`);
+    }
+
+    logMessage('Parsing JSON...');
+    const indexData = await response.json();
+
+    // Fix: Extract the stores array from the wrapper object
+    const storesArray = indexData.stores || indexData;
+
+    if (!Array.isArray(storesArray)) {
+      console.error('Invalid data structure:', indexData);
+      throw new Error('Store index data is not in the expected format');
+    }
+
+    logMessage(`Parsed JSON successfully. Found ${storesArray.length} stores`);
+    console.log('Sample store data:', storesArray.slice(0, 2));
+
+    const currentDate = new Date();
+    currentDate.setHours(0, 0, 0, 0);
+    logMessage(`Current date for comparison: ${currentDate.toISOString()}`);
+
+    // Process the stores from the array
+    const stores: Store[] = storesArray.map((storeInfo: StoreIndexItem, index: number) => {
+      try {
         const validUntil = new Date(storeInfo.validUntil);
         const isAvailable = validUntil >= currentDate;
 
-        return {
+        // Parse coordinates if they exist
+        let lat = storeInfo.lat;
+        let lng = storeInfo.lng;
+
+        if (!lat || !lng) {
+          const coords = parseCoordinates(storeInfo.coordinates || '');
+          if (coords) {
+            lat = coords.latitude;
+            lng = coords.longitude;
+          }
+        }
+
+        const store = {
           id: storeInfo.id,
           name: storeInfo.name,
           location: storeInfo.location,
@@ -751,36 +782,57 @@ export const usePlannerStore = create<PlannerState>((set, get) => ({
           validUntil,
           isAvailable,
           logo: storeInfo.logo,
+          lat,
+          lng,
           // Include all new fields
           location_name: storeInfo.location_name,
           city: storeInfo.city,
           postal_code: storeInfo.postal_code,
           coordinates: storeInfo.coordinates,
           flyer: storeInfo.flyer,
-          lat: storeInfo.lat,
-          lng: storeInfo.lng,
           geocoded_address: storeInfo.geocoded_address,
           geocoded_at: storeInfo.geocoded_at
         };
-      });
 
-      // Sort by name
-      stores.sort((a, b) => a.name.localeCompare(b.name));
+        if (index < 3) {
+          logMessage(`Sample store ${index}: ${store.name} - ${store.location} - Available: ${store.isAvailable}`);
+        }
 
-      logMessage(`Discovered ${stores.length} stores`);
+        return store;
+      } catch (storeError) {
+        console.error(`Error processing store at index ${index}:`, storeError, storeInfo);
+        throw storeError;
+      }
+    });
 
-      set({
-        availableStores: stores,
-        isLoading: false,
-        isStoresLoaded: true
-      });
-    } catch (err) {
-      console.error("Error discovering stores:", err);
-      set({
-        isLoading: false,
-        error: err instanceof Error ? err.message : 'Failed to discover stores',
-        isStoresLoaded: false
-      });
-    }
+    // Sort by name
+    stores.sort((a, b) => a.name.localeCompare(b.name));
+
+    logMessage(`Successfully processed ${stores.length} stores`);
+    const availableCount = stores.filter(s => s.isAvailable).length;
+    logMessage(`Available stores: ${availableCount}/${stores.length}`);
+
+    set({
+      availableStores: stores,
+      isLoading: false,
+      isStoresLoaded: true,
+      error: null
+    });
+
+    logMessage('Store discovery completed successfully');
+  } catch (err) {
+    console.error("Error discovering stores:", err);
+    const errorMessage = err instanceof Error ? err.message : 'Failed to discover stores';
+    console.error("Full error details:", err);
+
+    set({
+      isLoading: false,
+      error: errorMessage,
+      isStoresLoaded: false,
+      availableStores: []
+    });
+
+    logMessage(`Store discovery failed: ${errorMessage}`);
   }
+}
 }));

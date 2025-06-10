@@ -130,6 +130,12 @@ export class LocationService {
 
     // Geocode postal code or address using Geocodio API
     async geocodeAddress(address: string): Promise<UserLocation> {
+        // Debug environment variables
+        console.log('=== Environment Debug ===');
+        console.log('API Key exists:', !!process.env.NEXT_PUBLIC_GEOCODIO_API_KEY);
+        console.log('API Key length:', process.env.NEXT_PUBLIC_GEOCODIO_API_KEY?.length);
+        console.log('API Key preview:', process.env.NEXT_PUBLIC_GEOCODIO_API_KEY?.substring(0, 8) + '...');
+
         // Simple postal code pattern for Canada (M4B 1B3 format)
         const canadianPostalRegex = /^[A-Za-z]\d[A-Za-z][ -]?\d[A-Za-z]\d$/;
 
@@ -144,15 +150,32 @@ export class LocationService {
 
         try {
             // Using Geocodio API (free tier: 2500 requests/day, $0.50/1000 after)
-            const response = await fetch(
-                `https://api.geocod.io/v1.7/geocode?q=${encodeURIComponent(searchQuery)}&api_key=${process.env.GEOCODIO_API_KEY}&limit=1`
-            );
+            // FIXED: Use NEXT_PUBLIC_GEOCODIO_API_KEY instead of GEOCODIO_API_KEY
+            const apiKey = process.env.NEXT_PUBLIC_GEOCODIO_API_KEY;
+
+            if (!apiKey) {
+                throw new Error('Geocodio API key not found. Make sure NEXT_PUBLIC_GEOCODIO_API_KEY is set in your .env.local file.');
+            }
+
+            const url = `https://api.geocod.io/v1.7/geocode?q=${encodeURIComponent(searchQuery)}&api_key=${apiKey}&limit=1`;
+
+            console.log('=== Geocoding Debug ===');
+            console.log('Search query:', searchQuery);
+            console.log('Using API key:', apiKey.substring(0, 8) + '...');
+
+            const response = await fetch(url);
+
+            console.log('Response status:', response.status);
+            console.log('Response ok:', response.ok);
 
             if (!response.ok) {
-                throw new Error(`Geocoding failed: ${response.status}`);
+                const errorText = await response.text();
+                console.log('Error response body:', errorText);
+                throw new Error(`Geocoding failed: ${response.status} - ${errorText}`);
             }
 
             const data = await response.json();
+            console.log('Geocoding success:', data);
 
             if (!data.results || data.results.length === 0) {
                 throw new Error('No location found for this address');
@@ -171,7 +194,7 @@ export class LocationService {
             return location;
         } catch (error) {
             console.error('Geocoding error:', error);
-            throw new Error('Failed to find location. Please try a different address.');
+            throw error;
         }
     }
 

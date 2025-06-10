@@ -2,7 +2,6 @@
 
 import React from 'react';
 import Image from 'next/image';
-import { MapPin, Navigation } from 'lucide-react';
 import { type Store } from './usePlannerStore';
 import { format } from 'date-fns';
 
@@ -64,24 +63,6 @@ export function StoreCard({
   const formattedDate = store.validUntil ?
     format(new Date(store.validUntil), 'MMM d, yyyy') : '';
 
-  // Format distance display
-  const distanceDisplay = () => {
-    if (!showDistance || store.distance === undefined) return null;
-
-    return (
-      <div className={`flex items-center text-xs mt-1 ${isSelected ? 'text-white/90' : 'text-teal-600'
-        }`}>
-        <MapPin className="h-3 w-3 mr-1" />
-        <span className="font-medium">
-          {store.distance < 1
-            ? `~${Math.round(store.distance * 1000)}m away`
-            : `~${store.distance.toFixed(1)}km away`
-          }
-        </span>
-      </div>
-    );
-  };
-
   return (
     <div
       className={containerClassName}
@@ -110,9 +91,6 @@ export function StoreCard({
             {store.location}
           </div>
 
-          {/* Distance display - below location */}
-          {distanceDisplay()}
-
           {/* Expiration date */}
           {formattedDate && (
             <div className={`text-xs mt-0.5 ${isSelected ? 'text-white/80' : 'text-gray-600'
@@ -130,9 +108,9 @@ export function StoreCard({
             <Image
               src={logoPath}
               alt={`${store.name} logo`}
-              width={100}
-              height={100}
-              className="object-contain"
+              width={48}
+              height={48}
+              className="object-contain w-auto h-auto"
             />
           </div>
         ) : (
@@ -144,15 +122,6 @@ export function StoreCard({
 
       {/* Special indicators */}
       <div className="flex justify-between items-center mt-2 mx-3">
-        {/* Closest store indicator */}
-        {showDistance && store.distance !== undefined && store.distance <= 2 && (
-          <div className={`flex items-center text-xs ${isSelected ? 'text-white' : 'text-green-600'
-            }`}>
-            <Navigation className="h-3 w-3 mr-1" />
-            <span className="font-medium">Closest to you</span>
-          </div>
-        )}
-
         {/* Available/Unavailable status */}
         {!store.isAvailable && (
           <div className="text-xs text-red-600 font-medium">

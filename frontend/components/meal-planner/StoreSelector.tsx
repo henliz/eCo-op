@@ -1,10 +1,9 @@
 'use client';
 
 import React, { useEffect, useMemo } from 'react';
-import Image from 'next/image';
-import { usePlannerStore, type Store, parseCoordinates } from './usePlannerStore';
+import { usePlannerStore, type Store } from './usePlannerStore';
 import { StoreCard } from './StoreCard';
-import { MapPin, AlertTriangle, Navigation, Loader2, AlertCircle } from 'lucide-react';
+import { MapPin, Navigation, Loader2, AlertCircle, Search, X } from 'lucide-react';
 import { locationService } from '@/lib/location';
 import { useLocation } from '@/hooks/useLocation';
 
@@ -26,7 +25,6 @@ export default function StoreSelector({ shouldNavigateToPlan }: StoreSelectorPro
     selectedStore,
     setSelectedStore,
     isLoading,
-    error,
     availableStores,
     isStoresLoaded,
     discoverStores,
@@ -39,24 +37,18 @@ export default function StoreSelector({ shouldNavigateToPlan }: StoreSelectorPro
     location: hookLocation,
     isLoading: locationLoading,
     error: locationError,
-    isPermissionDenied,
-    hasAskedPermission,
     requestLocation,
     geocodeAddress,
     clearError,
   } = useLocation();
 
-  // State for search filter and location UI
+  // State
   const [searchTerm, setSearchTerm] = React.useState('');
-  const [locationEnabled, setLocationEnabled] = React.useState(false);
-  const [isClient, setIsClient] = React.useState(false);
-  const [addressInput, setAddressInput] = React.useState('');
-  const [showLocationUI, setShowLocationUI] = React.useState(false);
-
-  // Prevent hydration mismatch
-  React.useEffect(() => {
-    setIsClient(true);
-  }, []);
+  const [selectedChain, setSelectedChain] = React.useState('');
+  const [postalCode, setPostalCode] = React.useState('');
+  const [sortBy, setSortBy] = React.useState<'name' | 'distance'>('name');
+  const [showLocationPrompt, setShowLocationPrompt] = React.useState(false);
+  const carouselRef = React.useRef<HTMLDivElement>(null);
 
   // Discover stores on component mount
   useEffect(() => {
@@ -65,7 +57,7 @@ export default function StoreSelector({ shouldNavigateToPlan }: StoreSelectorPro
     }
   }, [isStoresLoaded, isLoading, discoverStores]);
 
-  // Check for existing location on mount
+  // Check for existing location and auto-enable distance sorting
   useEffect(() => {
     const existingLocation = locationService.getStoredLocation();
     if (existingLocation) {
@@ -75,10 +67,7 @@ export default function StoreSelector({ shouldNavigateToPlan }: StoreSelectorPro
         address: existingLocation.address,
         source: existingLocation.source,
       });
-      setLocationEnabled(true);
-    } else {
-      // Show location UI if no existing location
-      setShowLocationUI(true);
+      setSortBy('distance');
     }
   }, [setUserLocation]);
 
@@ -91,8 +80,8 @@ export default function StoreSelector({ shouldNavigateToPlan }: StoreSelectorPro
         address: hookLocation.address,
         source: hookLocation.source,
       });
-      setLocationEnabled(true);
-      setShowLocationUI(false);
+      setSortBy('distance');
+      setShowLocationPrompt(false);
     }
   }, [hookLocation, setUserLocation]);
 
@@ -110,9 +99,42 @@ export default function StoreSelector({ shouldNavigateToPlan }: StoreSelectorPro
     await requestLocation();
   };
 
-  const handleAddressSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
-    await geocodeAddress(addressInput);
+  const handlePostalCodeSubmit = async () => {
+    if (!postalCode.trim()) return;
+    await geocodeAddress(postalCode);
+  };
+
+  // Get unique store chains for dropdown (deduplicated)
+  const storeChains = useMemo(() => {
+    const chains = [...new Set(availableStores.map(store => store.name))].sort();
+    return chains;
+  }, [availableStores]);
+
+  // Helper function for chain logos using actual store data
+  const getChainLogo = (chain: string) => {
+    // Find a store from this chain to get the logo image
+    const storeFromChain = availableStores.find(store => store.name === chain);
+
+    if (storeFromChain?.logo) {
+      return (
+        <div
+          className="w-full h-full p-2 bg-white flex items-center justify-center"
+          style={{
+            backgroundImage: `url(/${storeFromChain.logo})`,
+            backgroundSize: 'contain',
+            backgroundRepeat: 'no-repeat',
+            backgroundPosition: 'center'
+          }}
+        />
+      );
+    }
+
+    // Fallback to colored circle with letter
+    return (
+      <div className="w-full h-full bg-gray-500 flex items-center justify-center text-white text-xl font-bold">
+        {chain.charAt(0)}
+      </div>
+    );
   };
 
   // Calculate distances and sort stores
@@ -158,424 +180,300 @@ export default function StoreSelector({ shouldNavigateToPlan }: StoreSelectorPro
     });
   }, [availableStores, userLocation]);
 
-  // Sort stores
-  const sortedStores = useMemo((): ExtendedStore[] => {
-    return [...storesWithDistance]
-      .sort((a, b) => {
-        if (a.isAvailable !== b.isAvailable) {
-          return a.isAvailable ? -1 : 1;
-        }
+  // Filter and sort stores
+  const filteredAndSortedStores = useMemo((): ExtendedStore[] => {
+    let filtered = [...storesWithDistance];
 
-        if (userLocation && locationEnabled) {
-          if (a.distance !== undefined && b.distance === undefined) return -1;
-          if (a.distance === undefined && b.distance !== undefined) return 1;
-          if (a.distance !== undefined && b.distance !== undefined) {
-            return a.distance - b.distance;
-          }
-        }
+    // Filter by search term
+    if (searchTerm) {
+      const searchLower = searchTerm.toLowerCase();
+      filtered = filtered.filter(store =>
+        store.name.toLowerCase().includes(searchLower) ||
+        store.location.toLowerCase().includes(searchLower) ||
+        store.city?.toLowerCase().includes(searchLower) ||
+        store.postal_code?.toLowerCase().includes(searchLower)
+      );
+    }
 
-        return a.name.localeCompare(b.name);
-      })
-      .filter(store => {
-        if (!searchTerm) return true;
-        const extendedStore = store as ExtendedStore;
-        const searchLower = searchTerm.toLowerCase();
-        return (
-          extendedStore.name.toLowerCase().includes(searchLower) ||
-          extendedStore.location.toLowerCase().includes(searchLower) ||
-          extendedStore.id.toLowerCase().includes(searchLower) ||
-          (extendedStore.location_name && extendedStore.location_name.toLowerCase().includes(searchLower)) ||
-          (extendedStore.city && extendedStore.city.toLowerCase().includes(searchLower)) ||
-          (extendedStore.postal_code && extendedStore.postal_code.toLowerCase().includes(searchLower))
-        );
-      });
-  }, [storesWithDistance, userLocation, locationEnabled, searchTerm]);
+    // Filter by chain
+    if (selectedChain) {
+      filtered = filtered.filter(store => store.name === selectedChain);
+    }
+
+    // Sort
+    filtered.sort((a, b) => {
+      // Always put available stores first
+      if (a.isAvailable !== b.isAvailable) {
+        return a.isAvailable ? -1 : 1;
+      }
+
+      // Then sort by chosen method
+      if (sortBy === 'distance' && userLocation) {
+        if (a.distance !== undefined && b.distance === undefined) return -1;
+        if (a.distance === undefined && b.distance !== undefined) return 1;
+        if (a.distance !== undefined && b.distance !== undefined) {
+          return a.distance - b.distance;
+        }
+      }
+
+      return a.name.localeCompare(b.name);
+    });
+
+    return filtered;
+  }, [storesWithDistance, searchTerm, selectedChain, sortBy, userLocation]);
 
   return (
-    <div className="bg-white rounded-xl py-2 px-5 mb-3 shadow-sm">
-      {/* Header */}
-      <div className="flex items-center justify-between mb-3">
-        <div className="flex items-center">
-          <h3 className="text-lg font-semibold text-gray-800">Local Store</h3>
-          {userLocation && locationEnabled && (
-            <div className="ml-2 flex items-center text-sm text-green-600">
-              <MapPin className="h-4 w-4 mr-1" />
-              <span>Location enabled</span>
+    <div className="bg-white rounded-xl shadow-sm overflow-hidden">
+      {/* Mobile Header */}
+      <div className="px-4 py-3 border-b border-gray-100">
+        <div className="flex items-center justify-between mb-3">
+          <h2 className="text-xl font-bold text-gray-900">Find Your Store</h2>
+          <div className="text-sm text-gray-500">
+            {filteredAndSortedStores.length} stores
+          </div>
+        </div>
+
+        {/* Hero Search Bar with Location Button */}
+        <div className="flex gap-2">
+          <div className="flex-1 relative">
+            <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+              <Search className="h-5 w-5 text-gray-400" />
             </div>
-          )}
-        </div>
-
-        {/* Location Toggle */}
-        {userLocation && (
-          <button
-            onClick={() => setLocationEnabled(!locationEnabled)}
-            className={`flex items-center px-3 py-1.5 rounded-lg text-sm font-medium transition-colors ${
-              locationEnabled
-                ? 'bg-green-100 text-green-700 hover:bg-green-200'
-                : 'bg-gray-100 text-gray-600 hover:bg-gray-200'
-            }`}
-          >
-            <MapPin className="h-4 w-4 mr-1.5" />
-            {locationEnabled ? 'Distance sorting ON' : 'Distance sorting OFF'}
-          </button>
-        )}
-      </div>
-
-      {/* Loading state */}
-      {isLoading && !isStoresLoaded ? (
-        <div className="flex justify-center my-4">
-          <div className="animate-spin rounded-full h-8 w-8 border-t-2 border-b-2 border-blue-600"></div>
-          <p className="ml-3 text-gray-600">Discovering available stores...</p>
-        </div>
-      ) : (
-        <div className="store-columns">
-          {/* Enhanced Robot Chef Card with Search & Location Integration */}
-          <div className="store-card bg-teal-50 rounded-[30px] p-4 flex flex-col items-center justify-center">
-            <Image
-              src="/Robo_Chef.png"
-              alt="Friendly chef robot"
-              width={150}
-              height={150}
-              className="mx-auto"
+            <input
+              type="text"
+              value={searchTerm}
+              onChange={(e) => setSearchTerm(e.target.value)}
+              placeholder="Search stores, cities, postal codes..."
+              className="w-full pl-10 pr-4 py-4 text-lg border-2 border-gray-200 rounded-xl focus:outline-none focus:border-teal-500 focus:ring-2 focus:ring-teal-200 transition-all bg-gray-50"
+              autoComplete="off"
             />
-
-            <div className="mt-3 text-center w-full">
-              {isStoresLoaded ? (
-                <>
-                  <p className="text-gray-700 font-medium text-lg">
-                    {availableStores.filter(s => s.isAvailable).length} stores available
-                  </p>
-                  {userLocation && locationEnabled && sortedStores.some(s => s.distance !== undefined) && (
-                    <p className="text-sm text-teal-600 mt-1">
-                      📍 Sorted by distance from you
-                    </p>
-                  )}
-                  {userLocation && !locationEnabled && (
-                    <p className="text-sm text-gray-600 mt-1">
-                      📝 Sorted alphabetically
-                    </p>
-                  )}
-                </>
-              ) : (
-                <p className="text-gray-600">Finding stores...</p>
-              )}
-
-              {/* Location UI Integration - Primary Option */}
-              {isClient && !userLocation && showLocationUI && (
-                <div className="mt-4 space-y-3">
-                  <div className="text-center">
-                    <p className="text-sm text-gray-700 font-medium mb-2">
-                      Find stores near you!
-                    </p>
-                  </div>
-
-                  {locationError && (
-                    <div className="flex items-start space-x-2 p-2 bg-red-50 border border-red-200 rounded-md">
-                      <AlertCircle className="h-4 w-4 text-red-500 mt-0.5 flex-shrink-0" />
-                      <p className="text-xs text-red-700">{locationError}</p>
-                    </div>
-                  )}
-
-                  {/* Primary: Browser location - Less aggressive styling */}
-                  {!isPermissionDenied && (
-                    <button
-                      onClick={handleLocationRequest}
-                      disabled={locationLoading}
-                      className="w-full bg-teal-500 hover:bg-teal-600 text-white px-4 py-2.5 rounded-lg text-sm font-medium transition-colors disabled:opacity-50 shadow-sm"
-                    >
-                      {locationLoading ? (
-                        <>
-                          <Loader2 className="h-4 w-4 mr-2 animate-spin inline" />
-                          Getting location...
-                        </>
-                      ) : (
-                        <>
-                          <Navigation className="h-4 w-4 mr-2 inline" />
-                          Use My Location
-                        </>
-                      )}
-                    </button>
-                  )}
-
-                  {/* Fallback: Manual entry */}
-                  {(isPermissionDenied || hasAskedPermission) && (
-                    <form onSubmit={handleAddressSubmit} className="space-y-2">
-                      <input
-                        type="text"
-                        placeholder="Enter postal code (M4B 1B3)"
-                        value={addressInput}
-                        onChange={(e) => setAddressInput(e.target.value)}
-                        className="w-full px-3 py-2 text-sm border border-gray-200 rounded-lg focus:outline-none focus:border-teal-500"
-                      />
-                      <button
-                        type="submit"
-                        disabled={locationLoading || !addressInput.trim()}
-                        className="w-full bg-gray-500 hover:bg-gray-600 text-white px-3 py-2 rounded-lg text-sm font-medium transition-colors disabled:opacity-50"
-                      >
-                        {locationLoading ? (
-                          <>
-                            <Loader2 className="h-4 w-4 mr-2 animate-spin inline" />
-                            Finding...
-                          </>
-                        ) : (
-                          <>
-                            <MapPin className="h-4 w-4 mr-2 inline" />
-                            Set Location
-                          </>
-                        )}
-                      </button>
-                    </form>
-                  )}
-
-                  <div className="text-xs text-gray-500 text-center">
-                    <p>🔒 Stored for this session only</p>
-                  </div>
-
-                  {/* Divider */}
-                  <div className="relative my-4">
-                    <div className="absolute inset-0 flex items-center">
-                      <span className="w-full border-t border-gray-200" />
-                    </div>
-                    <div className="relative flex justify-center text-xs uppercase">
-                      <span className="bg-teal-50 px-2 text-gray-500">
-                        Or search manually
-                      </span>
-                    </div>
-                  </div>
-
-                  {/* Search Bar - Secondary Option */}
-                  <div className="w-full">
-                    <div className="relative">
-                      <input
-                        type="text"
-                        value={searchTerm}
-                        onChange={(e) => setSearchTerm(e.target.value)}
-                        placeholder="Type store name, city, or postal code..."
-                        className="w-full pl-4 pr-10 py-2.5 rounded-lg bg-white border border-gray-200 text-sm focus:outline-none focus:border-teal-400 focus:ring-1 focus:ring-teal-200 transition-all"
-                        autoComplete="off"
-                        autoCorrect="off"
-                        autoCapitalize="off"
-                        spellCheck="false"
-                      />
-                      <div className="absolute right-3 top-1/2 transform -translate-y-1/2">
-                        {searchTerm ? (
-                          <button
-                            onClick={() => setSearchTerm('')}
-                            className="text-gray-400 hover:text-gray-600 p-1"
-                            aria-label="Clear search"
-                          >
-                            <svg
-                              xmlns="http://www.w3.org/2000/svg"
-                              className="h-4 w-4"
-                              fill="none"
-                              viewBox="0 0 24 24"
-                              stroke="currentColor"
-                            >
-                              <path
-                                strokeLinecap="round"
-                                strokeLinejoin="round"
-                                strokeWidth={2}
-                                d="M6 18L18 6M6 6l12 12"
-                              />
-                            </svg>
-                          </button>
-                        ) : (
-                          <svg
-                            xmlns="http://www.w3.org/2000/svg"
-                            className="h-4 w-4 text-gray-400"
-                            fill="none"
-                            viewBox="0 0 24 24"
-                            stroke="currentColor"
-                          >
-                            <path
-                              strokeLinecap="round"
-                              strokeLinejoin="round"
-                              strokeWidth={2}
-                              d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"
-                            />
-                          </svg>
-                        )}
-                      </div>
-                    </div>
-                    {searchTerm && (
-                      <p className="text-xs text-gray-600 mt-1">
-                        Showing {sortedStores.length} result{sortedStores.length !== 1 ? 's' : ''} for "{searchTerm}"
-                      </p>
-                    )}
-                  </div>
-
-                  <button
-                    onClick={() => setShowLocationUI(false)}
-                    className="text-xs text-gray-500 hover:text-gray-700 underline"
-                  >
-                    Skip for now
-                  </button>
-                </div>
-              )}
-
-              {/* Search Bar - When Location UI is Hidden */}
-              {(!showLocationUI || userLocation) && (
-                <div className="mt-4 w-full">
-                  <label className="block text-sm font-medium text-gray-700 mb-2">
-                    🔍 Search Stores
-                  </label>
-                  <div className="relative">
-                    <input
-                      type="text"
-                      value={searchTerm}
-                      onChange={(e) => setSearchTerm(e.target.value)}
-                      placeholder="Type store name, city, or postal code..."
-                      className="w-full pl-4 pr-10 py-3 rounded-xl bg-white border-2 border-teal-200 text-sm focus:outline-none focus:border-teal-500 focus:ring-2 focus:ring-teal-200 transition-all shadow-sm"
-                      autoComplete="off"
-                      autoCorrect="off"
-                      autoCapitalize="off"
-                      spellCheck="false"
-                    />
-                    <div className="absolute right-3 top-1/2 transform -translate-y-1/2">
-                      {searchTerm ? (
-                        <button
-                          onClick={() => setSearchTerm('')}
-                          className="text-gray-400 hover:text-gray-600 p-1"
-                          aria-label="Clear search"
-                        >
-                          <svg
-                            xmlns="http://www.w3.org/2000/svg"
-                            className="h-4 w-4"
-                            fill="none"
-                            viewBox="0 0 24 24"
-                            stroke="currentColor"
-                          >
-                            <path
-                              strokeLinecap="round"
-                              strokeLinejoin="round"
-                              strokeWidth={2}
-                              d="M6 18L18 6M6 6l12 12"
-                            />
-                          </svg>
-                        </button>
-                      ) : (
-                        <svg
-                          xmlns="http://www.w3.org/2000/svg"
-                          className="h-5 w-5 text-teal-400"
-                          fill="none"
-                          viewBox="0 0 24 24"
-                          stroke="currentColor"
-                        >
-                          <path
-                            strokeLinecap="round"
-                            strokeLinejoin="round"
-                            strokeWidth={2}
-                            d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"
-                          />
-                        </svg>
-                      )}
-                    </div>
-                  </div>
-                  {searchTerm && (
-                    <p className="text-xs text-gray-600 mt-1">
-                      Showing {sortedStores.length} result{sortedStores.length !== 1 ? 's' : ''} for "{searchTerm}"
-                    </p>
-                  )}
-                </div>
-              )}
-
-              {/* Show location prompt if hidden and no location */}
-              {!userLocation && !showLocationUI && (
-                <div className="mt-4">
-                  <button
-                    onClick={() => setShowLocationUI(true)}
-                    className="text-teal-600 hover:text-teal-800 text-sm font-medium"
-                  >
-                    📍 Set location for distance sorting
-                  </button>
-                </div>
-              )}
-
-              {/* Re-enable distance sorting */}
-              {userLocation && !locationEnabled && (
-                <div className="mt-4">
-                  <button
-                    onClick={() => setLocationEnabled(true)}
-                    className="text-blue-600 hover:text-blue-800 text-sm font-medium"
-                  >
-                    📍 Enable distance sorting
-                  </button>
-                </div>
-              )}
-            </div>
+            {searchTerm && (
+              <button
+                onClick={() => setSearchTerm('')}
+                className="absolute inset-y-0 right-0 pr-3 flex items-center"
+              >
+                <X className="h-5 w-5 text-gray-400 hover:text-gray-600" />
+              </button>
+            )}
           </div>
 
+          {/* Smart Sort/Location Button */}
+          <div className="flex-shrink-0">
+            {!userLocation ? (
+              <button
+                onClick={() => setShowLocationPrompt(!showLocationPrompt)}
+                className="h-full flex items-center gap-2 px-4 rounded-xl text-sm font-medium bg-blue-100 text-blue-700 border-2 border-blue-200 transition-colors hover:bg-blue-200"
+              >
+                <MapPin className="h-5 w-5" />
+                <span className="hidden sm:inline">Near me</span>
+              </button>
+            ) : (
+              <div className="flex h-full">
+                <button
+                  onClick={() => setSortBy(sortBy === 'name' ? 'distance' : 'name')}
+                  className={`flex items-center gap-2 px-4 rounded-l-xl text-sm font-medium transition-colors border-2 border-r-0 ${
+                    sortBy === 'distance'
+                      ? 'bg-green-100 text-green-700 border-green-200'
+                      : 'bg-gray-100 text-gray-600 border-gray-200'
+                  }`}
+                >
+                  <MapPin className="h-4 w-4" />
+                  <span className="hidden sm:inline">
+                    {sortBy === 'distance' ? 'Distance' : 'A-Z'}
+                  </span>
+                </button>
+                <button
+                  onClick={() => {
+                    setUserLocation(null);
+                    setSortBy('name');
+                    locationService.clearStoredLocation();
+                    setShowLocationPrompt(false);
+                  }}
+                  className="px-2 text-green-600 hover:text-green-800 hover:bg-green-50 rounded-r-xl border-2 border-green-200 bg-green-100 transition-colors"
+                  title="Clear location"
+                >
+                  <X className="h-4 w-4" />
+                </button>
+              </div>
+            )}
+          </div>
+        </div>
 
+        {/* Store Chain Carousel */}
+        <div className="mt-4">
+          <div className="relative">
+            <div
+              ref={carouselRef}
+              className="flex overflow-x-auto scrollbar-hide gap-3 pb-2"
+              style={{ scrollBehavior: 'auto' }}
+            >
+              {/* All Stores Button */}
+              <button
+                onClick={() => setSelectedChain('')}
+                className={`flex-shrink-0 w-16 h-16 rounded-xl transition-colors border-2 ${
+                  selectedChain === ''
+                    ? 'bg-teal-500 text-white border-teal-500 shadow-lg'
+                    : 'bg-white text-gray-600 border-gray-200 hover:border-gray-300 hover:shadow-md'
+                }`}
+              >
+                <div className="w-full h-full rounded-xl bg-gradient-to-br from-blue-400 to-purple-500 flex items-center justify-center text-white text-xl font-bold">
+                  ★
+                </div>
+              </button>
 
-          {/* Store cards */}
-          {sortedStores.map(store => (
-            <div key={store.id} className="store-card">
+              {/* Store Chain Buttons - Simple duplication for smooth scrolling */}
+              {[...storeChains, ...storeChains, ...storeChains].map((chain, index) => {
+                const chainLogo = getChainLogo(chain);
+                const isSelected = selectedChain === chain;
+
+                return (
+                  <button
+                    key={`${chain}-${index}`}
+                    onClick={() => setSelectedChain(selectedChain === chain ? '' : chain)}
+                    className={`flex-shrink-0 w-16 h-16 rounded-xl transition-colors border-2 overflow-hidden ${
+                      isSelected
+                        ? 'border-teal-500 shadow-lg ring-2 ring-teal-200'
+                        : 'border-gray-200 hover:border-gray-300 hover:shadow-md'
+                    }`}
+                  >
+                    <div className="w-full h-full bg-white flex items-center justify-center relative">
+                      {chainLogo}
+                    </div>
+                  </button>
+                );
+              })}
+            </div>
+
+            {/* Scroll Indicators */}
+            {storeChains.length > 2 && (
+              <>
+                <div className="absolute left-0 top-0 bottom-2 w-6 bg-gradient-to-r from-white via-white to-transparent pointer-events-none" />
+                <div className="absolute right-0 top-0 bottom-2 w-6 bg-gradient-to-l from-white via-white to-transparent pointer-events-none" />
+              </>
+            )}
+          </div>
+        </div>
+      </div>
+
+      {/* Location Prompt */}
+      {showLocationPrompt && !userLocation && (
+        <div className="px-4 py-3 bg-blue-50 border-b border-blue-100">
+          <div className="space-y-3">
+            <div className="flex items-center gap-2">
+              <MapPin className="h-5 w-5 text-blue-600" />
+              <span className="font-medium text-blue-800">Find stores near you</span>
+            </div>
+
+            <div className="space-y-2">
+              <button
+                onClick={handleLocationRequest}
+                disabled={locationLoading}
+                className="w-full bg-blue-600 hover:bg-blue-700 text-white py-3 rounded-lg font-medium transition-colors disabled:opacity-50"
+              >
+                {locationLoading ? (
+                  <>
+                    <Loader2 className="h-4 w-4 mr-2 animate-spin inline" />
+                    Getting location...
+                  </>
+                ) : (
+                  <>
+                    <Navigation className="h-4 w-4 mr-2 inline" />
+                    Use my current location
+                  </>
+                )}
+              </button>
+
+              <div className="flex gap-2">
+                <input
+                  type="text"
+                  value={postalCode}
+                  onChange={(e) => setPostalCode(e.target.value)}
+                  placeholder="Enter postal code (M4B 1B3)"
+                  className="flex-1 px-3 py-2 border border-gray-200 rounded-lg text-sm focus:outline-none focus:border-blue-500 bg-white"
+                />
+                <button
+                  onClick={handlePostalCodeSubmit}
+                  disabled={locationLoading || !postalCode.trim()}
+                  className="bg-gray-600 hover:bg-gray-700 text-white px-4 py-2 rounded-lg text-sm font-medium transition-colors disabled:opacity-50"
+                >
+                  Set
+                </button>
+              </div>
+            </div>
+
+            {locationError && (
+              <div className="flex items-start gap-2 p-2 bg-red-50 border border-red-200 rounded-lg">
+                <AlertCircle className="h-4 w-4 text-red-500 mt-0.5 flex-shrink-0" />
+                <p className="text-xs text-red-700">{locationError}</p>
+              </div>
+            )}
+          </div>
+        </div>
+      )}
+
+      {/* Results */}
+      <div className="p-4">
+        {/* Add custom scrollbar styles */}
+        <style jsx>{`
+          .scrollbar-hide {
+            -ms-overflow-style: none;
+            scrollbar-width: none;
+          }
+          .scrollbar-hide::-webkit-scrollbar {
+            display: none;
+          }
+        `}</style>
+
+        {/* Results Summary */}
+        {searchTerm && (
+          <div className="text-sm text-gray-600 mb-3">
+            {filteredAndSortedStores.length} result{filteredAndSortedStores.length !== 1 ? 's' : ''}
+            {searchTerm && ` for "${searchTerm}"`}
+          </div>
+        )}
+
+        {/* Loading state */}
+        {isLoading && !isStoresLoaded ? (
+          <div className="flex flex-col items-center justify-center py-12">
+            <div className="animate-spin rounded-full h-8 w-8 border-t-2 border-b-2 border-blue-600 mb-3"></div>
+            <p className="text-gray-600">Finding stores...</p>
+          </div>
+        ) : (
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3">
+            {/* Store cards - Responsive grid */}
+            {filteredAndSortedStores.map(store => (
               <StoreCard
+                key={store.id}
                 store={store}
                 isSelected={selectedStore === store.id}
                 disabled={!store.isAvailable}
                 onClick={() => store.isAvailable && handleStoreSelect(store.id)}
-                showDistance={userLocation !== null && locationEnabled}
+                showDistance={userLocation !== null && sortBy === 'distance'}
               />
-            </div>
-          ))}
+            ))}
 
-          {/* No results message */}
-          {sortedStores.length === 0 && searchTerm && (
-            <div className="store-card bg-gray-50 rounded-[30px] p-4 text-center">
-              <p className="text-gray-500">No stores match your search for &ldquo;{searchTerm}&rdquo;</p>
-              <button
-                onClick={() => setSearchTerm('')}
-                className="mt-2 text-teal-600 hover:text-teal-800 text-sm font-medium"
-              >
-                Clear search
-              </button>
-            </div>
-          )}
-        </div>
-      )}
-
-      {isStoresLoaded && availableStores.length === 0 && (
-        <div className="text-center p-4 bg-gray-100 rounded-lg mt-4">
-          <p className="text-gray-700">No stores with current sales were found. Please check back later.</p>
-        </div>
-      )}
-
-      {/* Loading indicator for store data */}
-      {isLoading && selectedStore && (
-        <div className="flex justify-center mt-4 mb-2">
-          <div className="animate-spin rounded-full h-8 w-8 border-t-2 border-b-2 border-blue-600"></div>
-          <p className="ml-3 text-gray-600">Loading meal deals for {availableStores.find(s => s.id === selectedStore)?.name}...</p>
-        </div>
-      )}
-
-      {/* CSS for column-based layout */}
-      <style jsx>{`
-        .store-columns {
-          column-count: 2;
-          column-gap: 12px;
-          width: 100%;
-        }
-
-        .store-card {
-          break-inside: avoid;
-          margin-bottom: 12px;
-          display: inline-block;
-          width: 100%;
-        }
-
-        @media (max-width: 480px) {
-          .store-columns {
-            column-count: 1;
-          }
-        }
-
-        @media (min-width: 768px) {
-          .store-columns {
-            column-count: 3;
-          }
-        }
-      `}</style>
+            {/* No results message */}
+            {filteredAndSortedStores.length === 0 && (
+              <div className="col-span-full text-center py-12">
+                <div className="text-gray-400 mb-3">
+                  <Search className="h-12 w-12 mx-auto" />
+                </div>
+                <p className="text-gray-500 mb-3">No stores found</p>
+                <button
+                  onClick={() => {
+                    setSearchTerm('');
+                    setSelectedChain('');
+                  }}
+                  className="text-teal-600 hover:text-teal-800 font-medium"
+                >
+                  Clear all filters
+                </button>
+              </div>
+            )}
+          </div>
+        )}
+      </div>
     </div>
   );
 }
+
