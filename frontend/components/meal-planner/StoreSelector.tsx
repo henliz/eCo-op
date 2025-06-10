@@ -110,6 +110,35 @@ export default function StoreSelector({ shouldNavigateToPlan }: StoreSelectorPro
     return chains;
   }, [availableStores]);
 
+  // Infinite scroll logic for carousel
+  useEffect(() => {
+    const carousel = carouselRef.current;
+    if (!carousel) return;
+
+    const handleScroll = () => {
+      const { scrollLeft, clientWidth } = carousel;
+      const itemWidth = 64 + 12; // 64px width + 12px gap
+      const totalItems = storeChains.length + 1; // +1 for "All Stores" button
+      const sectionWidth = totalItems * itemWidth;
+
+      // If scrolled to near the end, jump back to the beginning of the second set
+      if (scrollLeft >= sectionWidth * 2 - clientWidth) {
+        carousel.scrollLeft = sectionWidth;
+      }
+      // If scrolled to near the beginning, jump to the end of the second set
+      else if (scrollLeft <= 0) {
+        carousel.scrollLeft = sectionWidth;
+      }
+    };
+
+    carousel.addEventListener('scroll', handleScroll);
+
+    // Initialize scroll position to the middle section
+    carousel.scrollLeft = (storeChains.length + 1) * (64 + 12);
+
+    return () => carousel.removeEventListener('scroll', handleScroll);
+  }, [storeChains.length]);
+
   // Helper function for chain logos using actual store data
   const getChainLogo = (chain: string) => {
     // Find a store from this chain to get the logo image
@@ -304,8 +333,12 @@ export default function StoreSelector({ shouldNavigateToPlan }: StoreSelectorPro
           <div className="relative">
             <div
               ref={carouselRef}
-              className="flex overflow-x-auto scrollbar-hide gap-3 pb-2"
-              style={{ scrollBehavior: 'auto' }}
+              className="flex overflow-x-auto gap-3 pb-2"
+              style={{
+                scrollBehavior: 'auto',
+                scrollbarWidth: 'none',
+                msOverflowStyle: 'none'
+              }}
             >
               {/* All Stores Button */}
               <button
@@ -321,7 +354,7 @@ export default function StoreSelector({ shouldNavigateToPlan }: StoreSelectorPro
                 </div>
               </button>
 
-              {/* Store Chain Buttons - Simple duplication for smooth scrolling */}
+              {/* Store Chain Buttons - Triple duplication for smooth infinite scrolling */}
               {[...storeChains, ...storeChains, ...storeChains].map((chain, index) => {
                 const chainLogo = getChainLogo(chain);
                 const isSelected = selectedChain === chain;
@@ -413,13 +446,9 @@ export default function StoreSelector({ shouldNavigateToPlan }: StoreSelectorPro
 
       {/* Results */}
       <div className="p-4">
-        {/* Add custom scrollbar styles */}
+        {/* Webkit scrollbar hiding */}
         <style jsx>{`
-          .scrollbar-hide {
-            -ms-overflow-style: none;
-            scrollbar-width: none;
-          }
-          .scrollbar-hide::-webkit-scrollbar {
+          div::-webkit-scrollbar {
             display: none;
           }
         `}</style>
@@ -476,4 +505,3 @@ export default function StoreSelector({ shouldNavigateToPlan }: StoreSelectorPro
     </div>
   );
 }
-
