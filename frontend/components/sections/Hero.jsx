@@ -10,6 +10,7 @@ const Hero = () => {
   const [activeTab, setActiveTab] = useState(0);
   const [transitioning, setTransitioning] = useState(false);
 
+
   const tabs = ["add-items", "compare", "optimize", "save"];
   const tabLabels = ["📋 Set", "🥪 Plan", "💸 Shop", "🍳 Cook"];
 
@@ -80,7 +81,7 @@ const Hero = () => {
     return () => {
       videoRefs.current.forEach((video) => {
         if (video) {
-          video.removeEventListener('ended', () => {});
+          video.removeEventListener('ended', () => { });
         }
       });
     };
@@ -799,7 +800,7 @@ const Hero = () => {
             </p>
 
             {/* Animated CTA Button with Link */}
-            <Link href="https://skrimp.ai/plan" passHref>
+            <Link href="/plan" passHref>
               <button ref={buttonRef} className="cta-button pulse">
                 <span>
                   Start saving— it's free!
