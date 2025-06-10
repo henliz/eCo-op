@@ -109,6 +109,11 @@ export function HouseholdSizeSelector() {
      * probability-based animation on mount.
      */
     const [anim, setAnim] = useState<AnimationType>('none');
+    const [isClient, setIsClient] = useState(false);
+
+useEffect(() => {
+  setIsClient(true);
+}, []);
     const wrapperRef = useRef<HTMLDivElement>(null);
 
     // Initial animation setup - runs only once after mount
@@ -142,12 +147,12 @@ export function HouseholdSizeSelector() {
     }, [anim, index]);
 
     // Only apply animation styles if not 'none'
-    const animationStyle = anim === 'none'
-      ? {}
-      : {
-          animation: `${anim} ${0.8 + (index % 5) * 0.15}s ease-in-out ${(index * 0.17) % 1}s infinite`,
-          transformOrigin: (anim === 'spin' || anim.startsWith('somersault')) ? '50% 50%' : 'bottom',
-        };
+const animationStyle = (anim === 'none' || !isClient)
+  ? {}
+  : {
+      animation: `${anim} ${0.8 + (index % 5) * 0.15}s ease-in-out ${(index * 0.17) % 1}s infinite`,
+      transformOrigin: (anim === 'spin' || anim.startsWith('somersault')) ? '50% 50%' : 'bottom',
+    };
 
     return (
       <div

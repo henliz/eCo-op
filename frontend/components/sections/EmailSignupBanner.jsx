@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
 
 const containerVariants = {
@@ -35,6 +35,12 @@ const childVariants = {
 export default function EmailSignupBanner() {
   const [email, setEmail] = useState('');
   const [status, setStatus] = useState('idle');
+  const [isClient, setIsClient] = useState(false);
+
+  // Prevent hydration mismatch
+  useEffect(() => {
+    setIsClient(true);
+  }, []);
 
   const handleSubmit = (e) => {
     e.preventDefault();
@@ -119,7 +125,7 @@ export default function EmailSignupBanner() {
                 skrimp it!
               </motion.button>
 
-              {status === 'success' && (
+              {isClient && status === 'success' && (
                 <motion.p
                   initial={{ opacity: 0, y: 4 }}
                   animate={{ opacity: 1, y: 0 }}

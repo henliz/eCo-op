@@ -8,14 +8,22 @@ export interface Store {
   validUntil: Date;
   filename: string;
   isAvailable: boolean;
-  logo?: string;
-  // New fields from CSV
-  location_name?: string;
-  city?: string;
-  postal_code?: string;
-  coordinates?: string;
-  flyer?: string;
+  logo?: string; // Add logo property
+  lat?: number;
+  lng?: number;
+  storeLocation?: StoreLocation;
+  distance?: number;
+  geocoded_address?: string;
+  geocoded_at?: string;
 }
+
+export interface StoreLocation {
+  latitude: number;
+  longitude: number;
+  address: string;
+  postalCode?: string;
+}
+
 
 interface StoreIndexItem {
   id: string;
@@ -30,6 +38,10 @@ interface StoreIndexItem {
   postal_code?: string;
   coordinates?: string;
   flyer?: string;
+  lat?: number;
+  lng?: number;
+  geocoded_address?: string;
+  geocoded_at?: string;
 }
 
 
@@ -119,6 +131,14 @@ interface PlannerState {
   isLoading: boolean;
   error: string | null;
   isDataLoaded: boolean; // Flag to track if data has been loaded
+  userLocation: {
+    latitude: number;
+    longitude: number;
+    address?: string;
+    source: 'browser' | 'postal' | 'address';
+  } | null;
+  locationError: string | null;
+  isLocationLoading: boolean;
 
   // Actions
   setSelectedStore: (storeId: string) => void;
@@ -131,6 +151,11 @@ interface PlannerState {
   setIngredientTags: (packageId: string, tags: Partial<IngredientTags>) => void;
   discoverStores: () => Promise<void>;
   setNormalMealServings: (servings: number) => void;
+  setUserLocation: (location: PlannerState['userLocation']) => void;
+  clearUserLocation: () => void;
+  setLocationError: (error: string | null) => void;
+  setLocationLoading: (loading: boolean) => void;
+  geocodeStoreAddress: (storeId: string, address: string) => Promise<void>;
 
   // Computed values
   selectedRecipes: () => Recipe[];
@@ -138,6 +163,7 @@ interface PlannerState {
   totals: () => Totals;
   mealSummary: () => { breakfast: number; lunch: number; dinner: number; total: number };
   calculateInitialMultiplier: (servings: number) => number;
+
 }
 
 
@@ -151,9 +177,37 @@ const roundUpToHalf = (num: number): number => {
   return Math.ceil(num * 2) / 2;
 };
 
+export function parseCoordinates(coordString: string): { latitude: number; longitude: number } | null {
+  if (!coordString) return null;
+
+  // Try different coordinate formats
+  // Format 1: "lat,lng" (43.7182,-79.3762)
+  const commaFormat = coordString.match(/^(-?\d+\.?\d*),\s*(-?\d+\.?\d*)$/);
+  if (commaFormat) {
+    return {
+      latitude: parseFloat(commaFormat[1]),
+      longitude: parseFloat(commaFormat[2])
+    };
+  }
+
+  // Format 2: "lat lng" (43.7182 -79.3762)
+  const spaceFormat = coordString.match(/^(-?\d+\.?\d*)\s+(-?\d+\.?\d*)$/);
+  if (spaceFormat) {
+    return {
+      latitude: parseFloat(spaceFormat[1]),
+      longitude: parseFloat(spaceFormat[2])
+    };
+  }
+
+  return null;
+}
+
 export const usePlannerStore = create<PlannerState>((set, get) => ({
   // Configuration
   normalMealServings: 4,
+  userLocation: null,
+  locationError: null,
+  isLocationLoading: false,
 
   // Initial data state
   meals: {
@@ -206,119 +260,121 @@ export const usePlannerStore = create<PlannerState>((set, get) => ({
     });
   },
 
+
+
   // Fetch meal data based on selected store
   fetchMealData: async () => {
-  const state = get();
-  const logMessage = (msg: string) => console.log(`[PlannerStore] ${msg}`);
+    const state = get();
+    const logMessage = (msg: string) => console.log(`[PlannerStore] ${msg}`);
 
-  logMessage(`fetchMealData called. isDataLoaded: ${state.isDataLoaded}, selectedStore: ${state.selectedStore}`);
+    logMessage(`fetchMealData called. isDataLoaded: ${state.isDataLoaded}, selectedStore: ${state.selectedStore}`);
 
-  // Skip if already loaded or no store selected
-  if (state.isDataLoaded && state.selectedStore) {
-    logMessage('Data already loaded, skipping fetch');
-    return;
-  }
-
-  if (!state.selectedStore) {
-    logMessage('No store selected, skipping fetch');
-    return;
-  }
-
-  // Find the selected store
-  const selectedStore = state.availableStores.find(s => s.id === state.selectedStore);
-  if (!selectedStore) {
-    set({
-      error: 'Selected store not found in available stores',
-      isLoading: false
-    });
-    return;
-  }
-
-  try {
-    logMessage(`Starting data fetch for ${selectedStore.name}, using file: ${selectedStore.filename}`);
-    set({ isLoading: true, error: null });
-
-    // Fetch the store data file using the filename
-    const response = await fetch(`/data/${selectedStore.filename}`);
-
-    if (!response.ok) {
-      throw new Error(`Failed to fetch meal plan data: ${response.status} ${response.statusText}`);
+    // Skip if already loaded or no store selected
+    if (state.isDataLoaded && state.selectedStore) {
+      logMessage('Data already loaded, skipping fetch');
+      return;
     }
 
-    logMessage('Data fetched successfully, parsing JSON...');
+    if (!state.selectedStore) {
+      logMessage('No store selected, skipping fetch');
+      return;
+    }
 
-    // Parse the data - no need to transform structure
-    const mealData = await response.json();
+    // Find the selected store
+    const selectedStore = state.availableStores.find(s => s.id === state.selectedStore);
+    if (!selectedStore) {
+      set({
+        error: 'Selected store not found in available stores',
+        isLoading: false
+      });
+      return;
+    }
 
-    logMessage('JSON parsed successfully. Structure:');
-    console.log({
-      breakfastCount: mealData.breakfast?.length || 0,
-      lunchCount: mealData.lunch?.length || 0,
-      dinnerCount: mealData.dinner?.length || 0
-    });
+    try {
+      logMessage(`Starting data fetch for ${selectedStore.name}, using file: ${selectedStore.filename}`);
+      set({ isLoading: true, error: null });
 
-    // Calculate flyerItemsCount for each recipe
-    const calculateFlyerItemsCount = (recipe: Recipe) => {
-      if (!recipe.ingredients) return 0;
+      // Fetch the store data file using the filename
+      const response = await fetch(`/data/${selectedStore.filename}`);
 
-      return recipe.ingredients.filter(ingredient =>
-        //ingredient.type === 'core' &&
-        ingredient.source === 'flyer'
-      ).length;
-    };
+      if (!response.ok) {
+        throw new Error(`Failed to fetch meal plan data: ${response.status} ${response.statusText}`);
+      }
 
-    // Process each recipe to add the flyerItemsCount
-    const processRecipes = (recipes: Recipe[]): Recipe[] => {
-      return recipes.map(recipe => ({
-        ...recipe,
-        flyerItemsCount: calculateFlyerItemsCount(recipe)
-      }));
-    };
+      logMessage('Data fetched successfully, parsing JSON...');
 
-    // Create the meal categories using the data directly
-    // The structure already matches your frontend model
-    const mealCategories = {
-      breakfast: processRecipes(mealData.breakfast || []),
-      lunch: processRecipes(mealData.lunch || []),
-      dinner: processRecipes(mealData.dinner || [])
-    };
+      // Parse the data - no need to transform structure
+      const mealData = await response.json();
 
-    // Initialize default selections
-    const defaultSelectedMeals = new Set<string>();
-    const initialMultipliers: Record<string, number> = {};
-
-    // Default to selecting the first 7 recipes in each category with calculated multipliers
-    Object.values(mealCategories).forEach((recipes: Recipe[]) => {
-      recipes.slice(0, 7).forEach(recipe => {
-        defaultSelectedMeals.add(recipe.url);
-        // Calculate initial multiplier based on normalMealServings and recipe servings
-        initialMultipliers[recipe.url] = state.calculateInitialMultiplier(recipe.servings);
+      logMessage('JSON parsed successfully. Structure:');
+      console.log({
+        breakfastCount: mealData.breakfast?.length || 0,
+        lunchCount: mealData.lunch?.length || 0,
+        dinnerCount: mealData.dinner?.length || 0
       });
 
-      recipes.slice(7).forEach(recipe => {
-        initialMultipliers[recipe.url] = 0;
+      // Calculate flyerItemsCount for each recipe
+      const calculateFlyerItemsCount = (recipe: Recipe) => {
+        if (!recipe.ingredients) return 0;
+
+        return recipe.ingredients.filter(ingredient =>
+          //ingredient.type === 'core' &&
+          ingredient.source === 'flyer'
+        ).length;
+      };
+
+      // Process each recipe to add the flyerItemsCount
+      const processRecipes = (recipes: Recipe[]): Recipe[] => {
+        return recipes.map(recipe => ({
+          ...recipe,
+          flyerItemsCount: calculateFlyerItemsCount(recipe)
+        }));
+      };
+
+      // Create the meal categories using the data directly
+      // The structure already matches your frontend model
+      const mealCategories = {
+        breakfast: processRecipes(mealData.breakfast || []),
+        lunch: processRecipes(mealData.lunch || []),
+        dinner: processRecipes(mealData.dinner || [])
+      };
+
+      // Initialize default selections
+      const defaultSelectedMeals = new Set<string>();
+      const initialMultipliers: Record<string, number> = {};
+
+      // Default to selecting the first 7 recipes in each category with calculated multipliers
+      Object.values(mealCategories).forEach((recipes: Recipe[]) => {
+        recipes.slice(0, 7).forEach(recipe => {
+          defaultSelectedMeals.add(recipe.url);
+          // Calculate initial multiplier based on normalMealServings and recipe servings
+          initialMultipliers[recipe.url] = state.calculateInitialMultiplier(recipe.servings);
+        });
+
+        recipes.slice(7).forEach(recipe => {
+          initialMultipliers[recipe.url] = 0;
+        });
       });
-    });
 
-    // Update the store
-    set({
-      meals: mealCategories,
-      selectedMeals: defaultSelectedMeals,
-      recipeMultipliers: initialMultipliers,
-      isLoading: false,
-      isDataLoaded: true
-    });
+      // Update the store
+      set({
+        meals: mealCategories,
+        selectedMeals: defaultSelectedMeals,
+        recipeMultipliers: initialMultipliers,
+        isLoading: false,
+        isDataLoaded: true
+      });
 
-    logMessage('Store update complete');
-  } catch (err) {
-    console.error("Error fetching meal data:", err);
-    set({
-      isLoading: false,
-      error: err instanceof Error ? err.message : 'Failed to load meal plan',
-      isDataLoaded: false
-    });
-  }
-},
+      logMessage('Store update complete');
+    } catch (err) {
+      console.error("Error fetching meal data:", err);
+      set({
+        isLoading: false,
+        error: err instanceof Error ? err.message : 'Failed to load meal plan',
+        isDataLoaded: false
+      });
+    }
+  },
 
   // Original actions (slightly modified)
   setMeals: (meals) => {
@@ -469,6 +525,72 @@ export const usePlannerStore = create<PlannerState>((set, get) => ({
     return { ingredientTags: newTags };
   }),
 
+  // ========== ADD ALL THESE LOCATION ACTIONS HERE ==========
+  // Location actions
+  setUserLocation: (location) => {
+    set({ userLocation: location, locationError: null });
+  },
+
+  clearUserLocation: () => {
+    set({
+      userLocation: null,
+      locationError: null,
+      isLocationLoading: false
+    });
+  },
+
+  setLocationError: (error) => {
+    set({ locationError: error, isLocationLoading: false });
+  },
+
+  setLocationLoading: (loading) => {
+    set({ isLocationLoading: loading });
+  },
+
+  // Geocode a store address and update the store data
+  geocodeStoreAddress: async (storeId, address) => {
+    const state = get();
+    const store = state.availableStores.find(s => s.id === storeId);
+    if (!store) return;
+
+    try {
+      const response = await fetch(
+        `https://api.geocod.io/v1.7/geocode?q=${encodeURIComponent(address)}&api_key=${process.env.GEOCODIO_API_KEY}&limit=1`
+      );
+
+      if (!response.ok) {
+        throw new Error(`Geocoding failed: ${response.status}`);
+      }
+
+      const data = await response.json();
+
+      if (data.results && data.results.length > 0) {
+        const result = data.results[0];
+
+        // Update the store with location data
+        const updatedStores = state.availableStores.map(s =>
+          s.id === storeId
+            ? {
+              ...s,
+              storeLocation: {
+                latitude: result.location.lat,
+                longitude: result.location.lng,
+                address: result.formatted_address,
+                postalCode: result.address_components.zip || undefined
+              }
+            }
+            : s
+        );
+
+        set({ availableStores: updatedStores });
+      }
+    } catch (error) {
+      console.error('Failed to geocode store address:', error);
+    }
+  },
+  // ========== END OF LOCATION ACTIONS ==========
+
+
   // Computed values
   selectedRecipes: () => {
     const state = get();
@@ -599,62 +721,118 @@ export const usePlannerStore = create<PlannerState>((set, get) => ({
     return summary;
   },
 
-discoverStores: async () => {
+  discoverStores: async () => {
   const logMessage = (msg: string) => console.log(`[PlannerStore] ${msg}`);
   logMessage('Discovering available stores...');
+
   set({ isLoading: true, error: null });
 
   try {
-    // Fetch the store index file
+    logMessage('Attempting to fetch store index...');
+
     const response = await fetch('/data/store-index.json');
 
+    logMessage(`Fetch response status: ${response.status}`);
+
     if (!response.ok) {
-      throw new Error('Failed to load store index file');
+      throw new Error(`Failed to load store index file: ${response.status} ${response.statusText}`);
     }
 
+    logMessage('Parsing JSON...');
     const indexData = await response.json();
+
+    // Fix: Extract the stores array from the wrapper object
+    const storesArray = indexData.stores || indexData;
+
+    if (!Array.isArray(storesArray)) {
+      console.error('Invalid data structure:', indexData);
+      throw new Error('Store index data is not in the expected format');
+    }
+
+    logMessage(`Parsed JSON successfully. Found ${storesArray.length} stores`);
+    console.log('Sample store data:', storesArray.slice(0, 2));
+
     const currentDate = new Date();
-    currentDate.setHours(0, 0, 0, 0); // Compare dates only
+    currentDate.setHours(0, 0, 0, 0);
+    logMessage(`Current date for comparison: ${currentDate.toISOString()}`);
 
-    // Process the stores from the index
-    const stores: Store[] = indexData.stores.map((storeInfo: StoreIndexItem) => {
-      const validUntil = new Date(storeInfo.validUntil);
-      const isAvailable = validUntil >= currentDate;
+    // Process the stores from the array
+    const stores: Store[] = storesArray.map((storeInfo: StoreIndexItem, index: number) => {
+      try {
+        const validUntil = new Date(storeInfo.validUntil);
+        const isAvailable = validUntil >= currentDate;
 
-      return {
-        id: storeInfo.id,
-        name: storeInfo.name,
-        location: storeInfo.location,
-        filename: storeInfo.filename,
-        validUntil,
-        isAvailable,
-        logo: storeInfo.logo,
-        // Include all new fields
-        location_name: storeInfo.location_name,
-        city: storeInfo.city,
-        postal_code: storeInfo.postal_code,
-        coordinates: storeInfo.coordinates,
-        flyer: storeInfo.flyer
-      };
+        // Parse coordinates if they exist
+        let lat = storeInfo.lat;
+        let lng = storeInfo.lng;
+
+        if (!lat || !lng) {
+          const coords = parseCoordinates(storeInfo.coordinates || '');
+          if (coords) {
+            lat = coords.latitude;
+            lng = coords.longitude;
+          }
+        }
+
+        const store = {
+          id: storeInfo.id,
+          name: storeInfo.name,
+          location: storeInfo.location,
+          filename: storeInfo.filename,
+          validUntil,
+          isAvailable,
+          logo: storeInfo.logo,
+          lat,
+          lng,
+          // Include all new fields
+          location_name: storeInfo.location_name,
+          city: storeInfo.city,
+          postal_code: storeInfo.postal_code,
+          coordinates: storeInfo.coordinates,
+          flyer: storeInfo.flyer,
+          geocoded_address: storeInfo.geocoded_address,
+          geocoded_at: storeInfo.geocoded_at
+        };
+
+        if (index < 3) {
+          logMessage(`Sample store ${index}: ${store.name} - ${store.location} - Available: ${store.isAvailable}`);
+        }
+
+        return store;
+      } catch (storeError) {
+        console.error(`Error processing store at index ${index}:`, storeError, storeInfo);
+        throw storeError;
+      }
     });
 
     // Sort by name
     stores.sort((a, b) => a.name.localeCompare(b.name));
 
-    logMessage(`Discovered ${stores.length} stores`);
+    logMessage(`Successfully processed ${stores.length} stores`);
+    const availableCount = stores.filter(s => s.isAvailable).length;
+    logMessage(`Available stores: ${availableCount}/${stores.length}`);
 
     set({
       availableStores: stores,
       isLoading: false,
-      isStoresLoaded: true
+      isStoresLoaded: true,
+      error: null
     });
+
+    logMessage('Store discovery completed successfully');
   } catch (err) {
     console.error("Error discovering stores:", err);
+    const errorMessage = err instanceof Error ? err.message : 'Failed to discover stores';
+    console.error("Full error details:", err);
+
     set({
       isLoading: false,
-      error: err instanceof Error ? err.message : 'Failed to discover stores',
-      isStoresLoaded: false
+      error: errorMessage,
+      isStoresLoaded: false,
+      availableStores: []
     });
+
+    logMessage(`Store discovery failed: ${errorMessage}`);
   }
 }
 }));
