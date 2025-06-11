@@ -3,6 +3,7 @@
 
 import React, { useEffect, useState } from 'react';
 import Link from 'next/link';
+import Image from 'next/image';
 import { useAuth } from '@/contexts/AuthContext';
 import { Switch } from '@/components/ui/switch';
 
@@ -11,7 +12,7 @@ export default function Header() {
   const [mobile, setMob] = useState(false);
   const [showProfileMenu, setShowProfileMenu] = useState(false);
   const [notificationLoading, setNotificationLoading] = useState(false);
-  
+
   const { currentUser, userPreferences, logout, updateNotificationPreference } = useAuth();
 
   useEffect(() => {
@@ -68,12 +69,6 @@ export default function Header() {
 
   return (
     <>
-      {/* fonts */}
-      <link
-        href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600&family=Montserrat+Alternates:wght@700&display=swap"
-        rel="stylesheet"
-      />
-
       <header
         className="sticky top-0 z-50 h-14 w-full font-montserrat relative isolate"
         style={{ background: 'transparent' }}
@@ -92,9 +87,11 @@ export default function Header() {
         <div className="h-full max-w-screen-xl mx-auto flex items-center justify-between px-4">
           {/* logo + word‑mark */}
           <Link href="/" className="flex items-center gap-2">
-            <img
+            <Image
               src="/SmartCart_White.png"
               alt="SmartCart logo"
+              width={60}
+              height={24}
               className="h-6 w-15"
             />
             <span className="font-montserratAlt font-bold text-lg tracking-tight whitespace-nowrap text-white">
