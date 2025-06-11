@@ -35,7 +35,7 @@ export default function Header() {
     }
   };
 
-  const handleNotificationToggle = async (enabled) => {
+  const handleNotificationToggle = async (enabled: boolean) => {
     try {
       setNotificationLoading(true);
       await updateNotificationPreference(enabled);
@@ -46,7 +46,7 @@ export default function Header() {
     }
   };
 
-  const getInitials = (name) => {
+  const getInitials = (name: string) => {
     if (!name) return 'U';
     return name
       .split(' ')
@@ -156,65 +156,61 @@ export default function Header() {
                   <button
                     onClick={() => setShowProfileMenu(!showProfileMenu)}
                     className="
-                      w-8 h-8 rounded-full bg-white/20 backdrop-blur-sm
-                      flex items-center justify-center text-white font-semibold text-sm
-                      hover:bg-white/30 transition-colors duration-200
-                      ring-2 ring-white/30 hover:ring-white/50
+                      w-10 h-10 rounded-full bg-gradient-to-br from-white/30 to-white/10 backdrop-blur-sm
+                      flex items-center justify-center text-white font-bold text-sm
+                      hover:from-white/40 hover:to-white/20 transition-all duration-300
+                      ring-2 ring-white/30 hover:ring-white/50 shadow-lg hover:shadow-xl
+                      hover:scale-105 transform
                     "
                   >
                     {getInitials(currentUser.displayName || currentUser.email)}
                   </button>
 
-                  {/* Profile Dropdown */}
+                  {/* Modern Profile Dropdown */}
                   {showProfileMenu && (
                     <div className="
-                      absolute right-0 top-full mt-2 w-72 py-2
-                      bg-white rounded-lg shadow-xl border border-gray-200
-                      z-50
+                      absolute right-0 top-full mt-3 w-80
+                      backdrop-blur-md bg-white/95 border border-white/30 rounded-2xl shadow-2xl
+                      z-50 overflow-hidden
+                      animate-in slide-in-from-top-2 fade-in-0 duration-300
                     ">
-                      {/* User Info */}
-                      <div className="px-4 py-3 border-b border-gray-100">
-                        <p className="font-semibold text-gray-900">
-                          {currentUser.displayName || 'User'}
-                        </p>
-                        <p className="text-sm text-gray-600 truncate">{currentUser.email}</p>
-                        {currentUser.emailVerified ? (
-                          <p className="text-xs text-green-600 mt-1">✓ Email verified</p>
-                        ) : (
-                          <p className="text-xs text-orange-600 mt-1">⚠ Email not verified</p>
-                        )}
-                      </div>
+                      {/* Top Accent */}
+                      <div className="h-1 bg-gradient-to-r from-[#45B08C] via-[#FDBA74] to-[#45B08C]" />
 
-                      {/* Account Info */}
-                      <div className="px-4 py-3 border-b border-gray-100">
-                        <div className="grid grid-cols-2 gap-2 text-xs">
-                          <div>
-                            <span className="text-gray-500">Member since:</span>
-                            <p className="text-gray-700 font-medium">
-                              {userPreferences?.createdAt.toLocaleDateString('en-US', {
-                                month: 'short',
-                                year: 'numeric'
-                              })}
-                            </p>
+                      {/* User Info */}
+                      <div className="px-6 py-5 border-b border-gray-100">
+                        <div className="flex items-center gap-4">
+                          {/* Enhanced Avatar */}
+                          <div className="
+                            w-12 h-12 rounded-full bg-gradient-to-br from-[#45B08C] to-[#3A9B7A]
+                            flex items-center justify-center text-white font-bold text-lg
+                            shadow-lg ring-2 ring-[#45B08C]/20
+                          ">
+                            {getInitials(currentUser.displayName || currentUser.email)}
                           </div>
-                          <div>
-                            <span className="text-gray-500">Account ID:</span>
-                            <p className="text-gray-700 font-mono">#{currentUser.id}</p>
+
+                          <div className="flex-1 min-w-0">
+                            <p className="font-bold text-gray-900 text-lg truncate" style={{ fontFamily: 'Montserrat, system-ui, sans-serif' }}>
+                              {currentUser.displayName || 'User'}
+                            </p>
+                            <p className="text-sm text-gray-600 truncate">{currentUser.email}</p>
                           </div>
                         </div>
                       </div>
 
                       {/* Notification Toggle */}
-                      <div className="px-4 py-3 border-b border-gray-100">
+                      <div className="px-6 py-5 border-b border-gray-100">
                         <div className="flex items-center justify-between">
-                          <div className="flex items-center space-x-2">
-                            <span className="text-gray-500">🔔</span>
-                            <div>
-                              <span className="text-sm text-gray-700 font-medium">
+                          <div className="flex items-center space-x-3">
+                            <div className="w-8 h-8 rounded-full bg-[#45B08C]/10 flex items-center justify-center">
+                              <span className="text-[#45B08C] text-lg">🔔</span>
+                            </div>
+                            <div className="flex-1">
+                              <span className="text-sm text-gray-800 font-semibold block" style={{ fontFamily: 'Montserrat, system-ui, sans-serif' }}>
                                 New Flyer Notifications
                               </span>
                               <p className="text-xs text-gray-500">
-                                Get notified about new deals and flyers
+                                Get notified about new deals
                               </p>
                             </div>
                           </div>
@@ -222,32 +218,57 @@ export default function Header() {
                             checked={userPreferences?.newFlyerNotifications ?? false}
                             onCheckedChange={handleNotificationToggle}
                             disabled={!userPreferences || notificationLoading}
+                            className="data-[state=checked]:bg-[#45B08C]"
                           />
                         </div>
-                        {userPreferences && (
-                          <p className="text-xs text-gray-400 mt-2">
-                            Last updated: {userPreferences.updatedAt.toLocaleString('en-US', {
-                              month: 'short',
-                              day: 'numeric',
-                              hour: '2-digit',
-                              minute: '2-digit'
-                            })}
-                          </p>
+
+                        {notificationLoading && (
+                          <div className="flex items-center gap-2 mt-3 text-xs text-gray-500">
+                            <div className="w-3 h-3 border border-[#45B08C] border-t-transparent rounded-full animate-spin" />
+                            <span>Updating preferences...</span>
+                          </div>
                         )}
                       </div>
 
+                      {/* Coming Soon Section */}
+                      <div className="px-6 py-5 border-b border-gray-100 bg-gradient-to-r from-[#45B08C]/5 to-[#FDBA74]/5">
+                        <div className="flex items-center gap-3">
+                          <div className="w-8 h-8 rounded-full bg-gradient-to-r from-[#45B08C] to-[#FDBA74] flex items-center justify-center">
+                            <span className="text-white text-sm">✨</span>
+                          </div>
+                          <div>
+                            <p className="text-sm font-semibold text-gray-800" style={{ fontFamily: 'Montserrat, system-ui, sans-serif' }}>
+                              Exciting new member features coming soon!
+                            </p>
+                            <p className="text-xs text-gray-600">
+                              Stay tuned for amazing updates
+                            </p>
+                          </div>
+                        </div>
+                      </div>
+
                       {/* Sign Out */}
-                      <div className="border-t border-gray-100">
+                      <div className="p-2">
                         <button
                           onClick={handleLogout}
                           className="
-                            block w-full text-left px-4 py-3 text-red-600 hover:bg-red-50
-                            transition-colors duration-150 font-medium
+                            w-full text-left px-4 py-3 text-red-600 hover:bg-red-50
+                            transition-all duration-200 font-semibold rounded-xl
+                            hover:shadow-md transform hover:scale-[1.02]
                           "
+                          style={{ fontFamily: 'Montserrat, system-ui, sans-serif' }}
                         >
-                          Sign Out
+                          <div className="flex items-center gap-3">
+                            <div className="w-8 h-8 rounded-full bg-red-100 flex items-center justify-center">
+                              <span className="text-red-600 text-sm">👋</span>
+                            </div>
+                            Sign Out
+                          </div>
                         </button>
                       </div>
+
+                      {/* Bottom Accent */}
+                      <div className="h-1 bg-gradient-to-r from-[#45B08C] via-[#FDBA74] to-[#45B08C]" />
                     </div>
                   )}
                 </div>
@@ -276,16 +297,21 @@ export default function Header() {
           </button>
         </div>
 
-        {/* mobile drawer */}
+        {/* Enhanced Mobile Drawer */}
         {mobile && open && (
           <nav
             className={`
-              md:hidden absolute top-14 left-0 w-full shadow-xl
-              transform-gpu transition-[opacity,transform] duration-300 ease-out
+              md:hidden absolute top-14 left-0 w-full shadow-2xl
+              transform-gpu transition-all duration-500 ease-out
               ${open ? 'opacity-100 translate-y-0' : 'opacity-0 -translate-y-4 pointer-events-none'}
             `}
-            style={{ background: 'rgba(69,176,140,0.92)', backdropFilter: 'blur(8px)' }}
+            style={{
+              background: 'rgba(69,176,140,0.95)',
+              backdropFilter: 'blur(12px)',
+              fontFamily: 'Montserrat, system-ui, sans-serif'
+            }}
           >
+            {/* Mobile Nav Links */}
             {NAV.map(({ label, href, external }) =>
               external ? (
                 <a
@@ -295,9 +321,10 @@ export default function Header() {
                   rel="noopener noreferrer"
                   onClick={() => setOpen(false)}
                   className="
-                    block text-center text-lg font-medium text-gray-900
-                    px-6 py-6 border-b last:border-0
-                    hover:bg-white/10 transition-colors
+                    block text-center text-lg font-medium text-white
+                    px-6 py-5 border-b border-white/20 last:border-0
+                    hover:bg-white/10 transition-all duration-200
+                    active:bg-white/20 transform active:scale-95
                   "
                 >
                   {label}
@@ -308,23 +335,26 @@ export default function Header() {
                   href={href}
                   onClick={() => setOpen(false)}
                   className="
-                    block text-center text-lg font-medium text-gray-900
-                    px-6 py-6 border-b last:border-0
-                    hover:bg-white/10 transition-colors
+                    block text-center text-lg font-medium text-white
+                    px-6 py-5 border-b border-white/20 last:border-0
+                    hover:bg-white/10 transition-all duration-200
+                    active:bg-white/20 transform active:scale-95
                   "
                 >
                   {label}
                 </Link>
               )
             )}
-            
+
+            {/* Mobile CTA */}
             <Link
               href="/plan"
               onClick={() => setOpen(false)}
               className="
-                block text-center text-lg font-semibold text-white
-                bg-[#FDBA74] hover:bg-[#FDBA74]/90 transition-colors
-                px-6 py-6 border-b
+                block text-center text-lg font-bold text-white
+                bg-[#FDBA74] hover:bg-[#FDBA74]/90 transition-all duration-200
+                px-6 py-5 border-b border-white/20
+                active:bg-[#FDBA74]/80 transform active:scale-95
               "
             >
               Try It Free
@@ -333,23 +363,34 @@ export default function Header() {
             {/* Mobile Auth Section */}
             {currentUser ? (
               <>
-                <div className="px-6 py-4 border-b border-white/20">
-                  <p className="font-semibold text-white">
-                    {currentUser.displayName || 'User'}
-                  </p>
-                  <p className="text-sm text-white/80">{currentUser.email}</p>
-                  <p className="text-xs text-white/60 mt-1">
-                    Account #{currentUser.id} • Member since {userPreferences?.createdAt.toLocaleDateString('en-US', { month: 'short', year: 'numeric' })}
-                  </p>
+                {/* Mobile User Info */}
+                <div className="px-6 py-5 border-b border-white/20 bg-white/10">
+                  <div className="flex items-center gap-4">
+                    <div className="
+                      w-12 h-12 rounded-full bg-white/20 backdrop-blur-sm
+                      flex items-center justify-center text-white font-bold text-lg
+                      shadow-lg
+                    ">
+                      {getInitials(currentUser.displayName || currentUser.email)}
+                    </div>
+                    <div className="flex-1 min-w-0">
+                      <p className="font-bold text-white text-lg truncate">
+                        {currentUser.displayName || 'User'}
+                      </p>
+                      <p className="text-sm text-white/80 truncate">{currentUser.email}</p>
+                    </div>
+                  </div>
                 </div>
 
                 {/* Mobile Notification Toggle */}
-                <div className="px-6 py-4 border-b border-white/20">
+                <div className="px-6 py-5 border-b border-white/20">
                   <div className="flex items-center justify-between">
-                    <div className="flex items-center space-x-2">
-                      <span className="text-white">🔔</span>
+                    <div className="flex items-center space-x-3">
+                      <div className="w-8 h-8 rounded-full bg-white/20 flex items-center justify-center">
+                        <span className="text-white text-lg">🔔</span>
+                      </div>
                       <div>
-                        <span className="text-sm text-white font-medium">
+                        <span className="text-sm text-white font-semibold block">
                           New Flyer Notifications
                         </span>
                         <p className="text-xs text-white/80">
@@ -361,32 +402,45 @@ export default function Header() {
                       checked={userPreferences?.newFlyerNotifications ?? false}
                       onCheckedChange={handleNotificationToggle}
                       disabled={!userPreferences || notificationLoading}
+                      className="data-[state=checked]:bg-white/30"
                     />
                   </div>
-                  {userPreferences && (
-                    <p className="text-xs text-white/60 mt-2">
-                      Last updated: {userPreferences.updatedAt.toLocaleString('en-US', {
-                        month: 'short',
-                        day: 'numeric',
-                        hour: '2-digit',
-                        minute: '2-digit'
-                      })}
-                    </p>
-                  )}
                 </div>
-                
+
+                {/* Mobile Coming Soon */}
+                <div className="px-6 py-5 border-b border-white/20 bg-white/5">
+                  <div className="flex items-center gap-3">
+                    <div className="w-8 h-8 rounded-full bg-[#FDBA74] flex items-center justify-center">
+                      <span className="text-white text-sm">✨</span>
+                    </div>
+                    <div>
+                      <p className="text-sm font-semibold text-white">
+                        Exciting new member features coming soon!
+                      </p>
+                      <p className="text-xs text-white/80">
+                        Stay tuned for updates
+                      </p>
+                    </div>
+                  </div>
+                </div>
+
+                {/* Mobile Sign Out */}
                 <button
                   onClick={() => {
                     handleLogout();
                     setOpen(false);
                   }}
                   className="
-                    block w-full text-center text-lg font-medium text-red-200
-                    px-6 py-6
-                    hover:bg-red-500/20 transition-colors
+                    block w-full text-center text-lg font-semibold text-red-200
+                    px-6 py-5
+                    hover:bg-red-500/20 transition-all duration-200
+                    active:bg-red-500/30 transform active:scale-95
                   "
                 >
-                  Sign Out
+                  <div className="flex items-center justify-center gap-3">
+                    <span className="text-xl">👋</span>
+                    Sign Out
+                  </div>
                 </button>
               </>
             ) : (
@@ -398,7 +452,8 @@ export default function Header() {
                 className="
                   block w-full text-center text-lg font-semibold text-white
                   border-2 border-white/30 hover:border-white/60 hover:bg-white/10
-                  transition-colors px-6 py-6
+                  transition-all duration-200 px-6 py-5
+                  active:bg-white/20 transform active:scale-95
                 "
               >
                 Log In
@@ -408,10 +463,10 @@ export default function Header() {
         )}
       </header>
 
-      {/* Click outside to close profile menu */}
+      {/* Enhanced Click Outside */}
       {showProfileMenu && (
         <div
-          className="fixed inset-0 z-40"
+          className="fixed inset-0 z-40 bg-black/20 backdrop-blur-sm"
           onClick={() => setShowProfileMenu(false)}
         />
       )}
