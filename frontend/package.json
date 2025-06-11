@@ -49,6 +49,7 @@
     "cmdk": "^1.1.1",
     "date-fns": "^4.1.0",
     "embla-carousel-react": "^8.6.0",
+    "firebase": "^11.8.1",
     "framer-motion": "^12.9.6",
     "input-otp": "^1.4.2",
     "lucide-react": "^0.507.0",
@@ -71,13 +72,13 @@
   "devDependencies": {
     "@eslint/eslintrc": "^3",
     "@tailwindcss/postcss": "^4",
-    "@types/node": "^20",
-    "@types/react": "^19",
+    "@types/node": "^22.15.29",
+    "@types/react": "^19.1.6",
     "@types/react-dom": "^19",
     "eslint": "^9",
     "eslint-config-next": "15.3.0",
     "gh-pages": "^6.3.0",
     "tailwindcss": "^4",
-    "typescript": "^5"
+    "typescript": "^5.8.3"
   }
 }
