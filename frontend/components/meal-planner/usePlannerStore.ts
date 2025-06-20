@@ -260,9 +260,9 @@ export const usePlannerStore = create<PlannerState>((set, get) => ({
     });
   },
 
-
-
-  // Fetch meal data based on selected store
+  // Fixed fetchMealData - just use validUntil from the store data
+  // Fixed fetchMealData - just use validUntil from the store data
+  // Fixed fetchMealData - just use validUntil from the store data
   fetchMealData: async () => {
     const state = get();
     const logMessage = (msg: string) => console.log(`[PlannerStore] ${msg}`);
@@ -291,67 +291,100 @@ export const usePlannerStore = create<PlannerState>((set, get) => ({
     }
 
     try {
-      logMessage(`Starting data fetch for ${selectedStore.name}, using file: ${selectedStore.filename}`);
+      logMessage(`Starting data fetch for ${selectedStore.name} at ${selectedStore.location} via API`);
       set({ isLoading: true, error: null });
 
-      // Fetch the store data file using the filename
-      const response = await fetch(`/data/${selectedStore.filename}`);
+      // Calculate the "from" date (validUntil - 7 days) - that's what the backend expects!
+      const validUntilDate = new Date(selectedStore.validUntil);
+      const dataDate = new Date(validUntilDate);
+      dataDate.setDate(dataDate.getDate() - 7);
+      const date = dataDate.toISOString().split('T')[0]; // Convert to YYYY-MM-DD string
 
-      if (!response.ok) {
-        throw new Error(`Failed to fetch meal plan data: ${response.status} ${response.statusText}`);
-      }
+      logMessage(`Using calculated data date: ${date} (from validUntil: ${selectedStore.validUntil.toISOString().split('T')[0]})`);
 
-      logMessage('Data fetched successfully, parsing JSON...');
+      // Make 3 separate API calls for each meal type
+      const mealTypes = ['breakfast', 'lunch', 'dinner'] as const;
+      const apiCalls = mealTypes.map(async (mealType) => {
+        const apiUrl = `https://api.skrimp.ai/meal-plans?store=${encodeURIComponent(selectedStore.name)}&location=${encodeURIComponent(selectedStore.location)}&date=${date}&mealType=${mealType}`;
+        logMessage(`Fetching ${mealType} from: ${apiUrl}`);
 
-      // Parse the data - no need to transform structure
-      const mealData = await response.json();
+        const response = await fetch(apiUrl);
 
-      logMessage('JSON parsed successfully. Structure:');
-      console.log({
-        breakfastCount: mealData.breakfast?.length || 0,
-        lunchCount: mealData.lunch?.length || 0,
-        dinnerCount: mealData.dinner?.length || 0
+        if (!response.ok) {
+          throw new Error(`Failed to fetch ${mealType} data: ${response.status} ${response.statusText}`);
+        }
+
+        const apiResponse = await response.json();
+
+        if (!apiResponse.success) {
+          throw new Error(`API returned error for ${mealType}: ${apiResponse.error || 'Unknown error'}`);
+        }
+
+        return {
+          mealType,
+          data: apiResponse.data || []
+        };
       });
 
-      // Calculate flyerItemsCount for each recipe
-      const calculateFlyerItemsCount = (recipe: Recipe) => {
-        if (!recipe.ingredients) return 0;
+      logMessage('Making parallel API calls for all meal types...');
 
-        return recipe.ingredients.filter(ingredient =>
-          //ingredient.type === 'core' &&
-          ingredient.source === 'flyer'
-        ).length;
+      // Execute all API calls in parallel
+      const results = await Promise.all(apiCalls);
+
+      // Process results
+      const mealCategories: {
+        breakfast: Recipe[];
+        lunch: Recipe[];
+        dinner: Recipe[];
+      } = {
+        breakfast: [],
+        lunch: [],
+        dinner: []
       };
 
-      // Process each recipe to add the flyerItemsCount
-      const processRecipes = (recipes: Recipe[]): Recipe[] => {
-        return recipes.map(recipe => ({
-          ...recipe,
-          flyerItemsCount: calculateFlyerItemsCount(recipe)
+      let totalMealPlans = 0;
+
+      results.forEach(({ mealType, data }) => {
+        logMessage(`Received ${data.length} ${mealType} meal plans from API`);
+        totalMealPlans += data.length;
+
+        // Transform API data to Recipe format
+        const recipes: Recipe[] = data.map((plan: {
+          id: string;
+          name: string;
+          url?: string;
+          salePrice?: number;
+          totalCost?: number;
+          regularPrice?: number;
+          totalSavings?: number;
+          servings: number;
+          img?: string;
+          recipes?: Array<{ ingredients?: Array<{ source: string }> }>;
+        }) => ({
+          name: plan.name,
+          url: plan.url || `${plan.id}`,
+          price: plan.salePrice || plan.totalCost,
+          servings: plan.servings,
+          salePrice: plan.salePrice || plan.totalCost,
+          regularPrice: plan.regularPrice || plan.salePrice,
+          totalSavings: plan.totalSavings || 0,
+          flyerItemsCount: plan.recipes?.[0]?.ingredients?.filter(ing => ing.source === 'flyer').length || 0,
+          ingredients: plan.recipes?.[0]?.ingredients || [],
+          img: plan.img
         }));
-      };
 
-      // Create the meal categories using the data directly
-      // The structure already matches your frontend model
-      const mealCategories = {
-        breakfast: processRecipes(mealData.breakfast || []),
-        lunch: processRecipes(mealData.lunch || []),
-        dinner: processRecipes(mealData.dinner || [])
-      };
+        mealCategories[mealType] = recipes;
+      });
 
-      // Initialize default selections
+      logMessage(`Data transformation complete. Total meal plans: ${totalMealPlans}`);
+
+      // Initialize with no default selections
       const defaultSelectedMeals = new Set<string>();
       const initialMultipliers: Record<string, number> = {};
 
-      // Default to selecting the first 7 recipes in each category with calculated multipliers
+      // Set all recipes to multiplier 0 (unselected)
       Object.values(mealCategories).forEach((recipes: Recipe[]) => {
-        recipes.slice(0, 7).forEach(recipe => {
-          defaultSelectedMeals.add(recipe.url);
-          // Calculate initial multiplier based on normalMealServings and recipe servings
-          initialMultipliers[recipe.url] = state.calculateInitialMultiplier(recipe.servings);
-        });
-
-        recipes.slice(7).forEach(recipe => {
+        recipes.forEach(recipe => {
           initialMultipliers[recipe.url] = 0;
         });
       });
@@ -365,7 +398,7 @@ export const usePlannerStore = create<PlannerState>((set, get) => ({
         isDataLoaded: true
       });
 
-      logMessage('Store update complete');
+      logMessage('Store update complete - no default selections');
     } catch (err) {
       console.error("Error fetching meal data:", err);
       set({
@@ -376,31 +409,25 @@ export const usePlannerStore = create<PlannerState>((set, get) => ({
     }
   },
 
-  // Original actions (slightly modified)
+  // Updated setMeals function - remove default selections
   setMeals: (meals) => {
     // Only initialize selections if they don't exist yet
     const state = get();
     if (state.selectedMeals.size === 0) {
-      const defaultSelectedMeals = new Set<string>();
+      const defaultSelectedMeals = new Set<string>(); // Empty set - no selections
       const initialMultipliers: Record<string, number> = {};
 
+      // Set all recipes to multiplier 0 (unselected)
       Object.values(meals).forEach((recipes: Recipe[]) => {
-        recipes.slice(0, 7).forEach(recipe => {
-          defaultSelectedMeals.add(recipe.url);
-          // Calculate initial multiplier based on normalMealServings and recipe servings
-          initialMultipliers[recipe.url] = state.calculateInitialMultiplier(recipe.servings);
-        });
-
-        // Set zero multiplier for unselected recipes
-        recipes.slice(7).forEach(recipe => {
-          initialMultipliers[recipe.url] = 0;
+        recipes.forEach(recipe => {
+          initialMultipliers[recipe.url] = 0; // All start at 0
         });
       });
 
       set({
         meals,
-        selectedMeals: defaultSelectedMeals,
-        recipeMultipliers: initialMultipliers
+        selectedMeals: defaultSelectedMeals, // Empty
+        recipeMultipliers: initialMultipliers // All 0
       });
     } else {
       // Just update meals, preserving selections
@@ -642,15 +669,15 @@ export const usePlannerStore = create<PlannerState>((set, get) => ({
           // Get tags if they exist
           const tags = state.ingredientTags[packageId];
 
-          aggregateMap.set(packageId, {
+                   aggregateMap.set(packageId, {
             packageId,
             // Multiply by recipe multiplier
             neededFraction: (ing.saleFractionUsed || 0) * multiplier,
             unitSize: ing.saleUnitSize || 0,
             unitType: ing.saleUnitType || '',
-            packPrice: ing.salePrice,
+            packPrice: ing.salePrice || 0,          // API provides salePrice (which was mapped from saleListPrice)
             productName: ing.productName || ing.recipeIngredientName,
-            source: ing.source,
+            source: ing.source || 'database',       // API provides source (which was mapped from saleSource)
             lineCost: 0,
             packsToBuy: 0,
             isChecked: state.groceryCheckedItems.has(packageId),
@@ -722,117 +749,123 @@ export const usePlannerStore = create<PlannerState>((set, get) => ({
   },
 
   discoverStores: async () => {
-  const logMessage = (msg: string) => console.log(`[PlannerStore] ${msg}`);
-  logMessage('Discovering available stores...');
+    const logMessage = (msg: string) => console.log(`[PlannerStore] ${msg}`);
+    logMessage('Discovering available stores...');
 
-  set({ isLoading: true, error: null });
+    set({ isLoading: true, error: null });
 
-  try {
-    logMessage('Attempting to fetch store index...');
+    try {
+      logMessage('Attempting to fetch store index from API...');
 
-    const response = await fetch('/data/store-index.json');
+      // 🚨 FIXED: Use deployed API
+      const response = await fetch('https://api.skrimp.ai/meal-plans/stores/index');
 
-    logMessage(`Fetch response status: ${response.status}`);
+      logMessage(`Fetch response status: ${response.status}`);
 
-    if (!response.ok) {
-      throw new Error(`Failed to load store index file: ${response.status} ${response.statusText}`);
-    }
-
-    logMessage('Parsing JSON...');
-    const indexData = await response.json();
-
-    // Fix: Extract the stores array from the wrapper object
-    const storesArray = indexData.stores || indexData;
-
-    if (!Array.isArray(storesArray)) {
-      console.error('Invalid data structure:', indexData);
-      throw new Error('Store index data is not in the expected format');
-    }
-
-    logMessage(`Parsed JSON successfully. Found ${storesArray.length} stores`);
-    console.log('Sample store data:', storesArray.slice(0, 2));
-
-    const currentDate = new Date();
-    currentDate.setHours(0, 0, 0, 0);
-    logMessage(`Current date for comparison: ${currentDate.toISOString()}`);
-
-    // Process the stores from the array
-    const stores: Store[] = storesArray.map((storeInfo: StoreIndexItem, index: number) => {
-      try {
-        const validUntil = new Date(storeInfo.validUntil);
-        const isAvailable = validUntil >= currentDate;
-
-        // Parse coordinates if they exist
-        let lat = storeInfo.lat;
-        let lng = storeInfo.lng;
-
-        if (!lat || !lng) {
-          const coords = parseCoordinates(storeInfo.coordinates || '');
-          if (coords) {
-            lat = coords.latitude;
-            lng = coords.longitude;
-          }
-        }
-
-        const store = {
-          id: storeInfo.id,
-          name: storeInfo.name,
-          location: storeInfo.location,
-          filename: storeInfo.filename,
-          validUntil,
-          isAvailable,
-          logo: storeInfo.logo,
-          lat,
-          lng,
-          // Include all new fields
-          location_name: storeInfo.location_name,
-          city: storeInfo.city,
-          postal_code: storeInfo.postal_code,
-          coordinates: storeInfo.coordinates,
-          flyer: storeInfo.flyer,
-          geocoded_address: storeInfo.geocoded_address,
-          geocoded_at: storeInfo.geocoded_at
-        };
-
-        if (index < 3) {
-          logMessage(`Sample store ${index}: ${store.name} - ${store.location} - Available: ${store.isAvailable}`);
-        }
-
-        return store;
-      } catch (storeError) {
-        console.error(`Error processing store at index ${index}:`, storeError, storeInfo);
-        throw storeError;
+      if (!response.ok) {
+        throw new Error(`Failed to load store index: ${response.status} ${response.statusText}`);
       }
-    });
 
-    // Sort by name
-    stores.sort((a, b) => a.name.localeCompare(b.name));
+      logMessage('Parsing JSON...');
+      const apiResponse = await response.json();
 
-    logMessage(`Successfully processed ${stores.length} stores`);
-    const availableCount = stores.filter(s => s.isAvailable).length;
-    logMessage(`Available stores: ${availableCount}/${stores.length}`);
+      if (!apiResponse.success || !apiResponse.data) {
+        throw new Error('Invalid API response format');
+      }
 
-    set({
-      availableStores: stores,
-      isLoading: false,
-      isStoresLoaded: true,
-      error: null
-    });
+      // Extract stores from API response
+      const indexData = apiResponse.data;
+      const storesArray = indexData.stores || [];
 
-    logMessage('Store discovery completed successfully');
-  } catch (err) {
-    console.error("Error discovering stores:", err);
-    const errorMessage = err instanceof Error ? err.message : 'Failed to discover stores';
-    console.error("Full error details:", err);
+      if (!Array.isArray(storesArray)) {
+        console.error('Invalid data structure:', indexData);
+        throw new Error('Store index data is not in the expected format');
+      }
 
-    set({
-      isLoading: false,
-      error: errorMessage,
-      isStoresLoaded: false,
-      availableStores: []
-    });
+      logMessage(`Parsed JSON successfully. Found ${storesArray.length} stores`);
+      console.log('Sample store data:', storesArray.slice(0, 2));
 
-    logMessage(`Store discovery failed: ${errorMessage}`);
+      const currentDate = new Date();
+      currentDate.setHours(0, 0, 0, 0);
+      logMessage(`Current date for comparison: ${currentDate.toISOString()}`);
+
+      // Process the stores from the array (same logic as before)
+      const stores: Store[] = storesArray.map((storeInfo: StoreIndexItem, index: number) => {
+        try {
+          const validUntil = new Date(storeInfo.validUntil);
+          const isAvailable = validUntil >= currentDate;
+
+          // Parse coordinates if they exist
+          let lat = storeInfo.lat;
+          let lng = storeInfo.lng;
+
+          if (!lat || !lng) {
+            const coords = parseCoordinates(storeInfo.coordinates || '');
+            if (coords) {
+              lat = coords.latitude;
+              lng = coords.longitude;
+            }
+          }
+
+          const store = {
+            id: storeInfo.id,
+            name: storeInfo.name,
+            location: storeInfo.location,
+            filename: storeInfo.filename,
+            validUntil,
+            isAvailable,
+            logo: storeInfo.logo,
+            lat,
+            lng,
+            // Include all new fields
+            location_name: storeInfo.location_name,
+            city: storeInfo.city,
+            postal_code: storeInfo.postal_code,
+            coordinates: storeInfo.coordinates,
+            flyer: storeInfo.flyer,
+            geocoded_address: storeInfo.geocoded_address,
+            geocoded_at: storeInfo.geocoded_at
+          };
+
+          if (index < 3) {
+            logMessage(`Sample store ${index}: ${store.name} - ${store.location} - Available: ${store.isAvailable}`);
+          }
+
+          return store;
+        } catch (storeError) {
+          console.error(`Error processing store at index ${index}:`, storeError, storeInfo);
+          throw storeError;
+        }
+      });
+
+      // Sort by name
+      stores.sort((a, b) => a.name.localeCompare(b.name));
+
+      logMessage(`Successfully processed ${stores.length} stores`);
+      const availableCount = stores.filter(s => s.isAvailable).length;
+      logMessage(`Available stores: ${availableCount}/${stores.length}`);
+
+      set({
+        availableStores: stores,
+        isLoading: false,
+        isStoresLoaded: true,
+        error: null
+      });
+
+      logMessage('Store discovery completed successfully');
+    } catch (err) {
+      console.error("Error discovering stores:", err);
+      const errorMessage = err instanceof Error ? err.message : 'Failed to discover stores';
+      console.error("Full error details:", err);
+
+      set({
+        isLoading: false,
+        error: errorMessage,
+        isStoresLoaded: false,
+        availableStores: []
+      });
+
+      logMessage(`Store discovery failed: ${errorMessage}`);
+    }
   }
-}
 }));
