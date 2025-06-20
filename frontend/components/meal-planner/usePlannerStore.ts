@@ -260,7 +260,9 @@ export const usePlannerStore = create<PlannerState>((set, get) => ({
     });
   },
 
-  // Replace the fetchMealData function in usePlannerStore.ts
+  // Fixed fetchMealData - just use validUntil from the store data
+  // Fixed fetchMealData - just use validUntil from the store data
+  // Fixed fetchMealData - just use validUntil from the store data
   fetchMealData: async () => {
     const state = get();
     const logMessage = (msg: string) => console.log(`[PlannerStore] ${msg}`);
@@ -292,16 +294,17 @@ export const usePlannerStore = create<PlannerState>((set, get) => ({
       logMessage(`Starting data fetch for ${selectedStore.name} at ${selectedStore.location} via API`);
       set({ isLoading: true, error: null });
 
-      // Parse store info to get the date from filename
-      const filenameMatch = selectedStore.filename.match(/-(\d{4}-\d{2}-\d{2})\.json$/);
-      const date = filenameMatch ? filenameMatch[1] : '2025-06-19'; // fallback date
+      // Calculate the "from" date (validUntil - 7 days) - that's what the backend expects!
+      const validUntilDate = new Date(selectedStore.validUntil);
+      const dataDate = new Date(validUntilDate);
+      dataDate.setDate(dataDate.getDate() - 7);
+      const date = dataDate.toISOString().split('T')[0]; // Convert to YYYY-MM-DD string
 
-      logMessage(`Using date: ${date} (extracted from filename: ${selectedStore.filename})`);
+      logMessage(`Using calculated data date: ${date} (from validUntil: ${selectedStore.validUntil.toISOString().split('T')[0]})`);
 
-      // 🔄 NEW: Make 3 separate API calls for each meal type with ALL required parameters
+      // Make 3 separate API calls for each meal type
       const mealTypes = ['breakfast', 'lunch', 'dinner'] as const;
       const apiCalls = mealTypes.map(async (mealType) => {
-        // 🚨 FIXED: Use deployed API with all required parameters
         const apiUrl = `https://api.skrimp.ai/meal-plans?store=${encodeURIComponent(selectedStore.name)}&location=${encodeURIComponent(selectedStore.location)}&date=${date}&mealType=${mealType}`;
         logMessage(`Fetching ${mealType} from: ${apiUrl}`);
 
@@ -329,7 +332,11 @@ export const usePlannerStore = create<PlannerState>((set, get) => ({
       const results = await Promise.all(apiCalls);
 
       // Process results
-      const mealCategories = {
+      const mealCategories: {
+        breakfast: Recipe[];
+        lunch: Recipe[];
+        dinner: Recipe[];
+      } = {
         breakfast: [],
         lunch: [],
         dinner: []
@@ -342,9 +349,20 @@ export const usePlannerStore = create<PlannerState>((set, get) => ({
         totalMealPlans += data.length;
 
         // Transform API data to Recipe format
-        const recipes: Recipe[] = data.map(plan => ({
+        const recipes: Recipe[] = data.map((plan: {
+          id: string;
+          name: string;
+          url?: string;
+          salePrice?: number;
+          totalCost?: number;
+          regularPrice?: number;
+          totalSavings?: number;
+          servings: number;
+          img?: string;
+          recipes?: Array<{ ingredients?: Array<{ source: string }> }>;
+        }) => ({
           name: plan.name,
-          url: plan.url || `${plan.id}`, // Fallback to ID if no URL
+          url: plan.url || `${plan.id}`,
           price: plan.salePrice || plan.totalCost,
           servings: plan.servings,
           salePrice: plan.salePrice || plan.totalCost,
@@ -359,26 +377,14 @@ export const usePlannerStore = create<PlannerState>((set, get) => ({
       });
 
       logMessage(`Data transformation complete. Total meal plans: ${totalMealPlans}`);
-      logMessage('Meal categories structure:');
-      console.log({
-        breakfastCount: mealCategories.breakfast.length,
-        lunchCount: mealCategories.lunch.length,
-        dinnerCount: mealCategories.dinner.length,
-        total: totalMealPlans
-      });
 
-      // Initialize default selections (same as before)
+      // Initialize with no default selections
       const defaultSelectedMeals = new Set<string>();
       const initialMultipliers: Record<string, number> = {};
 
-      // Default to selecting the first 7 recipes in each category with calculated multipliers
+      // Set all recipes to multiplier 0 (unselected)
       Object.values(mealCategories).forEach((recipes: Recipe[]) => {
-        recipes.slice(0, 7).forEach(recipe => {
-          defaultSelectedMeals.add(recipe.url);
-          initialMultipliers[recipe.url] = state.calculateInitialMultiplier(recipe.servings);
-        });
-
-        recipes.slice(7).forEach(recipe => {
+        recipes.forEach(recipe => {
           initialMultipliers[recipe.url] = 0;
         });
       });
@@ -392,7 +398,7 @@ export const usePlannerStore = create<PlannerState>((set, get) => ({
         isDataLoaded: true
       });
 
-      logMessage('Store update complete');
+      logMessage('Store update complete - no default selections');
     } catch (err) {
       console.error("Error fetching meal data:", err);
       set({
@@ -403,31 +409,25 @@ export const usePlannerStore = create<PlannerState>((set, get) => ({
     }
   },
 
-  // Original actions (slightly modified)
+  // Updated setMeals function - remove default selections
   setMeals: (meals) => {
     // Only initialize selections if they don't exist yet
     const state = get();
     if (state.selectedMeals.size === 0) {
-      const defaultSelectedMeals = new Set<string>();
+      const defaultSelectedMeals = new Set<string>(); // Empty set - no selections
       const initialMultipliers: Record<string, number> = {};
 
+      // Set all recipes to multiplier 0 (unselected)
       Object.values(meals).forEach((recipes: Recipe[]) => {
-        recipes.slice(0, 7).forEach(recipe => {
-          defaultSelectedMeals.add(recipe.url);
-          // Calculate initial multiplier based on normalMealServings and recipe servings
-          initialMultipliers[recipe.url] = state.calculateInitialMultiplier(recipe.servings);
-        });
-
-        // Set zero multiplier for unselected recipes
-        recipes.slice(7).forEach(recipe => {
-          initialMultipliers[recipe.url] = 0;
+        recipes.forEach(recipe => {
+          initialMultipliers[recipe.url] = 0; // All start at 0
         });
       });
 
       set({
         meals,
-        selectedMeals: defaultSelectedMeals,
-        recipeMultipliers: initialMultipliers
+        selectedMeals: defaultSelectedMeals, // Empty
+        recipeMultipliers: initialMultipliers // All 0
       });
     } else {
       // Just update meals, preserving selections
@@ -669,15 +669,15 @@ export const usePlannerStore = create<PlannerState>((set, get) => ({
           // Get tags if they exist
           const tags = state.ingredientTags[packageId];
 
-          aggregateMap.set(packageId, {
+                   aggregateMap.set(packageId, {
             packageId,
             // Multiply by recipe multiplier
             neededFraction: (ing.saleFractionUsed || 0) * multiplier,
             unitSize: ing.saleUnitSize || 0,
             unitType: ing.saleUnitType || '',
-            packPrice: ing.salePrice,
+            packPrice: ing.salePrice || 0,          // API provides salePrice (which was mapped from saleListPrice)
             productName: ing.productName || ing.recipeIngredientName,
-            source: ing.source,
+            source: ing.source || 'database',       // API provides source (which was mapped from saleSource)
             lineCost: 0,
             packsToBuy: 0,
             isChecked: state.groceryCheckedItems.has(packageId),
