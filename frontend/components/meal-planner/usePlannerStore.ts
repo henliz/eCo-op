@@ -1,6 +1,43 @@
 import { create } from 'zustand';
 
 // Types
+
+type APICallFunction = (
+  endpoint: string,
+  method: 'GET' | 'PUT' | 'DELETE',
+  body?: unknown,
+  requireAuth?: boolean
+) => Promise<unknown>;
+
+interface APIResponse {
+  success: boolean;
+  error?: string;
+}
+
+interface SavePlanResponse extends APIResponse {
+  planId: string;
+  version: number;
+}
+
+interface LoadPlanResponse extends APIResponse {
+  data?: {
+    id: string;
+    version: number;
+    householdSize: number;
+    selectedStore: string | null;
+    userLocation: {
+      latitude: number;
+      longitude: number;
+      address?: string;
+      source: 'browser' | 'postal' | 'address';
+    } | null;
+    selectedMeals: string[];
+    recipeMultipliers: Record<string, number>;
+    groceryCheckedItems: string[];
+    ingredientTags: Record<string, IngredientTags>;
+  };
+}
+
 export interface Store {
   id: string;
   name: string;
@@ -24,7 +61,6 @@ export interface StoreLocation {
   postalCode?: string;
 }
 
-
 interface StoreIndexItem {
   id: string;
   name: string;
@@ -43,7 +79,6 @@ interface StoreIndexItem {
   geocoded_address?: string;
   geocoded_at?: string;
 }
-
 
 export interface IngredientTags {
   importance?: 'core' | 'optional';
@@ -164,6 +199,17 @@ interface PlannerState {
   mealSummary: () => { breakfast: number; lunch: number; dinner: number; total: number };
   calculateInitialMultiplier: (servings: number) => number;
 
+  // New sync properties
+  isSyncing: boolean;
+  lastSynced: Date | null;
+  lastSyncError: string | null;
+  planId: string | null;
+  version: number;
+
+  // New sync methods - now they take the makeAPICall function as parameter
+  loadUserPlan: (makeAPICall: APICallFunction) => Promise<void>;
+  saveUserPlan: (makeAPICall: APICallFunction) => Promise<void>;
+  deleteUserPlan: (makeAPICall: APICallFunction) => Promise<void>;
 }
 
 
@@ -227,6 +273,12 @@ export const usePlannerStore = create<PlannerState>((set, get) => ({
   isDataLoaded: false,
   availableStores: [],
   isStoresLoaded: false,
+  lastSynced: null,
+
+  isSyncing: false,
+  lastSyncError: null,
+  planId: null,
+  version: 0,
 
   // Calculate initial multiplier based on recipe servings and normalMealServings
   calculateInitialMultiplier: (servings: number) => {
@@ -260,8 +312,6 @@ export const usePlannerStore = create<PlannerState>((set, get) => ({
     });
   },
 
-  // Fixed fetchMealData - just use validUntil from the store data
-  // Fixed fetchMealData - just use validUntil from the store data
   // Fixed fetchMealData - just use validUntil from the store data
   fetchMealData: async () => {
     const state = get();
@@ -867,5 +917,132 @@ export const usePlannerStore = create<PlannerState>((set, get) => ({
 
       logMessage(`Store discovery failed: ${errorMessage}`);
     }
-  }
+  },
+
+  // NEW: Save user plan to backend
+  saveUserPlan: async (makeAPICall: APICallFunction) => {
+    try {
+      set({ isSyncing: true, lastSyncError: null });
+
+      const state = get();
+
+      // Convert Sets to arrays for JSON serialization
+      const planData = {
+        householdSize: state.normalMealServings,
+        selectedStore: state.selectedStore,
+        userLocation: state.userLocation,
+        selectedMeals: Array.from(state.selectedMeals),
+        recipeMultipliers: state.recipeMultipliers,
+        groceryCheckedItems: Array.from(state.groceryCheckedItems),
+        ingredientTags: state.ingredientTags,
+      };
+
+      console.log('[PlannerStore] Saving plan data:', planData);
+
+      const response = await makeAPICall('/user-plans', 'PUT', planData, true) as SavePlanResponse;
+
+      if (response.success) {
+        set({
+          planId: response.planId,
+          version: response.version,
+          lastSynced: new Date(),
+          isSyncing: false,
+        });
+        console.log('[PlannerStore] User plan saved successfully');
+      } else {
+        throw new Error('Failed to save user plan');
+      }
+    } catch (error) {
+      console.error('Error saving user plan:', error);
+      set({
+        lastSyncError: 'Failed to save user plan',
+        isSyncing: false
+      });
+      throw error;
+    }
+  },
+
+  // NEW: Load user plan from backend
+  loadUserPlan: async (makeAPICall: APICallFunction) => {
+    try {
+      set({ isSyncing: true, lastSyncError: null });
+
+      const data = await makeAPICall('/user-plans', 'GET', null, true) as LoadPlanResponse;
+
+      if (data.success && data.data) {
+        const plan = data.data;
+
+        // Get current store before we change it
+        const currentStore = get().selectedStore;
+        const loadedStore = plan.selectedStore;
+        const storeChanged = currentStore !== loadedStore;
+
+        // Convert arrays back to Sets for Zustand
+        const selectedMeals = new Set(plan.selectedMeals || []);
+        const groceryCheckedItems = new Set(plan.groceryCheckedItems || []);
+
+        set({
+          planId: plan.id,
+          version: plan.version,
+          normalMealServings: plan.householdSize,
+          selectedStore: plan.selectedStore,
+          userLocation: plan.userLocation,
+          selectedMeals,
+          recipeMultipliers: plan.recipeMultipliers || {},
+          groceryCheckedItems,
+          ingredientTags: plan.ingredientTags || {},
+          isSyncing: false,
+          // Reset data loaded flag if store changed
+          isDataLoaded: storeChanged ? false : get().isDataLoaded,
+        });
+
+        // If store changed, we need to fetch new meal data
+        if (storeChanged) {
+          console.log('[PlannerStore] Store changed from', currentStore, 'to', loadedStore, '- fetching new meal data');
+          await get().fetchMealData();
+        }
+
+        console.log('[PlannerStore] User plan loaded successfully');
+      } else {
+        // No saved plan found - that's OK for new users
+        set({ isSyncing: false });
+        console.log('[PlannerStore] No saved plan found');
+      }
+    } catch (error) {
+      console.error('Error loading user plan:', error);
+      set({
+        lastSyncError: 'Failed to load saved plan',
+        isSyncing: false
+      });
+    }
+  },
+
+  // NEW: Delete user plan from backend
+  deleteUserPlan: async (makeAPICall: APICallFunction) => {
+    try {
+      set({ isSyncing: true, lastSyncError: null });
+
+      const response = await makeAPICall('/user-plans', 'DELETE', null, true) as APIResponse;
+
+      if (response.success) {
+        set({
+          planId: null,
+          version: 0,
+          lastSynced: null,
+          isSyncing: false,
+        });
+        console.log('[PlannerStore] User plan deleted successfully');
+      } else {
+        throw new Error('Failed to delete user plan');
+      }
+    } catch (error) {
+      console.error('Error deleting user plan:', error);
+      set({
+        lastSyncError: 'Failed to delete user plan',
+        isSyncing: false
+      });
+      throw error;
+    }
+  },
+
 }));
