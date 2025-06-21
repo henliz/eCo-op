@@ -1,5 +1,7 @@
 import { create } from 'zustand';
 
+const API_BASE_URL = process.env.NEXT_PUBLIC_API_URL || 'https://api.skrimp.ai';
+
 // Types
 
 type APICallFunction = (
@@ -8,6 +10,7 @@ type APICallFunction = (
   body?: unknown,
   requireAuth?: boolean
 ) => Promise<unknown>;
+
 
 interface APIResponse {
   success: boolean;
@@ -20,21 +23,23 @@ interface SavePlanResponse extends APIResponse {
 }
 
 interface LoadPlanResponse extends APIResponse {
+  planId?: string;
+  version?: number;
   data?: {
-    id: string;
-    version: number;
-    householdSize: number;
-    selectedStore: string | null;
-    userLocation: {
-      latitude: number;
-      longitude: number;
-      address?: string;
-      source: 'browser' | 'postal' | 'address';
-    } | null;
-    selectedMeals: string[];
-    recipeMultipliers: Record<string, number>;
-    groceryCheckedItems: string[];
-    ingredientTags: Record<string, IngredientTags>;
+    householdSize?: number;
+    selectedStore?: string | null;
+    allRecipes?: Array<{
+      url: string;
+      isSelected: boolean;
+      multiplier: number;
+      store: string;
+      location: string;
+      validFromDate: string;
+      validToDate: string;
+      mealType: string;
+    }>;
+    groceryCheckedItems?: string[];
+    ingredientTags?: Record<string, IngredientTags>;
   };
 }
 
@@ -104,18 +109,47 @@ export interface Ingredient {
   category?: string; // Add category property
 }
 
+// Enhanced Recipe interface - single source of truth for all recipe state
 export interface Recipe {
+  // Basic recipe identification
   name: string;
   url: string;
+  img?: string;
+
+  // Pricing information
   price: number;
-  servings: number;
   salePrice: number;
   regularPrice: number;
   totalSavings: number;
-  flyerItemsCount: number; // Add this property to track number of flyer items
+
+  // Recipe details
+  servings: number;
+  flyerItemsCount: number;    // Track number of flyer items
   ingredients: Ingredient[];
-  multiplier?: number; // How many times this recipe will be made
-  img?: string;
+
+  // Selection state - SINGLE SOURCE OF TRUTH
+  multiplier: number;         // 0 = not selected, >0 = selected with this multiplier
+  isSelected: boolean;        // Computed property: multiplier > 0
+
+  // Context information - from API response
+  store: string;
+  location: string;
+  mealType: 'breakfast' | 'lunch' | 'dinner';
+  date: string;               // Query date used to fetch this recipe
+
+  // Temporal validity - from API response
+  validFromDate: string;      // When this pricing starts being valid
+  validToDate: string;        // When this pricing expires
+
+  // Additional context
+  pricingContext?: {
+    store: string;
+    location: string;
+    dataDate: string;
+    validFromDate: string;
+    validToDate: string;
+    queryDate: string;
+  };
 }
 
 export interface MealCategory {
@@ -152,12 +186,10 @@ interface PlannerState {
   // Configuration
   normalMealServings: number;
 
-  // Data state
-  meals: MealCategory;
-  selectedMeals: Set<string>;
-  groceryCheckedItems: Set<string>;
-  recipeMultipliers: Record<string, number>; // url -> multiplier (defaults to calculated value)
-  ingredientTags: Record<string, IngredientTags>; // packageId -> tags
+  // Data state - SIMPLIFIED
+  meals: MealCategory;        // Recipe[] objects now contain all selection state
+  ingredientTags: Record<string, IngredientTags>; // packageId -> tags (keep this separate)
+  groceryCheckedItems: Set<string>;              // packageId -> checked (keep this separate)
 
   // Store state
   availableStores: Store[];
@@ -165,7 +197,7 @@ interface PlannerState {
   selectedStore: string | null;
   isLoading: boolean;
   error: string | null;
-  isDataLoaded: boolean; // Flag to track if data has been loaded
+  isDataLoaded: boolean;
   userLocation: {
     latitude: number;
     longitude: number;
@@ -175,13 +207,17 @@ interface PlannerState {
   locationError: string | null;
   isLocationLoading: boolean;
 
-  // Actions
+  // REMOVED - these are now in Recipe objects:
+  // selectedMeals: Set<string>;
+  // recipeMultipliers: Record<string, number>;
+
+  // Actions - UPDATED
   setSelectedStore: (storeId: string) => void;
   fetchMealData: () => Promise<void>;
   setMeals: (meals: MealCategory) => void;
-  toggleMeal: (url: string) => void;
+  toggleMeal: (url: string) => void;  // Now updates recipe.multiplier directly
   toggleGroceryItem: (packageId: string) => void;
-  setRecipeMultiplier: (url: string, multiplier: number) => void;
+  setRecipeMultiplier: (url: string, multiplier: number) => void; // Updates recipe.multiplier
   setIngredientTag: (packageId: string, tag: keyof IngredientTags, value: string | undefined) => void;
   setIngredientTags: (packageId: string, tags: Partial<IngredientTags>) => void;
   discoverStores: () => Promise<void>;
@@ -192,21 +228,21 @@ interface PlannerState {
   setLocationLoading: (loading: boolean) => void;
   geocodeStoreAddress: (storeId: string, address: string) => Promise<void>;
 
-  // Computed values
-  selectedRecipes: () => Recipe[];
+  // Computed values - SIMPLIFIED
+  selectedRecipes: () => Recipe[];           // Just filter meals where isSelected = true
   aggregatedIngredients: () => Map<string, AggregatedItem>;
   totals: () => Totals;
   mealSummary: () => { breakfast: number; lunch: number; dinner: number; total: number };
   calculateInitialMultiplier: (servings: number) => number;
 
-  // New sync properties
+  // Sync properties
   isSyncing: boolean;
   lastSynced: Date | null;
   lastSyncError: string | null;
   planId: string | null;
   version: number;
 
-  // New sync methods - now they take the makeAPICall function as parameter
+  // Sync methods
   loadUserPlan: (makeAPICall: APICallFunction) => Promise<void>;
   saveUserPlan: (makeAPICall: APICallFunction) => Promise<void>;
   deleteUserPlan: (makeAPICall: APICallFunction) => Promise<void>;
@@ -314,204 +350,136 @@ export const usePlannerStore = create<PlannerState>((set, get) => ({
 
   // Fixed fetchMealData - just use validUntil from the store data
   fetchMealData: async () => {
-    const state = get();
-    const logMessage = (msg: string) => console.log(`[PlannerStore] ${msg}`);
+  const state = get();
+  const logMessage = (msg: string) => console.log(`[PlannerStore] ${msg}`);
 
-    logMessage(`fetchMealData called. isDataLoaded: ${state.isDataLoaded}, selectedStore: ${state.selectedStore}`);
+  if (state.isDataLoaded && state.selectedStore) {
+    logMessage('Data already loaded, skipping fetch');
+    return;
+  }
 
-    // Skip if already loaded or no store selected
-    if (state.isDataLoaded && state.selectedStore) {
-      logMessage('Data already loaded, skipping fetch');
-      return;
-    }
+  if (!state.selectedStore) {
+    logMessage('No store selected, skipping fetch');
+    return;
+  }
 
-    if (!state.selectedStore) {
-      logMessage('No store selected, skipping fetch');
-      return;
-    }
+  const selectedStore = state.availableStores.find(s => s.id === state.selectedStore);
+  if (!selectedStore) {
+    set({ error: 'Selected store not found in available stores', isLoading: false });
+    return;
+  }
 
-    // Find the selected store
-    const selectedStore = state.availableStores.find(s => s.id === state.selectedStore);
-    if (!selectedStore) {
-      set({
-        error: 'Selected store not found in available stores',
-        isLoading: false
-      });
-      return;
-    }
+  try {
+    logMessage(`Starting data fetch for ${selectedStore.name} at ${selectedStore.location} via API`);
+    set({ isLoading: true, error: null });
 
-    try {
-      logMessage(`Starting data fetch for ${selectedStore.name} at ${selectedStore.location} via API`);
-      set({ isLoading: true, error: null });
+    const validUntilDate = new Date(selectedStore.validUntil);
+    const dataDate = new Date(validUntilDate);
+    dataDate.setDate(dataDate.getDate() - 7);
+    const date = dataDate.toISOString().split('T')[0];
 
-      // Calculate the "from" date (validUntil - 7 days) - that's what the backend expects!
-      const validUntilDate = new Date(selectedStore.validUntil);
-      const dataDate = new Date(validUntilDate);
-      dataDate.setDate(dataDate.getDate() - 7);
-      const date = dataDate.toISOString().split('T')[0]; // Convert to YYYY-MM-DD string
+    const mealTypes = ['breakfast', 'lunch', 'dinner'] as const;
+    const apiCalls = mealTypes.map(async (mealType) => {
+      const apiUrl = `${API_BASE_URL}/meal-plans?store=${encodeURIComponent(selectedStore.name)}&location=${encodeURIComponent(selectedStore.location)}&date=${date}&mealType=${mealType}`;
 
-      logMessage(`Using calculated data date: ${date} (from validUntil: ${selectedStore.validUntil.toISOString().split('T')[0]})`);
+      const response = await fetch(apiUrl);
+      if (!response.ok) {
+        throw new Error(`Failed to fetch ${mealType} data: ${response.status} ${response.statusText}`);
+      }
 
-      // Make 3 separate API calls for each meal type
-      const mealTypes = ['breakfast', 'lunch', 'dinner'] as const;
-      const apiCalls = mealTypes.map(async (mealType) => {
-        const apiUrl = `https://api.skrimp.ai/meal-plans?store=${encodeURIComponent(selectedStore.name)}&location=${encodeURIComponent(selectedStore.location)}&date=${date}&mealType=${mealType}`;
-        logMessage(`Fetching ${mealType} from: ${apiUrl}`);
+      const apiResponse = await response.json();
+      if (!apiResponse.success) {
+        throw new Error(`API returned error for ${mealType}: ${apiResponse.error || 'Unknown error'}`);
+      }
 
-        const response = await fetch(apiUrl);
+      return { mealType, data: apiResponse.data || [] };
+    });
 
-        if (!response.ok) {
-          throw new Error(`Failed to fetch ${mealType} data: ${response.status} ${response.statusText}`);
-        }
+    const results = await Promise.all(apiCalls);
 
-        const apiResponse = await response.json();
+    const mealCategories: MealCategory = {
+      breakfast: [],
+      lunch: [],
+      dinner: []
+    };
 
-        if (!apiResponse.success) {
-          throw new Error(`API returned error for ${mealType}: ${apiResponse.error || 'Unknown error'}`);
-        }
+    results.forEach(({ mealType, data }) => {
+      // Transform API data to enhanced Recipe format with all context
+      const recipes: Recipe[] = data.map((plan: Partial<Recipe> & { id?: string; totalCost?: number }) => ({
+        // Basic recipe info
+        name: plan.name,
+        url: plan.url || `${plan.id}`,
+        img: plan.img,
 
-        return {
-          mealType,
-          data: apiResponse.data || []
-        };
-      });
+        // Pricing
+        price: plan.salePrice || plan.totalCost,
+        salePrice: plan.salePrice || plan.totalCost,
+        regularPrice: plan.regularPrice || plan.salePrice,
+        totalSavings: plan.totalSavings || 0,
 
-      logMessage('Making parallel API calls for all meal types...');
+        // Recipe details
+        servings: plan.servings,
+        flyerItemsCount: plan.ingredients?.filter(ing => ing.source === 'flyer').length || 0,
+        ingredients: plan.ingredients || [],
 
-      // Execute all API calls in parallel
-      const results = await Promise.all(apiCalls);
+        // Selection state - SINGLE SOURCE OF TRUTH
+        multiplier: 0,           // Start unselected
+        isSelected: false,       // Computed from multiplier
 
-      // Process results
-      const mealCategories: {
-        breakfast: Recipe[];
-        lunch: Recipe[];
-        dinner: Recipe[];
-      } = {
-        breakfast: [],
-        lunch: [],
-        dinner: []
-      };
+        // Context from API response
+        store: plan.store,
+        location: plan.location,
+        mealType: mealType,
+        date: plan.date,
+        validFromDate: plan.validFromDate,
+        validToDate: plan.validToDate,
+        pricingContext: plan.pricingContext
+      }));
 
-      let totalMealPlans = 0;
+      mealCategories[mealType] = recipes;
+    });
 
-      results.forEach(({ mealType, data }) => {
-        logMessage(`Received ${data.length} ${mealType} meal plans from API`);
-        totalMealPlans += data.length;
+    set({
+      meals: mealCategories,
+      isLoading: false,
+      isDataLoaded: true
+    });
 
-        // Transform API data to Recipe format
-        const recipes: Recipe[] = data.map((plan: {
-          id: string;
-          name: string;
-          url?: string;
-          salePrice?: number;
-          totalCost?: number;
-          regularPrice?: number;
-          totalSavings?: number;
-          servings: number;
-          img?: string;
-          recipes?: Array<{ ingredients?: Array<{ source: string }> }>;
-        }) => ({
-          name: plan.name,
-          url: plan.url || `${plan.id}`,
-          price: plan.salePrice || plan.totalCost,
-          servings: plan.servings,
-          salePrice: plan.salePrice || plan.totalCost,
-          regularPrice: plan.regularPrice || plan.salePrice,
-          totalSavings: plan.totalSavings || 0,
-          flyerItemsCount: plan.recipes?.[0]?.ingredients?.filter(ing => ing.source === 'flyer').length || 0,
-          ingredients: plan.recipes?.[0]?.ingredients || [],
-          img: plan.img
-        }));
-
-        mealCategories[mealType] = recipes;
-      });
-
-      logMessage(`Data transformation complete. Total meal plans: ${totalMealPlans}`);
-
-      // Initialize with no default selections
-      const defaultSelectedMeals = new Set<string>();
-      const initialMultipliers: Record<string, number> = {};
-
-      // Set all recipes to multiplier 0 (unselected)
-      Object.values(mealCategories).forEach((recipes: Recipe[]) => {
-        recipes.forEach(recipe => {
-          initialMultipliers[recipe.url] = 0;
-        });
-      });
-
-      // Update the store
-      set({
-        meals: mealCategories,
-        selectedMeals: defaultSelectedMeals,
-        recipeMultipliers: initialMultipliers,
-        isLoading: false,
-        isDataLoaded: true
-      });
-
-      logMessage('Store update complete - no default selections');
-    } catch (err) {
-      console.error("Error fetching meal data:", err);
-      set({
-        isLoading: false,
-        error: err instanceof Error ? err.message : 'Failed to load meal plan',
-        isDataLoaded: false
-      });
-    }
-  },
+  } catch (err) {
+    console.error("Error fetching meal data:", err);
+    set({
+      isLoading: false,
+      error: err instanceof Error ? err.message : 'Failed to load meal plan',
+      isDataLoaded: false
+    });
+  }
+},
 
   // Updated setMeals function - remove default selections
   setMeals: (meals) => {
-    // Only initialize selections if they don't exist yet
-    const state = get();
-    if (state.selectedMeals.size === 0) {
-      const defaultSelectedMeals = new Set<string>(); // Empty set - no selections
-      const initialMultipliers: Record<string, number> = {};
-
-      // Set all recipes to multiplier 0 (unselected)
-      Object.values(meals).forEach((recipes: Recipe[]) => {
-        recipes.forEach(recipe => {
-          initialMultipliers[recipe.url] = 0; // All start at 0
-        });
-      });
-
-      set({
-        meals,
-        selectedMeals: defaultSelectedMeals, // Empty
-        recipeMultipliers: initialMultipliers // All 0
-      });
-    } else {
-      // Just update meals, preserving selections
-      set({ meals });
-    }
-  },
+  set({ meals });
+},
 
   toggleMeal: (url) => set((state) => {
-    const newSelectedMeals = new Set(state.selectedMeals);
-    const newMultipliers = { ...state.recipeMultipliers };
+  const updatedMeals = { ...state.meals };
 
-    if (newSelectedMeals.has(url)) {
-      newSelectedMeals.delete(url);
-      newMultipliers[url] = 0; // Set multiplier to 0 when unselected
-    } else {
-      // Find the recipe to get its servings
-      const recipe = [
-        ...state.meals.breakfast,
-        ...state.meals.lunch,
-        ...state.meals.dinner
-      ].find(r => r.url === url);
-
-      if (recipe) {
-        newSelectedMeals.add(url);
-        // Calculate initial multiplier based on normalMealServings and recipe servings
-        newMultipliers[url] = state.calculateInitialMultiplier(recipe.servings);
+  // Find and update the recipe across all meal types
+  (Object.keys(updatedMeals) as Array<keyof MealCategory>).forEach(mealType => {
+    updatedMeals[mealType] = updatedMeals[mealType].map(recipe => {
+      if (recipe.url === url) {
+        const newMultiplier = recipe.multiplier > 0 ? 0 : state.calculateInitialMultiplier(recipe.servings);
+        return {
+          ...recipe,
+          multiplier: newMultiplier,
+          isSelected: newMultiplier > 0
+        };
       }
-    }
+      return recipe;
+    });
+  });
 
-    return {
-      selectedMeals: newSelectedMeals,
-      recipeMultipliers: newMultipliers
-    };
-  }),
+  return { meals: updatedMeals };
+}),
 
   // Update toggleGroceryItem function in usePlannerStore.ts to handle status changes
   toggleGroceryItem: (packageId) => set((state) => {
@@ -548,25 +516,24 @@ export const usePlannerStore = create<PlannerState>((set, get) => ({
   }),
 
   setRecipeMultiplier: (url, multiplier) => set((state) => {
-    const newMultipliers = { ...state.recipeMultipliers };
-    const newSelectedMeals = new Set(state.selectedMeals);
+  const updatedMeals = { ...state.meals };
+  const newMultiplier = Math.max(0, multiplier);
 
-    // Ensure multiplier is a non-negative number with precision of 0.5
-    const newMultiplier = Math.max(0, multiplier);
-    newMultipliers[url] = newMultiplier;
+  (Object.keys(updatedMeals) as Array<keyof MealCategory>).forEach(mealType => {
+    updatedMeals[mealType] = updatedMeals[mealType].map(recipe => {
+      if (recipe.url === url) {
+        return {
+          ...recipe,
+          multiplier: newMultiplier,
+          isSelected: newMultiplier > 0
+        };
+      }
+      return recipe;
+    });
+  });
 
-    // Update selection based on multiplier
-    if (newMultiplier > 0) {
-      newSelectedMeals.add(url);
-    } else {
-      newSelectedMeals.delete(url);
-    }
-
-    return {
-      recipeMultipliers: newMultipliers,
-      selectedMeals: newSelectedMeals
-    };
-  }),
+  return { meals: updatedMeals };
+}),
 
   setIngredientTag: (packageId, tag, value) => set((state) => {
     const newTags = { ...state.ingredientTags };
@@ -670,29 +637,15 @@ export const usePlannerStore = create<PlannerState>((set, get) => ({
 
   // Computed values
   selectedRecipes: () => {
-    const state = get();
-    const recipes: Recipe[] = [];
+  const state = get();
+  const allRecipes = [
+    ...state.meals.breakfast,
+    ...state.meals.lunch,
+    ...state.meals.dinner
+  ];
 
-    // Collect all meals from all categories
-    const allRecipes = [
-      ...state.meals.breakfast,
-      ...state.meals.lunch,
-      ...state.meals.dinner
-    ];
-
-    // Filter only selected meals and add multiplier
-    allRecipes.forEach(recipe => {
-      if (state.selectedMeals.has(recipe.url)) {
-        const multiplier = state.recipeMultipliers[recipe.url] || 1;
-        recipes.push({
-          ...recipe,
-          multiplier
-        });
-      }
-    });
-
-    return recipes;
-  },
+  return allRecipes.filter(recipe => recipe.isSelected);
+},
 
   aggregatedIngredients: () => {
     const state = get();
@@ -776,27 +729,23 @@ export const usePlannerStore = create<PlannerState>((set, get) => ({
   },
 
   mealSummary: () => {
-    const state = get();
-    const summary = {
-      breakfast: 0,
-      lunch: 0,
-      dinner: 0,
-      total: 0
-    };
+  const state = get();
+  const summary = {
+    breakfast: 0,
+    lunch: 0,
+    dinner: 0,
+    total: 0
+  };
 
-    // Count selected meals by category - simply count active cards
-    (['breakfast', 'lunch', 'dinner'] as const).forEach(category => {
-      // Count the number of selected recipes in each category
-      summary[category] = state.meals[category].filter(recipe =>
-        state.selectedMeals.has(recipe.url)
-      ).length;
-
-      // Add to the total
+  (Object.keys(summary) as Array<keyof typeof summary>).forEach(category => {
+    if (category !== 'total') {
+      summary[category] = state.meals[category].filter(recipe => recipe.isSelected).length;
       summary.total += summary[category];
-    });
+    }
+  });
 
-    return summary;
-  },
+  return summary;
+},
 
   discoverStores: async () => {
     const logMessage = (msg: string) => console.log(`[PlannerStore] ${msg}`);
@@ -923,21 +872,32 @@ export const usePlannerStore = create<PlannerState>((set, get) => ({
   saveUserPlan: async (makeAPICall: APICallFunction) => {
     try {
       set({ isSyncing: true, lastSyncError: null });
-
       const state = get();
 
-      // Convert Sets to arrays for JSON serialization
+      // Extract ALL recipes with minimal temporal context
+      const allRecipes = [
+        ...state.meals.breakfast,
+        ...state.meals.lunch,
+        ...state.meals.dinner
+      ]
+      .map(recipe => ({
+        url: recipe.url,
+        isSelected: recipe.isSelected,
+        multiplier: recipe.multiplier,
+        store: recipe.store,
+        location: recipe.location,
+        validFromDate: recipe.validFromDate,
+        validToDate: recipe.validToDate,
+        mealType: recipe.mealType
+      }));
+
       const planData = {
         householdSize: state.normalMealServings,
         selectedStore: state.selectedStore,
-        userLocation: state.userLocation,
-        selectedMeals: Array.from(state.selectedMeals),
-        recipeMultipliers: state.recipeMultipliers,
+        allRecipes,                                   // NEW: save ALL recipes with their state
         groceryCheckedItems: Array.from(state.groceryCheckedItems),
         ingredientTags: state.ingredientTags,
       };
-
-      console.log('[PlannerStore] Saving plan data:', planData);
 
       const response = await makeAPICall('/user-plans', 'PUT', planData, true) as SavePlanResponse;
 
@@ -948,74 +908,91 @@ export const usePlannerStore = create<PlannerState>((set, get) => ({
           lastSynced: new Date(),
           isSyncing: false,
         });
-        console.log('[PlannerStore] User plan saved successfully');
       } else {
         throw new Error('Failed to save user plan');
       }
     } catch (error) {
       console.error('Error saving user plan:', error);
-      set({
-        lastSyncError: 'Failed to save user plan',
-        isSyncing: false
-      });
+      set({ lastSyncError: 'Failed to save user plan', isSyncing: false });
       throw error;
     }
   },
 
-  // NEW: Load user plan from backend
+  // 2. Updated loadUserPlan - call API with exact saved parameters then layer on selections
   loadUserPlan: async (makeAPICall: APICallFunction) => {
-    try {
-      set({ isSyncing: true, lastSyncError: null });
+  try {
+    set({ isSyncing: true, lastSyncError: null });
 
-      const data = await makeAPICall('/user-plans', 'GET', null, true) as LoadPlanResponse;
+    const response = await makeAPICall('/user-plans', 'GET', null, true) as LoadPlanResponse;
 
-      if (data.success && data.data) {
-        const plan = data.data;
+    if (response.success && response.data) {
+      const plan = response.data;
 
-        // Get current store before we change it
-        const currentStore = get().selectedStore;
-        const loadedStore = plan.selectedStore;
-        const storeChanged = currentStore !== loadedStore;
+      // Step 1: Load basic settings
+      set({
+        normalMealServings: plan.householdSize || 4,
+        selectedStore: plan.selectedStore || null,
+        groceryCheckedItems: new Set(plan.groceryCheckedItems || []),
+        ingredientTags: plan.ingredientTags || {},
+        planId: response.planId || null,
+        version: response.version || 0,
+      });
 
-        // Convert arrays back to Sets for Zustand
-        const selectedMeals = new Set(plan.selectedMeals || []);
-        const groceryCheckedItems = new Set(plan.groceryCheckedItems || []);
+      // Step 2: If we have saved recipes, restore them
+      const savedRecipes = plan.allRecipes || [];
+      console.log('[PlannerStore] Loading saved recipes:', savedRecipes.length);
 
-        set({
-          planId: plan.id,
-          version: plan.version,
-          normalMealServings: plan.householdSize,
-          selectedStore: plan.selectedStore,
-          userLocation: plan.userLocation,
-          selectedMeals,
-          recipeMultipliers: plan.recipeMultipliers || {},
-          groceryCheckedItems,
-          ingredientTags: plan.ingredientTags || {},
-          isSyncing: false,
-          // Reset data loaded flag if store changed
-          isDataLoaded: storeChanged ? false : get().isDataLoaded,
+      if (savedRecipes.length > 0) {
+        // For now, just restore the selections to existing meals if they match by URL
+        // This is a simpler approach that doesn't require re-fetching from API
+        const state = get();
+        const updatedMeals = { ...state.meals };
+
+        (Object.keys(updatedMeals) as Array<keyof MealCategory>).forEach(mealType => {
+          updatedMeals[mealType] = updatedMeals[mealType].map(recipe => {
+            const savedRecipe = savedRecipes.find(saved => saved.url === recipe.url);
+            if (savedRecipe) {
+              console.log(`[PlannerStore] Restoring selection for ${recipe.name}: selected=${savedRecipe.isSelected}, multiplier=${savedRecipe.multiplier}`);
+              return {
+                ...recipe,
+                isSelected: savedRecipe.isSelected,
+                multiplier: savedRecipe.multiplier
+              };
+            }
+            return recipe;
+          });
         });
 
-        // If store changed, we need to fetch new meal data
-        if (storeChanged) {
-          console.log('[PlannerStore] Store changed from', currentStore, 'to', loadedStore, '- fetching new meal data');
-          await get().fetchMealData();
-        }
-
-        console.log('[PlannerStore] User plan loaded successfully');
-      } else {
-        // No saved plan found - that's OK for new users
-        set({ isSyncing: false });
-        console.log('[PlannerStore] No saved plan found');
+        set({ meals: updatedMeals });
       }
-    } catch (error) {
-      console.error('Error loading user plan:', error);
+
       set({
-        lastSyncError: 'Failed to load saved plan',
-        isSyncing: false
+        lastSynced: new Date(),
+        isSyncing: false,
+      });
+
+    } else {
+      // No existing plan found, just set default values
+      console.log('[PlannerStore] No existing plan found, using defaults');
+      set({
+        normalMealServings: 4,
+        selectedStore: null,
+        groceryCheckedItems: new Set(),
+        ingredientTags: {},
+        planId: null,
+        version: 0,
+        isSyncing: false,
       });
     }
-  },
+  } catch (error) {
+    console.error('Error loading user plan:', error);
+    set({
+      lastSyncError: 'Failed to load user plan',
+      isSyncing: false
+    });
+    throw error;
+  }
+},
 
   // NEW: Delete user plan from backend
   deleteUserPlan: async (makeAPICall: APICallFunction) => {

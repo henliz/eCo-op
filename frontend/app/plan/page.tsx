@@ -53,7 +53,7 @@ function SyncTestButtons() {
   const {
     normalMealServings,
     selectedStore,
-    selectedMeals,
+    selectedRecipes,
     planId,
     version,
     setNormalMealServings
@@ -91,7 +91,7 @@ function SyncTestButtons() {
       </div>
 
       <div className="mb-2 text-xs">
-        Household: {normalMealServings} | Store: {selectedStore || 'None'} | Meals: {selectedMeals.size} | Plan: {planId ? `v${version}` : 'None'}
+        Household: {normalMealServings} | Store: {selectedStore || 'None'} | Meals: {selectedRecipes().length} | Plan: {planId ? `v${version}` : 'None'}
       </div>
 
       <div className="flex flex-wrap gap-1">

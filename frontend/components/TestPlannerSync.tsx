@@ -19,8 +19,7 @@ export default function TestPlannerSync() {
   const {
     normalMealServings,
     selectedStore,
-    selectedMeals,
-    recipeMultipliers,
+    selectedRecipes,
     groceryCheckedItems,
     planId,
     version,
@@ -64,8 +63,8 @@ export default function TestPlannerSync() {
         <h3 className="font-semibold mb-2">Current Planner State</h3>
         <p>Household Size: &quot;{normalMealServings}&quot;</p>
         <p>Selected Store: &quot;{selectedStore || 'None'}&quot;</p>
-        <p>Selected Meals: &quot;{selectedMeals.size}&quot;</p>
-        <p>Recipe Multipliers: &quot;{Object.keys(recipeMultipliers).length}&quot;</p>
+        <p>Selected Meals: &quot;{selectedRecipes().length}&quot;</p>
+        <p>Recipe Multipliers: &quot{selectedRecipes().length}&quot;</p>
         <p>Grocery Items: &quot;{groceryCheckedItems.size}&quot;</p>
         <p>Plan ID: &quot;{planId || 'None'}&quot;</p>
         <p>Version: &quot;{version}&quot;</p>
