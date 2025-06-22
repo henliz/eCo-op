@@ -112,13 +112,14 @@ export const ContinuePlanBanner: React.FC<ContinuePlanProps> = ({ onContinue }) 
   if (hasValidPlan && storeInfo) {
     return (
       <div className="bg-white rounded-xl py-4 px-5 mb-1 shadow-sm">
-        <div className="flex items-stretch gap-4">
+        <div className="flex items-stretch gap-6">
           {/* Robot mascot - left side */}
           <div className="flex-shrink-0 flex items-center">
+            {/* eslint-disable-next-line @next/next/no-img-element */}
             <img
               src="/Robo_Plan.png"
               alt="Plan Robot"
-              className="w-16 h-16 object-contain"
+              className="w-24 h-24 object-contain"
             />
           </div>
 
@@ -161,13 +162,14 @@ export const ContinuePlanBanner: React.FC<ContinuePlanProps> = ({ onContinue }) 
   // No plan found or error
   return (
     <div className="bg-white rounded-xl py-4 px-5 mb-1 shadow-sm">
-      <div className="flex items-stretch gap-4">
+      <div className="flex items-stretch gap-6">
         {/* Robot mascot - left side (grayed out) */}
         <div className="flex-shrink-0 flex items-center">
+          {/* eslint-disable-next-line @next/next/no-img-element */}
           <img
             src="/Robo_Plan.png"
             alt="Plan Robot"
-            className="w-16 h-16 object-contain opacity-30"
+            className="w-24 h-24 object-contain opacity-30"
           />
         </div>
 

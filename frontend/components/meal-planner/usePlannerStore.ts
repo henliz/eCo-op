@@ -238,6 +238,8 @@ interface PlannerState {
   loadUserPlan: (makeAPICall: APICallFunction) => Promise<void>;
   saveUserPlan: (makeAPICall: APICallFunction) => Promise<void>;
   deleteUserPlan: (makeAPICall: APICallFunction) => Promise<void>;
+  hasUnsavedChanges: () => boolean;
+
 }
 
 
@@ -251,11 +253,11 @@ const roundUpToHalf = (num: number): number => {
   return Math.ceil(num * 2) / 2;
 };
 
-const createStateSnapshot = (state: any) => {
+const createStateSnapshot = (state: PlannerState) => {
     return JSON.stringify({
       normalMealServings: state.normalMealServings,
       selectedStore: state.selectedStore,
-      selectedRecipes: state.selectedRecipes().map((r: any) => ({
+      selectedRecipes: state.selectedRecipes().map((r: Recipe) => ({
         url: r.url,
         multiplier: r.multiplier,
         isSelected: r.isSelected
@@ -338,7 +340,7 @@ export const usePlannerStore = create<PlannerState>((set, get) => ({
       if (currentState !== lastSavedState) {
         console.log('[PlannerStore] Changes detected, auto-saving...');
 
-        const makeAPICall = (window as any).__plannerMakeAPICall;
+        const makeAPICall = (window as typeof window).__plannerMakeAPICall;
         if (makeAPICall) {
           state.saveUserPlan(makeAPICall)
             .then(() => {
@@ -449,7 +451,12 @@ export const usePlannerStore = create<PlannerState>((set, get) => ({
 
     results.forEach(({ mealType, data }) => {
       // Transform API data to enhanced Recipe format with all context
-      const recipes: Recipe[] = data.map((plan: Partial<Recipe> & { id?: string; totalCost?: number }) => ({
+      interface APIPlanResponse extends Partial<Recipe> {
+        id?: string;
+        totalCost?: number;
+      }
+
+      const recipes: Recipe[] = data.map((plan: APIPlanResponse) => ({
         // Basic recipe info
         name: plan.name,
         url: plan.url || `${plan.id}`,
@@ -1116,6 +1123,21 @@ export const usePlannerStore = create<PlannerState>((set, get) => ({
       });
       throw error;
     }
+  },
+
+  hasUnsavedChanges: () => {
+    const state = get();
+
+    // No changes if no store selected or data not loaded
+    if (!state.selectedStore || !state.isDataLoaded) {
+      return false;
+    }
+
+    // Compare current state with last saved state
+    const currentState = createStateSnapshot(state);
+    const hasChanges = currentState !== lastSavedState;
+
+    return hasChanges;
   },
 
 }));

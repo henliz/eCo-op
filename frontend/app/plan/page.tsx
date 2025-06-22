@@ -18,6 +18,17 @@ import LoadingScreen from '@/components/meal-planner/LoadingScreen';
 import { usePlannerSync } from '@/hooks/usePlannerSync';
 import { useAuth } from '@/contexts/AuthContext';
 
+declare global {
+  interface Window {
+    __plannerMakeAPICall?: (
+      endpoint: string,
+      method?: 'GET' | 'PUT' | 'DELETE',
+      body?: unknown,
+      useAuth?: boolean
+    ) => Promise<unknown>;
+  }
+}
+
 type View = 'store' | 'plan' | 'groceries' | 'cook' | 'loading'; // Add loading as a view type
 
 const tabs: { label: string; value: View }[] = [
@@ -145,11 +156,11 @@ export default function MealPlannerPage() {
 
   // Expose makeAPICall to the store via window
   useEffect(() => {
-    (window as any).__plannerMakeAPICall = makeAPICall;
+    window.__plannerMakeAPICall = makeAPICall;
 
     // Cleanup on unmount
     return () => {
-      delete (window as any).__plannerMakeAPICall;
+      delete window.__plannerMakeAPICall;
     };
   }, [makeAPICall]);
 
