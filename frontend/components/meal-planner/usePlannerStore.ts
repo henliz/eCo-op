@@ -1,6 +1,8 @@
 import { create } from 'zustand';
 
 const API_BASE_URL = process.env.NEXT_PUBLIC_API_URL || 'https://api.skrimp.ai';
+let saveTimeout: NodeJS.Timeout | null = null;
+let lastSavedState: string | null = null;
 
 // Types
 
@@ -178,9 +180,9 @@ interface PlannerState {
   normalMealServings: number;
 
   // Data state - SIMPLIFIED
-  meals: MealCategory;        // Recipe[] objects now contain all selection state
-  ingredientTags: Record<string, IngredientTags>; // packageId -> tags (keep this separate)
-  groceryCheckedItems: Set<string>;              // packageId -> checked (keep this separate)
+  meals: MealCategory;
+  ingredientTags: Record<string, IngredientTags>;
+  groceryCheckedItems: Set<string>;
 
   // Store state
   availableStores: Store[];
@@ -198,17 +200,13 @@ interface PlannerState {
   locationError: string | null;
   isLocationLoading: boolean;
 
-  // REMOVED - these are now in Recipe objects:
-  // selectedMeals: Set<string>;
-  // recipeMultipliers: Record<string, number>;
-
   // Actions - UPDATED
   setSelectedStore: (storeId: string) => void;
   fetchMealData: () => Promise<void>;
   setMeals: (meals: MealCategory) => void;
-  toggleMeal: (url: string) => void;  // Now updates recipe.multiplier directly
+  toggleMeal: (url: string) => void;
   toggleGroceryItem: (packageId: string) => void;
-  setRecipeMultiplier: (url: string, multiplier: number) => void; // Updates recipe.multiplier
+  setRecipeMultiplier: (url: string, multiplier: number) => void;
   setIngredientTag: (packageId: string, tag: keyof IngredientTags, value: string | undefined) => void;
   setIngredientTags: (packageId: string, tags: Partial<IngredientTags>) => void;
   discoverStores: () => Promise<void>;
@@ -219,8 +217,11 @@ interface PlannerState {
   setLocationLoading: (loading: boolean) => void;
   geocodeStoreAddress: (storeId: string, address: string) => Promise<void>;
 
+  // ADD THIS LINE:
+  debouncedSave: () => void;
+
   // Computed values - SIMPLIFIED
-  selectedRecipes: () => Recipe[];           // Just filter meals where isSelected = true
+  selectedRecipes: () => Recipe[];
   aggregatedIngredients: () => Map<string, AggregatedItem>;
   totals: () => Totals;
   mealSummary: () => { breakfast: number; lunch: number; dinner: number; total: number };
@@ -250,6 +251,20 @@ const roundUpToHalf = (num: number): number => {
   return Math.ceil(num * 2) / 2;
 };
 
+const createStateSnapshot = (state: any) => {
+    return JSON.stringify({
+      normalMealServings: state.normalMealServings,
+      selectedStore: state.selectedStore,
+      selectedRecipes: state.selectedRecipes().map((r: any) => ({
+        url: r.url,
+        multiplier: r.multiplier,
+        isSelected: r.isSelected
+      })),
+      groceryCheckedItems: Array.from(state.groceryCheckedItems),
+      ingredientTags: state.ingredientTags
+    });
+  };
+
 export function parseCoordinates(coordString: string): { latitude: number; longitude: number } | null {
   if (!coordString) return null;
 
@@ -274,6 +289,7 @@ export function parseCoordinates(coordString: string): { latitude: number; longi
 
   return null;
 }
+
 
 export const usePlannerStore = create<PlannerState>((set, get) => ({
   // Configuration
@@ -306,6 +322,43 @@ export const usePlannerStore = create<PlannerState>((set, get) => ({
   lastSyncError: null,
   planId: null,
   version: 0,
+
+
+
+  debouncedSave: () => {
+  if (saveTimeout) clearTimeout(saveTimeout);
+
+  saveTimeout = setTimeout(() => {
+    const state = get();
+
+    if (state.selectedStore && state.isDataLoaded) {
+      // Use the helper function
+      const currentState = createStateSnapshot(state);
+
+      if (currentState !== lastSavedState) {
+        console.log('[PlannerStore] Changes detected, auto-saving...');
+
+        const makeAPICall = (window as any).__plannerMakeAPICall;
+        if (makeAPICall) {
+          state.saveUserPlan(makeAPICall)
+            .then(() => {
+              lastSavedState = currentState; // Update baseline after successful save
+              console.log('[PlannerStore] Auto-save successful');
+            })
+            .catch((error) => {
+              console.error('[PlannerStore] Auto-save failed:', error);
+            });
+        } else {
+          console.log('[PlannerStore] makeAPICall not available, skipping auto-save');
+        }
+      } else {
+        console.log('[PlannerStore] No changes detected, skipping auto-save');
+      }
+    }
+  }, 10000);
+},
+
+
 
   // Calculate initial multiplier based on recipe servings and normalMealServings
   calculateInitialMultiplier: (servings: number) => {
@@ -452,25 +505,25 @@ export const usePlannerStore = create<PlannerState>((set, get) => ({
 },
 
   toggleMeal: (url) => set((state) => {
-  const updatedMeals = { ...state.meals };
+    const updatedMeals = { ...state.meals };
 
-  // Find and update the recipe across all meal types
-  (Object.keys(updatedMeals) as Array<keyof MealCategory>).forEach(mealType => {
-    updatedMeals[mealType] = updatedMeals[mealType].map(recipe => {
-      if (recipe.url === url) {
-        const newMultiplier = recipe.multiplier > 0 ? 0 : state.calculateInitialMultiplier(recipe.servings);
-        return {
-          ...recipe,
-          multiplier: newMultiplier,
-          isSelected: newMultiplier > 0
-        };
-      }
-      return recipe;
+    // Find and update the recipe across all meal types
+    (Object.keys(updatedMeals) as Array<keyof MealCategory>).forEach(mealType => {
+      updatedMeals[mealType] = updatedMeals[mealType].map(recipe => {
+        if (recipe.url === url) {
+          const newMultiplier = recipe.multiplier > 0 ? 0 : state.calculateInitialMultiplier(recipe.servings);
+          return {
+            ...recipe,
+            multiplier: newMultiplier,
+            isSelected: newMultiplier > 0
+          };
+        }
+        return recipe;
+      });
     });
-  });
-
-  return { meals: updatedMeals };
-}),
+    setTimeout(() => get().debouncedSave(), 0);
+    return { meals: updatedMeals };
+  }),
 
   // Update toggleGroceryItem function in usePlannerStore.ts to handle status changes
   toggleGroceryItem: (packageId) => set((state) => {
@@ -499,7 +552,7 @@ export const usePlannerStore = create<PlannerState>((set, get) => ({
     else {
       newCheckedItems.add(packageId);
     }
-
+    setTimeout(() => get().debouncedSave(), 0);
     return {
       groceryCheckedItems: newCheckedItems,
       ingredientTags: newTags
@@ -507,24 +560,24 @@ export const usePlannerStore = create<PlannerState>((set, get) => ({
   }),
 
   setRecipeMultiplier: (url, multiplier) => set((state) => {
-  const updatedMeals = { ...state.meals };
-  const newMultiplier = Math.max(0, multiplier);
+    const updatedMeals = { ...state.meals };
+    const newMultiplier = Math.max(0, multiplier);
 
-  (Object.keys(updatedMeals) as Array<keyof MealCategory>).forEach(mealType => {
-    updatedMeals[mealType] = updatedMeals[mealType].map(recipe => {
-      if (recipe.url === url) {
-        return {
-          ...recipe,
-          multiplier: newMultiplier,
-          isSelected: newMultiplier > 0
-        };
-      }
-      return recipe;
+    (Object.keys(updatedMeals) as Array<keyof MealCategory>).forEach(mealType => {
+      updatedMeals[mealType] = updatedMeals[mealType].map(recipe => {
+        if (recipe.url === url) {
+          return {
+            ...recipe,
+            multiplier: newMultiplier,
+            isSelected: newMultiplier > 0
+          };
+        }
+        return recipe;
+      });
     });
-  });
-
-  return { meals: updatedMeals };
-}),
+    setTimeout(() => get().debouncedSave(), 0);
+    return { meals: updatedMeals };
+  }),
 
   setIngredientTag: (packageId, tag, value) => set((state) => {
     const newTags = { ...state.ingredientTags };
@@ -556,7 +609,7 @@ export const usePlannerStore = create<PlannerState>((set, get) => ({
       ...newTags[packageId],
       ...tags
     };
-
+    setTimeout(() => get().debouncedSave(), 0);
     return { ingredientTags: newTags };
   }),
 
@@ -637,6 +690,11 @@ export const usePlannerStore = create<PlannerState>((set, get) => ({
 
   return allRecipes.filter(recipe => recipe.isSelected);
 },
+
+  hasLoadablePlan: () => {
+    const state = get();
+    return !!(state.planId && state.selectedStore && state.lastSynced);
+  },
 
   aggregatedIngredients: () => {
     const state = get();
@@ -899,6 +957,11 @@ export const usePlannerStore = create<PlannerState>((set, get) => ({
           lastSynced: new Date(),
           isSyncing: false,
         });
+        // ✅ ADD THIS: Reset baseline after successful save
+        const state = get();
+        lastSavedState = createStateSnapshot(state);
+        console.log('[PlannerStore] Save baseline reset after successful save');
+
       } else {
         throw new Error('Failed to save user plan');
       }
@@ -998,6 +1061,11 @@ export const usePlannerStore = create<PlannerState>((set, get) => ({
         lastSynced: new Date(),
         isSyncing: false,
       });
+      // ✅ ADD THIS: Reset baseline after successful load
+      const state = get();
+      lastSavedState = createStateSnapshot(state);
+      console.log('[PlannerStore] Save baseline reset after successful load');
+
 
     } else {
       // No existing plan found, just set default values

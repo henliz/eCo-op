@@ -5,6 +5,7 @@ import { motion } from 'framer-motion';
 
 import Header from '@/components/layout/Header';
 import Footer from '@/components/layout/Footer';
+import { ContinuePlanBanner } from '@/components/meal-planner/ContinuePlanBanner';
 import StoreSelector from '@/components/meal-planner/StoreSelector';
 import { HouseholdSizeSelector } from '@/components/meal-planner/HouseholdSizeSelector';
 import { MealPlanScreen } from '@/components/meal-planner/MealPlanScreen';
@@ -140,6 +141,18 @@ function SyncTestButtons() {
 }
 
 export default function MealPlannerPage() {
+  const { makeAPICall } = useAuth(); // Get the API function
+
+  // Expose makeAPICall to the store via window
+  useEffect(() => {
+    (window as any).__plannerMakeAPICall = makeAPICall;
+
+    // Cleanup on unmount
+    return () => {
+      delete (window as any).__plannerMakeAPICall;
+    };
+  }, [makeAPICall]);
+
   const [view, setView] = useState<View>('store');
   const { selectedStore, isDataLoaded, isLoading } = usePlannerStore();
   const [showLoading, setShowLoading] = useState(false);
@@ -309,6 +322,7 @@ return (
       {/* --- Content panels --- */}
       {view === 'store' && (
         <>
+          <ContinuePlanBanner onContinue={() => handleViewChange('plan')} />
           <HouseholdSizeSelector />
           <StoreSelector shouldNavigateToPlan={shouldNavigateToPlan} />
         </>
