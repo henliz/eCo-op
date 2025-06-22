@@ -192,11 +192,22 @@ export default function MealPlannerPage() {
   // Handle view changes and scroll to top when switching views
   const handleViewChange = (newView: View) => {
     if (isTabEnabled(newView)) {
-      // Set the view first
-      setView(newView);
+      // SAVE BEFORE SWITCHING TABS
+      const store = usePlannerStore.getState();
+      if (store.hasUnsavedChanges() && window.__plannerMakeAPICall) {
+        console.log(`[TabChange] Saving before switching to ${newView}`);
+        store.saveUserPlan(window.__plannerMakeAPICall).catch(error => {
+          console.error('[TabChange] Save failed:', error);
+        });
+      }
 
       // Then scroll to top
       scrollToTop();
+
+      // Set the view first
+      setView(newView);
+
+
     }
   };
 
