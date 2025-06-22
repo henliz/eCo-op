@@ -28,16 +28,7 @@ interface LoadPlanResponse extends APIResponse {
   data?: {
     householdSize?: number;
     selectedStore?: string | null;
-    allRecipes?: Array<{
-      url: string;
-      isSelected: boolean;
-      multiplier: number;
-      store: string;
-      location: string;
-      validFromDate: string;
-      validToDate: string;
-      mealType: string;
-    }>;
+    allRecipes?: Recipe[];  // ← FIXED: Full Recipe objects, not minimal fields
     groceryCheckedItems?: string[];
     ingredientTags?: Record<string, IngredientTags>;
   };
@@ -938,32 +929,69 @@ export const usePlannerStore = create<PlannerState>((set, get) => ({
         version: response.version || 0,
       });
 
-      // Step 2: If we have saved recipes, restore them
+      // Step 2: Use the fully enriched recipes directly from the backend
       const savedRecipes = plan.allRecipes || [];
-      console.log('[PlannerStore] Loading saved recipes:', savedRecipes.length);
+      console.log('[PlannerStore] Loading enriched recipes:', savedRecipes.length);
 
       if (savedRecipes.length > 0) {
-        // For now, just restore the selections to existing meals if they match by URL
-        // This is a simpler approach that doesn't require re-fetching from API
-        const state = get();
-        const updatedMeals = { ...state.meals };
+        // Group the enriched recipes by meal type
+        const mealCategories: MealCategory = {
+          breakfast: [],
+          lunch: [],
+          dinner: []
+        };
 
-        (Object.keys(updatedMeals) as Array<keyof MealCategory>).forEach(mealType => {
-          updatedMeals[mealType] = updatedMeals[mealType].map(recipe => {
-            const savedRecipe = savedRecipes.find(saved => saved.url === recipe.url);
-            if (savedRecipe) {
-              console.log(`[PlannerStore] Restoring selection for ${recipe.name}: selected=${savedRecipe.isSelected}, multiplier=${savedRecipe.multiplier}`);
-              return {
-                ...recipe,
-                isSelected: savedRecipe.isSelected,
-                multiplier: savedRecipe.multiplier
-              };
-            }
-            return recipe;
-          });
+        savedRecipes.forEach(recipe => {
+          // The recipe is already fully enriched with ingredients, pricing, etc.
+          // Just ensure it has the correct structure
+          const enrichedRecipe: Recipe = {
+            // Basic recipe info (from backend enrichment)
+            name: recipe.name,
+            url: recipe.url,
+            img: recipe.img,
+
+            // Pricing (from backend enrichment)
+            price: recipe.salePrice || recipe.price,
+            salePrice: recipe.salePrice,
+            regularPrice: recipe.regularPrice,
+            totalSavings: recipe.totalSavings || 0,
+
+            // Recipe details (from backend enrichment)
+            servings: recipe.servings,
+            flyerItemsCount: recipe.ingredients?.filter(ing => ing.source === 'flyer').length || 0,
+            ingredients: recipe.ingredients || [],
+
+            // User selections (preserved from saved data)
+            multiplier: recipe.multiplier,
+            isSelected: recipe.isSelected,
+
+            // Context (from backend)
+            store: recipe.store,
+            location: recipe.location,
+            mealType: recipe.mealType,
+            date: recipe.date,
+            validFromDate: recipe.validFromDate,
+            validToDate: recipe.validToDate,
+            pricingContext: recipe.pricingContext
+          };
+
+          // Add to the appropriate meal type category
+          if (mealCategories[recipe.mealType]) {
+            mealCategories[recipe.mealType].push(enrichedRecipe);
+          }
         });
 
-        set({ meals: updatedMeals });
+        // Set the meals directly - no need to match with existing data
+        set({
+          meals: mealCategories,
+          isDataLoaded: true  // Mark data as loaded since we have enriched recipes
+        });
+
+        console.log('[PlannerStore] Loaded enriched meals:', {
+          breakfast: mealCategories.breakfast.length,
+          lunch: mealCategories.lunch.length,
+          dinner: mealCategories.dinner.length
+        });
       }
 
       set({
