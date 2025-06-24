@@ -1,6 +1,7 @@
 'use client';
 import React, { createContext, useContext, useEffect, useState } from 'react';
 
+
 interface UserPreferences {
   newFlyerNotifications: boolean;
   createdAt: Date;
@@ -32,6 +33,14 @@ interface AuthContextType {
   signInWithGoogle: () => Promise<void>;
   updateNotificationPreference: (enabled: boolean) => Promise<void>;
   refreshProfile: () => Promise<void>;
+  // Update this line:
+  makeAPICall: <T = any>(endpoint: string, method?: string, body?: any, useAuth?: boolean) => Promise<APIResponse<T>>;
+}
+
+interface APIResponse<T = any> {
+  success: boolean;
+  data?: T;
+  error?: string;
 }
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
@@ -57,7 +66,12 @@ export function AuthProvider({ children }: AuthProviderProps) {
   const [loading, setLoading] = useState(true);
 
   // Helper function to make API calls to your backend
-  async function makeAPICall(endpoint: string, method = 'GET', body?: any, useAuth = false) {
+  async function makeAPICall<T = any>(
+    endpoint: string,
+    method = 'GET',
+    body?: any,
+    useAuth = false
+  ): Promise<APIResponse<T>> {
     const url = `${API_BASE_URL}${endpoint}`;
     
     const headers: any = {
@@ -80,19 +94,19 @@ export function AuthProvider({ children }: AuthProviderProps) {
     }
     
     try {
-      const response = await fetch(url, config);
-      const data = await response.json();
-      
-      if (!response.ok) {
-        throw new Error(data.error || data.message || `HTTP ${response.status}: ${response.statusText}`);
-      }
-      
-      return data;
-    } catch (error: any) {
-      console.error(`API call to ${endpoint} failed:`, error);
-      throw error;
+    const response = await fetch(url, config);
+    const data = await response.json();
+
+    if (!response.ok) {
+      throw new Error(data.error || data.message || `HTTP ${response.status}: ${response.statusText}`);
     }
+
+    return data as APIResponse<T>; // Add type assertion here
+  } catch (error: any) {
+    console.error(`API call to ${endpoint} failed:`, error);
+    throw error;
   }
+}
 
   async function refreshProfile() {
     if (!accessToken) return;
@@ -286,48 +300,48 @@ export function AuthProvider({ children }: AuthProviderProps) {
   }
 
   async function updateNotificationPreference(enabled: boolean): Promise<void> {
-    if (!currentUser || !accessToken) {
-      throw new Error('No user logged in');
-    }
-
-    try {
-      const response = await makeAPICall('/auth/notifications', 'PUT', {
-        newFlyerNotifications: enabled,
-      }, true);
-
-      if (response.success) {
-        console.log('Notification preference updated:', response);
-        
-        // Update local state immediately for better UX
-        setUserPreferences(prev => prev ? {
-          ...prev,
-          newFlyerNotifications: enabled,
-          updatedAt: response.updatedAt ? new Date(response.updatedAt) : new Date(),
-        } : null);
-
-        // Update current user state
-        setCurrentUser(prev => prev ? {
-          ...prev,
-          newFlyerNotifications: enabled,
-          updatedAt: response.updatedAt || new Date().toISOString(),
-        } : null);
-
-        // Update localStorage
-        const storedUser = localStorage.getItem('user');
-        if (storedUser) {
-          const userData = JSON.parse(storedUser);
-          userData.newFlyerNotifications = enabled;
-          userData.updatedAt = response.updatedAt || new Date().toISOString();
-          localStorage.setItem('user', JSON.stringify(userData));
-        }
-      } else {
-        throw new Error(response.error || 'Failed to update notification preference');
-      }
-    } catch (error: any) {
-      console.error('Error updating notification preference:', error);
-      throw new Error(error.message || 'Failed to update notification preference. Please try again.');
-    }
+  if (!currentUser || !accessToken) {
+    throw new Error('No user logged in');
   }
+
+  try {
+    const response = await makeAPICall('/auth/notifications', 'PUT', {
+      newFlyerNotifications: enabled,
+    }, true);
+
+    if (response.success) {
+      console.log('Notification preference updated:', response);
+
+      // Update local state immediately for better UX
+      setUserPreferences(prev => prev ? {
+        ...prev,
+        newFlyerNotifications: enabled,
+        updatedAt: response.data?.updatedAt ? new Date(response.data.updatedAt) : new Date(), // Fix: use response.data.updatedAt
+      } : null);
+
+      // Update current user state
+      setCurrentUser(prev => prev ? {
+        ...prev,
+        newFlyerNotifications: enabled,
+        updatedAt: response.data?.updatedAt || new Date().toISOString(), // Fix: use response.data.updatedAt
+      } : null);
+
+      // Update localStorage
+      const storedUser = localStorage.getItem('user');
+      if (storedUser) {
+        const userData = JSON.parse(storedUser);
+        userData.newFlyerNotifications = enabled;
+        userData.updatedAt = response.data?.updatedAt || new Date().toISOString(); // Fix: use response.data.updatedAt
+        localStorage.setItem('user', JSON.stringify(userData));
+      }
+    } else {
+      throw new Error(response.error || 'Failed to update notification preference');
+    }
+  } catch (error: any) {
+    console.error('Error updating notification preference:', error);
+    throw new Error(error.message || 'Failed to update notification preference. Please try again.');
+  }
+}
 
   // Load user from localStorage on mount
   useEffect(() => {
@@ -374,6 +388,7 @@ export function AuthProvider({ children }: AuthProviderProps) {
     signInWithGoogle,
     updateNotificationPreference,
     refreshProfile,
+    makeAPICall, // ADD THIS LINE
   }), [currentUser, userPreferences, loading, accessToken]);
 
   return (

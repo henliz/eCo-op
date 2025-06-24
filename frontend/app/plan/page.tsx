@@ -5,6 +5,7 @@ import { motion } from 'framer-motion';
 
 import Header from '@/components/layout/Header';
 import Footer from '@/components/layout/Footer';
+import { ContinuePlanBanner } from '@/components/meal-planner/ContinuePlanBanner';
 import StoreSelector from '@/components/meal-planner/StoreSelector';
 import { HouseholdSizeSelector } from '@/components/meal-planner/HouseholdSizeSelector';
 import { MealPlanScreen } from '@/components/meal-planner/MealPlanScreen';
@@ -12,6 +13,21 @@ import { GroceryScreen } from '@/components/meal-planner/GroceryScreen';
 import { CookScreen } from '@/components/meal-planner/CookScreen';
 import { usePlannerStore } from '@/components/meal-planner/usePlannerStore';
 import LoadingScreen from '@/components/meal-planner/LoadingScreen';
+
+// Add these imports for testing
+import { usePlannerSync } from '@/hooks/usePlannerSync';
+import { useAuth } from '@/contexts/AuthContext';
+
+declare global {
+  interface Window {
+    __plannerMakeAPICall?: (
+      endpoint: string,
+      method?: 'GET' | 'PUT' | 'DELETE',
+      body?: unknown,
+      useAuth?: boolean
+    ) => Promise<unknown>;
+  }
+}
 
 type View = 'store' | 'plan' | 'groceries' | 'cook' | 'loading'; // Add loading as a view type
 
@@ -34,8 +50,120 @@ const instructions: Record<Exclude<View, 'loading'>, React.ReactNode> = {
   cook: 'Click on a recipe to see the cooking instructions.',
 };
 
+// Development sync test component
+function SyncTestButtons() {
+  const { currentUser } = useAuth();
+  const {
+    loadPlan,
+    savePlan,
+    deletePlan,
+    isSyncing,
+    lastSyncError,
+    isAuthenticated
+  } = usePlannerSync();
+
+  const {
+    normalMealServings,
+    selectedStore,
+    selectedRecipes,
+    planId,
+    version,
+    setNormalMealServings
+  } = usePlannerStore();
+
+  // Only show in development
+  if (process.env.NODE_ENV !== 'development') {
+    return null;
+  }
+
+  const API_BASE_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:3001';
+
+  const handleAddTestData = () => {
+    setNormalMealServings(6);
+    // Note: We can't easily add test meals here since they need to exist in the store
+    // But changing household size is enough to test the sync
+  };
+
+  const handleClearData = () => {
+    setNormalMealServings(4);
+  };
+
+  if (!isAuthenticated) {
+    return (
+      <div className="fixed bottom-4 left-4 right-4 bg-red-100 border border-red-300 rounded-lg p-2 text-xs">
+        <p className="text-red-700">Dev: Please log in to test sync</p>
+      </div>
+    );
+  }
+
+  return (
+    <div className="fixed bottom-4 left-4 right-4 bg-blue-50 border border-blue-300 rounded-lg p-3 text-xs z-30">
+      <div className="mb-2">
+        <strong>Dev Sync Test</strong> | API: {API_BASE_URL} | User: {currentUser?.email}
+      </div>
+
+      <div className="mb-2 text-xs">
+        Household: {normalMealServings} | Store: {selectedStore || 'None'} | Meals: {selectedRecipes().length} | Plan: {planId ? `v${version}` : 'None'}
+      </div>
+
+      <div className="flex flex-wrap gap-1">
+        <button
+          onClick={handleAddTestData}
+          className="px-2 py-1 bg-blue-500 text-white rounded text-xs hover:bg-blue-600"
+        >
+          Test Data
+        </button>
+        <button
+          onClick={handleClearData}
+          className="px-2 py-1 bg-gray-500 text-white rounded text-xs hover:bg-gray-600"
+        >
+          Clear
+        </button>
+        <button
+          onClick={loadPlan}
+          disabled={isSyncing}
+          className="px-2 py-1 bg-green-500 text-white rounded text-xs hover:bg-green-600 disabled:opacity-50"
+        >
+          {isSyncing ? 'Loading...' : 'Load'}
+        </button>
+        <button
+          onClick={savePlan}
+          disabled={isSyncing}
+          className="px-2 py-1 bg-purple-500 text-white rounded text-xs hover:bg-purple-600 disabled:opacity-50"
+        >
+          {isSyncing ? 'Saving...' : 'Save'}
+        </button>
+        <button
+          onClick={deletePlan}
+          disabled={isSyncing}
+          className="px-2 py-1 bg-red-500 text-white rounded text-xs hover:bg-red-600 disabled:opacity-50"
+        >
+          {isSyncing ? 'Deleting...' : 'Delete'}
+        </button>
+      </div>
+
+      {lastSyncError && (
+        <div className="mt-2 p-1 bg-red-100 border border-red-200 rounded text-red-700">
+          Error: {lastSyncError}
+        </div>
+      )}
+    </div>
+  );
+}
 
 export default function MealPlannerPage() {
+  const { makeAPICall } = useAuth(); // Get the API function
+
+  // Expose makeAPICall to the store via window
+  useEffect(() => {
+    window.__plannerMakeAPICall = makeAPICall;
+
+    // Cleanup on unmount
+    return () => {
+      delete window.__plannerMakeAPICall;
+    };
+  }, [makeAPICall]);
+
   const [view, setView] = useState<View>('store');
   const { selectedStore, isDataLoaded, isLoading } = usePlannerStore();
   const [showLoading, setShowLoading] = useState(false);
@@ -64,11 +192,22 @@ export default function MealPlannerPage() {
   // Handle view changes and scroll to top when switching views
   const handleViewChange = (newView: View) => {
     if (isTabEnabled(newView)) {
-      // Set the view first
-      setView(newView);
+      // SAVE BEFORE SWITCHING TABS
+      const store = usePlannerStore.getState();
+      if (store.hasUnsavedChanges() && window.__plannerMakeAPICall) {
+        console.log(`[TabChange] Saving before switching to ${newView}`);
+        store.saveUserPlan(window.__plannerMakeAPICall).catch(error => {
+          console.error('[TabChange] Save failed:', error);
+        });
+      }
 
       // Then scroll to top
       scrollToTop();
+
+      // Set the view first
+      setView(newView);
+
+
     }
   };
 
@@ -205,6 +344,7 @@ return (
       {/* --- Content panels --- */}
       {view === 'store' && (
         <>
+          <ContinuePlanBanner onContinue={() => handleViewChange('plan')} />
           <HouseholdSizeSelector />
           <StoreSelector shouldNavigateToPlan={shouldNavigateToPlan} />
         </>
@@ -218,6 +358,9 @@ return (
     <div className="relative z-0">
       <Footer />
     </div>
+
+    {/* Development sync test buttons - only visible in development */}
+    <SyncTestButtons />
   </>
 ); // Closing parenthesis for return statement
 }

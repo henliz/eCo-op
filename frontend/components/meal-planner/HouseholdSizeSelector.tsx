@@ -19,8 +19,6 @@ export function HouseholdSizeSelector() {
   // ─── Store state ───────────────────────────────────────────────────────────
   const normalMealServings     = usePlannerStore(s => s.normalMealServings);
   const setNormalMealServings  = usePlannerStore(s => s.setNormalMealServings);
-  const selectedMeals          = usePlannerStore(s => s.selectedMeals);
-  const recipeMultipliers      = usePlannerStore(s => s.recipeMultipliers);
   const setRecipeMultiplier    = usePlannerStore(s => s.setRecipeMultiplier);
   const meals                  = usePlannerStore(s => s.meals);
 
@@ -37,15 +35,17 @@ export function HouseholdSizeSelector() {
     prevSizeRef.current = normalMealServings;
 
     const allMeals = [...meals.breakfast, ...meals.lunch, ...meals.dinner];
-    Array.from(selectedMeals).forEach(url => {
-      const recipe = allMeals.find(r => r.url === url);
-      if (!recipe) return;
+
+    // UPDATED: Use recipe.isSelected instead of selectedMeals
+    allMeals.forEach(recipe => {
+      if (!recipe.isSelected) return;
+
       const calc = Math.ceil((normalMealServings / recipe.servings) * 2) / 2;
-      if (Math.abs((recipeMultipliers[url] || 0) - calc) > 0.01) {
-        setRecipeMultiplier(url, calc);
+      if (Math.abs(recipe.multiplier - calc) > 0.01) {
+        setRecipeMultiplier(recipe.url, calc);
       }
     });
-  }, [normalMealServings, meals, selectedMeals, recipeMultipliers, setRecipeMultiplier]);
+  }, [normalMealServings, meals, setRecipeMultiplier]);
 
   // ─── Slider handler ────────────────────────────────────────────────────────
   const handleSliderChange = (e: React.ChangeEvent<HTMLInputElement>) => {

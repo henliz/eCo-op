@@ -16,17 +16,14 @@ export function MealPlanScreen() {
     dinner: true
   });
 
-
-  const meals             = usePlannerStore(s => s.meals);
-  const selectedMeals     = usePlannerStore(s => s.selectedMeals);
-  const recipeMultipliers = usePlannerStore(s => s.recipeMultipliers);
+  // UPDATED: Use simplified store - no more separate selection state
+  const meals               = usePlannerStore(s => s.meals);
   const setRecipeMultiplier = usePlannerStore(s => s.setRecipeMultiplier);
-  const toggleMeal        = usePlannerStore(s => s.toggleMeal);
-  const mealSummary       = usePlannerStore(s => s.mealSummary);   // just the fn ref
-  const totals            = usePlannerStore(s => s.totals);        // just the fn ref
-  const isLoading         = usePlannerStore(s => s.isLoading);
-  const error             = usePlannerStore(s => s.error);
-
+  const toggleMeal          = usePlannerStore(s => s.toggleMeal);
+  const mealSummary         = usePlannerStore(s => s.mealSummary);
+  const totals              = usePlannerStore(s => s.totals);
+  const isLoading           = usePlannerStore(s => s.isLoading);
+  const error               = usePlannerStore(s => s.error);
 
   const handleSectionToggle = (section: keyof MealCategory) => {
     setOpenSections(prev => ({
@@ -46,13 +43,14 @@ export function MealPlanScreen() {
   }) => {
     const summary = mealSummary();
 
+    // UPDATED: Calculate totals from recipe objects directly
     const sectionSaleTotal = recipes
-      .filter(r => selectedMeals.has(r.url))
-      .reduce((sum, r) => sum + r.salePrice * (recipeMultipliers[r.url] || 1), 0);
+      .filter(r => r.isSelected)  // ← Use recipe.isSelected instead of selectedMeals.has()
+      .reduce((sum, r) => sum + r.salePrice * r.multiplier, 0);  // ← Use recipe.multiplier
 
     const sectionSavingsTotal = recipes
-      .filter(r => selectedMeals.has(r.url))
-      .reduce((sum, r) => sum + r.totalSavings * (recipeMultipliers[r.url] || 1), 0);
+      .filter(r => r.isSelected)  // ← Use recipe.isSelected
+      .reduce((sum, r) => sum + r.totalSavings * r.multiplier, 0);  // ← Use recipe.multiplier
 
     return (
       <Collapsible
@@ -97,8 +95,8 @@ export function MealPlanScreen() {
               <MealCard
                 key={recipe.url + idx}
                 recipe={recipe}
-                isSelected={selectedMeals.has(recipe.url)}
-                multiplier={recipeMultipliers[recipe.url] || 0}
+                isSelected={recipe.isSelected}      // ← Use recipe.isSelected directly
+                multiplier={recipe.multiplier}      // ← Use recipe.multiplier directly
                 onToggle={toggleMeal}
                 onMultiplierChange={setRecipeMultiplier}
               />

@@ -13,9 +13,11 @@ const placeholderImage = '/Robo_Research.png';
 export function CookScreen() {
   const [searchQuery, setSearchQuery] = useState<string>('');
   const [selectedRecipe, setSelectedRecipe] = useState<Recipe | null>(null);
-  const { selectedMeals, meals, recipeMultipliers } = usePlannerStore();
 
-  // Gather selected recipes and organize by meal type
+  // UPDATED: Use simplified store - no more separate selection state
+  const { meals } = usePlannerStore();
+
+  // UPDATED: Gather selected recipes directly from Recipe objects
   const selectedRecipesByType = useMemo(() => {
     const byType = {
       breakfast: [] as Recipe[],
@@ -23,26 +25,27 @@ export function CookScreen() {
       dinner: [] as Recipe[]
     };
 
+    // Filter selected recipes by type using recipe.isSelected
     meals.breakfast.forEach(recipe => {
-      if (selectedMeals.has(recipe.url)) {
+      if (recipe.isSelected) {
         byType.breakfast.push(recipe);
       }
     });
 
     meals.lunch.forEach(recipe => {
-      if (selectedMeals.has(recipe.url)) {
+      if (recipe.isSelected) {
         byType.lunch.push(recipe);
       }
     });
 
     meals.dinner.forEach(recipe => {
-      if (selectedMeals.has(recipe.url)) {
+      if (recipe.isSelected) {
         byType.dinner.push(recipe);
       }
     });
 
     return byType;
-  }, [selectedMeals, meals]);
+  }, [meals]);
 
   // Get all selected recipes as a flat array
   const allSelectedRecipes = useMemo(() => [
@@ -51,11 +54,9 @@ export function CookScreen() {
     ...selectedRecipesByType.dinner
   ], [selectedRecipesByType]);
 
-  // Determine recipe type
+  // UPDATED: Determine recipe type from recipe.mealType
   const getRecipeType = (recipe: Recipe): 'breakfast' | 'lunch' | 'dinner' => {
-    if (selectedRecipesByType.breakfast.some(r => r.url === recipe.url)) return 'breakfast';
-    if (selectedRecipesByType.lunch.some(r => r.url === recipe.url)) return 'lunch';
-    return 'dinner';
+    return recipe.mealType;
   };
 
   // Filtered recipes by search query
@@ -153,15 +154,15 @@ export function CookScreen() {
 
                       {/* Row 2: Servings (left) and multiplier (right) */}
                       <div className="flex justify-between items-center">
-                        {/* Show servings if available */}
+                        {/* UPDATED: Show servings using recipe.multiplier */}
                         <div className="text-xs text-gray-500">
-                          Serves: {recipe.servings * (recipeMultipliers[recipe.url] || 1)}
+                          Serves: {recipe.servings * recipe.multiplier}
                         </div>
 
-                        {/* Multiplier */}
-                        {(recipeMultipliers[recipe.url] || 0) > 0 && (
+                        {/* UPDATED: Multiplier from recipe.multiplier */}
+                        {recipe.multiplier > 0 && (
                           <span className="bg-purple-100 text-purple-800 px-2 py-1 rounded text-xs font-bold">
-                            ×{recipeMultipliers[recipe.url] || 1}
+                            ×{recipe.multiplier}
                           </span>
                         )}
                       </div>
