@@ -228,62 +228,107 @@ export function AuthProvider({ children }: AuthProviderProps) {
     }
   }
 
-  async function signInWithGoogle(): Promise<void> {
-    try {
-      // Initialize Firebase Auth for Google sign-in
-      const { GoogleAuthProvider, signInWithPopup } = await import('firebase/auth');
-      const { auth } = await import('@/lib/firebase');
+  // Replace your signInWithGoogle function in AuthContext with this:
+
+async function signInWithGoogle(): Promise<void> {
+  try {
+    console.log('🚀 Starting Google sign-in...');
+    
+    // Initialize Firebase Auth for Google sign-in
+    const { GoogleAuthProvider, signInWithPopup } = await import('firebase/auth');
+    const { auth } = await import('@/lib/firebase');
+    
+    const provider = new GoogleAuthProvider();
+    provider.addScope('email');
+    provider.addScope('profile');
+    
+    console.log('📱 Opening Google popup...');
+    const result = await signInWithPopup(auth, provider);
+    
+    if (result.user) {
+      console.log('✅ Google popup successful, user:', {
+        uid: result.user.uid,
+        email: result.user.email,
+        displayName: result.user.displayName
+      });
       
-      const provider = new GoogleAuthProvider();
-      provider.addScope('email');
-      provider.addScope('profile');
+      // Get the ID token and send to backend
+      console.log('🔑 Getting ID token...');
+      const idToken = await result.user.getIdToken();
+      console.log('📝 ID token received, length:', idToken.length);
       
-      const result = await signInWithPopup(auth, provider);
-      
-      if (result.user) {
-        // Get the ID token and send to backend
-        const idToken = await result.user.getIdToken();
+      console.log('🌐 Sending to backend...');
+      const response = await makeAPICall('/auth/google-login', 'POST', {
+        idToken: idToken
+      });
+
+      console.log('📨 Backend response:', response);
+
+      // Check if backend response indicates success
+      if (response.success && response.data) {
+        console.log('🎉 Google login successful:', response.data);
         
-        const response = await makeAPICall('/auth/google-login', 'POST', {
-          idToken: idToken
+        // Store access token and user data
+        setAccessToken(response.data.accessToken);
+        setCurrentUser(response.data.user);
+        setUserPreferences({
+          newFlyerNotifications: response.data.user.newFlyerNotifications || false,
+          createdAt: new Date(response.data.user.createdAt || new Date()),
+          updatedAt: new Date(response.data.user.updatedAt || new Date()),
         });
 
-        if (response.success && response.data) {
-          console.log('Google login successful:', response.data);
-          
-          // Store access token and user data
-          setAccessToken(response.data.accessToken);
-          setCurrentUser(response.data.user);
-          setUserPreferences({
-            newFlyerNotifications: response.data.user.newFlyerNotifications || false,
-            createdAt: new Date(response.data.user.createdAt || new Date()),
-            updatedAt: new Date(response.data.user.updatedAt || new Date()),
-          });
-
-          // Store in localStorage for persistence
-          localStorage.setItem('accessToken', response.data.accessToken);
-          localStorage.setItem('user', JSON.stringify(response.data.user));
-        } else {
-          throw new Error(response.error || 'Google sign-in failed');
+        // Store in localStorage for persistence
+        localStorage.setItem('accessToken', response.data.accessToken);
+        localStorage.setItem('user', JSON.stringify(response.data.user));
+      } else {
+        // Backend returned success: false
+        console.error('❌ Backend rejected Google login:', response);
+        let errorMessage = 'Google sign-in failed';
+        
+        if (response.message) {
+          errorMessage = response.message;
+        } else if (response.error === 'GOOGLE_LOGIN_FAILED') {
+          errorMessage = 'Google authentication failed. Please try again.';
         }
+        
+        throw new Error(errorMessage);
       }
-    } catch (error: any) {
-      console.error('Google Sign-in Error:', error);
-      
-      let errorMessage = 'Failed to sign in with Google';
-      if (error.code === 'auth/popup-closed-by-user') {
-        errorMessage = 'Sign in was cancelled';
-      } else if (error.code === 'auth/popup-blocked') {
-        errorMessage = 'Popup was blocked. Please allow popups and try again';
-      } else if (error.code === 'auth/cancelled-popup-request') {
-        errorMessage = 'Sign in was cancelled';
-      } else if (error.message) {
-        errorMessage = error.message;
-      }
-      
-      throw new Error(errorMessage);
     }
+  } catch (error: any) {
+    console.error('💥 Google Sign-in Error:', error);
+    console.error('Error details:', {
+      code: error.code,
+      message: error.message,
+      name: error.name
+    });
+    
+    let errorMessage = 'Failed to sign in with Google';
+    
+    // Handle Firebase popup errors
+    if (error.code === 'auth/popup-closed-by-user') {
+      errorMessage = 'Sign in was cancelled';
+    } else if (error.code === 'auth/popup-blocked') {
+      errorMessage = 'Popup was blocked. Please allow popups and try again';
+    } else if (error.code === 'auth/cancelled-popup-request') {
+      errorMessage = 'Sign in was cancelled';
+    } 
+    // Handle network/API errors
+    else if (error.message.includes('fetch')) {
+      errorMessage = 'Network error. Please check your connection and try again.';
+    }
+    // Handle backend authentication errors
+    else if (error.message.includes('Google authentication failed') || 
+             error.message.includes('Google sign-in failed')) {
+      errorMessage = error.message;
+    }
+    // Generic error handling
+    else if (error.message && !error.message.includes('GOOGLE_LOGIN_FAILED')) {
+      errorMessage = error.message;
+    }
+    
+    throw new Error(errorMessage);
   }
+}
 
   async function updateNotificationPreference(enabled: boolean): Promise<void> {
     if (!currentUser || !accessToken) {
