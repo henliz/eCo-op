@@ -12,7 +12,7 @@ export interface DistanceInfo {
     duration?: string; // estimated travel time if available
 }
 
-// Haversine formula for calculating distance between two points
+// Haversine formula for calculating distance between two pointsg
 export function calculateDistance(
     lat1: number,
     lon1: number,
