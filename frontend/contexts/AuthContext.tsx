@@ -1,4 +1,3 @@
-// contexts/AuthContext.tsx
 'use client';
 import React, { createContext, useContext, useEffect, useState } from 'react';
 import { isTokenValid, refreshFirebaseToken, clearAuthStorage, makeAuthenticatedRequest } from '@/contexts/authUtils';
