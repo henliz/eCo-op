@@ -6,6 +6,7 @@ import { usePlannerStore } from '@/components/meal-planner/usePlannerStore';
 import { useAuth } from '@/contexts/AuthContext';
 
 export default function TestPlannerSync() {
+  // Call all hooks first - BEFORE any conditional returns
   const { currentUser } = useAuth();
   const {
     loadPlan,
@@ -36,6 +37,11 @@ export default function TestPlannerSync() {
   const handleClearData = () => {
     setNormalMealServings(4);
   };
+
+  // NOW do the conditional return AFTER all hooks
+  if (process.env.NODE_ENV !== 'development') {
+    return null;
+  }
 
   if (!isAuthenticated) {
     return (

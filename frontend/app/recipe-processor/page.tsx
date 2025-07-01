@@ -16,9 +16,9 @@ interface UploadStatus {
 interface ProcessingResult {
   message?: string;
   error?: string;
-  data?: any;
+  data?: unknown;
   details?: string;
-  recipe?: any;
+  recipe?: unknown;
   user?: string;
   firestoreRecipeId?: string;
   addedIngredients?: string[];
@@ -28,9 +28,14 @@ interface UserRecipe {
   id: string;
   name: string;
   portions: number;
-  ingredients: any[];
-  createdAt: any;
-  updatedAt: any;
+  ingredients: unknown[];
+  createdAt: FirestoreTimestamp | string | Date;
+  updatedAt: FirestoreTimestamp | string | Date;
+}
+
+interface FirestoreTimestamp {
+  seconds: number;
+  nanoseconds?: number;
 }
 
 export default function RecipeProcessorPage() {
@@ -47,24 +52,8 @@ export default function RecipeProcessorPage() {
   // Use your existing auth context
   const { currentUser, accessToken, loading: authLoading } = useAuth();
 
-  // Check auth status on component mount
-  useEffect(() => {
-    if (!authLoading) {
-      if (!currentUser) {
-        setStatus({
-          type: 'auth-required',
-          message: '🔒 Please log in to upload and process recipes'
-        });
-      } else {
-        setStatus({ type: 'idle', message: '' });
-        // Load user's recipes when authenticated
-        loadUserRecipes();
-      }
-    }
-  }, [currentUser, authLoading, accessToken]);
-
   // Load user's recipes
-  const loadUserRecipes = async () => {
+  const loadUserRecipes = useCallback(async () => {
     if (!accessToken) return;
 
     try {
@@ -82,62 +71,26 @@ export default function RecipeProcessorPage() {
     } catch (error) {
       console.error('Failed to load recipes:', error);
     }
-  };
+  }, [accessToken, backendUrl]);
 
-  // File handling functions
-  const handleFileSelect = useCallback((file: File | null) => {
-    if (!file) return;
-
-    if (file.type !== 'application/pdf') {
-      setStatus({
-        type: 'error',
-        message: '❌ Please upload a PDF file only'
-      });
-      return;
+  // Check auth status on component mount
+  useEffect(() => {
+    if (!authLoading) {
+      if (!currentUser) {
+        setStatus({
+          type: 'auth-required',
+          message: '🔒 Please log in to upload and process recipes'
+        });
+      } else {
+        setStatus({ type: 'idle', message: '' });
+        // Load user's recipes when authenticated
+        loadUserRecipes();
+      }
     }
-
-    if (!currentUser || !accessToken) {
-      setStatus({
-        type: 'auth-required',
-        message: '🔒 Please log in to upload recipes'
-      });
-      return;
-    }
-
-    setSelectedFile(file);
-    setStatus({ type: 'idle', message: '' });
-    setResult(null);
-
-    // Auto-upload after file selection
-    setTimeout(() => {
-      uploadFile(file);
-    }, 500);
-  }, [currentUser, accessToken]);
-
-  const handleFileInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const file = e.target.files?.[0] || null;
-    handleFileSelect(file);
-  };
-
-  const handleDrop = useCallback((e: React.DragEvent) => {
-    e.preventDefault();
-    setDragOver(false);
-    const file = e.dataTransfer.files[0];
-    handleFileSelect(file);
-  }, [handleFileSelect]);
-
-  const handleDragOver = (e: React.DragEvent) => {
-    e.preventDefault();
-    setDragOver(true);
-  };
-
-  const handleDragLeave = (e: React.DragEvent) => {
-    e.preventDefault();
-    setDragOver(false);
-  };
+  }, [currentUser, authLoading, accessToken, loadUserRecipes]);
 
   // Upload function with authentication
-  const uploadFile = async (file?: File) => {
+  const uploadFile = useCallback(async (file?: File) => {
     const fileToUpload = file || selectedFile;
     if (!fileToUpload || !accessToken) return;
 
@@ -185,16 +138,69 @@ export default function RecipeProcessorPage() {
           setResult({ error: resultData.error });
         }
       }
-    } catch (error: any) {
+    } catch (error: unknown) {
+      const errorMessage = error instanceof Error ? error.message : 'Unknown error';
       setStatus({
         type: 'error',
-        message: `❌ Network error: ${error.message}`
+        message: `❌ Network error: ${errorMessage}`
       });
       setResult({
-        error: error.message,
+        error: errorMessage,
         details: 'Check if your backend is running on the correct port'
       });
     }
+  }, [selectedFile, accessToken, backendUrl, loadUserRecipes]);
+
+  // File handling functions
+  const handleFileSelect = useCallback((file: File | null) => {
+    if (!file) return;
+
+    if (file.type !== 'application/pdf') {
+      setStatus({
+        type: 'error',
+        message: '❌ Please upload a PDF file only'
+      });
+      return;
+    }
+
+    if (!currentUser || !accessToken) {
+      setStatus({
+        type: 'auth-required',
+        message: '🔒 Please log in to upload recipes'
+      });
+      return;
+    }
+
+    setSelectedFile(file);
+    setStatus({ type: 'idle', message: '' });
+    setResult(null);
+
+    // Auto-upload after file selection
+    setTimeout(() => {
+      uploadFile(file);
+    }, 500);
+  }, [currentUser, accessToken, uploadFile]);
+
+  const handleFileInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0] || null;
+    handleFileSelect(file);
+  };
+
+  const handleDrop = useCallback((e: React.DragEvent) => {
+    e.preventDefault();
+    setDragOver(false);
+    const file = e.dataTransfer.files[0];
+    handleFileSelect(file);
+  }, [handleFileSelect]);
+
+  const handleDragOver = (e: React.DragEvent) => {
+    e.preventDefault();
+    setDragOver(true);
+  };
+
+  const handleDragLeave = (e: React.DragEvent) => {
+    e.preventDefault();
+    setDragOver(false);
   };
 
   // Test connection with auth
@@ -212,10 +218,11 @@ export default function RecipeProcessorPage() {
           message: '⚠️ Backend health check failed'
         });
       }
-    } catch (error: any) {
+    } catch (error: unknown) {
+      const errorMessage = error instanceof Error ? error.message : 'Unknown error';
       setStatus({
         type: 'error',
-        message: `❌ Backend not reachable: ${error.message}`
+        message: `❌ Backend not reachable: ${errorMessage}`
       });
     }
   };
@@ -245,7 +252,7 @@ export default function RecipeProcessorPage() {
           message: `❌ Failed to delete recipe`
         });
       }
-    } catch (error) {
+    } catch {
       setStatus({
         type: 'error',
         message: `❌ Error deleting recipe`
@@ -257,11 +264,13 @@ export default function RecipeProcessorPage() {
     return (bytes / 1024 / 1024).toFixed(2) + ' MB';
   };
 
-  const formatDate = (timestamp: any) => {
+  const formatDate = (timestamp: FirestoreTimestamp | string | Date) => {
     if (!timestamp) return 'Unknown';
-    
+
     // Handle Firestore timestamp
-    const date = timestamp.seconds ? new Date(timestamp.seconds * 1000) : new Date(timestamp);
+    const date = (timestamp as FirestoreTimestamp).seconds
+      ? new Date((timestamp as FirestoreTimestamp).seconds * 1000)
+      : new Date(timestamp as string | Date);
     return date.toLocaleDateString();
   };
 

@@ -15,31 +15,32 @@ interface AuthDebugInfo {
 }
 
 export function AuthDebugPanel() {
+  // Call all hooks first - BEFORE any conditional returns
   const { currentUser, accessToken } = useAuth();
   const [debugInfo, setDebugInfo] = useState<AuthDebugInfo | null>(null);
   const [apiTestResult, setApiTestResult] = useState<string>('');
 
   const isTokenValid = (token: string): boolean => {
     if (!token) return false;
-    
+
     try {
       const payload = JSON.parse(atob(token.split('.')[1]));
       const now = Math.floor(Date.now() / 1000);
       return payload.exp && payload.exp > now;
-    } catch (error) {
+    } catch {
       return false;
     }
   };
 
   const getTokenExpiry = (token: string): string | null => {
     if (!token) return null;
-    
+
     try {
       const payload = JSON.parse(atob(token.split('.')[1]));
       if (payload.exp) {
         return new Date(payload.exp * 1000).toISOString();
       }
-    } catch (error) {
+    } catch {
       return 'Invalid token';
     }
     return null;
@@ -48,31 +49,32 @@ export function AuthDebugPanel() {
   const testApiCall = async () => {
     try {
       setApiTestResult('Testing...');
-      
-      const headers: any = {
+
+      const headers: Record<string, string> = {
         'Content-Type': 'application/json',
       };
-      
+
       if (accessToken) {
         headers['Authorization'] = `Bearer ${accessToken}`;
       }
-      
+
       const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL || 'http://localhost:3001'}/auth/profile`, {
         method: 'GET',
         headers,
         mode: 'cors',
         credentials: 'include'
       });
-      
+
       const data = await response.json();
-      
+
       if (response.ok) {
         setApiTestResult(`✅ API Success: ${response.status}`);
       } else {
         setApiTestResult(`❌ API Failed: ${response.status} - ${data.error || data.message}`);
       }
-    } catch (error: any) {
-      setApiTestResult(`💥 Network Error: ${error.message}`);
+    } catch (error: unknown) {
+      const errorMessage = error instanceof Error ? error.message : 'Unknown error';
+      setApiTestResult(`💥 Network Error: ${errorMessage}`);
     }
   };
 
@@ -86,9 +88,14 @@ export function AuthDebugPanel() {
       storageUser: !!localStorage.getItem('user'),
       lastApiCall: null
     };
-    
+
     setDebugInfo(info);
   }, [currentUser, accessToken]);
+
+  // NOW do the conditional return AFTER all hooks
+  if (process.env.NODE_ENV !== 'development') {
+    return null;
+  }
 
   if (!debugInfo) return null;
 

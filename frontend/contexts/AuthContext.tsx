@@ -34,6 +34,7 @@ interface AuthContextType {
   signInWithGoogle: () => Promise<void>;
   updateNotificationPreference: (enabled: boolean) => Promise<void>;
   refreshProfile: () => Promise<void>;
+  makeAPICall: (endpoint: string, method?: string, body?: any, useAuth?: boolean) => Promise<any>; // ADD THIS LINE
 }
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
@@ -105,7 +106,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     try {
       setAuthError(null);
       const response = await makeAPICall('/auth/login', 'POST', { email, password });
-      
+
       if (response.success && response.data) {
         const { accessToken: token, user } = response.data;
         if (!isTokenValid(token)) throw new Error('Invalid token received');
@@ -124,14 +125,14 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
       setAuthError(null);
       const { GoogleAuthProvider, signInWithPopup } = await import('firebase/auth');
       const { auth } = await import('@/lib/firebase');
-      
+
       const provider = new GoogleAuthProvider();
       const result = await signInWithPopup(auth, provider);
-      
+
       if (result.user) {
         const idToken = await result.user.getIdToken();
         const response = await makeAPICall('/auth/google-login', 'POST', { idToken });
-        
+
         if (response.success && response.data) {
           const { accessToken: token, user } = response.data;
           if (!isTokenValid(token)) throw new Error('Invalid token received');
@@ -154,9 +155,9 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     } catch (error) {
       console.warn('Backend logout failed:', error);
     }
-    
+
     clearAuthState();
-    
+
     try {
       const { auth } = await import('@/lib/firebase');
       await auth.signOut();
@@ -167,7 +168,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
 
   const refreshProfile = async (): Promise<void> => {
     if (!accessToken) return;
-    
+
     try {
       const response = await makeAPICall('/auth/profile', 'GET', null, true);
       if (response.success && response.data) {
@@ -217,11 +218,11 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     try {
       setAuthError(null);
       const response = await makeAPICall('/auth/notifications', 'PUT', { newFlyerNotifications: enabled }, true);
-      
+
       if (response.success) {
         setUserPreferences(prev => prev ? { ...prev, newFlyerNotifications: enabled, updatedAt: new Date() } : null);
         setCurrentUser(prev => prev ? { ...prev, newFlyerNotifications: enabled, updatedAt: new Date().toISOString() } : null);
-        
+
         const storedUser = localStorage.getItem('user');
         if (storedUser) {
           const userData = JSON.parse(storedUser);
@@ -242,7 +243,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
       try {
         const storedToken = localStorage.getItem('accessToken');
         const storedUser = localStorage.getItem('user');
-        
+
         if (storedToken && storedUser) {
           if (isTokenValid(storedToken)) {
             const user = JSON.parse(storedUser);
@@ -273,6 +274,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   const value = {
     currentUser, userPreferences, loading, accessToken, authError,
     signup, login, logout, resetPassword, signInWithGoogle, updateNotificationPreference, refreshProfile,
+    makeAPICall, // ADD THIS LINE
   };
 
   return (
