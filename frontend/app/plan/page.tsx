@@ -2,7 +2,7 @@
 
 import React, { useState, useEffect, useRef, useCallback } from 'react';
 import { motion } from 'framer-motion';
-
+import { AuthDebugPanel } from '@/components/AuthDebugPanel';
 import Header from '@/components/layout/Header';
 import Footer from '@/components/layout/Footer';
 import { ContinuePlanBanner } from '@/components/meal-planner/ContinuePlanBanner';
@@ -267,6 +267,9 @@ export default function MealPlannerPage() {
 
 return (
   <>
+    {/* ADD THIS LINE RIGHT HERE */}
+    <AuthDebugPanel />
+
     {/* Loading screen overlay - always in DOM but conditionally visible */}
     <div
       className={`fixed inset-0 z-50 transition-opacity duration-700 ease-in-out ${showLoading ? 'opacity-100' : 'opacity-0 pointer-events-none'}`}
