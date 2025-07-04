@@ -564,7 +564,9 @@ export const usePlannerStore = create<PlannerState>((set, get) => ({
 
         logMessage(`Making authenticated API call for ${mealType}: ${endpoint}`);
 
-        const apiResponse = await makeAPICall(endpoint, 'GET', null, true) as MealDataResponse;
+        const accessToken = localStorage.getItem('accessToken');
+        const isAuthenticated = !!(accessToken && accessToken !== 'null');
+        const apiResponse = await makeAPICall(endpoint, 'GET', null, isAuthenticated) as MealDataResponse;
 
         if (!apiResponse.success) {
           throw new Error(`API returned error for ${mealType}: ${apiResponse.error || 'Unknown error'}`);
@@ -948,8 +950,8 @@ export const usePlannerStore = create<PlannerState>((set, get) => ({
       const stores: Store[] = storesArray.map((storeInfo: StoreIndexItem, index: number) => {
         try {
           const validUntil = new Date(storeInfo.validUntil);
-          //const isAvailable = validUntil >= currentDate;
-          const isAvailable = true;
+          const isAvailable = validUntil >= currentDate;
+          //const isAvailable = true;
 
           // Parse coordinates if they exist
           let lat = storeInfo.lat;
