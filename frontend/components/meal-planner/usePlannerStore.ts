@@ -1,6 +1,6 @@
 import { create } from 'zustand';
 
-const API_BASE_URL = process.env.NEXT_PUBLIC_API_URL || 'https://api.skrimp.ai';
+//const API_BASE_URL = process.env.NEXT_PUBLIC_API_URL || 'https://api.skrimp.ai';
 let saveTimeout: NodeJS.Timeout | null = null;
 let lastSavedState: string | null = null;
 
@@ -22,6 +22,97 @@ interface APIResponse {
 interface SavePlanResponse extends APIResponse {
   planId: string;
   version: number;
+}
+
+interface MealDataResponse extends APIResponse {
+  data?: Array<{
+    id: string;
+    recipeId: string;
+    name: string;
+    url: string;
+    img?: string;
+    salePrice: number;
+    regularPrice: number;
+    totalSavings: number;
+    salePricePerServing: number;
+    regularPricePerServing: number;
+    savingsPerServing: number;
+    savingsPercentage: number;
+    servings: number;
+    costPerServing: number;
+    estimatedPrepTime: string;
+    store: string;
+    location: string;
+    date: string;
+    mealType: string;
+    validFromDate: string;
+    validToDate: string;
+    sortIndex?: number;
+    pricingContext: {
+      store: string;
+      location: string;
+      dataDate: string;
+      validFromDate: string;
+      validToDate: string;
+      queryDate: string;
+      pricedAt?: string;
+      sortIndex?: number;
+    };
+    ingredients: DualPricedIngredient[];
+  }>;
+  total?: number;
+  filters?: MealPlanFilters;
+  userPreferences?: {
+    applied: boolean;
+    maxIngredients?: number;
+    maxPricePerPortion?: number;
+    bannedIngredientsCount?: number;
+    bannedRecipesCount?: number;
+  };
+}
+
+interface DualPricedIngredient {
+  name: string;
+  quantity: number;
+  unit: string;
+  type?: string;
+  regularListPrice: number;
+  saleListPrice: number;
+  regularPrice: number;
+  regularSource: 'flyer' | 'database' | 'missing' | 'skipped' | 'free';
+  regularSourceName?: string;
+  regularSourceDate?: string;
+  regularConversionFailed?: boolean;
+  regularUnitSize?: number;
+  regularUnitType?: string;
+  regularFractionUsed?: number;
+  regularProductName?: string;
+  salePrice: number;
+  saleSource: 'flyer' | 'database' | 'missing' | 'skipped' | 'free';
+  saleSourceName?: string;
+  saleSourceDate?: string;
+  saleConversionFailed?: boolean;
+  saleUnitSize?: number;
+  saleUnitType?: string;
+  saleFractionUsed?: number;
+  saleProductName?: string;
+  onSale: boolean;
+  savings: number;
+  savingsPercentage: number;
+  regularPriceAlias?: string;
+  salePriceAlias?: string;
+  densityAlias?: string;
+  recipeIngredientName: string;
+  category?: string;
+}
+
+interface MealPlanFilters {
+  store: string;
+  location: string;
+  date: string;
+  servings?: number;
+  mealType?: 'breakfast' | 'lunch' | 'dinner';
+  userId?: string;
 }
 
 interface LoadPlanResponse extends APIResponse {
@@ -93,7 +184,7 @@ export interface Ingredient {
   regularPrice: number;
   regularFractionUsed?: number;
   type?: 'core' | 'optional' | 'garnish' | 'to taste';
-  source: 'flyer' | 'database' | 'skipped' | 'free';
+  source: 'flyer' | 'database' | 'missing' | 'skipped' | 'free';
   sourceDate?: string;
   productName?: string;
   packageId?: string;
@@ -158,7 +249,7 @@ export interface AggregatedItem {
   unitType: string;
   packPrice: number;
   productName: string;
-  source: 'flyer' | 'database' | 'skipped' | 'free';
+  source: 'flyer' | 'database' | 'missing' | 'skipped' | 'free';
   lineCost: number;
   packsToBuy: number;
   isChecked: boolean;
@@ -292,6 +383,42 @@ export function parseCoordinates(coordString: string): { latitude: number; longi
   return null;
 }
 
+const transformMealPlanToRecipe = (mealPlan: NonNullable<MealDataResponse['data']>[0], mealType: 'breakfast' | 'lunch' | 'dinner'): Recipe => ({
+  name: mealPlan.name,
+  url: mealPlan.url,
+  img: mealPlan.img,
+  price: mealPlan.salePrice,
+  salePrice: mealPlan.salePrice,
+  regularPrice: mealPlan.regularPrice,
+  totalSavings: mealPlan.totalSavings,
+  servings: mealPlan.servings,
+  flyerItemsCount: mealPlan.ingredients?.filter(ing => ing.saleSource === 'flyer').length || 0,
+  ingredients: (mealPlan.ingredients || []).map(ing => ({
+    recipeIngredientName: ing.recipeIngredientName,
+    saleUnitSize: ing.saleUnitSize || 0,
+    saleUnitType: ing.saleUnitType || '',
+    salePrice: ing.salePrice,
+    saleFractionUsed: ing.saleFractionUsed || 0,
+    regularPrice: ing.regularPrice,
+    regularFractionUsed: ing.regularFractionUsed || 0,
+    type: (ing.type as 'core' | 'optional' | 'garnish' | 'to taste') || 'core',
+    source: ing.saleSource,
+    sourceDate: ing.saleSourceDate,
+    productName: ing.saleProductName || ing.recipeIngredientName,
+    packageId: `${ing.saleProductName || ing.recipeIngredientName}-${ing.saleUnitSize || 0}${ing.saleUnitType || ''}`,
+    savingsPercentage: ing.savingsPercentage,
+    category: ing.category
+  })),
+  multiplier: 0,
+  isSelected: false,
+  store: mealPlan.store,
+  location: mealPlan.location,
+  mealType: mealType,
+  date: mealPlan.date,
+  validFromDate: mealPlan.validFromDate,
+  validToDate: mealPlan.validToDate,
+  pricingContext: mealPlan.pricingContext
+});
 
 export const usePlannerStore = create<PlannerState>((set, get) => ({
   // Configuration
@@ -396,115 +523,87 @@ export const usePlannerStore = create<PlannerState>((set, get) => ({
 
   // Fixed fetchMealData - just use validUntil from the store data
   fetchMealData: async () => {
-  const state = get();
-  const logMessage = (msg: string) => console.log(`[PlannerStore] ${msg}`);
+    const state = get();
+    const logMessage = (msg: string) => console.log(`[PlannerStore] ${msg}`);
 
-  if (state.isDataLoaded && state.selectedStore) {
-    logMessage('Data already loaded, skipping fetch');
-    return;
-  }
+    if (state.isDataLoaded && state.selectedStore) {
+      logMessage('Data already loaded, skipping fetch');
+      return;
+    }
 
-  if (!state.selectedStore) {
-    logMessage('No store selected, skipping fetch');
-    return;
-  }
+    if (!state.selectedStore) {
+      logMessage('No store selected, skipping fetch');
+      return;
+    }
 
-  const selectedStore = state.availableStores.find(s => s.id === state.selectedStore);
-  if (!selectedStore) {
-    set({ error: 'Selected store not found in available stores', isLoading: false });
-    return;
-  }
+    const selectedStore = state.availableStores.find(s => s.id === state.selectedStore);
+    if (!selectedStore) {
+      set({ error: 'Selected store not found in available stores', isLoading: false });
+      return;
+    }
 
-  try {
-    logMessage(`Starting data fetch for ${selectedStore.name} at ${selectedStore.location} via API`);
-    set({ isLoading: true, error: null });
+    try {
+      logMessage(`Starting data fetch for ${selectedStore.name} at ${selectedStore.location} via API`);
+      set({ isLoading: true, error: null });
 
-    const validUntilDate = new Date(selectedStore.validUntil);
-    const dataDate = new Date(validUntilDate);
-    dataDate.setDate(dataDate.getDate() - 7);
-    const date = dataDate.toISOString().split('T')[0];
+      const validUntilDate = new Date(selectedStore.validUntil);
+      const dataDate = new Date(validUntilDate);
+      dataDate.setDate(dataDate.getDate() - 7);
+      const date = dataDate.toISOString().split('T')[0];
 
-    const mealTypes = ['breakfast', 'lunch', 'dinner'] as const;
-    const apiCalls = mealTypes.map(async (mealType) => {
-      const apiUrl = `${API_BASE_URL}/meal-plans?store=${encodeURIComponent(selectedStore.name)}&location=${encodeURIComponent(selectedStore.location)}&date=${date}&mealType=${mealType}`;
-
-      const response = await fetch(apiUrl);
-      if (!response.ok) {
-        throw new Error(`Failed to fetch ${mealType} data: ${response.status} ${response.statusText}`);
+      // Get the makeAPICall function from window (set by AuthContext)
+      const makeAPICall = (window as typeof window).__plannerMakeAPICall;
+      if (!makeAPICall) {
+        throw new Error('Authentication not available. Please log in.');
       }
 
-      const apiResponse = await response.json();
-      if (!apiResponse.success) {
-        throw new Error(`API returned error for ${mealType}: ${apiResponse.error || 'Unknown error'}`);
-      }
+      const mealTypes = ['breakfast', 'lunch', 'dinner'] as const;
+      const apiCalls = mealTypes.map(async (mealType) => {
+        // Use authenticated API call instead of direct fetch
+        const endpoint = `/meal-plans?store=${encodeURIComponent(selectedStore.name)}&location=${encodeURIComponent(selectedStore.location)}&date=${date}&mealType=${mealType}`;
 
-      return { mealType, data: apiResponse.data || [] };
-    });
+        logMessage(`Making authenticated API call for ${mealType}: ${endpoint}`);
 
-    const results = await Promise.all(apiCalls);
+        const apiResponse = await makeAPICall(endpoint, 'GET', null, true) as MealDataResponse;
 
-    const mealCategories: MealCategory = {
-      breakfast: [],
-      lunch: [],
-      dinner: []
-    };
+        if (!apiResponse.success) {
+          throw new Error(`API returned error for ${mealType}: ${apiResponse.error || 'Unknown error'}`);
+        }
 
-    results.forEach(({ mealType, data }) => {
-      // Transform API data to enhanced Recipe format with all context
-      interface APIPlanResponse extends Partial<Recipe> {
-        id?: string;
-        totalCost?: number;
-      }
+        return { mealType, data: apiResponse.data || [] };
+      });
 
-      const recipes: Recipe[] = data.map((plan: APIPlanResponse) => ({
-        // Basic recipe info
-        name: plan.name,
-        url: plan.url || `${plan.id}`,
-        img: plan.img,
+      const results = await Promise.all(apiCalls);
 
-        // Pricing
-        price: plan.salePrice || plan.totalCost,
-        salePrice: plan.salePrice || plan.totalCost,
-        regularPrice: plan.regularPrice || plan.salePrice,
-        totalSavings: plan.totalSavings || 0,
+      const mealCategories: MealCategory = {
+        breakfast: [],
+        lunch: [],
+        dinner: []
+      };
 
-        // Recipe details
-        servings: plan.servings,
-        flyerItemsCount: plan.ingredients?.filter(ing => ing.source === 'flyer').length || 0,
-        ingredients: plan.ingredients || [],
+      results.forEach(({ mealType, data }) => {
+        const recipes: Recipe[] = data.map((mealPlan) => transformMealPlanToRecipe(mealPlan, mealType));
+        mealCategories[mealType] = recipes;
+        logMessage(`Processed ${recipes.length} ${mealType} recipes`);
+      });
 
-        // Selection state - SINGLE SOURCE OF TRUTH
-        multiplier: 0,           // Start unselected
-        isSelected: false,       // Computed from multiplier
+      set({
+        meals: mealCategories,
+        isLoading: false,
+        isDataLoaded: true
+      });
 
-        // Context from API response
-        store: plan.store,
-        location: plan.location,
-        mealType: mealType,
-        date: plan.date,
-        validFromDate: plan.validFromDate,
-        validToDate: plan.validToDate,
-        pricingContext: plan.pricingContext
-      }));
+      logMessage('Meal data fetch completed successfully with user authentication');
 
-      mealCategories[mealType] = recipes;
-    });
-
-    set({
-      meals: mealCategories,
-      isLoading: false,
-      isDataLoaded: true
-    });
-
-  } catch (err) {
-    console.error("Error fetching meal data:", err);
-    set({
-      isLoading: false,
-      error: err instanceof Error ? err.message : 'Failed to load meal plan',
-      isDataLoaded: false
-    });
-  }
-},
+    } catch (err) {
+      console.error("Error fetching meal data:", err);
+      set({
+        isLoading: false,
+        error: err instanceof Error ? err.message : 'Failed to load meal plan',
+        isDataLoaded: false
+      });
+    }
+  },
 
   // Updated setMeals function - remove default selections
   setMeals: (meals) => {
@@ -814,6 +913,7 @@ export const usePlannerStore = create<PlannerState>((set, get) => ({
 
       // 🚨 FIXED: Use deployed API
       const response = await fetch('https://api.skrimp.ai/meal-plans/stores/index');
+      //const response = await fetch('http://localhost:3001/meal-plans/stores/index');
 
       logMessage(`Fetch response status: ${response.status}`);
 
@@ -848,7 +948,8 @@ export const usePlannerStore = create<PlannerState>((set, get) => ({
       const stores: Store[] = storesArray.map((storeInfo: StoreIndexItem, index: number) => {
         try {
           const validUntil = new Date(storeInfo.validUntil);
-          const isAvailable = validUntil >= currentDate;
+          //const isAvailable = validUntil >= currentDate;
+          const isAvailable = true;
 
           // Parse coordinates if they exist
           let lat = storeInfo.lat;

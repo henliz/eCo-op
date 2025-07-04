@@ -7,7 +7,7 @@ interface ContinuePlanProps {
 }
 
 export const ContinuePlanBanner: React.FC<ContinuePlanProps> = ({ onContinue }) => {
-  const { makeAPICall } = useAuth();
+  const { makeAPICall, currentUser } = useAuth(); // Add currentUser
   const {
     loadUserPlan,
     selectedStore,
@@ -38,8 +38,8 @@ export const ContinuePlanBanner: React.FC<ContinuePlanProps> = ({ onContinue }) 
           return;
         }
 
-        // Only attempt to load if we don't have a plan and we have makeAPICall
-        if (makeAPICall) {
+        // Only attempt to load if we don't have a plan, we have makeAPICall, AND we have a current user
+        if (makeAPICall && currentUser) {
           try {
             console.log('[ContinuePlan] Attempting to load user plan...');
             await loadUserPlan(makeAPICall);
@@ -51,15 +51,15 @@ export const ContinuePlanBanner: React.FC<ContinuePlanProps> = ({ onContinue }) 
             setLoadComplete(true);
           }
         } else {
-          // No makeAPICall available, just mark as complete
-          console.log('[ContinuePlan] No makeAPICall available, marking as complete');
+          // No makeAPICall available or no current user, just mark as complete
+          console.log('[ContinuePlan] No makeAPICall or currentUser available, marking as complete');
           setLoadComplete(true);
         }
       }
     };
 
     checkOrLoad();
-  }, [makeAPICall, hasAttemptedLoad, loadUserPlan, planId, selectedStore, lastSynced]);
+  }, [makeAPICall, currentUser, hasAttemptedLoad, loadUserPlan, planId, selectedStore, lastSynced]);
 
   // Don't render anything until load attempt is complete
   if (!loadComplete || isSyncing) {
