@@ -950,8 +950,8 @@ export const usePlannerStore = create<PlannerState>((set, get) => ({
       const stores: Store[] = storesArray.map((storeInfo: StoreIndexItem, index: number) => {
         try {
           const validUntil = new Date(storeInfo.validUntil);
-          const isAvailable = validUntil >= currentDate;
-          //const isAvailable = true;
+          //const isAvailable = validUntil >= currentDate;
+          const isAvailable = true;
 
           // Parse coordinates if they exist
           let lat = storeInfo.lat;
