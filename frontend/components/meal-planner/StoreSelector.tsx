@@ -7,6 +7,9 @@ import { MapPin, Navigation, Loader2, AlertCircle, Search, X } from 'lucide-reac
 import { locationService } from '@/lib/location';
 import { useLocation } from '@/hooks/useLocation';
 
+// 🆕 New store is now primary
+import { useStoreLocationStore } from '@/stores/useStoreLocationStore';
+
 type ExtendedStore = Store & {
   location_name?: string;
   city?: string;
@@ -21,18 +24,20 @@ interface StoreSelectorProps {
 }
 
 export default function StoreSelector({ shouldNavigateToPlan }: StoreSelectorProps) {
-  const {
-    selectedStore,
-    setSelectedStore,
-    isLoading,
-    availableStores,
-    isStoresLoaded,
-    discoverStores,
-    userLocation,
-    setUserLocation,
-  } = usePlannerStore();
+  // 🔄 PHASE 2: New store is PRIMARY, old store is FALLBACK
+  const newStoreLocation = useStoreLocationStore();
+  const oldPlannerStore = usePlannerStore();
 
-  // Location hook for permissions and geocoding
+  // 🆕 Use new store as primary data source
+  const selectedStore = newStoreLocation.selectedStore || oldPlannerStore.selectedStore;
+  const availableStores = newStoreLocation.availableStores.length > 0
+    ? newStoreLocation.availableStores
+    : oldPlannerStore.availableStores;
+  const isLoading = newStoreLocation.isLoading || oldPlannerStore.isLoading;
+  const isStoresLoaded = newStoreLocation.isStoresLoaded || oldPlannerStore.isStoresLoaded;
+  const userLocation = newStoreLocation.userLocation || oldPlannerStore.userLocation;
+
+  // Location hook for permissions and geocoding (unchanged)
   const {
     location: hookLocation,
     isLoading: locationLoading,
@@ -42,7 +47,7 @@ export default function StoreSelector({ shouldNavigateToPlan }: StoreSelectorPro
     clearError,
   } = useLocation();
 
-  // State
+  // State (unchanged)
   const [searchTerm, setSearchTerm] = React.useState('');
   const [selectedChain, setSelectedChain] = React.useState('');
   const [postalCode, setPostalCode] = React.useState('');
@@ -50,18 +55,75 @@ export default function StoreSelector({ shouldNavigateToPlan }: StoreSelectorPro
   const [showLocationPrompt, setShowLocationPrompt] = React.useState(false);
   const carouselRef = React.useRef<HTMLDivElement>(null);
 
-  // Discover stores on component mount
+  // 🆕 Auto-discover stores using NEW store as primary
   useEffect(() => {
-    if (!isStoresLoaded && !isLoading) {
-      discoverStores();
-    }
-  }, [isStoresLoaded, isLoading, discoverStores]);
+    const discoverStores = async () => {
+      console.log('[StoreSelector] 🆕 Auto-discovering stores with NEW store as primary...');
 
-  // Check for existing location and auto-enable distance sorting
+      // Try new store first (primary)
+      if (!newStoreLocation.isStoresLoaded && !newStoreLocation.isLoading) {
+        console.log('[StoreSelector] 🆕 Using NEW store for discovery (primary)');
+        await newStoreLocation.discoverStores();
+
+        // Sync old store to new store's selection if it exists
+        if (oldPlannerStore.selectedStore && !newStoreLocation.selectedStore) {
+          newStoreLocation.setSelectedStore(oldPlannerStore.selectedStore);
+        }
+      }
+
+      // Fallback to old store only if new store completely fails
+      if (!oldPlannerStore.isStoresLoaded && !oldPlannerStore.isLoading &&
+          newStoreLocation.availableStores.length === 0 && newStoreLocation.error) {
+        console.log('[StoreSelector] ⚠️ NEW store failed, fallback to OLD store');
+        await oldPlannerStore.discoverStores();
+      }
+    };
+
+    discoverStores();
+  }, [newStoreLocation, oldPlannerStore]);
+
+  // 🆕 Store selection now uses NEW store as primary
+  const handleStoreSelect = (storeId: string) => {
+    console.log("[StoreSelector] 🆕 Selecting store with NEW store as primary:", storeId);
+
+    // Update new store first (primary)
+    newStoreLocation.setSelectedStore(storeId);
+
+    // Keep old store in sync for meal data fetching (temporary)
+    oldPlannerStore.setSelectedStore(storeId);
+
+    // Keep existing meal plan navigation logic
+    shouldNavigateToPlan.current = true;
+    setTimeout(() => {
+      usePlannerStore.getState().fetchMealData();
+    }, 100);
+  };
+
+  // 🔄 Sync hook location with BOTH stores (during transition)
+  useEffect(() => {
+    if (hookLocation) {
+      console.log('[StoreSelector] 🆕 Setting location on NEW store (primary)');
+      newStoreLocation.setUserLocation(hookLocation);
+
+      // Keep old store in sync during transition
+      oldPlannerStore.setUserLocation({
+        latitude: hookLocation.latitude,
+        longitude: hookLocation.longitude,
+        address: hookLocation.address,
+        source: hookLocation.source,
+      });
+
+      setSortBy('distance');
+      setShowLocationPrompt(false);
+    }
+  }, [hookLocation, newStoreLocation, oldPlannerStore]);
+
+  // 🆕 Check for existing location and auto-enable distance sorting (using new store)
   useEffect(() => {
     const existingLocation = locationService.getStoredLocation();
     if (existingLocation) {
-      setUserLocation({
+      console.log('[StoreSelector] 🆕 Loading stored location into NEW store');
+      newStoreLocation.setUserLocation({
         latitude: existingLocation.latitude,
         longitude: existingLocation.longitude,
         address: existingLocation.address,
@@ -69,31 +131,9 @@ export default function StoreSelector({ shouldNavigateToPlan }: StoreSelectorPro
       });
       setSortBy('distance');
     }
-  }, [setUserLocation]);
+  }, [newStoreLocation]);
 
-  // Sync hook location with store location
-  useEffect(() => {
-    if (hookLocation) {
-      setUserLocation({
-        latitude: hookLocation.latitude,
-        longitude: hookLocation.longitude,
-        address: hookLocation.address,
-        source: hookLocation.source,
-      });
-      setSortBy('distance');
-      setShowLocationPrompt(false);
-    }
-  }, [hookLocation, setUserLocation]);
-
-  const handleStoreSelect = (storeId: string) => {
-    console.log("Selected store:", storeId);
-    setSelectedStore(storeId);
-    shouldNavigateToPlan.current = true;
-    setTimeout(() => {
-      usePlannerStore.getState().fetchMealData();
-    }, 100);
-  };
-
+  // Location handlers (unchanged)
   const handleLocationRequest = async () => {
     clearError();
     await requestLocation();
@@ -104,13 +144,13 @@ export default function StoreSelector({ shouldNavigateToPlan }: StoreSelectorPro
     await geocodeAddress(postalCode);
   };
 
-  // Get unique store chains for dropdown (deduplicated)
+  // Get unique store chains for dropdown (unchanged)
   const storeChains = useMemo(() => {
     const chains = [...new Set(availableStores.map(store => store.name))].sort();
     return chains;
   }, [availableStores]);
 
-  // Infinite scroll logic for carousel
+  // Infinite scroll logic for carousel (unchanged)
   useEffect(() => {
     const carousel = carouselRef.current;
     if (!carousel) return;
@@ -139,7 +179,7 @@ export default function StoreSelector({ shouldNavigateToPlan }: StoreSelectorPro
     return () => carousel.removeEventListener('scroll', handleScroll);
   }, [storeChains.length]);
 
-  // Helper function for chain logos using actual store data
+  // Helper function for chain logos (unchanged)
   const getChainLogo = (chain: string) => {
     // Find a store from this chain to get the logo image
     const storeFromChain = availableStores.find(store => store.name === chain);
@@ -166,7 +206,7 @@ export default function StoreSelector({ shouldNavigateToPlan }: StoreSelectorPro
     );
   };
 
-  // Calculate distances and sort stores
+  // Calculate distances and sort stores (unchanged)
   const storesWithDistance = useMemo(() => {
     if (!userLocation) {
       return availableStores.map(store => ({ ...store, distance: undefined })) as ExtendedStore[];
@@ -209,7 +249,7 @@ export default function StoreSelector({ shouldNavigateToPlan }: StoreSelectorPro
     });
   }, [availableStores, userLocation]);
 
-  // Filter and sort stores
+  // Filter and sort stores (unchanged)
   const filteredAndSortedStores = useMemo((): ExtendedStore[] => {
     let filtered = [...storesWithDistance];
 
@@ -251,9 +291,34 @@ export default function StoreSelector({ shouldNavigateToPlan }: StoreSelectorPro
     return filtered;
   }, [storesWithDistance, searchTerm, selectedChain, sortBy, userLocation]);
 
+  // 🔍 Debug comparison during migration
+  useEffect(() => {
+    if (process.env.NODE_ENV === 'development') {
+      console.log('[StoreSelector] 🆕 NEW store primary comparison:', {
+        newStores: newStoreLocation.availableStores.length,
+        oldStores: oldPlannerStore.availableStores.length,
+        newSelected: newStoreLocation.selectedStore,
+        oldSelected: oldPlannerStore.selectedStore,
+        dataSource: newStoreLocation.availableStores.length > 0 ? 'NEW' : 'OLD',
+        match: newStoreLocation.availableStores.length === oldPlannerStore.availableStores.length
+      });
+    }
+  }, [newStoreLocation.availableStores.length, oldPlannerStore.availableStores.length,
+      newStoreLocation.selectedStore, oldPlannerStore.selectedStore]);
+
   return (
     <div className="bg-white rounded-xl shadow-sm overflow-hidden">
-      {/* Mobile Header */}
+      {/* 🔍 Migration Debug Bar (dev only) - Updated for Phase 2 */}
+      {process.env.NODE_ENV === 'development' && (
+        <div className="px-4 py-2 bg-green-50 border-b border-green-200 text-xs">
+          <strong>🆕 Phase 2 - NEW Store Primary:</strong> NEW: {newStoreLocation.availableStores.length} stores,
+          OLD: {oldPlannerStore.availableStores.length} stores,
+          Source: {newStoreLocation.availableStores.length > 0 ? 'NEW STORE' : 'OLD STORE'},
+          Selected: {selectedStore || 'None'}
+        </div>
+      )}
+
+      {/* Mobile Header - UNCHANGED */}
       <div className="px-4 py-3 border-b border-gray-100">
         <div className="flex items-center justify-between mb-3">
           <h2 className="text-xl font-bold text-gray-900">Find Your Store</h2>
@@ -262,7 +327,7 @@ export default function StoreSelector({ shouldNavigateToPlan }: StoreSelectorPro
           </div>
         </div>
 
-        {/* Hero Search Bar with Location Button */}
+        {/* Hero Search Bar with Location Button - UNCHANGED */}
         <div className="flex gap-2">
           <div className="flex-1 relative">
             <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
@@ -286,7 +351,7 @@ export default function StoreSelector({ shouldNavigateToPlan }: StoreSelectorPro
             )}
           </div>
 
-          {/* Smart Sort/Location Button */}
+          {/* 🆕 Updated Smart Sort/Location Button to use new store */}
           <div className="flex-shrink-0">
             {!userLocation ? (
               <button
@@ -313,7 +378,8 @@ export default function StoreSelector({ shouldNavigateToPlan }: StoreSelectorPro
                 </button>
                 <button
                   onClick={() => {
-                    setUserLocation(null);
+                    // 🆕 Clear location from new store (primary)
+                    newStoreLocation.clearUserLocation();
                     setSortBy('name');
                     locationService.clearStoredLocation();
                     setShowLocationPrompt(false);
@@ -328,7 +394,7 @@ export default function StoreSelector({ shouldNavigateToPlan }: StoreSelectorPro
           </div>
         </div>
 
-        {/* Store Chain Carousel */}
+        {/* Store Chain Carousel - UNCHANGED */}
         <div className="mt-4">
           <div className="relative">
             <div
@@ -388,7 +454,7 @@ export default function StoreSelector({ shouldNavigateToPlan }: StoreSelectorPro
         </div>
       </div>
 
-      {/* Location Prompt */}
+      {/* Location Prompt - UNCHANGED */}
       {showLocationPrompt && !userLocation && (
         <div className="px-4 py-3 bg-blue-50 border-b border-blue-100">
           <div className="space-y-3">
@@ -444,7 +510,7 @@ export default function StoreSelector({ shouldNavigateToPlan }: StoreSelectorPro
         </div>
       )}
 
-      {/* Results */}
+      {/* Results - UNCHANGED */}
       <div className="p-4">
         {/* Webkit scrollbar hiding */}
         <style jsx>{`
