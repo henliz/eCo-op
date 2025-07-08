@@ -83,10 +83,10 @@ const DashboardPage: React.FC = () => {
 
   // Load preferences for summary display
   useEffect(() => {
-    if (currentUser && makeAPICall && preferences.preferences === null) {
+    if (currentUser && makeAPICall && preferences.preferences === null && !preferences.loading) {
       preferences.loadPreferences(makeAPICall).catch(console.error);
     }
-  }, [currentUser, makeAPICall, preferences]);
+  }, [currentUser, makeAPICall]); // Remove 'preferences' from dependency array
 
   // Check if user has any meal plan data
   const hasData: boolean = Boolean(selectedStore && selectedRecipes && selectedRecipes().length > 0);
