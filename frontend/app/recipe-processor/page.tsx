@@ -1,43 +1,29 @@
+// C:\Users\satta\eCo-op\frontend\app\recipe-processor\page.tsx
 'use client';
 
 import React, { useState, useCallback, useEffect } from 'react';
 import { Button } from '@/components/ui/button';
-import { Input } from '@/components/ui/input';
 import { Alert, AlertDescription } from '@/components/ui/alert';
 import { Badge } from '@/components/ui/badge';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import Header from '@/components/layout/Header';
 import Footer from '@/components/layout/Footer';
 import { useAuth } from '@/contexts/AuthContext';
-
-// Dynamic import for ReactJson
-const ReactJson = React.lazy(() => import('react-json-view'));
+import EnhancedRecipeDisplay from '@/components/custom-recipes/EnhancedRecipeDisplay';
+import PricingResultModal from '@/components/custom-recipes/PricingResultModal';
 
 interface UploadStatus {
   type: 'idle' | 'loading' | 'success' | 'error' | 'auth-required';
   message: string;
 }
 
-interface ProcessingResult {
-  message?: string;
-  error?: string;
-  data?: any;
-  details?: string;
-  recipe?: any;
-  user?: string;
-  firestoreRecipeId?: string;
-  addedIngredients?: string[];
-  submissionId?: string;
-  success?: boolean;
-}
-
 interface SubmissionData {
   id: string;
   filename: string;
-  status: 'processing' | 'completed' | 'failed' | 'edited';
+  status: 'processing' | 'completed' | 'failed' | 'edited' | 'priced';
   recipe?: any;
   originalRecipe?: any;
+  pricingData?: any;
   processingSteps?: string[];
   warnings?: string[];
   createdAt: string;
@@ -49,6 +35,7 @@ interface UserRecipe {
   name: string;
   portions: number;
   ingredients: any[];
+  currentPrice?: number;
   createdAt: any;
   updatedAt: any;
 }
@@ -56,10 +43,30 @@ interface UserRecipe {
 interface Submission {
   id: string;
   filename: string;
-  status: 'processing' | 'completed' | 'failed' | 'edited';
+  status: 'processing' | 'completed' | 'failed' | 'edited' | 'priced';
   hasRecipe: boolean;
+  hasPricing: boolean;
   createdAt: string;
   updatedAt: string;
+}
+
+interface PricingResult {
+  success: boolean;
+  message: string;
+  pricing?: {
+    totalPrice: number;
+    pricePerServing: number;
+    formattedPrice: string;
+    formattedPricePerServing: string;
+    breakdown: any[];
+    store: string;
+    location: string;
+    date: string;
+    pricedAt: Date;
+  };
+  recipe?: any;
+  missingIngredients?: any[];
+  canRetry?: boolean;
 }
 
 export default function RecipeProcessorPage() {
@@ -71,14 +78,17 @@ export default function RecipeProcessorPage() {
   
   // UI state
   const [backendUrl, setBackendUrl] = useState('http://localhost:3001');
-  const [store, setStore] = useState('Walmart');
-  const [location, setLocation] = useState('100 The Boardwalk');
   const [status, setStatus] = useState<UploadStatus>({ type: 'idle', message: '' });
-  const [result, setResult] = useState<ProcessingResult | null>(null);
   const [dragOver, setDragOver] = useState(false);
   const [showPdfReview, setShowPdfReview] = useState(false);
   const [showRecipes, setShowRecipes] = useState(false);
   const [showSubmissions, setShowSubmissions] = useState(false);
+  
+  // Pricing state
+  const [isPricing, setIsPricing] = useState(false);
+  const [pricingResult, setPricingResult] = useState<PricingResult | null>(null);
+  const [showPricingModal, setShowPricingModal] = useState(false);
+  const [isSavingToFirestore, setIsSavingToFirestore] = useState(false);
   
   // Polling for submission updates
   const [pollingInterval, setPollingInterval] = useState<NodeJS.Timeout | null>(null);
@@ -191,7 +201,7 @@ export default function RecipeProcessorPage() {
         setSubmissionData(data);
         setEditedData(data.recipe ? JSON.parse(JSON.stringify(data.recipe)) : null);
         
-        if (data.status === 'processing' || data.status === 'completed') {
+        if (data.status === 'processing' || data.status === 'completed' || data.status === 'priced') {
           setShowPdfReview(true);
         }
       }
@@ -222,8 +232,8 @@ export default function RecipeProcessorPage() {
 
     setSelectedFile(file);
     setStatus({ type: 'idle', message: '' });
-    setResult(null);
     setShowPdfReview(false);
+    setPricingResult(null);
 
     setTimeout(() => {
       uploadFile(file);
@@ -264,7 +274,6 @@ export default function RecipeProcessorPage() {
       type: 'loading',
       message: '🔄 Processing recipe... This may take a moment'
     });
-    setResult(null);
 
     try {
       const response = await fetch(`${backendUrl}/recipe-processing/upload`, {
@@ -282,7 +291,6 @@ export default function RecipeProcessorPage() {
           type: 'success',
           message: `✅ ${resultData.message || 'Upload successful'}`
         });
-        setResult(resultData);
         setCurrentSubmissionId(resultData.submissionId);
         setShowPdfReview(true);
         
@@ -300,18 +308,11 @@ export default function RecipeProcessorPage() {
             message: `❌ ${resultData.message || 'Upload failed'}`
           });
         }
-        if (resultData.error) {
-          setResult({ error: resultData.error });
-        }
       }
     } catch (error: any) {
       setStatus({
         type: 'error',
         message: `❌ Network error: ${error.message}`
-      });
-      setResult({
-        error: error.message,
-        details: 'Check if your backend is running on the correct port'
       });
     }
   };
@@ -338,6 +339,7 @@ export default function RecipeProcessorPage() {
       if (response.ok) {
         setStatus({ type: 'success', message: 'Changes saved successfully' });
         loadSubmissionData(currentSubmissionId);
+        loadUserSubmissions();
       } else {
         setStatus({ type: 'error', message: 'Failed to save changes' });
       }
@@ -346,14 +348,66 @@ export default function RecipeProcessorPage() {
     }
   };
 
-  // Finalize submission
-  const finalizeSubmission = async () => {
+  // NEW: Price Recipe function
+  const priceRecipe = async () => {
     if (!currentSubmissionId || !accessToken) return;
 
-    setStatus({ type: 'loading', message: 'Finalizing submission...' });
+    setIsPricing(true);
+    setStatus({ type: 'loading', message: '💰 Pricing recipe...' });
 
     try {
-      const response = await fetch(`${backendUrl}/recipe-processing/submission/${currentSubmissionId}/finalize`, {
+      const response = await fetch(`${backendUrl}/recipe-processing/submission/${currentSubmissionId}/price`, {
+        method: 'POST',
+        headers: {
+          'Authorization': `Bearer ${accessToken}`,
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          store: 'Default Store',
+          location: 'Default Location'
+        }),
+      });
+
+      const result = await response.json();
+
+      if (response.ok && result.success) {
+        setPricingResult(result);
+        setShowPricingModal(true);
+        setStatus({ 
+          type: 'success', 
+          message: `✅ Recipe priced successfully: ${result.pricing.formattedPrice}` 
+        });
+        
+        // Refresh submission data to get updated pricing info
+        await loadSubmissionData(currentSubmissionId);
+        loadUserSubmissions();
+      } else {
+        setPricingResult(result);
+        setShowPricingModal(true);
+        setStatus({ 
+          type: 'error', 
+          message: result.message || 'Failed to price recipe' 
+        });
+      }
+    } catch (error: any) {
+      setStatus({
+        type: 'error',
+        message: `❌ Pricing error: ${error.message}`
+      });
+    } finally {
+      setIsPricing(false);
+    }
+  };
+
+  // NEW: Submit to Firestore function
+  const submitToFirestore = async () => {
+    if (!currentSubmissionId || !accessToken) return;
+
+    setIsSavingToFirestore(true);
+    setStatus({ type: 'loading', message: '🔥 Saving to Firestore...' });
+
+    try {
+      const response = await fetch(`${backendUrl}/recipe-processing/submission/${currentSubmissionId}/submit-to-firestore`, {
         method: 'POST',
         headers: {
           'Authorization': `Bearer ${accessToken}`,
@@ -361,21 +415,42 @@ export default function RecipeProcessorPage() {
         },
       });
 
-      if (response.ok) {
-        setStatus({ type: 'success', message: 'Recipe saved to Firestore successfully!' });
+      const result = await response.json();
+
+      if (response.ok && result.success) {
+        setStatus({ 
+          type: 'success', 
+          message: '✅ Recipe saved to Firestore successfully!' 
+        });
+        
+        // Refresh data
+        await loadSubmissionData(currentSubmissionId);
         loadUserRecipes();
         loadUserSubmissions();
         
-        setCurrentSubmissionId(null);
-        setSubmissionData(null);
-        setEditedData(null);
-        setShowPdfReview(false);
-        setSelectedFile(null);
+        // Close pricing modal if open
+        setShowPricingModal(false);
       } else {
-        setStatus({ type: 'error', message: 'Failed to finalize submission' });
+        setStatus({ 
+          type: 'error', 
+          message: result.message || 'Failed to save to Firestore' 
+        });
       }
-    } catch (error) {
-      setStatus({ type: 'error', message: 'Network error finalizing submission' });
+    } catch (error: any) {
+      setStatus({
+        type: 'error',
+        message: `❌ Firestore error: ${error.message}`
+      });
+    } finally {
+      setIsSavingToFirestore(false);
+    }
+  };
+
+  // Reset to original data
+  const resetToOriginal = () => {
+    if (submissionData?.originalRecipe) {
+      setEditedData(JSON.parse(JSON.stringify(submissionData.originalRecipe)));
+      setStatus({ type: 'success', message: 'Reset to original data' });
     }
   };
 
@@ -385,9 +460,10 @@ export default function RecipeProcessorPage() {
     setSubmissionData(null);
     setEditedData(null);
     setShowPdfReview(false);
-    setResult(null);
     setSelectedFile(null);
     setStatus({ type: 'idle', message: '' });
+    setPricingResult(null);
+    setShowPricingModal(false);
   };
 
   // Test connection
@@ -442,6 +518,13 @@ export default function RecipeProcessorPage() {
     }
   };
 
+  // Load existing submission
+  const loadExistingSubmission = (submissionId: string) => {
+    setCurrentSubmissionId(submissionId);
+    setShowPdfReview(true);
+    setStatus({ type: 'idle', message: '' });
+  };
+
   // Utility functions
   const getStatusBadge = (status: string) => {
     switch (status) {
@@ -451,6 +534,8 @@ export default function RecipeProcessorPage() {
         return <Badge variant="secondary" className="bg-green-100 text-green-800">✅ Completed</Badge>;
       case 'edited':
         return <Badge variant="secondary" className="bg-blue-100 text-blue-800">✏️ Edited</Badge>;
+      case 'priced':
+        return <Badge variant="secondary" className="bg-purple-100 text-purple-800">💰 Priced</Badge>;
       case 'failed':
         return <Badge variant="secondary" className="bg-red-100 text-red-800">❌ Failed</Badge>;
       default:
@@ -462,99 +547,22 @@ export default function RecipeProcessorPage() {
     return (bytes / 1024 / 1024).toFixed(2) + ' MB';
   };
 
-  const formatDate = (timestamp: any) => {
-    if (!timestamp) return 'Unknown';
-    const date = timestamp.seconds ? new Date(timestamp.seconds * 1000) : new Date(timestamp);
-    return date.toLocaleDateString();
+  const formatPrice = (price?: number) => {
+    return price ? `$${price.toFixed(2)}` : 'Not priced';
   };
 
-  // JSON Viewer Component
-  const JsonViewer = ({ data, onEdit }: { data: any; onEdit: (e: any) => void }) => {
-    return (
-      <React.Suspense fallback={
-        <div className="flex items-center justify-center h-96">
-          <div className="w-6 h-6 border-2 border-indigo-400 border-t-transparent rounded-full animate-spin" />
-        </div>
-      }>
-        <ReactJson
-          src={data || {}}
-          onEdit={onEdit}
-          onAdd={onEdit}
-          onDelete={onEdit}
-          theme="rjv-default"
-          displayDataTypes={false}
-          displayObjectSize={false}
-          enableClipboard={false}
-          style={{
-            padding: '12px',
-            backgroundColor: '#ffffff',
-            fontSize: '12px',
-            height: '100%'
-          }}
-        />
-      </React.Suspense>
-    );
+  // Check if recipe can be priced (has recipe data and not currently processing)
+  const canPriceRecipe = () => {
+    return submissionData?.recipe && 
+           submissionData.status !== 'processing' && 
+           !isPricing;
   };
 
-  // Simple PDF Link Component (shows file info and download link)
-  const PdfInfoViewer = ({ file, submissionId }: { file: File | null; submissionId: string | null }) => {
-    const downloadPdf = async () => {
-      if (!submissionId || !accessToken) return;
-      
-      try {
-        const response = await fetch(`${backendUrl}/recipe-processing/submission/${submissionId}/pdf`, {
-          headers: {
-            'Authorization': `Bearer ${accessToken}`,
-          },
-        });
-        
-        if (response.ok) {
-          const blob = await response.blob();
-          const url = URL.createObjectURL(blob);
-          const a = document.createElement('a');
-          a.href = url;
-          a.download = file?.name || 'recipe.pdf';
-          document.body.appendChild(a);
-          a.click();
-          document.body.removeChild(a);
-          URL.revokeObjectURL(url);
-        }
-      } catch (error) {
-        console.error('Failed to download PDF:', error);
-      }
-    };
-
-    return (
-      <div className="border rounded bg-white h-full">
-        <div className="p-4 bg-gray-50 border-b">
-          <span className="font-medium">Original PDF</span>
-        </div>
-        <div className="p-8 flex flex-col items-center justify-center h-[500px] text-center">
-          <div className="text-6xl mb-4">📄</div>
-          {file && (
-            <>
-              <div className="font-medium text-lg mb-2">{file.name}</div>
-              <div className="text-sm text-gray-600 mb-4">
-                Size: {formatFileSize(file.size)}
-              </div>
-            </>
-          )}
-          <div className="text-gray-600 mb-6 max-w-md">
-            <p className="mb-2">PDF viewer temporarily disabled due to compatibility issues.</p>
-            <p>You can download the PDF to view it separately.</p>
-          </div>
-          {submissionId && (
-            <Button
-              onClick={downloadPdf}
-              variant="outline"
-              className="flex items-center gap-2"
-            >
-              📥 Download PDF
-            </Button>
-          )}
-        </div>
-      </div>
-    );
+  // Check if recipe can be saved to Firestore (has recipe data)
+  const canSaveToFirestore = () => {
+    return submissionData?.recipe && 
+           submissionData.status !== 'processing' && 
+           !isSavingToFirestore;
   };
 
   // Cleanup on unmount
@@ -594,7 +602,7 @@ export default function RecipeProcessorPage() {
             </h1>
             <p className="text-lg text-gray-600">
               {currentUser 
-                ? `Welcome ${currentUser.email}! Upload a PDF recipe to process and review it.`
+                ? `Welcome ${currentUser.email}! Upload → Edit → Price → Save to Firestore`
                 : 'Please log in to upload and process recipes'
               }
             </p>
@@ -658,7 +666,7 @@ export default function RecipeProcessorPage() {
                         <div className="text-sm text-gray-600">
                           {!currentUser 
                             ? 'Please log in to start processing'
-                            : 'We\'ll extract the recipe data and show it alongside your PDF info'
+                            : 'Upload → Edit → Price → Save to Firestore'
                           }
                         </div>
                       </div>
@@ -675,52 +683,23 @@ export default function RecipeProcessorPage() {
                 </CardContent>
               </Card>
 
-              {/* Settings */}
+              {/* Connection Test */}
               <Card>
                 <CardHeader>
-                  <CardTitle className="text-lg">⚙️ Settings</CardTitle>
+                  <CardTitle className="text-lg">🔗 Connection</CardTitle>
                 </CardHeader>
-                <CardContent className="space-y-4">
-                  <div>
-                    <label className="block text-sm font-medium mb-1">Backend URL</label>
-                    <Input
-                      value={backendUrl}
-                      onChange={(e) => setBackendUrl(e.target.value)}
-                      placeholder="Backend URL"
-                      className="text-sm"
-                    />
-                  </div>
-                  
-                  <div className="grid grid-cols-1 gap-3">
-                    <div>
-                      <label className="block text-sm font-medium mb-1">Store</label>
-                      <Input
-                        value={store}
-                        onChange={(e) => setStore(e.target.value)}
-                        placeholder="Store"
-                        className="text-sm"
-                      />
-                    </div>
-                    
-                    <div>
-                      <label className="block text-sm font-medium mb-1">Location</label>
-                      <Input
-                        value={location}
-                        onChange={(e) => setLocation(e.target.value)}
-                        placeholder="Location"
-                        className="text-sm"
-                      />
-                    </div>
-                  </div>
-
+                <CardContent>
                   <Button
                     onClick={testConnection}
                     variant="outline"
                     className="w-full"
                     size="sm"
                   >
-                    Test Connection
+                    Test Backend Connection
                   </Button>
+                  <p className="text-xs text-gray-500 mt-2">
+                    Backend: {backendUrl}
+                  </p>
                 </CardContent>
               </Card>
 
@@ -760,11 +739,15 @@ export default function RecipeProcessorPage() {
                       {showSubmissions && (
                         <CardContent>
                           <div className="space-y-2 max-h-32 overflow-y-auto">
-                            {userSubmissions.slice(0, 3).map((submission) => (
-                              <div key={submission.id} className="text-xs p-2 bg-gray-50 rounded">
+                            {userSubmissions.slice(0, 5).map((submission) => (
+                              <div key={submission.id} className="text-xs p-2 bg-gray-50 rounded cursor-pointer hover:bg-gray-100" 
+                                   onClick={() => loadExistingSubmission(submission.id)}>
                                 <div className="font-medium truncate">{submission.filename}</div>
                                 <div className="flex items-center gap-1 mt-1">
                                   {getStatusBadge(submission.status)}
+                                  {submission.hasPricing && (
+                                    <Badge variant="outline" className="text-xs">💰 Priced</Badge>
+                                  )}
                                 </div>
                               </div>
                             ))}
@@ -796,7 +779,7 @@ export default function RecipeProcessorPage() {
                               <div key={recipe.id} className="flex items-center justify-between text-xs p-2 bg-gray-50 rounded">
                                 <div className="flex-1 min-w-0">
                                   <div className="font-medium truncate">{recipe.name}</div>
-                                  <div className="text-gray-600">{recipe.portions} portions</div>
+                                  <div className="text-gray-600">{recipe.portions} portions • {formatPrice(recipe.currentPrice)}</div>
                                 </div>
                                 <Button
                                   onClick={() => deleteRecipe(recipe.id, recipe.name)}
@@ -820,188 +803,52 @@ export default function RecipeProcessorPage() {
             {/* Right Column - PDF & Data Review */}
             <div className="xl:col-span-2">
               {showPdfReview && submissionData ? (
-                <Card className="h-full">
-                  <CardHeader>
-                    <CardTitle className="flex items-center justify-between">
-                      <div className="flex items-center gap-2">
-                        <span>📄 Review: {submissionData.filename}</span>
-                        {getStatusBadge(submissionData.status)}
-                      </div>
-                      <div className="flex gap-2">
-                        {submissionData.recipe && submissionData.status !== 'processing' && (
-                          <Button
-                            onClick={finalizeSubmission}
-                            className="bg-green-600 hover:bg-green-700 text-white"
-                            size="sm"
-                          >
-                            ✅ Save to Firestore
-                          </Button>
-                        )}
-                      </div>
-                    </CardTitle>
-                  </CardHeader>
-                  <CardContent>
-                    <Tabs defaultValue="side-by-side" className="w-full">
-                      <TabsList className="grid w-full grid-cols-3">
-                        <TabsTrigger value="side-by-side">📄📋 Side by Side</TabsTrigger>
-                        <TabsTrigger value="pdf-only">📄 PDF Info</TabsTrigger>
-                        <TabsTrigger value="data-only" disabled={!submissionData.recipe}>
-                          📋 Data Only
-                        </TabsTrigger>
-                      </TabsList>
-
-                      {/* Side by Side View */}
-                      <TabsContent value="side-by-side" className="mt-4">
-                        <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 h-[600px]">
-                          {/* PDF Info Viewer */}
-                          <PdfInfoViewer file={selectedFile} submissionId={currentSubmissionId} />
-
-                          {/* Data Viewer */}
-                          <div className="border rounded overflow-hidden bg-white">
-                            <div className="flex items-center justify-between p-2 bg-gray-50 border-b text-sm">
-                              <span>Extracted Data</span>
-                              <div className="flex gap-1">
-                                <Button
-                                  onClick={() => setEditedData(JSON.parse(JSON.stringify(submissionData.originalRecipe || submissionData.recipe)))}
-                                  variant="outline"
-                                  size="sm"
-                                  disabled={!submissionData.recipe}
-                                >
-                                  Reset
-                                </Button>
-                                <Button
-                                  onClick={saveEditedData}
-                                  variant="outline"
-                                  size="sm"
-                                  disabled={!editedData || JSON.stringify(editedData) === JSON.stringify(submissionData.recipe)}
-                                >
-                                  Save
-                                </Button>
-                              </div>
-                            </div>
-                            <div className="h-[550px] overflow-auto">
-                              {submissionData.recipe ? (
-                                <JsonViewer
-                                  data={editedData}
-                                  onEdit={(e) => setEditedData(e.updated_src)}
-                                />
-                              ) : submissionData.status === 'processing' ? (
-                                <div className="flex items-center justify-center h-full">
-                                  <div className="text-center">
-                                    <div className="w-8 h-8 border-4 border-indigo-400 border-t-transparent rounded-full animate-spin mx-auto mb-4" />
-                                    <p className="text-sm text-gray-600">AI is extracting recipe data...</p>
-                                    {submissionData.processingSteps && (
-                                      <div className="mt-4 text-xs text-gray-500 max-w-xs">
-                                        {submissionData.processingSteps.map((step, index) => (
-                                          <div key={index} className="mb-1">{step}</div>
-                                        ))}
-                                      </div>
-                                    )}
-                                  </div>
-                                </div>
-                              ) : submissionData.status === 'failed' ? (
-                                <div className="flex items-center justify-center h-full">
-                                  <div className="text-center text-red-600">
-                                    <div className="text-4xl mb-2">❌</div>
-                                    <p className="text-sm">Processing failed</p>
-                                    {submissionData.warnings && submissionData.warnings.length > 0 && (
-                                      <div className="mt-2 text-xs">
-                                        {submissionData.warnings.map((warning, index) => (
-                                          <div key={index}>{warning}</div>
-                                        ))}
-                                      </div>
-                                    )}
-                                  </div>
-                                </div>
-                              ) : (
-                                <div className="flex items-center justify-center h-full">
-                                  <div className="text-center text-gray-500">
-                                    <div className="text-4xl mb-2">📋</div>
-                                    <p className="text-sm">No data extracted yet</p>
-                                  </div>
-                                </div>
-                              )}
-                            </div>
-                          </div>
-                        </div>
-                      </TabsContent>
-
-                      {/* PDF Only View */}
-                      <TabsContent value="pdf-only" className="mt-4">
-                        <div className="h-[600px]">
-                          <PdfInfoViewer file={selectedFile} submissionId={currentSubmissionId} />
-                        </div>
-                      </TabsContent>
-
-                      {/* Data Only View */}
-                      <TabsContent value="data-only" className="mt-4">
-                        <div className="border rounded overflow-hidden bg-white h-[600px]">
-                          <div className="flex items-center justify-between p-3 bg-gray-50 border-b">
-                            <span className="font-medium">Extracted Recipe Data</span>
-                            <div className="flex gap-2">
-                              {submissionData.warnings && submissionData.warnings.length > 0 && (
-                                <Badge variant="secondary" className="bg-yellow-100 text-yellow-800">
-                                  ⚠️ {submissionData.warnings.length} Warning(s)
-                                </Badge>
-                              )}
-                              <Button
-                                onClick={() => setEditedData(JSON.parse(JSON.stringify(submissionData.originalRecipe || submissionData.recipe)))}
-                                variant="outline"
-                                size="sm"
-                                disabled={!submissionData.recipe}
-                              >
-                                Reset to Original
-                              </Button>
-                              <Button
-                                onClick={saveEditedData}
-                                variant="outline"
-                                size="sm"
-                                disabled={!editedData || JSON.stringify(editedData) === JSON.stringify(submissionData.recipe)}
-                              >
-                                Save Changes
-                              </Button>
-                            </div>
-                          </div>
-                          
-                          {/* Warnings */}
-                          {submissionData.warnings && submissionData.warnings.length > 0 && (
-                            <div className="p-3 bg-yellow-50 border-b border-yellow-200">
-                              <div className="text-sm font-medium text-yellow-800 mb-1">⚠️ Processing Warnings:</div>
-                              {submissionData.warnings.map((warning, index) => (
-                                <div key={index} className="text-xs text-yellow-700">• {warning}</div>
-                              ))}
-                            </div>
-                          )}
-                          
-                          <div className="h-[500px] overflow-auto">
-                            {submissionData.recipe ? (
-                              <JsonViewer
-                                data={editedData}
-                                onEdit={(e) => setEditedData(e.updated_src)}
-                              />
-                            ) : (
-                              <div className="flex items-center justify-center h-full">
-                                <div className="text-center text-gray-500">
-                                  <div className="text-6xl mb-4">📋</div>
-                                  <p>No recipe data available</p>
-                                </div>
-                              </div>
-                            )}
-                          </div>
-                        </div>
-                      </TabsContent>
-                    </Tabs>
-                  </CardContent>
-                </Card>
+                <EnhancedRecipeDisplay
+                  submissionData={submissionData}
+                  selectedFile={selectedFile}
+                  currentSubmissionId={currentSubmissionId}
+                  authToken={accessToken || ''}
+                  backendUrl={backendUrl}
+                  onSaveChanges={saveEditedData}
+                  onPriceRecipe={priceRecipe}
+                  onSubmitToFirestore={submitToFirestore}
+                  onReset={resetToOriginal}
+                  editedData={editedData}
+                  onEditData={setEditedData}
+                  isPricing={isPricing}
+                  isSavingToFirestore={isSavingToFirestore}
+                  canPriceRecipe={canPriceRecipe()}
+                  canSaveToFirestore={canSaveToFirestore()}
+                />
               ) : (
-                <Card className="h-[600px] flex items-center justify-center">
+                <Card className="h-[700px] flex items-center justify-center">
                   <CardContent>
                     <div className="text-center text-gray-500">
                       <div className="text-6xl mb-4">📄</div>
                       <h3 className="text-xl font-semibold mb-2">Upload a PDF to get started</h3>
-                      <p className="text-gray-600 max-w-md">
-                        Once you upload a PDF, we'll extract the recipe data and show it here alongside the PDF information.
+                      <p className="text-gray-600 max-w-md mb-4">
+                        Upload a recipe PDF and follow the new workflow:
                       </p>
+                      <div className="text-sm text-left bg-gray-50 p-4 rounded max-w-sm mx-auto">
+                        <div className="space-y-2">
+                          <div className="flex items-center gap-2">
+                            <span className="w-6 h-6 bg-blue-500 text-white rounded-full text-xs flex items-center justify-center">1</span>
+                            <span>Upload & Parse PDF</span>
+                          </div>
+                          <div className="flex items-center gap-2">
+                            <span className="w-6 h-6 bg-blue-500 text-white rounded-full text-xs flex items-center justify-center">2</span>
+                            <span>Edit recipe data if needed</span>
+                          </div>
+                          <div className="flex items-center gap-2">
+                            <span className="w-6 h-6 bg-purple-500 text-white rounded-full text-xs flex items-center justify-center">3</span>
+                            <span>Price recipe with "Price Recipe" button</span>
+                          </div>
+                          <div className="flex items-center gap-2">
+                            <span className="w-6 h-6 bg-green-500 text-white rounded-full text-xs flex items-center justify-center">4</span>
+                            <span>Save to Firestore</span>
+                          </div>
+                        </div>
+                      </div>
                       {!currentUser && (
                         <div className="mt-4 p-4 bg-blue-50 rounded-lg">
                           <div className="text-blue-800 font-medium">🔒 Please log in first</div>
@@ -1046,20 +893,16 @@ export default function RecipeProcessorPage() {
             </div>
           )}
 
-          {/* Debug Result (Optional - can be removed in production) */}
-          {result && result.error && (
-            <Card className="mt-6">
-              <CardHeader>
-                <CardTitle className="text-red-600">🐛 Debug Information</CardTitle>
-              </CardHeader>
-              <CardContent>
-                <div className="bg-gray-900 text-green-400 p-4 rounded font-mono text-sm overflow-auto max-h-48">
-                  <pre className="whitespace-pre-wrap">
-                    {JSON.stringify(result, null, 2)}
-                  </pre>
-                </div>
-              </CardContent>
-            </Card>
+          {/* Pricing Result Modal */}
+          {showPricingModal && pricingResult && (
+            <PricingResultModal
+              isOpen={showPricingModal}
+              onClose={() => setShowPricingModal(false)}
+              pricingResult={pricingResult}
+              onSubmitToFirestore={submitToFirestore}
+              isSavingToFirestore={isSavingToFirestore}
+              canSaveToFirestore={canSaveToFirestore()}
+            />
           )}
         </div>
       </div>
