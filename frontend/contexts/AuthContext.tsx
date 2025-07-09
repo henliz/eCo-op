@@ -1,5 +1,6 @@
 'use client';
 import React, { createContext, useContext, useEffect, useState } from 'react';
+import { useRouter } from 'next/navigation';
 import { isTokenValid, refreshFirebaseToken, clearAuthStorage, makeAuthenticatedRequest } from '@/contexts/authUtils';
 
 interface UserPreferences {
@@ -34,7 +35,7 @@ interface AuthContextType {
   signInWithGoogle: () => Promise<void>;
   updateNotificationPreference: (enabled: boolean) => Promise<void>;
   refreshProfile: () => Promise<void>;
-  makeAPICall: (endpoint: string, method?: string, body?: any, useAuth?: boolean) => Promise<any>; // ADD THIS LINE
+  makeAPICall: (endpoint: string, method?: string, body?: any, useAuth?: boolean) => Promise<any>;
 }
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
@@ -48,6 +49,7 @@ export function useAuth() {
 }
 
 export function AuthProvider({ children }: { children: React.ReactNode }) {
+  const router = useRouter();
   const [currentUser, setCurrentUser] = useState<BackendUser | null>(null);
   const [userPreferences, setUserPreferences] = useState<UserPreferences | null>(null);
   const [accessToken, setAccessToken] = useState<string | null>(null);
@@ -111,6 +113,9 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
         const { accessToken: token, user } = response.data;
         if (!isTokenValid(token)) throw new Error('Invalid token received');
         setUserData(user, token);
+
+        // Redirect to dashboard after successful login
+        router.push('/dashboard');
       } else {
         throw new Error(response.error || 'Login failed');
       }
@@ -137,6 +142,9 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
           const { accessToken: token, user } = response.data;
           if (!isTokenValid(token)) throw new Error('Invalid token received');
           setUserData(user, token);
+
+          // Redirect to dashboard after successful Google login
+          router.push('/dashboard');
         } else {
           throw new Error(response.error || 'Google login failed');
         }
@@ -274,7 +282,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   const value = {
     currentUser, userPreferences, loading, accessToken, authError,
     signup, login, logout, resetPassword, signInWithGoogle, updateNotificationPreference, refreshProfile,
-    makeAPICall, // ADD THIS LINE
+    makeAPICall,
   };
 
   return (

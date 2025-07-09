@@ -165,132 +165,141 @@ export default function Header() {
 
                   {/* Modern Profile Dropdown */}
                   {showProfileMenu && (
-                    <div className="
+                      <div className="
                       absolute right-0 top-full mt-3 w-80
                       backdrop-blur-md bg-white/95 border border-white/30 rounded-2xl shadow-2xl
                       z-50 overflow-hidden
                       animate-in slide-in-from-top-2 fade-in-0 duration-300
                     ">
-                      {/* Top Accent */}
-                      <div className="h-1 bg-gradient-to-r from-[#45B08C] via-[#FDBA74] to-[#45B08C]" />
+                        {/* Top Accent */}
+                        <div className="h-1 bg-gradient-to-r from-[#45B08C] via-[#FDBA74] to-[#45B08C]"/>
 
-                      {/* User Info */}
-                      <div className="px-6 py-5 border-b border-gray-100">
-                        <div className="flex items-center gap-4">
-                          {/* Enhanced Avatar */}
-                          <div className="
+                        {/* User Info */}
+                        <div className="px-6 py-5 border-b border-gray-100">
+                          <div className="flex items-center gap-4">
+                            {/* Enhanced Avatar */}
+                            <div className="
                             w-12 h-12 rounded-full bg-gradient-to-br from-[#45B08C] to-[#3A9B7A]
                             flex items-center justify-center text-white font-bold text-lg
                             shadow-lg ring-2 ring-[#45B08C]/20
                           ">
-                            {getInitials(currentUser.displayName || currentUser.email)}
-                          </div>
+                              {getInitials(currentUser.displayName || currentUser.email)}
+                            </div>
 
-                          <div className="flex-1 min-w-0">
-                            <p className="font-bold text-gray-900 text-lg truncate" style={{ fontFamily: 'Montserrat, system-ui, sans-serif' }}>
-                              {currentUser.displayName || 'User'}
-                            </p>
-                            <p className="text-sm text-gray-600 truncate">{currentUser.email}</p>
+                            <div className="flex-1 min-w-0">
+                              <p className="font-bold text-gray-900 text-lg truncate"
+                                 style={{fontFamily: 'Montserrat, system-ui, sans-serif'}}>
+                                {currentUser.displayName || 'User'}
+                              </p>
+                              <p className="text-sm text-gray-600 truncate">{currentUser.email}</p>
+                            </div>
                           </div>
                         </div>
-                      </div>
 
-                      {/* Notification Toggle */}
-                      <div className="px-6 py-5 border-b border-gray-100">
-                        <div className="flex items-center justify-between">
-                          <div className="flex items-center space-x-3">
-                            <div className="w-8 h-8 rounded-full bg-[#45B08C]/10 flex items-center justify-center">
-                              <span className="text-[#45B08C] text-lg">🔔</span>
-                            </div>
-                            <div className="flex-1">
-                              <span className="text-sm text-gray-800 font-semibold block" style={{ fontFamily: 'Montserrat, system-ui, sans-serif' }}>
+                        {/* Notification Toggle */}
+                        <div className="px-6 py-5 border-b border-gray-100">
+                          <div className="flex items-center justify-between">
+                            <div className="flex items-center space-x-3">
+                              <div className="w-8 h-8 rounded-full bg-[#45B08C]/10 flex items-center justify-center">
+                                <span className="text-[#45B08C] text-lg">🔔</span>
+                              </div>
+                              <div className="flex-1">
+                              <span className="text-sm text-gray-800 font-semibold block"
+                                    style={{fontFamily: 'Montserrat, system-ui, sans-serif'}}>
                                 New Flyer Notifications
                               </span>
-                              <p className="text-xs text-gray-500">
-                                Get notified about new deals
+                                <p className="text-xs text-gray-500">
+                                  Get notified about new deals
+                                </p>
+                              </div>
+                            </div>
+                            <Switch
+                                checked={userPreferences?.newFlyerNotifications ?? false}
+                                onCheckedChange={handleNotificationToggle}
+                                disabled={!userPreferences || notificationLoading}
+                                className="data-[state=checked]:bg-[#45B08C]"
+                            />
+                          </div>
+
+                          {notificationLoading && (
+                              <div className="flex items-center gap-2 mt-3 text-xs text-gray-500">
+                                <div
+                                    className="w-3 h-3 border border-[#45B08C] border-t-transparent rounded-full animate-spin"/>
+                                <span>Updating preferences...</span>
+                              </div>
+                          )}
+                        </div>
+
+                        {/* Coming Soon Section */}
+                        <div className="px-6 py-5 border-b border-gray-100">
+                          <Link
+                              href="/dashboard"
+                              onClick={() => setShowProfileMenu(false)}
+                              className="flex items-center gap-3 w-full text-left px-0 py-0 hover:bg-gray-50 transition-all duration-200 rounded-xl transform hover:scale-[1.02] p-3 -m-3"
+                          >
+                            <div
+                                className="w-8 h-8 rounded-full bg-gradient-to-r from-[#45B08C] to-[#FDBA74] flex items-center justify-center">
+                              <span className="text-white text-sm">📊</span>
+                            </div>
+                            <div>
+                              <p className="text-sm font-semibold text-gray-800"
+                                 style={{fontFamily: 'Montserrat, system-ui, sans-serif'}}>
+                                User Dashboard
+                              </p>
+                              <p className="text-xs text-gray-600">
+                                View your meal plans and preferences
                               </p>
                             </div>
-                          </div>
-                          <Switch
-                            checked={userPreferences?.newFlyerNotifications ?? false}
-                            onCheckedChange={handleNotificationToggle}
-                            disabled={!userPreferences || notificationLoading}
-                            className="data-[state=checked]:bg-[#45B08C]"
-                          />
+                          </Link>
                         </div>
 
-                        {notificationLoading && (
-                          <div className="flex items-center gap-2 mt-3 text-xs text-gray-500">
-                            <div className="w-3 h-3 border border-[#45B08C] border-t-transparent rounded-full animate-spin" />
-                            <span>Updating preferences...</span>
-                          </div>
-                        )}
-                      </div>
-
-                      {/* Coming Soon Section */}
-                      <div className="px-6 py-5 border-b border-gray-100 bg-gradient-to-r from-[#45B08C]/5 to-[#FDBA74]/5">
-                        <div className="flex items-center gap-3">
-                          <div className="w-8 h-8 rounded-full bg-gradient-to-r from-[#45B08C] to-[#FDBA74] flex items-center justify-center">
-                            <span className="text-white text-sm">✨</span>
-                          </div>
-                          <div>
-                            <p className="text-sm font-semibold text-gray-800" style={{ fontFamily: 'Montserrat, system-ui, sans-serif' }}>
-                              Exciting new member features coming soon!
-                            </p>
-                            <p className="text-xs text-gray-600">
-                              Stay tuned for amazing updates
-                            </p>
-                          </div>
-                        </div>
-                      </div>
-
-                      {/* Sign Out */}
-                      <div className="p-2">
-                        <button
-                          onClick={handleLogout}
-                          className="
+                        {/* Sign Out */}
+                        <div className="p-2">
+                          <button
+                              onClick={handleLogout}
+                              className="
                             w-full text-left px-4 py-3 text-red-600 hover:bg-red-50
                             transition-all duration-200 font-semibold rounded-xl
                             hover:shadow-md transform hover:scale-[1.02]
                           "
-                          style={{ fontFamily: 'Montserrat, system-ui, sans-serif' }}
-                        >
-                          <div className="flex items-center gap-3">
-                            <div className="w-8 h-8 rounded-full bg-red-100 flex items-center justify-center">
-                              <span className="text-red-600 text-sm">👋</span>
+                              style={{fontFamily: 'Montserrat, system-ui, sans-serif'}}
+                          >
+                            <div className="flex items-center gap-3">
+                              <div className="w-8 h-8 rounded-full bg-red-100 flex items-center justify-center">
+                                <span className="text-red-600 text-sm">👋</span>
+                              </div>
+                              Sign Out
                             </div>
-                            Sign Out
-                          </div>
-                        </button>
-                      </div>
+                          </button>
+                        </div>
 
-                      {/* Bottom Accent */}
-                      <div className="h-1 bg-gradient-to-r from-[#45B08C] via-[#FDBA74] to-[#45B08C]" />
-                    </div>
+                        {/* Bottom Accent */}
+                        <div className="h-1 bg-gradient-to-r from-[#45B08C] via-[#FDBA74] to-[#45B08C]"/>
+                      </div>
                   )}
                 </div>
               ) : (
-                <button
-                  onClick={handleLogin}
-                  className="
+                  <button
+                      onClick={handleLogin}
+                      className="
                     rounded-full border-2 border-white/30 px-4 py-2 font-semibold text-white
                     transition-all duration-200 ease-out
                     hover:border-white/60 hover:bg-white/10
                   "
-                >
-                  Log In
-                </button>
+                  >
+                    Log In
+                  </button>
               )}
             </div>
           </nav>
 
           {/* hamburger */}
           <button
-            className="md:hidden text-3xl leading-none transition-transform duration-200 hover:scale-110 text-white"
-            onClick={() => setOpen(!open)}
-            aria-label={open ? 'Close menu' : 'Open menu'}
+              className="md:hidden text-3xl leading-none transition-transform duration-200 hover:scale-110 text-white"
+              onClick={() => setOpen(!open)}
+              aria-label={open ? 'Close menu' : 'Open menu'}
           >
-            {open ? '✕' : '☰'}
+          {open ? '✕' : '☰'}
           </button>
         </div>
 
@@ -405,21 +414,25 @@ export default function Header() {
                 </div>
 
                 {/* Mobile Coming Soon */}
-                <div className="px-6 py-5 border-b border-white/20 bg-white/5">
+                <Link
+                  href="/dashboard"
+                  onClick={() => setOpen(false)}
+                  className="block px-6 py-5 border-b border-white/20 bg-white/5 hover:bg-white/10 transition-all duration-200"
+                >
                   <div className="flex items-center gap-3">
                     <div className="w-8 h-8 rounded-full bg-[#FDBA74] flex items-center justify-center">
-                      <span className="text-white text-sm">✨</span>
+                      <span className="text-white text-sm">📊</span>
                     </div>
                     <div>
                       <p className="text-sm font-semibold text-white">
-                        Exciting new member features coming soon!
+                        User Dashboard
                       </p>
                       <p className="text-xs text-white/80">
-                        Stay tuned for updates
+                        View your meal plans and preferences
                       </p>
                     </div>
                   </div>
-                </div>
+                </Link>
 
                 {/* Mobile Sign Out */}
                 <button

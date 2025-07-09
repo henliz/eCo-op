@@ -56,20 +56,25 @@ const DashboardPage: React.FC = () => {
   const { currentUser, loading: authLoading, makeAPICall } = useAuth();
 
   // Get real data from planner store
+  const loadUserPlan = usePlannerStore((s) => s.loadUserPlan);
   const meals = usePlannerStore((s) => s.meals);
   const selectedStore = usePlannerStore((s) => s.selectedStore);
   const selectedRecipes = usePlannerStore((s) => s.selectedRecipes);
   const mealSummary = usePlannerStore((s) => s.mealSummary);
   const totals = usePlannerStore((s) => s.totals);
-  const loadUserPlan = usePlannerStore((s) => s.loadUserPlan);
+  const [hasTriedToLoad, setHasTriedToLoad] = useState<boolean>(false);
+
 
   // Add preferences store
-  const preferences = useUserPreferencesStore();
+  //const preferences = useUserPreferencesStore();
+  const preferencesData = useUserPreferencesStore(state => state.preferences);
+  const preferencesLoading = useUserPreferencesStore(state => state.loading);
+  const loadPreferences = useUserPreferencesStore(state => state.loadPreferences);
+  const getPreferencesSummary = useUserPreferencesStore(state => state.getPreferencesSummary);
 
   const [activeSection, setActiveSection] = useState<string>('overview');
   const [searchQuery, setSearchQuery] = useState<string>('');
   const [currentTime, setCurrentTime] = useState<Date>(new Date());
-  const [hasTriedToLoad, setHasTriedToLoad] = useState<boolean>(false);
 
   // Load user's saved meal plan when dashboard mounts
   useEffect(() => {
@@ -81,12 +86,11 @@ const DashboardPage: React.FC = () => {
     }
   }, [currentUser, makeAPICall, hasTriedToLoad, loadUserPlan]);
 
-  // Load preferences for summary display
   useEffect(() => {
-    if (currentUser && makeAPICall && preferences.preferences === null && !preferences.loading) {
-      preferences.loadPreferences(makeAPICall).catch(console.error);
+    if (currentUser && makeAPICall && preferencesData === null && !preferencesLoading) {
+      loadPreferences(makeAPICall).catch(console.error);
     }
-  }, [currentUser, makeAPICall]); // Remove 'preferences' from dependency array
+  }, [currentUser, makeAPICall, preferencesData, preferencesLoading, loadPreferences]);
 
   // Check if user has any meal plan data
   const hasData: boolean = Boolean(selectedStore && selectedRecipes && selectedRecipes().length > 0);
@@ -498,7 +502,7 @@ const DashboardPage: React.FC = () => {
   };
 
   const renderPreferences = () => {
-    const summary = preferences.getPreferencesSummary();
+    const summary = getPreferencesSummary();
 
     return (
       <div className="space-y-6">

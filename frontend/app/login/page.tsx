@@ -22,7 +22,7 @@ export default function ModernLoginPage() {
   // Redirect if already logged in
   React.useEffect(() => {
     if (currentUser) {
-      router.push('/');
+      router.push('/dashboard');
     }
   }, [currentUser, router]);
 
@@ -31,7 +31,8 @@ export default function ModernLoginPage() {
       setError('');
       setLoading(true);
       await signInWithGoogle();
-      router.push('/');
+      // Remove this line: router.push('/');
+      // AuthContext.tsx already handles the redirect to /dashboard
     } catch (error: unknown) {
       console.error('Google sign in error:', error);
       const errorMessage = error instanceof Error ? error.message : 'Failed to sign in with Google';
@@ -52,7 +53,8 @@ export default function ModernLoginPage() {
       setError('');
       setLoading(true);
       await login(email, password);
-      router.push('/');
+      // Remove this line: router.push('/');
+      // AuthContext.tsx already handles the redirect to /dashboard
     } catch (error: unknown) {
       console.error('Login error:', error);
       const errorMessage = error instanceof Error ? error.message : 'Failed to sign in';
