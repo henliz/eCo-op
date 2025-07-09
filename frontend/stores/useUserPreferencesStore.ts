@@ -113,7 +113,20 @@ export const useUserPreferencesStore = create<UserPreferencesState>((set, get) =
       console.log('Store: Loading user preferences...');
 
       // Single API call to get all preferences
-      const userProfile = await makeAPICall('/user-preferences/profile', 'GET', null, true);
+      const response = await makeAPICall('/user-preferences/profile', 'GET', null, true);
+
+      // Handle different response scenarios
+      let userProfile = null;
+
+      if (response) {
+        // If we got a response, try to extract the data
+        if (typeof response === 'object' && response.data) {
+          userProfile = response.data;
+        } else if (typeof response === 'object' && !response.data && !response.error) {
+          // Direct object response (no wrapper)
+          userProfile = response;
+        }
+      }
 
       if (userProfile && typeof userProfile === 'object') {
         console.log('Store: User profile loaded:', userProfile);
@@ -139,7 +152,8 @@ export const useUserPreferencesStore = create<UserPreferencesState>((set, get) =
           error: null,
         });
       } else {
-        console.warn('Store: No user profile data received, using defaults');
+        // New user - no preferences exist yet, use defaults
+        console.log('Store: New user detected, using default preferences');
         set({
           preferences: { ...DEFAULT_PREFERENCES },
           loading: false,
@@ -148,13 +162,32 @@ export const useUserPreferencesStore = create<UserPreferencesState>((set, get) =
           error: null,
         });
       }
-    } catch (error) {
+    } catch (error: any) {
       console.error('Store: Error loading preferences:', error);
-      set({
-        preferences: { ...DEFAULT_PREFERENCES },
-        loading: false,
-        error: 'Failed to load preferences - using defaults'
-      });
+
+      // Check if this is a 404 (user preferences not found) or similar "not found" error
+      const isNewUser = error.message?.includes('404') ||
+                       error.message?.includes('not found') ||
+                       error.message?.includes('User preferences not found') ||
+                       error.message?.includes('Unexpected end of JSON input');
+
+      if (isNewUser) {
+        console.log('Store: Treating as new user, using default preferences');
+        set({
+          preferences: { ...DEFAULT_PREFERENCES },
+          loading: false,
+          lastSynced: new Date(),
+          hasUnsavedChanges: false,
+          error: null,
+        });
+      } else {
+        // Real error - show error state but still provide defaults so app doesn't break
+        set({
+          preferences: { ...DEFAULT_PREFERENCES },
+          loading: false,
+          error: 'Failed to load preferences - using defaults'
+        });
+      }
     }
   },
 
