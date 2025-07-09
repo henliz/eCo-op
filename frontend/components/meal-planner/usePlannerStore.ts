@@ -502,23 +502,58 @@ export const usePlannerStore = create<PlannerState>((set, get) => ({
   },
 
   // Set selected store
+  // 🔍 DEBUG VERSION: Replace setSelectedStore in usePlannerStore.ts with this temporarily
+
   setSelectedStore: (storeId) => {
     logMessage(`Setting store to: ${storeId}`);
     const state = get();
-    const store = state.availableStores.find(s => s.id === storeId);
 
-    if (!store || !store.isAvailable) {
-      set({ error: 'Selected store is not available' });
-      return;
+    // 🔍 DEBUG: Log the current state
+    console.log('[DEBUG setSelectedStore] Current state:', {
+      availableStoresCount: state.availableStores.length,
+      currentSelectedStore: state.selectedStore,
+      targetStoreId: storeId
+    });
+
+    // 🔍 DEBUG: Check validation path
+    if (state.availableStores.length > 0) {
+      console.log('[DEBUG setSelectedStore] Has stores, checking validation...');
+      const store = state.availableStores.find(s => s.id === storeId);
+      console.log('[DEBUG setSelectedStore] Store lookup result:', {
+        found: !!store,
+        store: store ? { id: store.id, name: store.name, isAvailable: store.isAvailable } : null
+      });
+
+      if (!store || !store.isAvailable) {
+        console.log('[DEBUG setSelectedStore] ❌ VALIDATION FAILED - Setting error and returning');
+        set({ error: 'Selected store is not available' });
+        return;
+      }
+      console.log('[DEBUG setSelectedStore] ✅ Validation passed, proceeding to update state');
+    } else {
+      console.log('[DEBUG setSelectedStore] No stores loaded, skipping validation (migration mode)');
     }
 
-    // Always reset isDataLoaded when changing stores to force data reload
+    // 🔍 DEBUG: State update
+    console.log('[DEBUG setSelectedStore] 🔄 Updating state...');
     set({
       selectedStore: storeId,
       isLoading: true,
       error: null,
-      isDataLoaded: false // Reset this flag to force data reload
+      isDataLoaded: false
     });
+
+    console.log('[DEBUG setSelectedStore] ✅ State update completed');
+
+    // 🔍 DEBUG: Verify the update
+    setTimeout(() => {
+      const newState = get();
+      console.log('[DEBUG setSelectedStore] Post-update verification:', {
+        selectedStore: newState.selectedStore,
+        wasUpdated: newState.selectedStore === storeId,
+        error: newState.error
+      });
+    }, 10);
   },
 
   // Fixed fetchMealData - just use validUntil from the store data

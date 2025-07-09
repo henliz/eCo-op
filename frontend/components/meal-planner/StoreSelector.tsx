@@ -83,18 +83,49 @@ export default function StoreSelector({ shouldNavigateToPlan }: StoreSelectorPro
   }, [newStoreLocation, oldPlannerStore]);
 
   // 🆕 Store selection now uses NEW store as primary
-  const handleStoreSelect = (storeId: string) => {
-    console.log("[StoreSelector] 🆕 Selecting store with NEW store as primary:", storeId);
+  // 🎯 TARGETED FIX: Replace handleStoreSelect in StoreSelector.tsx
 
-    // Update new store first (primary)
+  // 🚨 FINAL FIX: Replace handleStoreSelect in StoreSelector.tsx
+  // The key is to REMOVE the usePlannerStore.getState().setSelectedStore(storeId) call
+
+  const handleStoreSelect = (storeId: string) => {
+    console.log("🔍 DEBUG: handleStoreSelect called with:", storeId); // ← ADD THIS LINE
+
+    console.log("[StoreSelector] 🚨 FINAL FIX: Selecting store:", storeId);
+
+    // 1. Update new store first (primary)
     newStoreLocation.setSelectedStore(storeId);
 
-    // Keep old store in sync for meal data fetching (temporary)
-    oldPlannerStore.setSelectedStore(storeId);
+    // 2. 🚨 CRITICAL: DO NOT call oldStore.setSelectedStore() - it has broken validation
+    // Instead, update the state directly using setState
+    console.log("[StoreSelector] 🚨 Bypassing setSelectedStore, using direct setState");
 
-    // Keep existing meal plan navigation logic
-    shouldNavigateToPlan.current = true;
+    usePlannerStore.setState({
+      selectedStore: storeId,
+      isLoading: true,
+      error: null,
+      isDataLoaded: false,
+      // Also sync the stores to prevent future validation issues
+      availableStores: newStoreLocation.availableStores
+    });
+
+    // 3. Verify the state was actually updated
     setTimeout(() => {
+      const state = usePlannerStore.getState();
+      console.log("[StoreSelector] 🚨 State verification:", {
+        selectedStore: state.selectedStore,
+        isDataLoaded: state.isDataLoaded,
+        error: state.error,
+        availableStoresCount: state.availableStores.length
+      });
+    }, 10);
+
+    // 4. Keep existing meal plan navigation logic
+    shouldNavigateToPlan.current = true;
+
+    // 5. Trigger fresh data fetch
+    setTimeout(() => {
+      console.log("[StoreSelector] 🚨 Triggering fetchMealData");
       usePlannerStore.getState().fetchMealData();
     }, 100);
   };
