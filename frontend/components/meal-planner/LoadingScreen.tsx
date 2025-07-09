@@ -25,7 +25,6 @@ const LoadingScreen: React.FC<LoadingScreenProps> = ({ onComplete, onProgress })
   // Main effect for progress bar animation
   useEffect(() => {
     const baseInterval = 30; // milliseconds between updates (smooth but fast)
-    let timer: NodeJS.Timeout;
 
     const updateProgress = () => {
       setProgress(oldProgress => {
@@ -63,8 +62,8 @@ const LoadingScreen: React.FC<LoadingScreenProps> = ({ onComplete, onProgress })
       });
     };
 
-    // Start the timer immediately
-    timer = setInterval(updateProgress, baseInterval);
+    // Start the timer immediately - AFTER declaring updateProgress
+    const timer = setInterval(updateProgress, baseInterval);
 
     return () => clearInterval(timer);
   }, [onComplete, onProgress]);
