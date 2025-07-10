@@ -1,3 +1,4 @@
+// C:\Users\satta\eCo-op\frontend\components\custom-recipes\PricingResultModal.tsx
 'use client';
 
 import React from 'react';
@@ -50,26 +51,46 @@ const PricingResultModal: React.FC<PricingResultModalProps> = ({
   isSavingToFirestore,
   canSaveToFirestore
 }) => {
+  // FIXED: Add proper null/undefined checks
   const formatIngredientDisplay = (ingredient: any): string => {
+    if (!ingredient) return 'Unknown ingredient';
+    
     const { name, quantity, unit } = ingredient;
     
-    if (quantity === 0 || unit === 'to taste' || unit === 'as needed') {
-      return `${name} - ${unit}`;
+    // Add safety checks for undefined/null values
+    if (!name) return 'Unknown ingredient';
+    if (quantity === undefined || quantity === null || quantity === 0 || unit === 'to taste' || unit === 'as needed') {
+      return `${name} - ${unit || 'unknown unit'}`;
     }
     
-    const quantityStr = quantity % 1 === 0 ? quantity.toString() : quantity.toFixed(2).replace(/\.?0+$/, '');
-    return `${name} - ${quantityStr} ${unit}`;
+    // Ensure quantity is a number before calling toFixed
+    const safeQuantity = typeof quantity === 'number' ? quantity : parseFloat(quantity) || 0;
+    const quantityStr = safeQuantity % 1 === 0 ? safeQuantity.toString() : safeQuantity.toFixed(2).replace(/\.?0+$/, '');
+    return `${name} - ${quantityStr} ${unit || 'unit'}`;
   };
 
   const formatDate = (date: string | Date) => {
-    const dateObj = typeof date === 'string' ? new Date(date) : date;
-    return dateObj.toLocaleDateString('en-US', {
-      year: 'numeric',
-      month: 'short',
-      day: 'numeric',
-      hour: '2-digit',
-      minute: '2-digit'
-    });
+    try {
+      const dateObj = typeof date === 'string' ? new Date(date) : date;
+      return dateObj.toLocaleDateString('en-US', {
+        year: 'numeric',
+        month: 'short',
+        day: 'numeric',
+        hour: '2-digit',
+        minute: '2-digit'
+      });
+    } catch (error) {
+      return 'Unknown date';
+    }
+  };
+
+  // FIXED: Add safety check for price values
+  const formatPrice = (price: any): string => {
+    if (price === undefined || price === null || isNaN(price)) {
+      return '$0.00';
+    }
+    const safePrice = typeof price === 'number' ? price : parseFloat(price) || 0;
+    return `${safePrice.toFixed(2)}`;
   };
 
   return (
@@ -110,13 +131,13 @@ const PricingResultModal: React.FC<PricingResultModalProps> = ({
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                     <div className="text-center p-4 bg-green-50 rounded-lg border">
                       <div className="text-2xl font-bold text-green-700">
-                        {pricingResult.pricing.formattedPrice}
+                        {pricingResult.pricing.formattedPrice || formatPrice(pricingResult.pricing.totalPrice)}
                       </div>
                       <div className="text-sm text-green-600">Total Recipe Cost</div>
                     </div>
                     <div className="text-center p-4 bg-blue-50 rounded-lg border">
                       <div className="text-2xl font-bold text-blue-700">
-                        {pricingResult.pricing.formattedPricePerServing}
+                        {pricingResult.pricing.formattedPricePerServing || formatPrice(pricingResult.pricing.pricePerServing)}
                       </div>
                       <div className="text-sm text-blue-600">Cost per Serving</div>
                     </div>
@@ -126,16 +147,16 @@ const PricingResultModal: React.FC<PricingResultModalProps> = ({
                   <div className="mt-4 grid grid-cols-1 md:grid-cols-3 gap-4 text-sm">
                     <div>
                       <span className="font-semibold text-gray-700">Store: </span>
-                      <span className="text-gray-600">{pricingResult.pricing.store}</span>
+                      <span className="text-gray-600">{pricingResult.pricing.store || 'Unknown'}</span>
                     </div>
                     <div>
                       <span className="font-semibold text-gray-700">Location: </span>
-                      <span className="text-gray-600">{pricingResult.pricing.location}</span>
+                      <span className="text-gray-600">{pricingResult.pricing.location || 'Unknown'}</span>
                     </div>
                     <div>
                       <span className="font-semibold text-gray-700">Priced: </span>
                       <span className="text-gray-600">
-                        {formatDate(pricingResult.pricing.pricedAt)}
+                        {pricingResult.pricing.pricedAt ? formatDate(pricingResult.pricing.pricedAt) : 'Unknown'}
                       </span>
                     </div>
                   </div>
@@ -153,10 +174,10 @@ const PricingResultModal: React.FC<PricingResultModalProps> = ({
                       {pricingResult.pricing.breakdown.map((item, index) => (
                         <div key={index} className="flex items-center justify-between p-3 bg-gray-50 rounded-lg">
                           <div className="flex-1">
-                            <div className="font-medium text-gray-800">{item.name}</div>
+                            <div className="font-medium text-gray-800">{item?.name || 'Unknown item'}</div>
                             <div className="text-sm text-gray-600">
-                              {item.quantity} {item.unit}
-                              {item.source && (
+                              {item?.quantity || 0} {item?.unit || 'unit'}
+                              {item?.source && (
                                 <span className="ml-2 text-xs text-gray-500">
                                   from {item.source}
                                 </span>
@@ -165,11 +186,11 @@ const PricingResultModal: React.FC<PricingResultModalProps> = ({
                           </div>
                           <div className="text-right">
                             <div className="font-bold text-green-700">
-                              ${item.price?.toFixed(2) || '0.00'}
+                              {formatPrice(item?.price)}
                             </div>
-                            {item.pricePerUnit && (
+                            {item?.pricePerUnit && (
                               <div className="text-xs text-gray-500">
-                                ${item.pricePerUnit.toFixed(2)}/{item.unit}
+                                {formatPrice(item.pricePerUnit)}/{item?.unit || 'unit'}
                               </div>
                             )}
                           </div>
@@ -192,24 +213,24 @@ const PricingResultModal: React.FC<PricingResultModalProps> = ({
             </Alert>
           )}
 
-          {/* Missing Ingredients */}
+          {/* Auto-Adding Ingredients (Changed from "Missing") */}
           {pricingResult.missingIngredients && pricingResult.missingIngredients.length > 0 && (
             <Card>
               <CardHeader>
                 <CardTitle className="text-lg flex items-center gap-2">
-                  <span>⚠️</span>
-                  Missing Ingredients
+                  <span>🔄</span>
+                  Auto-Adding Ingredients
                 </CardTitle>
               </CardHeader>
               <CardContent>
                 <div className="text-sm text-gray-600 mb-3">
-                  The following ingredients could not be priced and were excluded from the total:
+                  Our system is automatically adding these ingredients to improve pricing accuracy:
                 </div>
                 <div className="space-y-2">
                   {pricingResult.missingIngredients.map((ingredient, index) => (
-                    <div key={index} className="flex items-center gap-2 p-2 bg-yellow-50 rounded border-l-4 border-yellow-400">
-                      <Badge variant="outline" className="bg-yellow-100 text-yellow-800">
-                        Missing
+                    <div key={index} className="flex items-center gap-2 p-2 bg-blue-50 rounded border-l-4 border-blue-400">
+                      <Badge variant="outline" className="bg-blue-100 text-blue-800">
+                        Auto-Adding
                       </Badge>
                       <span className="text-gray-700">
                         {formatIngredientDisplay(ingredient)}
@@ -219,7 +240,7 @@ const PricingResultModal: React.FC<PricingResultModalProps> = ({
                 </div>
                 {pricingResult.canRetry && (
                   <div className="mt-3 text-sm text-gray-600">
-                    💡 You can edit the ingredient names and try pricing again.
+                    💡 You can edit the ingredient names and try pricing again for better matches.
                   </div>
                 )}
               </CardContent>

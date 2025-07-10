@@ -7,10 +7,10 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { Alert, AlertDescription } from '@/components/ui/alert';
+import { Input } from '@/components/ui/input';
+import { Label } from '@/components/ui/label';
+import { Textarea } from '@/components/ui/textarea';
 import PdfViewer from '@/components/PDFviewer';
-
-// Dynamic import for ReactJson
-const ReactJson = React.lazy(() => import('react-json-view'));
 
 interface RecipeIngredient {
   name: string;
@@ -80,7 +80,7 @@ const EnhancedRecipeDisplay: React.FC<EnhancedRecipeDisplayProps> = ({
   canPriceRecipe = false,
   canSaveToFirestore = false
 }) => {
-  const [activeTab, setActiveTab] = useState<'side-by-side' | 'pdf-only' | 'data-only'>('side-by-side');
+  const [activeTab, setActiveTab] = useState<'pdf-only' | 'data-only'>('pdf-only');
 
   const formatIngredientDisplay = (ingredient: RecipeIngredient): string => {
     const { name, quantity, unit } = ingredient;
@@ -110,148 +110,220 @@ const EnhancedRecipeDisplay: React.FC<EnhancedRecipeDisplayProps> = ({
     }
   };
 
-  const coreIngredients = submissionData.recipe?.ingredients.filter(ing => ing.type === 'core' || !ing.type) || [];
-  const optionalIngredients = submissionData.recipe?.ingredients.filter(ing => ing.type && ing.type !== 'core') || [];
-
   // Check if data has been edited
   const hasUnsavedChanges = editedData && JSON.stringify(editedData) !== JSON.stringify(submissionData.recipe);
 
-  // JSON Viewer Component
-  const JsonViewer = ({ data, onEdit }: { data: any; onEdit: (e: any) => void }) => {
-    return (
-      <React.Suspense fallback={
-        <div className="flex items-center justify-center h-96">
-          <div className="w-6 h-6 border-2 border-indigo-400 border-t-transparent rounded-full animate-spin" />
-        </div>
-      }>
-        <ReactJson
-          src={data || {}}
-          onEdit={onEdit}
-          onAdd={onEdit}
-          onDelete={onEdit}
-          theme="rjv-default"
-          displayDataTypes={false}
-          displayObjectSize={false}
-          enableClipboard={false}
-          style={{
-            padding: '12px',
-            backgroundColor: '#ffffff',
-            fontSize: '12px',
-            height: '100%'
-          }}
-        />
-      </React.Suspense>
-    );
+  // Update ingredient in edited data
+  const updateIngredient = (index: number, field: string, value: any) => {
+    if (!editedData?.ingredients) return;
+    
+    const newIngredients = [...editedData.ingredients];
+    newIngredients[index] = {
+      ...newIngredients[index],
+      [field]: value
+    };
+    
+    onEditData({
+      ...editedData,
+      ingredients: newIngredients
+    });
   };
 
-  // User-friendly recipe display
-  const UserFriendlyRecipeDisplay = () => (
+  // Add new ingredient
+  const addIngredient = () => {
+    if (!editedData) return;
+    
+    const newIngredient = {
+      name: '',
+      quantity: 0,
+      unit: '',
+      type: 'core'
+    };
+    
+    onEditData({
+      ...editedData,
+      ingredients: [...(editedData.ingredients || []), newIngredient]
+    });
+  };
+
+  // Remove ingredient
+  const removeIngredient = (index: number) => {
+    if (!editedData?.ingredients) return;
+    
+    const newIngredients = editedData.ingredients.filter((_: any, i: number) => i !== index);
+    onEditData({
+      ...editedData,
+      ingredients: newIngredients
+    });
+  };
+
+  // Update recipe basic info
+  const updateRecipeInfo = (field: string, value: any) => {
+    if (!editedData) return;
+    
+    onEditData({
+      ...editedData,
+      [field]: value
+    });
+  };
+
+  // Editable Recipe Display
+  const EditableRecipeDisplay = () => (
     <div className="space-y-6 p-6">
-      {/* Recipe Header */}
+      {/* Recipe Header - Editable */}
       <div className="border-b pb-4">
-        <h3 className="text-2xl font-bold mb-3 text-gray-800">
-          {submissionData.recipe?.name || 'Untitled Recipe'}
-        </h3>
-        
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-4 text-sm">
+        <div className="space-y-4">
           <div>
-            <span className="font-semibold text-gray-700">Portions: </span>
-            <span className="text-gray-600">{submissionData.recipe?.portions || 'Unknown'}</span>
+            <Label htmlFor="recipe-name" className="text-sm font-medium text-gray-700">Recipe Name</Label>
+            <Input
+              id="recipe-name"
+              value={editedData?.name || ''}
+              onChange={(e) => updateRecipeInfo('name', e.target.value)}
+              placeholder="Enter recipe name"
+              className="mt-1"
+            />
           </div>
           
-          {submissionData.recipe?.currentPrice && (
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             <div>
-              <span className="font-semibold text-gray-700">Total Price: </span>
-              <span className="text-green-600 font-bold text-lg">
-                ${submissionData.recipe.currentPrice.toFixed(2)}
-              </span>
+              <Label htmlFor="portions" className="text-sm font-medium text-gray-700">Portions</Label>
+              <Input
+                id="portions"
+                type="number"
+                value={editedData?.portions || ''}
+                onChange={(e) => updateRecipeInfo('portions', parseInt(e.target.value) || 0)}
+                placeholder="Number of portions"
+                className="mt-1"
+                min="1"
+              />
             </div>
-          )}
+            
+            <div>
+              <Label htmlFor="recipe-url" className="text-sm font-medium text-gray-700">Recipe URL (Optional)</Label>
+              <Input
+                id="recipe-url"
+                value={editedData?.url || ''}
+                onChange={(e) => updateRecipeInfo('url', e.target.value)}
+                placeholder="https://..."
+                className="mt-1"
+              />
+            </div>
+          </div>
 
-          {submissionData.recipe?.pricePerServing && (
-            <div>
-              <span className="font-semibold text-gray-700">Price per Serving: </span>
-              <span className="text-green-600 font-bold">
-                ${submissionData.recipe.pricePerServing.toFixed(2)}
-              </span>
-            </div>
-          )}
-
-          {submissionData.recipe?.lastPriced && (
-            <div>
-              <span className="font-semibold text-gray-700">Last Priced: </span>
-              <span className="text-gray-600">
-                {new Date(submissionData.recipe.lastPriced).toLocaleDateString()}
-              </span>
-            </div>
-          )}
-          
-          {submissionData.recipe?.url && (
-            <div className="md:col-span-2">
-              <span className="font-semibold text-gray-700">Recipe URL: </span>
-              <a 
-                href={submissionData.recipe.url} 
-                target="_blank" 
-                rel="noopener noreferrer" 
-                className="text-blue-600 hover:underline break-all"
-              >
-                {submissionData.recipe.url}
-              </a>
-            </div>
-          )}
-          
-          {submissionData.recipe?.tags && submissionData.recipe.tags.length > 0 && (
-            <div className="md:col-span-2">
-              <span className="font-semibold text-gray-700">Tags: </span>
-              <div className="flex flex-wrap gap-1 mt-1">
-                {submissionData.recipe.tags.map((tag, index) => (
-                  <Badge key={index} variant="outline" className="text-xs">
-                    {tag}
-                  </Badge>
-                ))}
+          {/* Pricing Info (Read-only) */}
+          {editedData?.currentPrice && (
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4 p-4 bg-green-50 rounded-lg">
+              <div>
+                <span className="font-semibold text-gray-700">Total Price: </span>
+                <span className="text-green-600 font-bold text-lg">
+                  ${editedData.currentPrice.toFixed(2)}
+                </span>
               </div>
+              {editedData.pricePerServing && (
+                <div>
+                  <span className="font-semibold text-gray-700">Price per Serving: </span>
+                  <span className="text-green-600 font-bold">
+                    ${editedData.pricePerServing.toFixed(2)}
+                  </span>
+                </div>
+              )}
             </div>
           )}
         </div>
       </div>
 
-      {/* Core Ingredients */}
-      {coreIngredients.length > 0 && (
-        <div>
-          <h4 className="text-xl font-semibold mb-4 text-gray-800">Ingredients</h4>
-          <ul className="space-y-3">
-            {coreIngredients.map((ingredient, index) => (
-              <li key={index} className="flex items-start bg-gray-50 p-3 rounded-lg">
-                <span className="text-blue-600 font-bold mr-3 mt-1">•</span>
-                <span className="flex-1 text-gray-700">{formatIngredientDisplay(ingredient)}</span>
-              </li>
-            ))}
-          </ul>
+      {/* Ingredients - Editable */}
+      <div>
+        <div className="flex items-center justify-between mb-4">
+          <h4 className="text-xl font-semibold text-gray-800">Ingredients</h4>
+          <Button onClick={addIngredient} size="sm" variant="outline">
+            ➕ Add Ingredient
+          </Button>
         </div>
-      )}
-
-      {/* Optional Ingredients */}
-      {optionalIngredients.length > 0 && (
-        <div>
-          <h4 className="text-lg font-semibold mb-3 text-gray-700">Optional Ingredients</h4>
-          <ul className="space-y-2">
-            {optionalIngredients.map((ingredient, index) => (
-              <li key={index} className="flex items-start bg-yellow-50 p-2 rounded">
-                <span className="text-yellow-600 font-bold mr-3 mt-1">○</span>
-                <span className="flex-1 text-gray-600 text-sm">{formatIngredientDisplay(ingredient)}</span>
-              </li>
-            ))}
-          </ul>
+        
+        <div className="space-y-3">
+          {editedData?.ingredients?.map((ingredient: RecipeIngredient, index: number) => (
+            <div key={index} className="grid grid-cols-12 gap-2 items-end p-3 bg-gray-50 rounded-lg">
+              {/* Ingredient Name */}
+              <div className="col-span-5">
+                <Label className="text-xs text-gray-600">Ingredient</Label>
+                <Input
+                  value={ingredient.name}
+                  onChange={(e) => updateIngredient(index, 'name', e.target.value)}
+                  placeholder="Ingredient name"
+                  className="mt-1"
+                />
+              </div>
+              
+              {/* Quantity */}
+              <div className="col-span-2">
+                <Label className="text-xs text-gray-600">Quantity</Label>
+                <Input
+                  type="number"
+                  value={ingredient.quantity}
+                  onChange={(e) => updateIngredient(index, 'quantity', parseFloat(e.target.value) || 0)}
+                  placeholder="0"
+                  className="mt-1"
+                  step="0.1"
+                  min="0"
+                />
+              </div>
+              
+              {/* Unit */}
+              <div className="col-span-3">
+                <Label className="text-xs text-gray-600">Unit</Label>
+                <Input
+                  value={ingredient.unit}
+                  onChange={(e) => updateIngredient(index, 'unit', e.target.value)}
+                  placeholder="cups, tbsp, etc."
+                  className="mt-1"
+                />
+              </div>
+              
+              {/* Remove Button */}
+              <div className="col-span-2">
+                <Button
+                  onClick={() => removeIngredient(index)}
+                  size="sm"
+                  variant="outline"
+                  className="text-red-600 hover:text-red-700 hover:bg-red-50 w-full"
+                >
+                  🗑️
+                </Button>
+              </div>
+            </div>
+          ))}
+          
+          {(!editedData?.ingredients || editedData.ingredients.length === 0) && (
+            <div className="text-center py-8 text-gray-500">
+              <div className="text-4xl mb-2">🥘</div>
+              <p>No ingredients yet</p>
+              <p className="text-sm">Click "Add Ingredient" to get started</p>
+            </div>
+          )}
         </div>
-      )}
+      </div>
 
-      {/* Pricing Breakdown */}
-      {submissionData.recipe?.pricingBreakdown && submissionData.recipe.pricingBreakdown.length > 0 && (
+      {/* Tags - Editable */}
+      <div>
+        <Label htmlFor="tags" className="text-sm font-medium text-gray-700">Tags (comma-separated)</Label>
+        <Textarea
+          id="tags"
+          value={editedData?.tags?.join(', ') || ''}
+          onChange={(e) => updateRecipeInfo('tags', e.target.value.split(',').map((tag: string) => tag.trim()).filter(Boolean))}
+          placeholder="vegetarian, quick, easy, etc."
+          className="mt-1"
+          rows={2}
+        />
+      </div>
+
+      {/* Pricing Breakdown (Read-only) */}
+      {editedData?.pricingBreakdown && editedData.pricingBreakdown.length > 0 && (
         <div>
           <h4 className="text-lg font-semibold mb-3 text-gray-700">Pricing Breakdown</h4>
           <div className="bg-green-50 border border-green-200 rounded-lg p-4">
             <div className="space-y-2">
-              {submissionData.recipe.pricingBreakdown.map((item, index) => (
+              {editedData.pricingBreakdown.map((item: any, index: number) => (
                 <div key={index} className="flex items-center justify-between text-sm">
                   <div className="flex-1">
                     <span className="font-medium">{item.name}</span>
@@ -281,8 +353,8 @@ const EnhancedRecipeDisplay: React.FC<EnhancedRecipeDisplayProps> = ({
         <div className="border-t pt-4">
           <Alert>
             <AlertDescription>
-              <div className="text-sm font-medium text-yellow-800 mb-2">⚠️ Processing Notes:</div>
-              <ul className="text-xs text-yellow-700 space-y-1">
+              <div className="text-sm font-medium text-blue-800 mb-2">ℹ️ Processing Notes:</div>
+              <ul className="text-xs text-blue-700 space-y-1">
                 {submissionData.warnings.map((warning, index) => (
                   <li key={index}>• {warning}</li>
                 ))}
@@ -345,92 +417,18 @@ const EnhancedRecipeDisplay: React.FC<EnhancedRecipeDisplayProps> = ({
       
       <CardContent>
         <Tabs value={activeTab} onValueChange={(value: any) => setActiveTab(value)} className="w-full">
-          <TabsList className="grid w-full grid-cols-3">
-            <TabsTrigger value="side-by-side">📄📋 Side by Side</TabsTrigger>
-            <TabsTrigger value="pdf-only">📄 PDF Info</TabsTrigger>
+          <TabsList className="grid w-full grid-cols-2">
+            <TabsTrigger value="pdf-only">📄 Original PDF</TabsTrigger>
             <TabsTrigger value="data-only" disabled={!submissionData.recipe}>
-              📋 Data Only
+              📋 Edit Recipe Data
             </TabsTrigger>
           </TabsList>
-
-          {/* Side by Side View */}
-          <TabsContent value="side-by-side" className="mt-4">
-            <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 h-[700px]">
-              {/* PDF Viewer */}
-              <PdfViewer
-                file={selectedFile}
-                submissionId={currentSubmissionId}
-                authToken={authToken}
-                backendUrl={backendUrl}
-                filename={submissionData.filename}
-                title="Original PDF"
-                height="100%"
-                showCard={false}
-                className="border rounded bg-white"
-              />
-
-              {/* User-Friendly Recipe Display */}
-              <div className="border rounded overflow-hidden bg-white">
-                <div className="flex items-center justify-between p-3 bg-gray-50 border-b">
-                  <span className="font-medium">Extracted Recipe</span>
-                  <div className="flex gap-2">
-                    <Button 
-                      onClick={onReset} 
-                      variant="outline" 
-                      size="sm" 
-                      disabled={!submissionData.recipe}
-                    >
-                      Reset
-                    </Button>
-                    <Button 
-                      onClick={onSaveChanges} 
-                      variant="outline" 
-                      size="sm"
-                      disabled={!hasUnsavedChanges}
-                    >
-                      Save
-                    </Button>
-                  </div>
-                </div>
-                
-                <div className="h-[650px] overflow-auto">
-                  {submissionData.recipe ? (
-                    <UserFriendlyRecipeDisplay />
-                  ) : submissionData.status === 'processing' ? (
-                    <div className="flex items-center justify-center h-full">
-                      <div className="text-center">
-                        <div className="w-8 h-8 border-4 border-indigo-400 border-t-transparent rounded-full animate-spin mx-auto mb-4" />
-                        <p className="text-sm text-gray-600">AI is extracting recipe data...</p>
-                        {submissionData.processingSteps && (
-                          <div className="mt-4 text-xs text-gray-500 max-w-xs">
-                            {submissionData.processingSteps.slice(-3).map((step, index) => (
-                              <div key={index} className="mb-1">{step}</div>
-                            ))}
-                          </div>
-                        )}
-                      </div>
-                    </div>
-                  ) : (
-                    <div className="flex items-center justify-center h-full">
-                      <div className="text-center text-gray-500">
-                        <div className="text-4xl mb-2">📋</div>
-                        <p className="text-sm">No recipe data available</p>
-                      </div>
-                    </div>
-                  )}
-                </div>
-              </div>
-            </div>
-          </TabsContent>
 
           {/* PDF Only View */}
           <TabsContent value="pdf-only" className="mt-4">
             <div className="h-[700px]">
               <PdfViewer
                 file={selectedFile}
-                submissionId={currentSubmissionId}
-                authToken={authToken}
-                backendUrl={backendUrl}
                 filename={submissionData.filename}
                 title="Original PDF"
                 height="100%"
@@ -440,12 +438,12 @@ const EnhancedRecipeDisplay: React.FC<EnhancedRecipeDisplayProps> = ({
             </div>
           </TabsContent>
 
-          {/* Data Only View (JSON Editor) */}
+          {/* Data Only View (User-Friendly Editor) */}
           <TabsContent value="data-only" className="mt-4">
             <div className="border rounded overflow-hidden bg-white h-[700px]">
               <div className="flex items-center justify-between p-3 bg-gray-50 border-b">
                 <div className="flex items-center gap-2">
-                  <span className="font-medium">Recipe JSON Data (Editable)</span>
+                  <span className="font-medium">Recipe Data (Editable)</span>
                   {hasUnsavedChanges && (
                     <Badge variant="outline" className="bg-orange-100 text-orange-800 text-xs">
                       ✏️ Unsaved
@@ -454,8 +452,8 @@ const EnhancedRecipeDisplay: React.FC<EnhancedRecipeDisplayProps> = ({
                 </div>
                 <div className="flex gap-2">
                   {submissionData.warnings && submissionData.warnings.length > 0 && (
-                    <Badge className="bg-yellow-100 text-yellow-800">
-                      ⚠️ {submissionData.warnings.length} Warning(s)
+                    <Badge className="bg-blue-100 text-blue-800">
+                      ℹ️ {submissionData.warnings.length} Note(s)
                     </Badge>
                   )}
                   <Button 
@@ -477,27 +475,29 @@ const EnhancedRecipeDisplay: React.FC<EnhancedRecipeDisplayProps> = ({
                 </div>
               </div>
               
-              {/* Warnings */}
-              {submissionData.warnings && submissionData.warnings.length > 0 && (
-                <div className="p-3 bg-yellow-50 border-b border-yellow-200">
-                  <div className="text-sm font-medium text-yellow-800 mb-1">⚠️ Processing Warnings:</div>
-                  {submissionData.warnings.map((warning, index) => (
-                    <div key={index} className="text-xs text-yellow-700">• {warning}</div>
-                  ))}
-                </div>
-              )}
-              
               <div className="h-[600px] overflow-auto">
                 {submissionData.recipe ? (
-                  <JsonViewer
-                    data={editedData}
-                    onEdit={(e) => onEditData(e.updated_src)}
-                  />
+                  <EditableRecipeDisplay />
+                ) : submissionData.status === 'processing' ? (
+                  <div className="flex items-center justify-center h-full">
+                    <div className="text-center">
+                      <div className="w-8 h-8 border-4 border-indigo-400 border-t-transparent rounded-full animate-spin mx-auto mb-4" />
+                      <p className="text-sm text-gray-600">AI is extracting recipe data...</p>
+                      {submissionData.processingSteps && (
+                        <div className="mt-4 text-xs text-gray-500 max-w-xs">
+                          {submissionData.processingSteps.slice(-3).map((step, index) => (
+                            <div key={index} className="mb-1">{step}</div>
+                          ))}
+                        </div>
+                      )}
+                    </div>
+                  </div>
                 ) : (
                   <div className="flex items-center justify-center h-full">
                     <div className="text-center text-gray-500">
-                      <div className="text-6xl mb-4">📋</div>
-                      <p>No recipe data available</p>
+                      <div className="text-4xl mb-2">📋</div>
+                      <p className="text-sm">No recipe data available</p>
+                      <p className="text-xs text-gray-400 mt-1">The AI couldn't extract recipe data from this PDF</p>
                     </div>
                   </div>
                 )}
