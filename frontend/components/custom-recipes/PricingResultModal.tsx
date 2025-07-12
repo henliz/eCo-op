@@ -15,6 +15,30 @@ import {
   DialogTitle,
 } from '@/components/ui/dialog';
 
+interface Ingredient {
+  name: string;
+  quantity: number;
+  unit: string;
+  price?: number;
+  pricePerUnit?: number;
+  source?: string;
+}
+
+interface PricingBreakdownItem {
+  name: string;
+  quantity: number;
+  unit: string;
+  price: number;
+  pricePerUnit?: number;
+  source?: string;
+}
+
+interface Recipe {
+  name: string;
+  portions: number;
+  ingredients: Ingredient[];
+}
+
 interface PricingResult {
   success: boolean;
   message: string;
@@ -23,14 +47,14 @@ interface PricingResult {
     pricePerServing: number;
     formattedPrice: string;
     formattedPricePerServing: string;
-    breakdown: any[];
+    breakdown: PricingBreakdownItem[];
     store: string;
     location: string;
     date: string;
     pricedAt: Date;
   };
-  recipe?: any;
-  missingIngredients?: any[];
+  recipe?: Recipe;
+  missingIngredients?: Ingredient[];
   canRetry?: boolean;
 }
 
@@ -52,24 +76,31 @@ const PricingResultModal: React.FC<PricingResultModalProps> = ({
   canSaveToFirestore
 }) => {
   // FIXED: Add proper null/undefined checks
-  const formatIngredientDisplay = (ingredient: any): string => {
+  const formatIngredientDisplay = (ingredient: Ingredient): string => {
     if (!ingredient) return 'Unknown ingredient';
-    
+
     const { name, quantity, unit } = ingredient;
-    
+
     // Add safety checks for undefined/null values
     if (!name) return 'Unknown ingredient';
     if (quantity === undefined || quantity === null || quantity === 0 || unit === 'to taste' || unit === 'as needed') {
       return `${name} - ${unit || 'unknown unit'}`;
     }
-    
-    // Ensure quantity is a number before calling toFixed
-    const safeQuantity = typeof quantity === 'number' ? quantity : parseFloat(quantity) || 0;
+
+    // Ensure quantity is a number before processing
+    let safeQuantity: number;
+    if (typeof quantity === 'number') {
+      safeQuantity = quantity;
+    } else {
+      // Handle any non-number type by converting to 0
+      safeQuantity = 0;
+    }
+
     const quantityStr = safeQuantity % 1 === 0 ? safeQuantity.toString() : safeQuantity.toFixed(2).replace(/\.?0+$/, '');
     return `${name} - ${quantityStr} ${unit || 'unit'}`;
   };
 
-  const formatDate = (date: string | Date) => {
+  const formatDate = (date: string | Date): string => {
     try {
       const dateObj = typeof date === 'string' ? new Date(date) : date;
       return dateObj.toLocaleDateString('en-US', {
@@ -79,18 +110,18 @@ const PricingResultModal: React.FC<PricingResultModalProps> = ({
         hour: '2-digit',
         minute: '2-digit'
       });
-    } catch (error) {
+    } catch {
       return 'Unknown date';
     }
   };
 
   // FIXED: Add safety check for price values
-  const formatPrice = (price: any): string => {
-    if (price === undefined || price === null || isNaN(price)) {
+  const formatPrice = (price: number | string | undefined | null): string => {
+    if (price === undefined || price === null || isNaN(Number(price))) {
       return '$0.00';
     }
-    const safePrice = typeof price === 'number' ? price : parseFloat(price) || 0;
-    return `${safePrice.toFixed(2)}`;
+    const safePrice = typeof price === 'number' ? price : parseFloat(price.toString()) || 0;
+    return `$${safePrice.toFixed(2)}`;
   };
 
   return (
@@ -111,8 +142,8 @@ const PricingResultModal: React.FC<PricingResultModalProps> = ({
             )}
           </DialogTitle>
           <DialogDescription>
-            {pricingResult.success 
-              ? 'Your recipe has been successfully priced!' 
+            {pricingResult.success
+              ? 'Your recipe has been successfully priced!'
               : 'There was an issue pricing your recipe.'
             }
           </DialogDescription>
@@ -281,7 +312,7 @@ const PricingResultModal: React.FC<PricingResultModalProps> = ({
               Close
             </Button>
           </div>
-          
+
           {pricingResult.success && (
             <Button
               onClick={onSubmitToFirestore}
@@ -308,3 +339,4 @@ const PricingResultModal: React.FC<PricingResultModalProps> = ({
 };
 
 export default PricingResultModal;
+

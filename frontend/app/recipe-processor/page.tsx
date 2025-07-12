@@ -14,12 +14,12 @@ import PricingResultModal from '@/components/custom-recipes/PricingResultModal';
 
 export default function RecipeProcessorPage() {
   const { currentUser, accessToken, loading: authLoading } = useAuth();
-  
+
   const {
     // State
     selectedFile,
     setSelectedFile,
-    currentSubmissionId,
+    // currentSubmissionId, // Commented out - not used in this component
     submissionData,
     editedData,
     setEditedData,
@@ -31,7 +31,7 @@ export default function RecipeProcessorPage() {
     showPricingModal,
     setShowPricingModal,
     isSavingToFirestore,
-    
+
     // Actions
     uploadFile,
     saveEditedData,
@@ -41,7 +41,7 @@ export default function RecipeProcessorPage() {
     startNewUpload,
     loadUserRecipes,
     loadUserSubmissions,
-    
+
     // Computed
     canPriceRecipe,
     canSaveToFirestore
@@ -110,7 +110,7 @@ export default function RecipeProcessorPage() {
   return (
     <>
       <Header />
-      
+
       <div className="min-h-screen bg-gradient-to-br from-blue-50 via-indigo-50 to-purple-50 py-8">
         <div className="container mx-auto max-w-7xl px-4">
           {/* Header */}
@@ -119,7 +119,7 @@ export default function RecipeProcessorPage() {
               🍳 Recipe Processor
             </h1>
             <p className="text-lg text-gray-600">
-              {currentUser 
+              {currentUser
                 ? `Welcome ${currentUser.email}! Upload → Edit → Price → Save to Firestore`
                 : 'Please log in to upload and process recipes'
               }
@@ -144,9 +144,6 @@ export default function RecipeProcessorPage() {
                 <EnhancedRecipeDisplay
                   submissionData={submissionData}
                   selectedFile={selectedFile}
-                  currentSubmissionId={currentSubmissionId}
-                  authToken={accessToken || ''}
-                  backendUrl="http://localhost:3001"
                   onSaveChanges={saveEditedData}
                   onPriceRecipe={priceRecipe}
                   onSubmitToFirestore={submitToFirestore}
@@ -167,7 +164,7 @@ export default function RecipeProcessorPage() {
           {/* Status Alert */}
           {status.message && (
             <div className="mt-6">
-              <Alert 
+              <Alert
                 className={`
                   ${status.type === 'loading' ? 'bg-gradient-to-r from-amber-100 to-orange-100 border-amber-200' : ''}
                   ${status.type === 'success' ? 'bg-gradient-to-r from-green-100 to-emerald-100 border-green-200' : ''}
@@ -179,7 +176,7 @@ export default function RecipeProcessorPage() {
                   {status.type === 'loading' && (
                     <div className="w-4 h-4 border-2 border-orange-400 border-t-transparent rounded-full animate-spin" />
                   )}
-                  <span 
+                  <span
                     className={`
                       font-medium
                       ${status.type === 'loading' ? 'text-orange-800' : ''}

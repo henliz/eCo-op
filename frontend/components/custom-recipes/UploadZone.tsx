@@ -5,8 +5,15 @@ import React, { useState, useCallback } from 'react';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 
+interface User {
+  uid: string;
+  email: string | null;
+  displayName: string | null;
+  // Add other user properties as needed
+}
+
 interface UploadZoneProps {
-  currentUser: any;
+  currentUser: User | null;
   selectedFile: File | null;
   showPdfReview: boolean;
   onFileSelect: (file: File | null) => void;
@@ -22,7 +29,7 @@ const UploadZone: React.FC<UploadZoneProps> = ({
 }) => {
   const [dragOver, setDragOver] = useState(false);
 
-  const formatFileSize = (bytes: number) => {
+  const formatFileSize = (bytes: number): string => {
     return (bytes / 1024 / 1024).toFixed(2) + ' MB';
   };
 
@@ -88,20 +95,20 @@ const UploadZone: React.FC<UploadZoneProps> = ({
             className="hidden"
             disabled={!currentUser}
           />
-          
+
           <div className="space-y-3">
             <div className="text-4xl">
               {!currentUser ? '🔒' : '📄'}
             </div>
             <div>
               <div className="font-semibold text-gray-800 mb-1">
-                {!currentUser 
+                {!currentUser
                   ? 'Login required'
                   : 'Drop PDF or click to browse'
                 }
               </div>
               <div className="text-sm text-gray-600">
-                {!currentUser 
+                {!currentUser
                   ? 'Please log in to start processing'
                   : 'Upload → Edit → Price → Save to Firestore'
                 }

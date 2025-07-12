@@ -24,9 +24,9 @@ interface PdfViewerProps {
 
 const PdfViewer: React.FC<PdfViewerProps> = ({
   file,
-  submissionId,
-  authToken,
-  backendUrl = 'http://localhost:3001',
+  // submissionId, // Commented out unused props
+  // authToken,
+  // backendUrl = 'http://localhost:3001',
   filename,
   fileSize,
   title = 'PDF Document',
@@ -48,7 +48,7 @@ const PdfViewer: React.FC<PdfViewerProps> = ({
     setIsClient(true);
   }, []);
 
-  const formatFileSize = (bytes: number) => {
+  const formatFileSize = (bytes: number): string => {
     return (bytes / 1024 / 1024).toFixed(2) + ' MB';
   };
 
@@ -70,7 +70,7 @@ const PdfViewer: React.FC<PdfViewerProps> = ({
         return () => {
           URL.revokeObjectURL(objectUrl);
         };
-      } catch (err) {
+      } catch {
         setPdfError('Failed to load PDF file');
         setLoading(false);
       }
