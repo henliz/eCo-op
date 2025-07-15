@@ -1,12 +1,11 @@
 import { create } from 'zustand';
 
 // Unified preferences interface matching your Firestore structure
+// REMOVED: newFlyerNotifications and weeklyNotifications (now handled by auth service)
 export interface UserPreferences {
   // Core preferences
   maxPricePerPortion: number;
   maxIngredients: number;
-  newFlyerNotifications: boolean;
-  weeklyNotifications: boolean;
 
   // Banned items (stored as arrays in Firestore)
   bannedIngredients: string[];
@@ -83,11 +82,10 @@ interface UserPreferencesState {
 }
 
 // Default preferences matching your Firestore structure
+// REMOVED: notification preferences (now handled by auth service)
 const DEFAULT_PREFERENCES: UserPreferences = {
   maxPricePerPortion: 10,
   maxIngredients: 6,
-  newFlyerNotifications: false,
-  weeklyNotifications: false,
   bannedIngredients: [],
   bannedRecipes: [],
   dietaryRestrictions: [],
@@ -119,11 +117,10 @@ export const useUserPreferencesStore = create<UserPreferencesState>((set, get) =
         console.log('Store: User profile loaded:', userProfile);
 
         // Map backend data to frontend structure
+        // REMOVED: notification fields mapping
         const preferences: UserPreferences = {
           maxPricePerPortion: userProfile.maxPricePerPortion || DEFAULT_PREFERENCES.maxPricePerPortion,
           maxIngredients: userProfile.maxIngredients || DEFAULT_PREFERENCES.maxIngredients,
-          newFlyerNotifications: userProfile.newFlyerNotifications || DEFAULT_PREFERENCES.newFlyerNotifications,
-          weeklyNotifications: userProfile.weeklyNotifications || DEFAULT_PREFERENCES.weeklyNotifications,
           bannedIngredients: userProfile.bannedIngredients || DEFAULT_PREFERENCES.bannedIngredients,
           bannedRecipes: userProfile.bannedRecipes || DEFAULT_PREFERENCES.bannedRecipes,
           dietaryRestrictions: userProfile.dietaryRestrictions || DEFAULT_PREFERENCES.dietaryRestrictions,
@@ -171,11 +168,10 @@ export const useUserPreferencesStore = create<UserPreferencesState>((set, get) =
       console.log('Store: Saving preferences...', state.preferences);
 
       // Single API call to save all preferences
+      // REMOVED: notification fields from save payload
       const response = await makeAPICall('/user-preferences/profile', 'PUT', {
         maxPricePerPortion: state.preferences.maxPricePerPortion,
         maxIngredients: state.preferences.maxIngredients,
-        newFlyerNotifications: state.preferences.newFlyerNotifications,
-        weeklyNotifications: state.preferences.weeklyNotifications,
         bannedIngredients: state.preferences.bannedIngredients,
         bannedRecipes: state.preferences.bannedRecipes,
         dietaryRestrictions: state.preferences.dietaryRestrictions,

@@ -21,13 +21,14 @@ import {
 } from 'lucide-react';
 
 export default function PreferencesPage() {
-  const { currentUser, makeAPICall } = useAuth();
+  const { currentUser, makeAPICall, updateNotificationPreference } = useAuth();
   const preferences = useUserPreferencesStore();
   const loadedRef = useRef(false);
 
   const [activeTab, setActiveTab] = useState('ingredients');
   const [showIngredientBrowser, setShowIngredientBrowser] = useState(false);
   const [showRecipeBrowser, setShowRecipeBrowser] = useState(false);
+  const [notificationLoading, setNotificationLoading] = useState(false);
 
   // Wrap loadPreferences in useCallback to stabilize the function reference
   const loadPreferences = useCallback(async () => {
@@ -67,12 +68,29 @@ export default function PreferencesPage() {
     preferences.updatePreferences({ maxPricePerPortion: value });
   };
 
-  const updateNewFlyerNotifications = (value: boolean) => {
-    preferences.updatePreferences({ newFlyerNotifications: value });
+  // FIXED: Use auth context for notifications instead of user preferences store
+  const updateNewFlyerNotifications = async (value: boolean) => {
+    setNotificationLoading(true);
+    try {
+      await updateNotificationPreference('newFlyerNotifications', value);
+    } catch (error) {
+      console.error('Error updating flyer notifications:', error);
+      alert('Failed to update notification preference. Please try again.');
+    } finally {
+      setNotificationLoading(false);
+    }
   };
 
-  const updateWeeklyNotifications = (value: boolean) => {
-    preferences.updatePreferences({ weeklyNotifications: value });
+  const updateWeeklyNotifications = async (value: boolean) => {
+    setNotificationLoading(true);
+    try {
+      await updateNotificationPreference('weeklyNotifications', value);
+    } catch (error) {
+      console.error('Error updating weekly notifications:', error);
+      alert('Failed to update notification preference. Please try again.');
+    } finally {
+      setNotificationLoading(false);
+    }
   };
 
   const handleRemoveBannedIngredient = (ingredientName: string) => {
@@ -101,8 +119,10 @@ export default function PreferencesPage() {
   const currentPrefs = preferences.preferences;
   const maxIngredients = currentPrefs?.maxIngredients || 6;
   const maxPricePerPortion = currentPrefs?.maxPricePerPortion || 10;
-  const newFlyerNotifications = currentPrefs?.newFlyerNotifications || false;
-  const weeklyNotifications = currentPrefs?.weeklyNotifications || false;
+
+  // FIXED: Get notification preferences from auth context instead of user preferences store
+  const newFlyerNotifications = currentUser?.newFlyerNotifications || false;
+  const weeklyNotifications = currentUser?.weeklyNotifications || false;
 
   const bannedIngredients = preferences.getBannedIngredientsAsItems();
   const bannedRecipes = preferences.getBannedRecipesAsItems();
@@ -353,9 +373,13 @@ export default function PreferencesPage() {
                           type="checkbox"
                           checked={newFlyerNotifications}
                           onChange={(e) => updateNewFlyerNotifications(e.target.checked)}
+                          disabled={notificationLoading}
                           className="sr-only peer"
                         />
-                        <div className="w-11 h-6 bg-gray-200 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-blue-300 rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-blue-600"></div>
+                        <div className="w-11 h-6 bg-gray-200 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-blue-300 rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-blue-600 disabled:opacity-50"></div>
+                        {notificationLoading && (
+                          <RefreshCw className="w-4 h-4 animate-spin text-blue-500 ml-2" />
+                        )}
                       </label>
                     </div>
 
@@ -371,9 +395,13 @@ export default function PreferencesPage() {
                           type="checkbox"
                           checked={weeklyNotifications}
                           onChange={(e) => updateWeeklyNotifications(e.target.checked)}
+                          disabled={notificationLoading}
                           className="sr-only peer"
                         />
-                        <div className="w-11 h-6 bg-gray-200 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-blue-300 rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-blue-600"></div>
+                        <div className="w-11 h-6 bg-gray-200 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-blue-300 rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-blue-600 disabled:opacity-50"></div>
+                        {notificationLoading && (
+                          <RefreshCw className="w-4 h-4 animate-spin text-blue-500 ml-2" />
+                        )}
                       </label>
                     </div>
                   </div>

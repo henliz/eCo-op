@@ -5,15 +5,14 @@ import React, { useEffect, useState } from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
 import { useAuth } from '@/contexts/AuthContext';
-import { Switch } from '@/components/ui/switch';
 
 export default function Header() {
   const [open, setOpen] = useState(false);
   const [mobile, setMob] = useState(false);
   const [showProfileMenu, setShowProfileMenu] = useState(false);
-  const [notificationLoading, setNotificationLoading] = useState(false);
 
-  const { currentUser, userPreferences, logout, updateNotificationPreference } = useAuth();
+  // REMOVED: userPreferences, updateNotificationPreference, notificationLoading
+  const { currentUser, logout } = useAuth();
 
   useEffect(() => {
     if (typeof window === 'undefined') return;
@@ -36,16 +35,7 @@ export default function Header() {
     }
   };
 
-  const handleNotificationToggle = async (enabled: boolean) => {
-    try {
-      setNotificationLoading(true);
-      await updateNotificationPreference(enabled);
-    } catch (error) {
-      console.error('Error updating notifications:', error);
-    } finally {
-      setNotificationLoading(false);
-    }
-  };
+  // REMOVED: handleNotificationToggle function
 
   const getInitials = (name: string) => {
     if (!name) return 'U';
@@ -163,7 +153,7 @@ export default function Header() {
                     {getInitials(currentUser.displayName || currentUser.email)}
                   </button>
 
-                  {/* Modern Profile Dropdown */}
+                  {/* Simplified Profile Dropdown */}
                   {showProfileMenu && (
                       <div className="
                       absolute right-0 top-full mt-3 w-80
@@ -196,41 +186,9 @@ export default function Header() {
                           </div>
                         </div>
 
-                        {/* Notification Toggle */}
-                        <div className="px-6 py-5 border-b border-gray-100">
-                          <div className="flex items-center justify-between">
-                            <div className="flex items-center space-x-3">
-                              <div className="w-8 h-8 rounded-full bg-[#45B08C]/10 flex items-center justify-center">
-                                <span className="text-[#45B08C] text-lg">🔔</span>
-                              </div>
-                              <div className="flex-1">
-                              <span className="text-sm text-gray-800 font-semibold block"
-                                    style={{fontFamily: 'Montserrat, system-ui, sans-serif'}}>
-                                New Flyer Notifications
-                              </span>
-                                <p className="text-xs text-gray-500">
-                                  Get notified about new deals
-                                </p>
-                              </div>
-                            </div>
-                            <Switch
-                                checked={userPreferences?.newFlyerNotifications ?? false}
-                                onCheckedChange={handleNotificationToggle}
-                                disabled={!userPreferences || notificationLoading}
-                                className="data-[state=checked]:bg-[#45B08C]"
-                            />
-                          </div>
+                        {/* REMOVED: Notification Toggle Section */}
 
-                          {notificationLoading && (
-                              <div className="flex items-center gap-2 mt-3 text-xs text-gray-500">
-                                <div
-                                    className="w-3 h-3 border border-[#45B08C] border-t-transparent rounded-full animate-spin"/>
-                                <span>Updating preferences...</span>
-                              </div>
-                          )}
-                        </div>
-
-                        {/* Coming Soon Section */}
+                        {/* Dashboard Link */}
                         <div className="px-6 py-5 border-b border-gray-100">
                           <Link
                               href="/dashboard"
@@ -248,6 +206,29 @@ export default function Header() {
                               </p>
                               <p className="text-xs text-gray-600">
                                 View your meal plans and preferences
+                              </p>
+                            </div>
+                          </Link>
+                        </div>
+
+                        {/* Meal Preferences Link */}
+                        <div className="px-6 py-5 border-b border-gray-100">
+                          <Link
+                              href="/meal-preferences"
+                              onClick={() => setShowProfileMenu(false)}
+                              className="flex items-center gap-3 w-full text-left px-0 py-0 hover:bg-gray-50 transition-all duration-200 rounded-xl transform hover:scale-[1.02] p-3 -m-3"
+                          >
+                            <div
+                                className="w-8 h-8 rounded-full bg-gradient-to-r from-[#45B08C] to-[#FDBA74] flex items-center justify-center">
+                              <span className="text-white text-sm">⚙️</span>
+                            </div>
+                            <div>
+                              <p className="text-sm font-semibold text-gray-800"
+                                 style={{fontFamily: 'Montserrat, system-ui, sans-serif'}}>
+                                Meal Preferences
+                              </p>
+                              <p className="text-xs text-gray-600">
+                                Manage dietary preferences and notifications
                               </p>
                             </div>
                           </Link>
@@ -388,32 +369,9 @@ export default function Header() {
                   </div>
                 </div>
 
-                {/* Mobile Notification Toggle */}
-                <div className="px-6 py-5 border-b border-white/20">
-                  <div className="flex items-center justify-between">
-                    <div className="flex items-center space-x-3">
-                      <div className="w-8 h-8 rounded-full bg-white/20 flex items-center justify-center">
-                        <span className="text-white text-lg">🔔</span>
-                      </div>
-                      <div>
-                        <span className="text-sm text-white font-semibold block">
-                          New Flyer Notifications
-                        </span>
-                        <p className="text-xs text-white/80">
-                          Get notified about deals
-                        </p>
-                      </div>
-                    </div>
-                    <Switch
-                      checked={userPreferences?.newFlyerNotifications ?? false}
-                      onCheckedChange={handleNotificationToggle}
-                      disabled={!userPreferences || notificationLoading}
-                      className="data-[state=checked]:bg-white/30"
-                    />
-                  </div>
-                </div>
+                {/* REMOVED: Mobile Notification Toggle */}
 
-                {/* Mobile Coming Soon */}
+                {/* Mobile Dashboard Link */}
                 <Link
                   href="/dashboard"
                   onClick={() => setOpen(false)}
@@ -429,6 +387,27 @@ export default function Header() {
                       </p>
                       <p className="text-xs text-white/80">
                         View your meal plans and preferences
+                      </p>
+                    </div>
+                  </div>
+                </Link>
+
+                {/* Mobile Preferences Link */}
+                <Link
+                  href="/meal-preferences"
+                  onClick={() => setOpen(false)}
+                  className="block px-6 py-5 border-b border-white/20 bg-white/5 hover:bg-white/10 transition-all duration-200"
+                >
+                  <div className="flex items-center gap-3">
+                    <div className="w-8 h-8 rounded-full bg-[#45B08C] flex items-center justify-center">
+                      <span className="text-white text-sm">⚙️</span>
+                    </div>
+                    <div>
+                      <p className="text-sm font-semibold text-white">
+                        Meal Preferences
+                      </p>
+                      <p className="text-xs text-white/80">
+                        Manage settings and notifications
                       </p>
                     </div>
                   </div>
