@@ -155,8 +155,8 @@ export default function RecipeProcessorPage() {
                   onEditData={setEditedData}
                   isPricing={isPricing}
                   isSavingToFirestore={isSavingToFirestore}
-                  canPriceRecipe={canPriceRecipe}
-                  canSaveToFirestore={canSaveToFirestore}
+                  canPriceRecipe={canPriceRecipe ?? undefined}
+                  canSaveToFirestore={canSaveToFirestore ?? undefined}
                 />
               ) : (
                 <WelcomeScreen currentUser={currentUser} />
@@ -203,7 +203,7 @@ export default function RecipeProcessorPage() {
               pricingResult={pricingResult}
               onSubmitToFirestore={submitToFirestore}
               isSavingToFirestore={isSavingToFirestore}
-              canSaveToFirestore={canSaveToFirestore}
+              canSaveToFirestore={canSaveToFirestore ?? false}
             />
           )}
         </div>
