@@ -125,7 +125,7 @@ export const useRecipeProcessor = (
     }
   }, [accessToken, backendUrl]);
 
-  // NEW: Parse PDF using Claude Recipe Parser Service
+  // Parse PDF using Claude Recipe Parser Service
   const uploadFile = useCallback(async (file?: File) => {
     const fileToUpload = file || selectedFile;
     if (!fileToUpload || !accessToken || !currentUser) return;
@@ -211,7 +211,7 @@ export const useRecipeProcessor = (
     }
   }, [editedData, submissionData]);
 
-  // NEW: Price recipe using Recipe Price Fixer Service
+  // FIXED: Price recipe using Recipe Price Fixer Service
   const priceRecipe = useCallback(async () => {
     if (!editedData || !accessToken) return;
 
@@ -219,8 +219,8 @@ export const useRecipeProcessor = (
     setStatus({ type: 'loading', message: '💰 Pricing recipe and fixing any issues...' });
 
     try {
-      // Call Recipe Price Fixer Service
-      const response = await fetch(`${backendUrl}/api/fix-price`, {
+      // Call Recipe Price Fixer Service - remove /api prefix
+      const response = await fetch(`${backendUrl}/fix-price`, {
         method: 'POST',
         headers: {
           'Authorization': `Bearer ${accessToken}`,
@@ -289,22 +289,21 @@ export const useRecipeProcessor = (
     }
   }, [editedData, accessToken, backendUrl, submissionData]);
 
-  // Submit to Firestore
+  // FIXED: Submit to Firestore using your existing endpoint
   const submitToFirestore = useCallback(async () => {
-    if (!editedData || !accessToken) return;
+    if (!submissionData || !currentSubmissionId || !accessToken) return;
 
     setIsSavingToFirestore(true);
     setStatus({ type: 'loading', message: '🔥 Saving to Firestore...' });
 
     try {
-      // Save recipe to your existing Firestore endpoint
-      const response = await fetch(`${backendUrl}/recipes`, {
+      // Use your existing submission endpoint
+      const response = await fetch(`${backendUrl}/recipe-processing/submission/${currentSubmissionId}/submit-to-firestore`, {
         method: 'POST',
         headers: {
           'Authorization': `Bearer ${accessToken}`,
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify(editedData),
       });
 
       const result = await response.json();
@@ -314,6 +313,14 @@ export const useRecipeProcessor = (
           type: 'success', 
           message: '✅ Recipe saved to Firestore successfully!' 
         });
+        
+        // Update submission data
+        if (submissionData) {
+          setSubmissionData({
+            ...submissionData,
+            updatedAt: new Date().toISOString()
+          });
+        }
         
         loadUserRecipes();
         loadUserSubmissions();
@@ -332,7 +339,7 @@ export const useRecipeProcessor = (
     } finally {
       setIsSavingToFirestore(false);
     }
-  }, [editedData, accessToken, backendUrl, loadUserRecipes, loadUserSubmissions]);
+  }, [submissionData, currentSubmissionId, accessToken, backendUrl, loadUserRecipes, loadUserSubmissions]);
 
   // Utility functions
   const resetToOriginal = useCallback(() => {
