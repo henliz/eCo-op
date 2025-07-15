@@ -12,6 +12,8 @@ import { MealPlanScreen } from '@/components/meal-planner/MealPlanScreen';
 import { GroceryScreen } from '@/components/meal-planner/GroceryScreen';
 import { CookScreen } from '@/components/meal-planner/CookScreen';
 import { usePlannerStore } from '@/components/meal-planner/usePlannerStore';
+import { useStoreLocationStore } from '@/stores/useStoreLocationStore';
+
 import LoadingScreen from '@/components/meal-planner/LoadingScreen';
 
 // Add these imports for testing
@@ -165,7 +167,16 @@ export default function MealPlannerPage() {
   }, [makeAPICall]);
 
   const [view, setView] = useState<View>('store');
-  const { selectedStore, isDataLoaded, isLoading } = usePlannerStore();
+
+  //const { selectedStore, isDataLoaded, isLoading } = usePlannerStore();
+
+  const newStoreLocation = useStoreLocationStore();
+  const oldPlannerStore = usePlannerStore();
+  const selectedStore = newStoreLocation.selectedStore || oldPlannerStore.selectedStore;
+  const isDataLoaded = oldPlannerStore.isDataLoaded; // Keep using old store for meal data
+  const isLoading = newStoreLocation.isLoading || oldPlannerStore.isLoading;
+
+
   const [showLoading, setShowLoading] = useState(false);
   const hasTransitionedToPlan = useRef(false);
 

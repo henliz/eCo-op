@@ -1,372 +1,405 @@
-// frontend/app/meal-preferences/page.tsx
 'use client';
 
-import React, { useState, useEffect, useCallback } from 'react';
+import { useState, useEffect, useCallback, useRef } from 'react';
 import { useAuth } from '@/contexts/AuthContext';
+import { useUserPreferencesStore } from '@/stores/useUserPreferencesStore';
 import Header from '@/components/layout/Header';
+import { IngredientBrowser } from '@/components/user-preferences/IngredientBrowser';
+import { RecipeBrowser } from '@/components/user-preferences/RecipeBrowser';
+import {
+  Settings,
+  ChefHat,
+  AlertCircle,
+  Bell,
+  DollarSign,
+  Hash,
+  X,
+  Plus,
+  Filter,
+  Save,
+  RefreshCw
+} from 'lucide-react';
 
-interface UserMealPreferences {
-  userId: string;
-  maxIngredients: number;
-  maxPricePerPortion: number;
-  bannedIngredients: string[];
-  bannedRecipes: string[];
-  createdAt?: Date;
-  updatedAt?: Date;
-}
-
-const DEFAULT_PREFERENCES: Omit<UserMealPreferences, 'userId'> = {
-  maxIngredients: 20,
-  maxPricePerPortion: 10.00,
-  bannedIngredients: [],
-  bannedRecipes: []
-};
-
-export default function MealPreferencesPage() {
+export default function PreferencesPage() {
   const { currentUser, makeAPICall } = useAuth();
-  const [preferences, setPreferences] = useState<Omit<UserMealPreferences, 'userId'>>(DEFAULT_PREFERENCES);
-  const [loading, setLoading] = useState(true);
-  const [saving, setSaving] = useState(false);
-  const [message, setMessage] = useState<{ type: 'success' | 'error' | 'info', text: string } | null>(null);
+  const preferences = useUserPreferencesStore();
+  const loadedRef = useRef(false);
 
-  // Form state for banned ingredients input
-  const [newBannedIngredient, setNewBannedIngredient] = useState('');
-  const [newBannedRecipe, setNewBannedRecipe] = useState('');
+  const [activeTab, setActiveTab] = useState('ingredients');
+  const [showIngredientBrowser, setShowIngredientBrowser] = useState(false);
+  const [showRecipeBrowser, setShowRecipeBrowser] = useState(false);
 
+  // Wrap loadPreferences in useCallback to stabilize the function reference
   const loadPreferences = useCallback(async () => {
-    try {
-      setLoading(true);
-      const response = await makeAPICall('/meal-plans/preferences', 'GET', null, true);
-
-      if (response.success && response.data) {
-        const data = response.data;
-        setPreferences({
-          maxIngredients: data.maxIngredients,
-          maxPricePerPortion: data.maxPricePerPortion,
-          bannedIngredients: data.bannedIngredients || [],
-          bannedRecipes: data.bannedRecipes || []
-        });
-      } else {
-        // No preferences found or unsuccessful response, use defaults
-        setPreferences(DEFAULT_PREFERENCES);
-        setMessage({ type: 'info', text: 'Please set your meal preferences' });
+    if (currentUser && !loadedRef.current && !preferences.preferences) {
+      try {
+        loadedRef.current = true;
+        await preferences.loadPreferences(makeAPICall);
+      } catch (error) {
+        console.error('Error loading preferences:', error);
+        loadedRef.current = false; // Reset on error so we can try again
       }
-    } catch (error) {
-      console.error('Error loading preferences:', error);
-      // Check if it's a 404 error (no preferences exist yet)
-      if (error instanceof Error && error.message && error.message.includes('404')) {
-        setPreferences(DEFAULT_PREFERENCES);
-        setMessage({ type: 'info', text: 'Please set your meal preferences' });
-      } else {
-        setMessage({ type: 'error', text: 'Failed to load preferences. Using defaults.' });
-        setPreferences(DEFAULT_PREFERENCES);
-      }
-    } finally {
-      setLoading(false);
     }
-  }, [makeAPICall]);
+  }, [currentUser, makeAPICall, preferences]);
 
+  // Load preferences when user is available
   useEffect(() => {
-    if (currentUser) {
-      loadPreferences();
-    }
-  }, [currentUser, loadPreferences]);
+    loadPreferences();
+  }, [loadPreferences]);
 
-  const savePreferences = async () => {
+  // Handle saving preferences
+  const handleSavePreferences = async () => {
     try {
-      setSaving(true);
-      setMessage(null);
-
-      const response = await makeAPICall('/meal-plans/preferences', 'PUT', preferences, true);
-
-      if (response.success && response.data) {
-        const savedData = response.data;
-        setPreferences({
-          maxIngredients: savedData.maxIngredients,
-          maxPricePerPortion: savedData.maxPricePerPortion,
-          bannedIngredients: savedData.bannedIngredients || [],
-          bannedRecipes: savedData.bannedRecipes || []
-        });
-        setMessage({ type: 'success', text: 'Preferences saved successfully!' });
-      } else {
-        throw new Error('Failed to save preferences');
-      }
+      await preferences.savePreferences(makeAPICall);
+      alert('Preferences saved successfully!');
     } catch (error) {
       console.error('Error saving preferences:', error);
-      setMessage({ type: 'error', text: 'Failed to save preferences. Please try again.' });
-    } finally {
-      setSaving(false);
+      alert('Failed to save preferences. Please try again.');
     }
   };
 
-  const deletePreferences = async () => {
-    if (!confirm('Are you sure you want to reset all preferences to defaults?')) {
-      return;
-    }
-
-    try {
-      setSaving(true);
-      setMessage(null);
-
-      const response = await makeAPICall('/meal-plans/preferences', 'DELETE', null, true);
-
-      if (response.success) {
-        setPreferences(DEFAULT_PREFERENCES);
-        setMessage({ type: 'success', text: 'Preferences reset to defaults!' });
-      } else {
-        throw new Error('Failed to delete preferences');
-      }
-    } catch (error) {
-      console.error('Error deleting preferences:', error);
-      setMessage({ type: 'error', text: 'Failed to reset preferences. Please try again.' });
-    } finally {
-      setSaving(false);
-    }
+  // Handle preference updates
+  const updateMaxIngredients = (value: number) => {
+    preferences.updatePreferences({ maxIngredients: value });
   };
 
-  const addBannedIngredient = () => {
-    const ingredient = newBannedIngredient.trim().toLowerCase();
-    if (ingredient && !preferences.bannedIngredients.includes(ingredient)) {
-      setPreferences(prev => ({
-        ...prev,
-        bannedIngredients: [...prev.bannedIngredients, ingredient]
-      }));
-      setNewBannedIngredient('');
-    }
+  const updateMaxPricePerPortion = (value: number) => {
+    preferences.updatePreferences({ maxPricePerPortion: value });
   };
 
-  const removeBannedIngredient = (ingredient: string) => {
-    setPreferences(prev => ({
-      ...prev,
-      bannedIngredients: prev.bannedIngredients.filter(item => item !== ingredient)
-    }));
+  const updateNewFlyerNotifications = (value: boolean) => {
+    preferences.updatePreferences({ newFlyerNotifications: value });
   };
 
-  const addBannedRecipe = () => {
-    const recipe = newBannedRecipe.trim();
-    if (recipe && !preferences.bannedRecipes.includes(recipe)) {
-      setPreferences(prev => ({
-        ...prev,
-        bannedRecipes: [...prev.bannedRecipes, recipe]
-      }));
-      setNewBannedRecipe('');
-    }
+  const updateWeeklyNotifications = (value: boolean) => {
+    preferences.updatePreferences({ weeklyNotifications: value });
   };
 
-  const removeBannedRecipe = (recipe: string) => {
-    setPreferences(prev => ({
-      ...prev,
-      bannedRecipes: prev.bannedRecipes.filter(item => item !== recipe)
-    }));
+  const handleRemoveBannedIngredient = (ingredientName: string) => {
+    preferences.removeBannedIngredient(ingredientName);
   };
 
-  if (!currentUser) {
+  const handleRemoveBannedRecipe = (recipeId: string) => {
+    preferences.removeBannedRecipe(recipeId);
+  };
+
+  if (preferences.loading) {
     return (
       <div className="min-h-screen bg-gray-50">
         <Header />
-        <div className="max-w-4xl mx-auto py-12 px-4">
-          <div className="text-center">
-            <h1 className="text-2xl font-bold text-gray-900 mb-4">Meal Preferences</h1>
-            <p className="text-gray-600">Please log in to manage your meal preferences.</p>
+        <div className="container mx-auto px-4 py-8">
+          <div className="flex items-center justify-center py-12">
+            <RefreshCw className="w-6 h-6 animate-spin text-blue-500 mr-2" />
+            <span className="text-gray-600">Loading your preferences...</span>
           </div>
         </div>
       </div>
     );
   }
 
-  if (loading) {
-    return (
-      <div className="min-h-screen bg-gray-50">
-        <Header />
-        <div className="max-w-4xl mx-auto py-12 px-4">
-          <div className="text-center">
-            <h1 className="text-2xl font-bold text-gray-900 mb-4">Meal Preferences</h1>
-            <p className="text-gray-600">Loading your preferences...</p>
-          </div>
-        </div>
-      </div>
-    );
-  }
+  // Get current preferences values with defaults
+  const currentPrefs = preferences.preferences;
+  const maxIngredients = currentPrefs?.maxIngredients || 6;
+  const maxPricePerPortion = currentPrefs?.maxPricePerPortion || 10;
+  const newFlyerNotifications = currentPrefs?.newFlyerNotifications || false;
+  const weeklyNotifications = currentPrefs?.weeklyNotifications || false;
+
+  const bannedIngredients = preferences.getBannedIngredientsAsItems();
+  const bannedRecipes = preferences.getBannedRecipesAsItems();
 
   return (
     <div className="min-h-screen bg-gray-50">
       <Header />
-      <div className="max-w-4xl mx-auto py-12 px-4">
-        <div className="bg-white rounded-lg shadow-sm p-6">
-          <h1 className="text-2xl font-bold text-gray-900 mb-6">Meal Preferences</h1>
 
-          {message && (
-            <div className={`mb-6 p-4 rounded-md ${
-              message.type === 'success' 
-                ? 'bg-green-50 text-green-800 border border-green-200' 
-                : message.type === 'error'
-                ? 'bg-red-50 text-red-800 border border-red-200'
-                : 'bg-blue-50 text-blue-800 border border-blue-200'
-            }`}>
-              {message.text}
+      <div className="container mx-auto px-4 py-8">
+        {/* Header */}
+        <div className="mb-8">
+          <div className="flex justify-between items-start">
+            <div>
+              <h1 className="text-3xl font-bold text-gray-900 mb-2">Food Preferences</h1>
+              <p className="text-gray-600">
+                Customize your meal planning experience by managing your dietary preferences and restrictions.
+              </p>
+            </div>
+
+            {/* Save button with status */}
+            <div className="flex items-center gap-4">
+              {preferences.hasUnsavedChanges && (
+                <span className="text-sm text-orange-600 font-medium">
+                  Unsaved changes
+                </span>
+              )}
+              <button
+                onClick={handleSavePreferences}
+                disabled={preferences.saving || !preferences.hasUnsavedChanges}
+                className="px-6 py-3 bg-blue-600 text-white rounded-lg hover:bg-blue-700 disabled:opacity-50 disabled:cursor-not-allowed flex items-center gap-2"
+              >
+                {preferences.saving ? (
+                  <>
+                    <RefreshCw className="w-4 h-4 animate-spin" />
+                    Saving...
+                  </>
+                ) : (
+                  <>
+                    <Save className="w-4 h-4" />
+                    Save All Preferences
+                  </>
+                )}
+              </button>
+            </div>
+          </div>
+
+          {preferences.error && (
+            <div className="mt-4 p-3 bg-red-50 border border-red-200 rounded-lg">
+              <p className="text-red-800 text-sm">{preferences.error}</p>
             </div>
           )}
+        </div>
 
-          <div className="space-y-8">
-            {/* Maximum Ingredients */}
-            <div>
-              <label className="block text-sm font-medium text-gray-700 mb-2">
-                Maximum Ingredients per Recipe
-              </label>
-              <input
-                type="number"
-                min="1"
-                max="50"
-                value={preferences.maxIngredients}
-                onChange={(e) => setPreferences(prev => ({
-                  ...prev,
-                  maxIngredients: Math.max(1, parseInt(e.target.value) || 1)
-                }))}
-                className="w-32 px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-              />
-              <p className="text-sm text-gray-500 mt-1">
-                Recipes with more than this many ingredients will be filtered out
-              </p>
-            </div>
-
-            {/* Maximum Price Per Portion */}
-            <div>
-              <label className="block text-sm font-medium text-gray-700 mb-2">
-                Maximum Price per Serving (CAD)
-              </label>
-              <div className="flex items-center">
-                <span className="text-gray-500 mr-1">$</span>
-                <input
-                  type="number"
-                  min="0.50"
-                  max="50.00"
-                  step="0.25"
-                  value={preferences.maxPricePerPortion}
-                  onChange={(e) => setPreferences(prev => ({
-                    ...prev,
-                    maxPricePerPortion: Math.max(0.5, parseFloat(e.target.value) || 0.5)
-                  }))}
-                  className="w-32 px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-                />
-              </div>
-              <p className="text-sm text-gray-500 mt-1">
-                Recipes costing more than this per serving will be filtered out
-              </p>
-            </div>
-
-            {/* Banned Ingredients */}
-            <div>
-              <label className="block text-sm font-medium text-gray-700 mb-2">
-                Banned Ingredients
-              </label>
-              <div className="flex gap-2 mb-2">
-                <input
-                  type="text"
-                  value={newBannedIngredient}
-                  onChange={(e) => setNewBannedIngredient(e.target.value)}
-                  onKeyPress={(e) => e.key === 'Enter' && addBannedIngredient()}
-                  placeholder="Enter ingredient name..."
-                  className="flex-1 px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-                />
+        {/* Tabs */}
+        <div className="mb-8">
+          <div className="border-b border-gray-200">
+            <nav className="-mb-px flex space-x-8">
+              {[
+                { id: 'ingredients', label: 'Ingredients', icon: Filter },
+                { id: 'recipes', label: 'Recipes', icon: ChefHat },
+                { id: 'settings', label: 'Settings', icon: Settings }
+              ].map(tab => (
                 <button
-                  onClick={addBannedIngredient}
-                  disabled={!newBannedIngredient.trim()}
-                  className="px-4 py-2 bg-red-500 text-white rounded-md hover:bg-red-600 disabled:bg-gray-300 disabled:cursor-not-allowed"
+                  key={tab.id}
+                  onClick={() => setActiveTab(tab.id)}
+                  className={`py-2 px-1 border-b-2 font-medium text-sm flex items-center gap-2 ${
+                    activeTab === tab.id
+                      ? 'border-blue-500 text-blue-600'
+                      : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300'
+                  }`}
                 >
-                  Add
+                  <tab.icon className="w-4 h-4" />
+                  {tab.label}
                 </button>
-              </div>
-              {preferences.bannedIngredients.length > 0 && (
-                <div className="flex flex-wrap gap-2">
-                  {preferences.bannedIngredients.map((ingredient, index) => (
-                    <span
-                      key={index}
-                      className="inline-flex items-center px-3 py-1 bg-red-100 text-red-800 rounded-full text-sm"
-                    >
-                      {ingredient}
-                      <button
-                        onClick={() => removeBannedIngredient(ingredient)}
-                        className="ml-2 text-red-600 hover:text-red-800"
-                      >
-                        ×
-                      </button>
-                    </span>
-                  ))}
+              ))}
+            </nav>
+          </div>
+        </div>
+
+        {/* Tab Content */}
+        <div className="bg-white rounded-lg shadow-sm">
+          {activeTab === 'ingredients' && (
+            <div className="p-6">
+              <div className="flex justify-between items-center mb-6">
+                <div>
+                  <h2 className="text-xl font-semibold text-gray-900">Banned Ingredients</h2>
+                  <p className="text-gray-600">Recipes containing these ingredients will be excluded from your meal plans.</p>
                 </div>
-              )}
-              <p className="text-sm text-gray-500 mt-1">
-                Recipes containing any of these ingredients will be filtered out
-              </p>
-            </div>
-
-            {/* Banned Recipes */}
-            <div>
-              <label className="block text-sm font-medium text-gray-700 mb-2">
-                Banned Recipes
-              </label>
-              <div className="flex gap-2 mb-2">
-                <input
-                  type="text"
-                  value={newBannedRecipe}
-                  onChange={(e) => setNewBannedRecipe(e.target.value)}
-                  onKeyPress={(e) => e.key === 'Enter' && addBannedRecipe()}
-                  placeholder="Enter recipe ID or URL..."
-                  className="flex-1 px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-                />
                 <button
-                  onClick={addBannedRecipe}
-                  disabled={!newBannedRecipe.trim()}
-                  className="px-4 py-2 bg-red-500 text-white rounded-md hover:bg-red-600 disabled:bg-gray-300 disabled:cursor-not-allowed"
+                  onClick={() => setShowIngredientBrowser(true)}
+                  className="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 flex items-center gap-2"
                 >
-                  Add
+                  <Plus className="w-4 h-4" />
+                  Browse Ingredients
                 </button>
               </div>
-              {preferences.bannedRecipes.length > 0 && (
-                <div className="space-y-2">
-                  {preferences.bannedRecipes.map((recipe, index) => (
+
+              {bannedIngredients.length === 0 ? (
+                <div className="text-center py-8">
+                  <AlertCircle className="w-12 h-12 text-gray-400 mx-auto mb-4" />
+                  <p className="text-gray-500">No banned ingredients yet</p>
+                  <p className="text-sm text-gray-400 mt-1">
+                    Click &quot;Browse Ingredients&quot; to add ingredients you want to avoid
+                  </p>
+                </div>
+              ) : (
+                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3">
+                  {bannedIngredients.map(item => (
                     <div
-                      key={index}
-                      className="flex items-center justify-between p-2 bg-red-50 border border-red-200 rounded"
+                      key={item.id}
+                      className="flex items-center justify-between p-3 bg-red-50 border border-red-200 rounded-lg"
                     >
-                      <span className="text-sm text-red-800 truncate flex-1 mr-2">
-                        {recipe}
-                      </span>
+                      <div>
+                        <span className="text-red-800 font-medium">{item.name}</span>
+                        {item.category && (
+                          <span className="text-xs text-red-600 ml-2">({item.category})</span>
+                        )}
+                      </div>
                       <button
-                        onClick={() => removeBannedRecipe(recipe)}
-                        className="text-red-600 hover:text-red-800 flex-shrink-0"
+                        onClick={() => handleRemoveBannedIngredient(item.name)}
+                        className="p-1 text-red-600 hover:bg-red-100 rounded"
                       >
-                        ×
+                        <X className="w-4 h-4" />
                       </button>
                     </div>
                   ))}
                 </div>
               )}
-              <p className="text-sm text-gray-500 mt-1">
-                These specific recipes will be excluded from meal plans
-              </p>
             </div>
-          </div>
+          )}
 
-          {/* Action Buttons */}
-          <div className="flex justify-between pt-8 border-t border-gray-200 mt-8">
-            <button
-              onClick={deletePreferences}
-              disabled={saving}
-              className="px-4 py-2 text-gray-600 border border-gray-300 rounded-md hover:bg-gray-50 disabled:opacity-50 disabled:cursor-not-allowed"
-            >
-              Reset to Defaults
-            </button>
+          {activeTab === 'recipes' && (
+            <div className="p-6">
+              <div className="flex justify-between items-center mb-6">
+                <div>
+                  <h2 className="text-xl font-semibold text-gray-900">Banned Recipes</h2>
+                  <p className="text-gray-600">These recipes will not appear in your meal plans.</p>
+                </div>
+                <button
+                  onClick={() => setShowRecipeBrowser(true)}
+                  className="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 flex items-center gap-2"
+                >
+                  <Plus className="w-4 h-4" />
+                  Browse Recipes
+                </button>
+              </div>
 
-            <button
-              onClick={savePreferences}
-              disabled={saving}
-              className="px-6 py-2 bg-blue-500 text-white rounded-md hover:bg-blue-600 disabled:opacity-50 disabled:cursor-not-allowed"
-            >
-              {saving ? 'Saving...' : 'Save Preferences'}
-            </button>
-          </div>
+              {bannedRecipes.length === 0 ? (
+                <div className="text-center py-8">
+                  <ChefHat className="w-12 h-12 text-gray-400 mx-auto mb-4" />
+                  <p className="text-gray-500">No banned recipes yet</p>
+                  <p className="text-sm text-gray-400 mt-1">
+                    Click &quot;Browse Recipes&quot; to add recipes you want to avoid
+                  </p>
+                </div>
+              ) : (
+                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3">
+                  {bannedRecipes.map(item => (
+                    <div
+                      key={item.id}
+                      className="flex items-center justify-between p-3 bg-red-50 border border-red-200 rounded-lg"
+                    >
+                      <span className="text-red-800 font-medium">{item.name}</span>
+                      <button
+                        onClick={() => handleRemoveBannedRecipe(item.id)}
+                        className="p-1 text-red-600 hover:bg-red-100 rounded"
+                      >
+                        <X className="w-4 h-4" />
+                      </button>
+                    </div>
+                  ))}
+                </div>
+              )}
+            </div>
+          )}
+
+          {activeTab === 'settings' && (
+            <div className="p-6">
+              <h2 className="text-xl font-semibold text-gray-900 mb-6">Meal Planning Settings</h2>
+
+              <div className="space-y-8">
+                {/* Recipe Complexity */}
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 mb-3">
+                    <Hash className="w-4 h-4 inline mr-1" />
+                    Maximum Ingredients per Recipe
+                  </label>
+                  <div className="flex items-center space-x-4">
+                    <input
+                      type="range"
+                      min="3"
+                      max="15"
+                      value={maxIngredients}
+                      onChange={(e) => updateMaxIngredients(Number(e.target.value))}
+                      className="flex-1"
+                    />
+                    <span className="text-sm font-medium text-gray-900 w-8">
+                      {maxIngredients}
+                    </span>
+                  </div>
+                  <p className="text-sm text-gray-500 mt-1">
+                    Recipes with more than {maxIngredients} ingredients will be excluded
+                  </p>
+                </div>
+
+                {/* Price Range */}
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 mb-3">
+                    <DollarSign className="w-4 h-4 inline mr-1" />
+                    Maximum Price per Portion
+                  </label>
+                  <div className="flex items-center space-x-4">
+                    <input
+                      type="range"
+                      min="2"
+                      max="25"
+                      step="0.5"
+                      value={maxPricePerPortion}
+                      onChange={(e) => updateMaxPricePerPortion(Number(e.target.value))}
+                      className="flex-1"
+                    />
+                    <span className="text-sm font-medium text-gray-900 w-12">
+                      ${maxPricePerPortion}
+                    </span>
+                  </div>
+                  <p className="text-sm text-gray-500 mt-1">
+                    Recipes costing more than ${maxPricePerPortion} per portion will be excluded
+                  </p>
+                </div>
+
+                {/* Notifications */}
+                <div>
+                  <h3 className="text-lg font-medium text-gray-900 mb-4">
+                    <Bell className="w-5 h-5 inline mr-2" />
+                    Notifications
+                  </h3>
+
+                  <div className="space-y-4">
+                    <div className="flex items-center justify-between p-4 bg-gray-50 rounded-lg">
+                      <div>
+                        <p className="font-medium text-gray-900">New Flyer Notifications</p>
+                        <p className="text-sm text-gray-600">
+                          Get notified when new store flyers are available
+                        </p>
+                      </div>
+                      <label className="relative inline-flex items-center cursor-pointer">
+                        <input
+                          type="checkbox"
+                          checked={newFlyerNotifications}
+                          onChange={(e) => updateNewFlyerNotifications(e.target.checked)}
+                          className="sr-only peer"
+                        />
+                        <div className="w-11 h-6 bg-gray-200 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-blue-300 rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-blue-600"></div>
+                      </label>
+                    </div>
+
+                    <div className="flex items-center justify-between p-4 bg-gray-50 rounded-lg">
+                      <div>
+                        <p className="font-medium text-gray-900">Weekly Meal Planning</p>
+                        <p className="text-sm text-gray-600">
+                          Get weekly reminders to plan your meals
+                        </p>
+                      </div>
+                      <label className="relative inline-flex items-center cursor-pointer">
+                        <input
+                          type="checkbox"
+                          checked={weeklyNotifications}
+                          onChange={(e) => updateWeeklyNotifications(e.target.checked)}
+                          className="sr-only peer"
+                        />
+                        <div className="w-11 h-6 bg-gray-200 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-blue-300 rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-blue-600"></div>
+                      </label>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          )}
         </div>
       </div>
+
+      {/* Modals */}
+      {showIngredientBrowser && (
+        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4 z-50">
+          <div className="max-w-6xl w-full max-h-[90vh] overflow-hidden">
+            <IngredientBrowser onClose={() => setShowIngredientBrowser(false)} />
+          </div>
+        </div>
+      )}
+
+      {showRecipeBrowser && (
+        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4 z-50">
+          <div className="max-w-6xl w-full max-h-[90vh] overflow-hidden">
+            <RecipeBrowser onClose={() => setShowRecipeBrowser(false)} />
+          </div>
+        </div>
+      )}
     </div>
   );
 }

@@ -19,6 +19,14 @@ interface RecipeIngredient {
   type?: string;
 }
 
+interface PricingBreakdownItem {
+  name: string;
+  quantity: number;
+  unit: string;
+  price: number;
+  source?: string;
+}
+
 interface Recipe {
   name: string;
   portions: number;
@@ -29,7 +37,16 @@ interface Recipe {
   currentPrice?: number;
   pricePerServing?: number;
   lastPriced?: Date;
-  pricingBreakdown?: any[];
+  pricingBreakdown?: PricingBreakdownItem[];
+}
+
+interface PricingData {
+  totalPrice: number;
+  pricePerServing: number;
+  breakdown: PricingBreakdownItem[];
+  store: string;
+  location: string;
+  date: string;
 }
 
 interface SubmissionData {
@@ -38,7 +55,7 @@ interface SubmissionData {
   status: 'processing' | 'completed' | 'failed' | 'edited' | 'priced';
   recipe?: Recipe;
   originalRecipe?: Recipe;
-  pricingData?: any;
+  pricingData?: PricingData;
   processingSteps?: string[];
   warnings?: string[];
   createdAt: string;
@@ -48,15 +65,15 @@ interface SubmissionData {
 interface EnhancedRecipeDisplayProps {
   submissionData: SubmissionData;
   selectedFile: File | null;
-  currentSubmissionId: string | null;
-  authToken: string;
-  backendUrl: string;
+  // currentSubmissionId: string | null; // Commented out unused prop
+  // authToken: string; // Commented out unused prop
+  // backendUrl: string; // Commented out unused prop
   onSaveChanges: () => void;
   onPriceRecipe: () => void;
   onSubmitToFirestore: () => void;
   onReset: () => void;
-  editedData: any;
-  onEditData: (data: any) => void;
+  editedData: Recipe | null;
+  onEditData: (data: Recipe) => void;
   isPricing?: boolean;
   isSavingToFirestore?: boolean;
   canPriceRecipe?: boolean;
@@ -66,9 +83,9 @@ interface EnhancedRecipeDisplayProps {
 const EnhancedRecipeDisplay: React.FC<EnhancedRecipeDisplayProps> = ({
   submissionData,
   selectedFile,
-  currentSubmissionId,
-  authToken,
-  backendUrl,
+  // currentSubmissionId, // Commented out unused props
+  // authToken,
+  // backendUrl,
   onSaveChanges,
   onPriceRecipe,
   onSubmitToFirestore,
@@ -81,17 +98,6 @@ const EnhancedRecipeDisplay: React.FC<EnhancedRecipeDisplayProps> = ({
   canSaveToFirestore = false
 }) => {
   const [activeTab, setActiveTab] = useState<'pdf-only' | 'data-only'>('pdf-only');
-
-  const formatIngredientDisplay = (ingredient: RecipeIngredient): string => {
-    const { name, quantity, unit } = ingredient;
-    
-    if (quantity === 0 || unit === 'to taste' || unit === 'as needed') {
-      return `${name} - ${unit}`;
-    }
-    
-    const quantityStr = quantity % 1 === 0 ? quantity.toString() : quantity.toFixed(2).replace(/\.?0+$/, '');
-    return `${name} - ${quantityStr} ${unit}`;
-  };
 
   const getStatusBadge = (status: string) => {
     switch (status) {
@@ -114,15 +120,15 @@ const EnhancedRecipeDisplay: React.FC<EnhancedRecipeDisplayProps> = ({
   const hasUnsavedChanges = editedData && JSON.stringify(editedData) !== JSON.stringify(submissionData.recipe);
 
   // Update ingredient in edited data
-  const updateIngredient = (index: number, field: string, value: any) => {
+  const updateIngredient = (index: number, field: keyof RecipeIngredient, value: string | number) => {
     if (!editedData?.ingredients) return;
-    
+
     const newIngredients = [...editedData.ingredients];
     newIngredients[index] = {
       ...newIngredients[index],
       [field]: value
     };
-    
+
     onEditData({
       ...editedData,
       ingredients: newIngredients
@@ -132,14 +138,14 @@ const EnhancedRecipeDisplay: React.FC<EnhancedRecipeDisplayProps> = ({
   // Add new ingredient
   const addIngredient = () => {
     if (!editedData) return;
-    
-    const newIngredient = {
+
+    const newIngredient: RecipeIngredient = {
       name: '',
       quantity: 0,
       unit: '',
       type: 'core'
     };
-    
+
     onEditData({
       ...editedData,
       ingredients: [...(editedData.ingredients || []), newIngredient]
@@ -149,8 +155,8 @@ const EnhancedRecipeDisplay: React.FC<EnhancedRecipeDisplayProps> = ({
   // Remove ingredient
   const removeIngredient = (index: number) => {
     if (!editedData?.ingredients) return;
-    
-    const newIngredients = editedData.ingredients.filter((_: any, i: number) => i !== index);
+
+    const newIngredients = editedData.ingredients.filter((_, i) => i !== index);
     onEditData({
       ...editedData,
       ingredients: newIngredients
@@ -158,9 +164,9 @@ const EnhancedRecipeDisplay: React.FC<EnhancedRecipeDisplayProps> = ({
   };
 
   // Update recipe basic info
-  const updateRecipeInfo = (field: string, value: any) => {
+  const updateRecipeInfo = (field: keyof Recipe, value: string | number | string[]) => {
     if (!editedData) return;
-    
+
     onEditData({
       ...editedData,
       [field]: value
@@ -183,7 +189,7 @@ const EnhancedRecipeDisplay: React.FC<EnhancedRecipeDisplayProps> = ({
               className="mt-1"
             />
           </div>
-          
+
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             <div>
               <Label htmlFor="portions" className="text-sm font-medium text-gray-700">Portions</Label>
@@ -197,7 +203,7 @@ const EnhancedRecipeDisplay: React.FC<EnhancedRecipeDisplayProps> = ({
                 min="1"
               />
             </div>
-            
+
             <div>
               <Label htmlFor="recipe-url" className="text-sm font-medium text-gray-700">Recipe URL (Optional)</Label>
               <Input
@@ -240,7 +246,7 @@ const EnhancedRecipeDisplay: React.FC<EnhancedRecipeDisplayProps> = ({
             ➕ Add Ingredient
           </Button>
         </div>
-        
+
         <div className="space-y-3">
           {editedData?.ingredients?.map((ingredient: RecipeIngredient, index: number) => (
             <div key={index} className="grid grid-cols-12 gap-2 items-end p-3 bg-gray-50 rounded-lg">
@@ -254,7 +260,7 @@ const EnhancedRecipeDisplay: React.FC<EnhancedRecipeDisplayProps> = ({
                   className="mt-1"
                 />
               </div>
-              
+
               {/* Quantity */}
               <div className="col-span-2">
                 <Label className="text-xs text-gray-600">Quantity</Label>
@@ -268,7 +274,7 @@ const EnhancedRecipeDisplay: React.FC<EnhancedRecipeDisplayProps> = ({
                   min="0"
                 />
               </div>
-              
+
               {/* Unit */}
               <div className="col-span-3">
                 <Label className="text-xs text-gray-600">Unit</Label>
@@ -279,7 +285,7 @@ const EnhancedRecipeDisplay: React.FC<EnhancedRecipeDisplayProps> = ({
                   className="mt-1"
                 />
               </div>
-              
+
               {/* Remove Button */}
               <div className="col-span-2">
                 <Button
@@ -293,12 +299,12 @@ const EnhancedRecipeDisplay: React.FC<EnhancedRecipeDisplayProps> = ({
               </div>
             </div>
           ))}
-          
+
           {(!editedData?.ingredients || editedData.ingredients.length === 0) && (
             <div className="text-center py-8 text-gray-500">
               <div className="text-4xl mb-2">🥘</div>
               <p>No ingredients yet</p>
-              <p className="text-sm">Click "Add Ingredient" to get started</p>
+              <p className="text-sm">Click &ldquo;Add Ingredient&rdquo; to get started</p>
             </div>
           )}
         </div>
@@ -323,7 +329,7 @@ const EnhancedRecipeDisplay: React.FC<EnhancedRecipeDisplayProps> = ({
           <h4 className="text-lg font-semibold mb-3 text-gray-700">Pricing Breakdown</h4>
           <div className="bg-green-50 border border-green-200 rounded-lg p-4">
             <div className="space-y-2">
-              {editedData.pricingBreakdown.map((item: any, index: number) => (
+              {editedData.pricingBreakdown.map((item: PricingBreakdownItem, index: number) => (
                 <div key={index} className="flex items-center justify-between text-sm">
                   <div className="flex-1">
                     <span className="font-medium">{item.name}</span>
@@ -365,6 +371,10 @@ const EnhancedRecipeDisplay: React.FC<EnhancedRecipeDisplayProps> = ({
       )}
     </div>
   );
+
+  const handleTabChange = (value: string) => {
+    setActiveTab(value as 'pdf-only' | 'data-only');
+  };
 
   return (
     <Card className="h-full">
@@ -414,9 +424,9 @@ const EnhancedRecipeDisplay: React.FC<EnhancedRecipeDisplayProps> = ({
           </div>
         </CardTitle>
       </CardHeader>
-      
+
       <CardContent>
-        <Tabs value={activeTab} onValueChange={(value: any) => setActiveTab(value)} className="w-full">
+        <Tabs value={activeTab} onValueChange={handleTabChange} className="w-full">
           <TabsList className="grid w-full grid-cols-2">
             <TabsTrigger value="pdf-only">📄 Original PDF</TabsTrigger>
             <TabsTrigger value="data-only" disabled={!submissionData.recipe}>
@@ -456,17 +466,17 @@ const EnhancedRecipeDisplay: React.FC<EnhancedRecipeDisplayProps> = ({
                       ℹ️ {submissionData.warnings.length} Note(s)
                     </Badge>
                   )}
-                  <Button 
-                    onClick={onReset} 
-                    variant="outline" 
-                    size="sm" 
+                  <Button
+                    onClick={onReset}
+                    variant="outline"
+                    size="sm"
                     disabled={!submissionData.recipe}
                   >
                     Reset to Original
                   </Button>
-                  <Button 
-                    onClick={onSaveChanges} 
-                    variant="outline" 
+                  <Button
+                    onClick={onSaveChanges}
+                    variant="outline"
                     size="sm"
                     disabled={!hasUnsavedChanges}
                   >
@@ -474,7 +484,7 @@ const EnhancedRecipeDisplay: React.FC<EnhancedRecipeDisplayProps> = ({
                   </Button>
                 </div>
               </div>
-              
+
               <div className="h-[600px] overflow-auto">
                 {submissionData.recipe ? (
                   <EditableRecipeDisplay />
@@ -497,7 +507,7 @@ const EnhancedRecipeDisplay: React.FC<EnhancedRecipeDisplayProps> = ({
                     <div className="text-center text-gray-500">
                       <div className="text-4xl mb-2">📋</div>
                       <p className="text-sm">No recipe data available</p>
-                      <p className="text-xs text-gray-400 mt-1">The AI couldn't extract recipe data from this PDF</p>
+                      <p className="text-xs text-gray-400 mt-1">The AI couldn&apos;t extract recipe data from this PDF</p>
                     </div>
                   </div>
                 )}

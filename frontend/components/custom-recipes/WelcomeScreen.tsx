@@ -4,8 +4,15 @@
 import React from 'react';
 import { Card, CardContent } from '@/components/ui/card';
 
+interface User {
+  uid: string;
+  email: string | null;
+  displayName: string | null;
+  // Add other user properties as needed
+}
+
 interface WelcomeScreenProps {
-  currentUser: any;
+  currentUser: User | null;
 }
 
 const WelcomeScreen: React.FC<WelcomeScreenProps> = ({ currentUser }) => {
@@ -30,7 +37,7 @@ const WelcomeScreen: React.FC<WelcomeScreenProps> = ({ currentUser }) => {
               </div>
               <div className="flex items-center gap-2">
                 <span className="w-6 h-6 bg-purple-500 text-white rounded-full text-xs flex items-center justify-center">3</span>
-                <span>Price recipe with "Price Recipe" button</span>
+                <span>Price recipe with &ldquo;Price Recipe&rdquo; button</span>
               </div>
               <div className="flex items-center gap-2">
                 <span className="w-6 h-6 bg-green-500 text-white rounded-full text-xs flex items-center justify-center">4</span>

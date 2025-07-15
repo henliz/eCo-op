@@ -24,26 +24,11 @@ const LoadingScreen: React.FC<LoadingScreenProps> = ({ onComplete, onProgress })
 
   // Main effect for progress bar animation
   useEffect(() => {
-    // Base speed for the progress bar (faster than before)
-    const baseInterval = 20; // milliseconds between updates (was 40)
-
-    // Create an array of points where we'll simulate "processing pauses"
-    const pausePoints = [
-      Math.floor(Math.random() * 15) + 10, // First pause between 10-25%
-      Math.floor(Math.random() * 15) + 35, // Second pause between 35-50%
-      Math.floor(Math.random() * 15) + 60, // Third pause between 60-75%
-      Math.floor(Math.random() * 10) + 85, // Final pause between 85-95%
-    ];
-
-    // Random pause durations between 100-500ms
-    const pauseDurations = pausePoints.map(() => Math.floor(Math.random() * 400) + 100);
-
-    let isPaused = false;
-    let timer: NodeJS.Timeout;
+    const baseInterval = 30; // milliseconds between updates (smooth but fast)
 
     const updateProgress = () => {
       setProgress(oldProgress => {
-        const newProgress = Math.min(oldProgress + 1, 100);
+        const newProgress = Math.min(oldProgress + 2, 100); // Increment by 2% each time
 
         // Update step based on progress
         if (newProgress > 25 && newProgress <= 50) {
@@ -55,42 +40,21 @@ const LoadingScreen: React.FC<LoadingScreenProps> = ({ onComplete, onProgress })
         }
 
         // Call the onProgress callback if provided and progress has changed significantly
-        // Only report every 5% to avoid too many state updates
         if (onProgress && newProgress % 5 === 0 && newProgress > lastReportedProgress.current) {
           lastReportedProgress.current = newProgress;
-          // Use setTimeout to avoid React state update during render
           setTimeout(() => {
             onProgress(newProgress);
           }, 0);
-        }
-
-        // Check if we've hit one of our pause points
-        if (!isPaused && pausePoints.includes(newProgress)) {
-          isPaused = true;
-          const pauseIndex = pausePoints.indexOf(newProgress);
-          const pauseDuration = pauseDurations[pauseIndex];
-
-          console.log(`Pausing at ${newProgress}% for ${pauseDuration}ms`);
-
-          // Clear existing timer during the pause
-          clearInterval(timer);
-
-          // Resume after pause duration
-          setTimeout(() => {
-            isPaused = false;
-            timer = setInterval(updateProgress, baseInterval);
-          }, pauseDuration);
         }
 
         // Mark as complete when done
         if (newProgress === 100) {
           setTimeout(() => {
             setComplete(true);
-            // Call the onComplete callback if provided
             if (onComplete) {
               onComplete();
             }
-          }, 500);
+          }, 200); // Reduced from 500ms to 200ms
           clearInterval(timer);
         }
 
@@ -98,11 +62,11 @@ const LoadingScreen: React.FC<LoadingScreenProps> = ({ onComplete, onProgress })
       });
     };
 
-    // Start the initial timer
-    timer = setInterval(updateProgress, baseInterval);
+    // Start the timer immediately - AFTER declaring updateProgress
+    const timer = setInterval(updateProgress, baseInterval);
 
     return () => clearInterval(timer);
-  }, [onComplete, onProgress]); // Include both callbacks in dependencies
+  }, [onComplete, onProgress]);
 
   // Debug effect for completion
   useEffect(() => {
