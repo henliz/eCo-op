@@ -5,6 +5,7 @@ import { isTokenValid, refreshFirebaseToken, clearAuthStorage, makeAuthenticated
 
 interface UserPreferences {
   newFlyerNotifications: boolean;
+  weeklyNotifications: boolean;
   createdAt: Date;
   updatedAt: Date;
 }
@@ -17,6 +18,7 @@ interface BackendUser {
   emailVerified: boolean;
   photoURL?: string;
   newFlyerNotifications: boolean;
+  weeklyNotifications: boolean;
   createdAt: string;
   updatedAt: string;
   lastLoginAt?: string;
@@ -33,7 +35,7 @@ interface AuthContextType {
   logout: () => Promise<void>;
   resetPassword: (email: string) => Promise<void>;
   signInWithGoogle: () => Promise<void>;
-  updateNotificationPreference: (enabled: boolean) => Promise<void>;
+  updateNotificationPreference: (preferenceType: 'newFlyerNotifications' | 'weeklyNotifications', enabled: boolean) => Promise<void>;
   refreshProfile: () => Promise<void>;
   makeAPICall: (endpoint: string, method?: string, body?: any, useAuth?: boolean) => Promise<any>;
 }
@@ -69,6 +71,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     setCurrentUser(userData);
     setUserPreferences({
       newFlyerNotifications: userData.newFlyerNotifications || false,
+      weeklyNotifications: userData.weeklyNotifications || false, // ADD THIS
       createdAt: new Date(userData.createdAt || new Date()),
       updatedAt: new Date(userData.updatedAt || new Date()),
     });
@@ -184,6 +187,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
         setCurrentUser(userData);
         setUserPreferences({
           newFlyerNotifications: userData.newFlyerNotifications || false,
+          weeklyNotifications: userData.weeklyNotifications || false, // ADD THIS
           createdAt: new Date(userData.createdAt),
           updatedAt: new Date(userData.updatedAt || new Date()),
         });
@@ -200,7 +204,11 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     try {
       setAuthError(null);
       const response = await makeAPICall('/auth/register', 'POST', {
-        email, password, displayName: displayName || '', newFlyerNotifications: notifications,
+        email,
+        password,
+        displayName: displayName || '',
+        newFlyerNotifications: notifications,
+        weeklyNotifications: false, // ADD DEFAULT VALUE
       });
       if (!response.success) throw new Error(response.error || 'Registration failed');
     } catch (error: any) {
@@ -220,21 +228,34 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     }
   };
 
-  const updateNotificationPreference = async (enabled: boolean) => {
+  const updateNotificationPreference = async (preferenceType: 'newFlyerNotifications' | 'weeklyNotifications', enabled: boolean) => {
     if (!currentUser || !accessToken) throw new Error('No user logged in');
 
     try {
       setAuthError(null);
-      const response = await makeAPICall('/auth/notifications', 'PUT', { newFlyerNotifications: enabled }, true);
+
+      // Send only the specific preference being updated
+      const body = { [preferenceType]: enabled };
+      const response = await makeAPICall('/auth/notifications', 'PUT', body, true);
 
       if (response.success) {
-        setUserPreferences(prev => prev ? { ...prev, newFlyerNotifications: enabled, updatedAt: new Date() } : null);
-        setCurrentUser(prev => prev ? { ...prev, newFlyerNotifications: enabled, updatedAt: new Date().toISOString() } : null);
+        // Update both state and localStorage
+        setUserPreferences(prev => prev ? {
+          ...prev,
+          [preferenceType]: enabled,
+          updatedAt: new Date()
+        } : null);
+
+        setCurrentUser(prev => prev ? {
+          ...prev,
+          [preferenceType]: enabled,
+          updatedAt: new Date().toISOString()
+        } : null);
 
         const storedUser = localStorage.getItem('user');
         if (storedUser) {
           const userData = JSON.parse(storedUser);
-          userData.newFlyerNotifications = enabled;
+          userData[preferenceType] = enabled;
           localStorage.setItem('user', JSON.stringify(userData));
         }
       } else {
