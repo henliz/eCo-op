@@ -53,9 +53,10 @@ export default function PreferencesPage() {
     try {
       await preferences.savePreferences(makeAPICall);
       alert('Preferences saved successfully!');
-    } catch (error) {
+    } catch (error: unknown) {
       console.error('Error saving preferences:', error);
-      alert('Failed to save preferences. Please try again.');
+      const errorMessage = error instanceof Error ? error.message : 'Unknown error occurred';
+      alert(`Failed to save preferences: ${errorMessage}. Please try again.`);
     }
   };
 
@@ -68,7 +69,7 @@ export default function PreferencesPage() {
     preferences.updatePreferences({ maxPricePerPortion: value });
   };
 
-  // FIXED: Use auth context for notifications instead of user preferences store
+  // Use auth context for notifications instead of user preferences store
   const updateNewFlyerNotifications = async (value: boolean) => {
     setNotificationLoading(true);
     try {
@@ -120,12 +121,12 @@ export default function PreferencesPage() {
   const maxIngredients = currentPrefs?.maxIngredients || 6;
   const maxPricePerPortion = currentPrefs?.maxPricePerPortion || 10;
 
-  // FIXED: Get notification preferences from auth context instead of user preferences store
+  // Get notification preferences from auth context instead of user preferences store
   const newFlyerNotifications = currentUser?.newFlyerNotifications || false;
   const weeklyNotifications = currentUser?.weeklyNotifications || false;
 
   const bannedIngredients = preferences.getBannedIngredientsAsItems();
-  const bannedRecipes = preferences.getBannedRecipesAsItems();
+  const bannedRecipes = preferences.getBannedRecipesAsItems(); // NOW SHOWS RECIPE NAMES! 🎉
 
   return (
     <div className="min-h-screen bg-gray-50">
@@ -285,6 +286,7 @@ export default function PreferencesPage() {
                       key={item.id}
                       className="flex items-center justify-between p-3 bg-red-50 border border-red-200 rounded-lg"
                     >
+                      {/* 🎉 NOW SHOWS ACTUAL RECIPE NAMES INSTEAD OF IDs! */}
                       <span className="text-red-800 font-medium">{item.name}</span>
                       <button
                         onClick={() => handleRemoveBannedRecipe(item.id)}
