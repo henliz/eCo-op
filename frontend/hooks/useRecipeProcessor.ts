@@ -88,7 +88,7 @@ export const useRecipeProcessor = (
     if (!accessToken) return;
 
     try {
-      const response = await fetch(`${backendUrl}/recipe-processing/my-recipes`, {
+      const response = await fetch(`${backendUrl}/recipe-parser/my-recipes`, {
         headers: {
           'Authorization': `Bearer ${accessToken}`,
           'Content-Type': 'application/json',
@@ -109,7 +109,7 @@ export const useRecipeProcessor = (
     if (!accessToken) return;
 
     try {
-      const response = await fetch(`${backendUrl}/recipe-processing/my-submissions?limit=10`, {
+      const response = await fetch(`${backendUrl}/recipe-parser/my-submissions?limit=10`, {
         headers: {
           'Authorization': `Bearer ${accessToken}`,
           'Content-Type': 'application/json',
@@ -211,7 +211,7 @@ export const useRecipeProcessor = (
     }
   }, [editedData, submissionData]);
 
-  // FIXED: Price recipe using Recipe Price Fixer Service
+  // Price recipe using Recipe Price Fixer Service
   const priceRecipe = useCallback(async () => {
     if (!editedData || !accessToken) return;
 
@@ -219,8 +219,8 @@ export const useRecipeProcessor = (
     setStatus({ type: 'loading', message: '💰 Pricing recipe and fixing any issues...' });
 
     try {
-      // Call Recipe Price Fixer Service - remove /api prefix
-      const response = await fetch(`${backendUrl}/fix-price`, {
+      // Call Recipe Price Fixer Service - use /api/fix-price endpoint
+      const response = await fetch(`${backendUrl}/api/fix-price`, {
         method: 'POST',
         headers: {
           'Authorization': `Bearer ${accessToken}`,
@@ -289,21 +289,22 @@ export const useRecipeProcessor = (
     }
   }, [editedData, accessToken, backendUrl, submissionData]);
 
-  // FIXED: Submit to Firestore using your existing endpoint
+  // FIXED: Submit to Firestore using direct /recipes endpoint
   const submitToFirestore = useCallback(async () => {
-    if (!submissionData || !currentSubmissionId || !accessToken) return;
+    if (!editedData || !accessToken) return;
 
     setIsSavingToFirestore(true);
     setStatus({ type: 'loading', message: '🔥 Saving to Firestore...' });
 
     try {
-      // Use your existing submission endpoint
-      const response = await fetch(`${backendUrl}/recipe-processing/submission/${currentSubmissionId}/submit-to-firestore`, {
+      // Use your existing /recipes endpoint directly
+      const response = await fetch(`${backendUrl}/recipes`, {
         method: 'POST',
         headers: {
           'Authorization': `Bearer ${accessToken}`,
           'Content-Type': 'application/json',
         },
+        body: JSON.stringify(editedData), // Send the recipe data directly
       });
 
       const result = await response.json();
@@ -339,7 +340,7 @@ export const useRecipeProcessor = (
     } finally {
       setIsSavingToFirestore(false);
     }
-  }, [submissionData, currentSubmissionId, accessToken, backendUrl, loadUserRecipes, loadUserSubmissions]);
+  }, [editedData, accessToken, backendUrl, loadUserRecipes, loadUserSubmissions, submissionData]);
 
   // Utility functions
   const resetToOriginal = useCallback(() => {
