@@ -103,15 +103,22 @@ export const RecipeBrowser: React.FC<RecipeBrowserProps> = ({ onClose, className
     setSelectedRecipes(newSelected);
   };
 
+  // UPDATED: Now uses the new BannedRecipe object format
   const handleBanSelected = async () => {
     if (selectedRecipes.size === 0) return;
 
     try {
-      // Add each selected recipe to banned list using recipe ID
+      // Convert selected recipe IDs to BannedRecipe objects
       selectedRecipes.forEach(recipeId => {
         if (recipeId) {
-          // The store expects only the recipe ID
-          preferences.addBannedRecipe(recipeId);
+          const recipe = recipes.find(r => r.id === recipeId);
+          if (recipe) {
+            // UPDATED: Pass BannedRecipe object instead of just ID
+            preferences.addBannedRecipe({
+              id: recipe.id!,
+              name: recipe.name
+            });
+          }
         }
       });
 
@@ -127,12 +134,8 @@ export const RecipeBrowser: React.FC<RecipeBrowserProps> = ({ onClose, className
 
   const handleUnbanRecipe = async (recipeId: string) => {
     try {
-      // Find the banned recipe by ID and remove it
-      const bannedItems = preferences.getBannedRecipesAsItems();
-      const bannedItem = bannedItems.find(item => item.id === recipeId);
-      if (bannedItem) {
-        preferences.removeBannedRecipe(bannedItem.id);
-      }
+      // Remove recipe by ID (this stays the same)
+      preferences.removeBannedRecipe(recipeId);
     } catch (error) {
       console.error('Error unbanning recipe:', error);
       alert('Failed to unban recipe. Please try again.');

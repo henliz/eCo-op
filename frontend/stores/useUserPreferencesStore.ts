@@ -1,7 +1,30 @@
 import { create } from 'zustand';
 
-// Unified preferences interface matching your Firestore structure
-// REMOVED: newFlyerNotifications and weeklyNotifications (now handled by auth service)
+// NEW: Add subscription limits interfaces (simple)
+export interface SubscriptionLimitsData {
+  tier: "free" | "premium";
+  limits: {
+    personalRecipes: number;        // -1 = unlimited
+    ingredientExclusions: number;   // -1 = unlimited
+    bannedRecipes: number;          // -1 = unlimited
+  };
+  usage: {
+    personalRecipesCount: number;
+    ingredientExclusionsCount: number;
+    bannedRecipesCount: number;
+  };
+  canAddPersonalRecipe: boolean;
+  canAddIngredientExclusion: boolean;
+  canAddBannedRecipe: boolean;
+}
+
+// NEW: Recipe object interface (instead of just string IDs)
+export interface BannedRecipe {
+  id: string;
+  name: string;
+}
+
+// UPDATED: Change bannedRecipes from string[] to BannedRecipe[]
 export interface UserPreferences {
   // Core preferences
   maxPricePerPortion: number;
@@ -9,7 +32,7 @@ export interface UserPreferences {
 
   // Banned items (stored as arrays in Firestore)
   bannedIngredients: string[];
-  bannedRecipes: string[];
+  bannedRecipes: BannedRecipe[]; // CHANGED: from string[] to BannedRecipe[]
 
   // Optional fields
   dietaryRestrictions?: string[];
@@ -31,6 +54,9 @@ interface UserPreferencesState {
   // Core state - single source of truth
   preferences: UserPreferences | null;
 
+  // NEW: Add subscription limits state
+  subscriptionLimits: SubscriptionLimitsData | null;
+
   // Loading states
   loading: boolean;
   saving: boolean;
@@ -44,6 +70,9 @@ interface UserPreferencesState {
   loadPreferences: (makeAPICall: (endpoint: string, method?: string, body?: any, useAuth?: boolean) => Promise<any>) => Promise<void>;
   savePreferences: (makeAPICall: (endpoint: string, method?: string, body?: any, useAuth?: boolean) => Promise<any>) => Promise<void>;
 
+  // NEW: Load subscription limits
+  loadSubscriptionLimits: (makeAPICall: (endpoint: string, method?: string, body?: any, useAuth?: boolean) => Promise<any>) => Promise<void>;
+
   // Actions - Update preferences
   updatePreferences: (updates: Partial<UserPreferences>) => void;
   resetPreferences: () => void;
@@ -53,8 +82,8 @@ interface UserPreferencesState {
   removeBannedIngredient: (name: string) => void;
   clearBannedIngredients: () => void;
 
-  // Actions - Banned recipes (convenience methods)
-  addBannedRecipe: (recipeId: string) => void;
+  // Actions - Banned recipes (convenience methods) - UPDATED: now work with objects
+  addBannedRecipe: (recipe: BannedRecipe) => void; // CHANGED: now takes BannedRecipe object
   removeBannedRecipe: (recipeId: string) => void;
   clearBannedRecipes: () => void;
 
@@ -64,7 +93,7 @@ interface UserPreferencesState {
   setError: (error: string | null) => void;
   markSynced: () => void;
 
-  // Query methods
+  // Query methods - UPDATED for new recipe format
   isIngredientBanned: (ingredientName: string) => boolean;
   isRecipeBanned: (recipeId: string) => boolean;
   getBannedIngredientsCount: () => number;
@@ -72,22 +101,29 @@ interface UserPreferencesState {
 
   // UI helper methods
   getBannedIngredientsAsItems: () => BannedItem[];
-  getBannedRecipesAsItems: () => BannedItem[];
+  getBannedRecipesAsItems: () => BannedItem[]; // UPDATED: now returns recipe names
   getPreferencesSummary: () => {
     bannedIngredientsCount: number;
     bannedRecipesCount: number;
     priceRange?: string;
     maxIngredients: number;
   };
+
+  // NEW: Simple limit checking helpers
+  canAddIngredientExclusion: () => boolean;
+  canAddBannedRecipe: () => boolean;
+  getUsageStatus: () => {
+    ingredients: { current: number; limit: number; canAdd: boolean };
+    recipes: { current: number; limit: number; canAdd: boolean };
+  };
 }
 
 // Default preferences matching your Firestore structure
-// REMOVED: notification preferences (now handled by auth service)
 const DEFAULT_PREFERENCES: UserPreferences = {
   maxPricePerPortion: 10,
   maxIngredients: 6,
   bannedIngredients: [],
-  bannedRecipes: [],
+  bannedRecipes: [], // Now empty array of BannedRecipe objects
   dietaryRestrictions: [],
 };
 
@@ -97,32 +133,53 @@ const generateId = () => `${Date.now()}-${Math.random().toString(36).substr(2, 9
 export const useUserPreferencesStore = create<UserPreferencesState>((set, get) => ({
   // Initial state
   preferences: null,
+  subscriptionLimits: null, // NEW
   loading: false,
   saving: false,
   error: null,
   lastSynced: null,
   hasUnsavedChanges: false,
 
-  // Unified load from backend
+  // UPDATED: Load preferences and limits
   loadPreferences: async (makeAPICall) => {
     set({ loading: true, error: null });
 
     try {
       console.log('Store: Loading user preferences...');
 
-      // Single API call to get all preferences
+      // Load preferences and try to load limits (don't fail if limits fail)
       const userProfile = await makeAPICall('/user-preferences/profile', 'GET', null, true);
+
+      let limitsData = null;
+      try {
+        const limitsResponse = await makeAPICall('/user-preferences/limits', 'GET', null, true);
+        limitsData = limitsResponse?.data || null;
+      } catch (err) {
+        console.warn('Failed to load limits, continuing without them:', err);
+      }
 
       if (userProfile && typeof userProfile === 'object') {
         console.log('Store: User profile loaded:', userProfile);
 
-        // Map backend data to frontend structure
-        // REMOVED: notification fields mapping
+        // UPDATED: Handle both old format (strings) and new format (objects) for banned recipes
+        let bannedRecipes: BannedRecipe[] = [];
+        if (userProfile.bannedRecipes) {
+          bannedRecipes = userProfile.bannedRecipes.map((recipe: any) => {
+            if (typeof recipe === 'string') {
+              // Old format - convert string to object
+              return { id: recipe, name: recipe };
+            } else {
+              // New format - already an object with id and name
+              return recipe;
+            }
+          });
+        }
+
         const preferences: UserPreferences = {
           maxPricePerPortion: userProfile.maxPricePerPortion || DEFAULT_PREFERENCES.maxPricePerPortion,
           maxIngredients: userProfile.maxIngredients || DEFAULT_PREFERENCES.maxIngredients,
           bannedIngredients: userProfile.bannedIngredients || DEFAULT_PREFERENCES.bannedIngredients,
-          bannedRecipes: userProfile.bannedRecipes || DEFAULT_PREFERENCES.bannedRecipes,
+          bannedRecipes, // UPDATED: use processed recipe objects
           dietaryRestrictions: userProfile.dietaryRestrictions || DEFAULT_PREFERENCES.dietaryRestrictions,
           createdAt: userProfile.createdAt ? new Date(userProfile.createdAt) : undefined,
           updatedAt: userProfile.updatedAt ? new Date(userProfile.updatedAt) : undefined,
@@ -130,6 +187,7 @@ export const useUserPreferencesStore = create<UserPreferencesState>((set, get) =
 
         set({
           preferences,
+          subscriptionLimits: limitsData, // NEW: store limits
           loading: false,
           lastSynced: new Date(),
           hasUnsavedChanges: false,
@@ -139,6 +197,7 @@ export const useUserPreferencesStore = create<UserPreferencesState>((set, get) =
         console.warn('Store: No user profile data received, using defaults');
         set({
           preferences: { ...DEFAULT_PREFERENCES },
+          subscriptionLimits: limitsData,
           loading: false,
           lastSynced: new Date(),
           hasUnsavedChanges: false,
@@ -149,13 +208,27 @@ export const useUserPreferencesStore = create<UserPreferencesState>((set, get) =
       console.error('Store: Error loading preferences:', error);
       set({
         preferences: { ...DEFAULT_PREFERENCES },
+        subscriptionLimits: null,
         loading: false,
         error: 'Failed to load preferences - using defaults'
       });
     }
   },
 
-  // Unified save to backend
+  // NEW: Load subscription limits separately
+  loadSubscriptionLimits: async (makeAPICall) => {
+    try {
+      const response = await makeAPICall('/user-preferences/limits', 'GET', null, true);
+      if (response?.success) {
+        set({ subscriptionLimits: response.data });
+      }
+    } catch (error) {
+      console.error('Store: Error loading limits:', error);
+      set({ subscriptionLimits: null });
+    }
+  },
+
+  // UPDATED: Save with new banned recipes format
   savePreferences: async (makeAPICall) => {
     const state = get();
     if (!state.preferences) {
@@ -167,13 +240,12 @@ export const useUserPreferencesStore = create<UserPreferencesState>((set, get) =
     try {
       console.log('Store: Saving preferences...', state.preferences);
 
-      // Single API call to save all preferences
-      // REMOVED: notification fields from save payload
+      // UPDATED: Send banned recipes as objects (backend now expects objects)
       const response = await makeAPICall('/user-preferences/profile', 'PUT', {
         maxPricePerPortion: state.preferences.maxPricePerPortion,
         maxIngredients: state.preferences.maxIngredients,
         bannedIngredients: state.preferences.bannedIngredients,
-        bannedRecipes: state.preferences.bannedRecipes,
+        bannedRecipes: state.preferences.bannedRecipes, // Now sends BannedRecipe objects
         dietaryRestrictions: state.preferences.dietaryRestrictions,
       }, true);
 
@@ -188,11 +260,11 @@ export const useUserPreferencesStore = create<UserPreferencesState>((set, get) =
       } else {
         throw new Error(response?.error || 'Failed to save preferences');
       }
-    } catch (error) {
+    } catch (error: any) {
       console.error('Store: Error saving preferences:', error);
       set({
         saving: false,
-        error: 'Failed to save preferences'
+        error: error?.message || 'Failed to save preferences'
       });
       throw error;
     }
@@ -246,14 +318,14 @@ export const useUserPreferencesStore = create<UserPreferencesState>((set, get) =
     });
   },
 
-  // Convenience methods for banned recipes
-  addBannedRecipe: (recipeId) => {
+  // UPDATED: Convenience methods for banned recipes (now work with objects)
+  addBannedRecipe: (recipe: BannedRecipe) => {
     const state = get();
     const current = state.preferences?.bannedRecipes || [];
 
-    if (!current.includes(recipeId)) {
+    if (!current.some(r => r.id === recipe.id)) {
       get().updatePreferences({
-        bannedRecipes: [...current, recipeId]
+        bannedRecipes: [...current, recipe]
       });
     }
   },
@@ -263,7 +335,7 @@ export const useUserPreferencesStore = create<UserPreferencesState>((set, get) =
     const current = state.preferences?.bannedRecipes || [];
 
     get().updatePreferences({
-      bannedRecipes: current.filter(id => id !== recipeId)
+      bannedRecipes: current.filter(recipe => recipe.id !== recipeId)
     });
   },
 
@@ -286,7 +358,7 @@ export const useUserPreferencesStore = create<UserPreferencesState>((set, get) =
     });
   },
 
-  // Query methods
+  // UPDATED: Query methods for new recipe format
   isIngredientBanned: (ingredientName) => {
     const state = get();
     return state.preferences?.bannedIngredients?.includes(ingredientName) || false;
@@ -294,7 +366,7 @@ export const useUserPreferencesStore = create<UserPreferencesState>((set, get) =
 
   isRecipeBanned: (recipeId) => {
     const state = get();
-    return state.preferences?.bannedRecipes?.includes(recipeId) || false;
+    return state.preferences?.bannedRecipes?.some(recipe => recipe.id === recipeId) || false;
   },
 
   getBannedIngredientsCount: () => {
@@ -320,14 +392,15 @@ export const useUserPreferencesStore = create<UserPreferencesState>((set, get) =
     }));
   },
 
+  // UPDATED: Now returns actual recipe names instead of IDs!
   getBannedRecipesAsItems: () => {
     const state = get();
     const bannedRecipes = state.preferences?.bannedRecipes || [];
 
-    return bannedRecipes.map(recipeId => ({
-      id: recipeId, // Use recipe ID as the key
-      name: recipeId, // For now, display the ID as name (could be enhanced with recipe name lookup)
-      addedAt: new Date(), // We don't store individual timestamps
+    return bannedRecipes.map(recipe => ({
+      id: recipe.id,
+      name: recipe.name, // NOW SHOWS ACTUAL RECIPE NAMES! 🎉
+      addedAt: new Date(),
     }));
   },
 
@@ -345,6 +418,37 @@ export const useUserPreferencesStore = create<UserPreferencesState>((set, get) =
       bannedRecipesCount: prefs?.bannedRecipes?.length || 0,
       priceRange,
       maxIngredients: prefs?.maxIngredients || DEFAULT_PREFERENCES.maxIngredients,
+    };
+  },
+
+  // NEW: Simple limit checking helpers
+  canAddIngredientExclusion: () => {
+    const state = get();
+    return state.subscriptionLimits?.canAddIngredientExclusion ?? true;
+  },
+
+  canAddBannedRecipe: () => {
+    const state = get();
+    return state.subscriptionLimits?.canAddBannedRecipe ?? true;
+  },
+
+  getUsageStatus: () => {
+    const state = get();
+    const limits = state.subscriptionLimits;
+    const currentIngredients = get().getBannedIngredientsCount();
+    const currentRecipes = get().getBannedRecipesCount();
+
+    return {
+      ingredients: {
+        current: currentIngredients,
+        limit: limits?.limits.ingredientExclusions ?? -1,
+        canAdd: limits?.canAddIngredientExclusion ?? true,
+      },
+      recipes: {
+        current: currentRecipes,
+        limit: limits?.limits.bannedRecipes ?? -1,
+        canAdd: limits?.canAddBannedRecipe ?? true,
+      },
     };
   },
 }));
