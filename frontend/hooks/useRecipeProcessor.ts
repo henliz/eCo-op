@@ -1,69 +1,14 @@
 // hooks/useRecipeProcessor.ts
 import { useState, useCallback, useEffect } from 'react';
 import { useAuth } from '@/contexts/AuthContext';
-
-interface UploadStatus {
-  type: 'idle' | 'loading' | 'success' | 'error' | 'auth-required';
-  message: string;
-}
-
-interface RecipeIngredient {
-  name: string;
-  quantity: number;
-  unit: string;
-  type?: 'core' | 'optional' | 'garnish' | 'to taste';
-}
-
-interface ParsedRecipeDto {
-  name: string;
-  portions: number;
-  ingredients: RecipeIngredient[];
-  tags?: string[];
-  ownerId: string;
-  visibility: 'private' | 'public';
-  status: 'draft' | 'validated' | 'needs_investigation' | 'rejected' | 'test_data';
-  parsingNotes?: string[];
-}
-
-interface SubmissionData {
-  id: string;
-  filename: string;
-  status: 'processing' | 'completed' | 'failed' | 'edited' | 'priced';
-  recipe?: ParsedRecipeDto;
-  originalRecipe?: ParsedRecipeDto;
-  pricingData?: any;
-  processingSteps?: string[];
-  warnings?: string[];
-  createdAt: string;
-  updatedAt: string;
-}
-
-interface PricingResult {
-  success: boolean;
-  message: string;
-  details?: {
-    totalIngredients: number;
-    successfullyPriced: number;
-    failed: number;
-    fixed: number;
-    regularPrice?: number;
-    salePrice?: number;
-  };
-  pricing?: {
-    totalPrice: number;
-    pricePerServing: number;
-    formattedPrice: string;
-    formattedPricePerServing: string;
-    breakdown: any[];
-    store: string;
-    location: string;
-    date: string;
-    pricedAt: Date;
-  };
-  recipe?: any;
-  missingIngredients?: any[];
-  canRetry?: boolean;
-}
+import { 
+  UploadStatus, 
+  Recipe,
+  RecipeIngredient, 
+  ParsedRecipeDto, 
+  SubmissionData, 
+  PricingResult 
+} from '@/types';
 
 export const useRecipeProcessor = (
   accessToken: string | null,
@@ -289,7 +234,7 @@ export const useRecipeProcessor = (
     }
   }, [editedData, accessToken, backendUrl, submissionData]);
 
-  // FIXED: Submit to Firestore using direct /recipes endpoint
+  // Submit to Firestore using direct /recipes endpoint
   const submitToFirestore = useCallback(async () => {
     if (!editedData || !accessToken) return;
 
@@ -297,14 +242,14 @@ export const useRecipeProcessor = (
     setStatus({ type: 'loading', message: '🔥 Saving to Firestore...' });
 
     try {
-      // Use your existing /recipes endpoint directly
+      // Use existing /recipes endpoint directly
       const response = await fetch(`${backendUrl}/recipes`, {
         method: 'POST',
         headers: {
           'Authorization': `Bearer ${accessToken}`,
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify(editedData), // Send the recipe data directly
+        body: JSON.stringify(editedData), // Send the recipe data
       });
 
       const result = await response.json();
