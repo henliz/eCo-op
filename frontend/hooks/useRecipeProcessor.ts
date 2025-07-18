@@ -12,7 +12,7 @@ import {
 
 export const useRecipeProcessor = (
   accessToken: string | null,
-  backendUrl: string = 'http://localhost:3001'
+  backendUrl: string = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:3001'
 ) => {
   const { currentUser } = useAuth();
   
