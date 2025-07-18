@@ -1,5 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { usePlannerStore } from './usePlannerStore';
+import { useStoreLocationStore } from '@/stores/useStoreLocationStore'; // ADD THIS
+
 import { useAuth } from '@/contexts/AuthContext';
 
 interface ContinuePlanProps {
@@ -8,16 +10,21 @@ interface ContinuePlanProps {
 
 export const ContinuePlanBanner: React.FC<ContinuePlanProps> = ({ onContinue }) => {
   const { makeAPICall, currentUser } = useAuth(); // Add currentUser
+
+  const { availableStores: newAvailableStores } = useStoreLocationStore();
+
   const {
     loadUserPlan,
     selectedStore,
     normalMealServings,
     lastSynced,
     planId,
-    availableStores,
+    availableStores: oldAvailableStores, // Keep for fallback
     isSyncing,
     selectedRecipes  // ← Move this here with other store hooks
   } = usePlannerStore();
+
+  const availableStores = newAvailableStores.length > 0 ? newAvailableStores : oldAvailableStores;
 
   const [hasAttemptedLoad, setHasAttemptedLoad] = useState(false);
   const [loadComplete, setLoadComplete] = useState(false);
@@ -82,6 +89,26 @@ export const ContinuePlanBanner: React.FC<ContinuePlanProps> = ({ onContinue }) 
   const storeInfo = hasValidPlan
     ? availableStores.find(s => s.id === selectedStore)
     : null;
+
+  console.log('[ContinuePlan] DEBUG - Store lookup:', {
+    selectedStore,
+    availableStoresCount: availableStores.length,
+    first5Stores: availableStores.slice(0, 5).map(s => ({
+      id: s.id,
+      name: s.name,
+      location: s.location
+    })),
+    // Try to find partial matches
+    partialMatches: availableStores.filter(s =>
+      s.id.includes('Zehrs') ||
+      s.name.includes('Zehrs') ||
+      s.location.includes('180 Holiday')
+    ).map(s => ({
+      id: s.id,
+      name: s.name,
+      location: s.location
+    }))
+  });
 
   // Format the last sync date
   const formatDate = (date: Date) => {
