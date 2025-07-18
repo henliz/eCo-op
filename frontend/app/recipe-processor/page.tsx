@@ -1,4 +1,3 @@
-// C:\Users\satta\eCo-op\frontend\app\recipe-processor\page.tsx
 'use client';
 
 import React, { useEffect } from 'react';
@@ -11,15 +10,13 @@ import UploadZone from '@/components/custom-recipes/UploadZone';
 import WelcomeScreen from '@/components/custom-recipes/WelcomeScreen';
 import EnhancedRecipeDisplay from '@/components/custom-recipes/EnhancedRecipeDisplay';
 import PricingResultModal from '@/components/custom-recipes/PricingResultModal';
+import { Recipe, ParsedRecipeDto } from '@/types';
 
 export default function RecipeProcessorPage() {
   const { currentUser, accessToken, loading: authLoading } = useAuth();
-
   const {
-    // State
     selectedFile,
     setSelectedFile,
-    // currentSubmissionId, // Commented out - not used in this component
     submissionData,
     editedData,
     setEditedData,
@@ -32,7 +29,6 @@ export default function RecipeProcessorPage() {
     setShowPricingModal,
     isSavingToFirestore,
 
-    // Actions
     uploadFile,
     saveEditedData,
     priceRecipe,
@@ -42,12 +38,11 @@ export default function RecipeProcessorPage() {
     loadUserRecipes,
     loadUserSubmissions,
 
-    // Computed
     canPriceRecipe,
     canSaveToFirestore
   } = useRecipeProcessor(accessToken);
 
-  // Check auth status on component mount
+  // Check auth
   useEffect(() => {
     if (!authLoading) {
       if (!currentUser) {
@@ -89,6 +84,29 @@ export default function RecipeProcessorPage() {
     setTimeout(() => {
       uploadFile(file);
     }, 500);
+  };
+
+  // Handler for editing data with proper type conversion
+  const handleEditData = (data: Recipe) => {
+    const parsedData: ParsedRecipeDto = {
+      ...data,
+      ownerId: currentUser?.uid || '',
+      visibility: 'private',
+      status: 'draft'
+    };
+    setEditedData(parsedData);
+  };
+
+  // Convert ParsedRecipeDto to Recipe for the component
+  const getRecipeForDisplay = (): Recipe | null => {
+    if (!editedData) return null;
+    return {
+      name: editedData.name,
+      portions: editedData.portions,
+      ingredients: editedData.ingredients,
+      tags: editedData.tags,
+      parsingNotes: editedData.parsingNotes
+    }
   };
 
   // Loading screen
@@ -148,12 +166,12 @@ export default function RecipeProcessorPage() {
                   onPriceRecipe={priceRecipe}
                   onSubmitToFirestore={submitToFirestore}
                   onReset={resetToOriginal}
-                  editedData={editedData}
-                  onEditData={setEditedData}
+                  editedData={getRecipeForDisplay()}
+                  onEditData={handleEditData}
                   isPricing={isPricing}
                   isSavingToFirestore={isSavingToFirestore}
-                  canPriceRecipe={canPriceRecipe}
-                  canSaveToFirestore={canSaveToFirestore}
+                  canPriceRecipe={canPriceRecipe ?? undefined}
+                  canSaveToFirestore={canSaveToFirestore ?? undefined}
                 />
               ) : (
                 <WelcomeScreen currentUser={currentUser} />
@@ -200,7 +218,7 @@ export default function RecipeProcessorPage() {
               pricingResult={pricingResult}
               onSubmitToFirestore={submitToFirestore}
               isSavingToFirestore={isSavingToFirestore}
-              canSaveToFirestore={canSaveToFirestore}
+              canSaveToFirestore={canSaveToFirestore ?? false}
             />
           )}
         </div>
