@@ -54,7 +54,7 @@ export const useRecipeProcessor = (
     if (!accessToken) return;
 
     try {
-      const response = await fetch(`${backendUrl}/recipe-parser/my-submissions?limit=10`, {
+      const response = await fetch(`${backendUrl}/recipe-parser/my-recipes?limit=10`, {
         headers: {
           'Authorization': `Bearer ${accessToken}`,
           'Content-Type': 'application/json',
