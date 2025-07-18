@@ -58,51 +58,76 @@ export default function StoreSelector({ shouldNavigateToPlan }: StoreSelectorPro
   // 🆕 Auto-discover stores using NEW store as primary
   const hasInitiatedDiscovery = React.useRef(false);
 
-useEffect(() => {
-  // Prevent multiple discoveries
-  if (hasInitiatedDiscovery.current) {
-    return;
-  }
+  // Extract stable references
+  const {
+    isStoresLoaded: newIsStoresLoaded,
+    isLoading: newIsLoading,
+    error: newError,
+    availableStores: newAvailableStores,
+    selectedStore: newSelectedStore,
+    discoverStores: newDiscoverStores,
+    setSelectedStore: newSetSelectedStore,
+  } = newStoreLocation;
 
-  const discoverStores = async () => {
-    console.log('[StoreSelector] 🆕 Auto-discovering stores with NEW store as primary...');
+  const {
+    isStoresLoaded: oldIsStoresLoaded,
+    isLoading: oldIsLoading,
+    selectedStore: oldSelectedStore,
+    discoverStores: oldDiscoverStores,
+  } = oldPlannerStore;
 
-    // Mark that we've started discovery
-    hasInitiatedDiscovery.current = true;
+  useEffect(() => {
+    // Prevent multiple discoveries
+    if (hasInitiatedDiscovery.current) {
+      return;
+    }
 
-    // Try new store first (primary)
-    if (!newStoreLocation.isStoresLoaded && !newStoreLocation.isLoading) {
-      console.log('[StoreSelector] 🆕 Using NEW store for discovery (primary)');
-      await newStoreLocation.discoverStores();
+    const discoverStores = async () => {
+      console.log('[StoreSelector] 🆕 Auto-discovering stores with NEW store as primary...');
 
-      // Sync old store to new store's selection if it exists
-      if (oldPlannerStore.selectedStore && !newStoreLocation.selectedStore) {
-        newStoreLocation.setSelectedStore(oldPlannerStore.selectedStore);
+      // Mark that we've started discovery
+      hasInitiatedDiscovery.current = true;
+
+      // Try new store first (primary)
+      if (!newIsStoresLoaded && !newIsLoading) {
+        console.log('[StoreSelector] 🆕 Using NEW store for discovery (primary)');
+        await newDiscoverStores();
+
+        // Sync old store to new store's selection if it exists
+        if (oldSelectedStore && !newSelectedStore) {
+          newSetSelectedStore(oldSelectedStore);
+        }
       }
-    }
 
-    // Fallback to old store only if new store completely fails
-    if (!oldPlannerStore.isStoresLoaded && !oldPlannerStore.isLoading &&
-        newStoreLocation.availableStores.length === 0 && newStoreLocation.error) {
-      console.log('[StoreSelector] ⚠️ NEW store failed, fallback to OLD store');
-      await oldPlannerStore.discoverStores();
-    }
-  };
+      // Fallback to old store only if new store completely fails
+      if (!oldIsStoresLoaded && !oldIsLoading &&
+          newAvailableStores.length === 0 && newError) {
+        console.log('[StoreSelector] ⚠️ NEW store failed, fallback to OLD store');
+        await oldDiscoverStores();
+      }
+    };
 
-  // Only run if we haven't loaded stores yet
-  if (!newStoreLocation.isStoresLoaded && !oldPlannerStore.isStoresLoaded) {
-    discoverStores();
-  }
-}, []); // Empty dependency array - run only once on mount
+    // Only run if we haven't loaded stores yet
+    if (!newIsStoresLoaded && !oldIsStoresLoaded) {
+      discoverStores();
+    }
+  }, [
+    newIsStoresLoaded,
+    newIsLoading,
+    newError,
+    newAvailableStores.length,
+    newSelectedStore,
+    newDiscoverStores,
+    newSetSelectedStore,
+    oldIsStoresLoaded,
+    oldIsLoading,
+    oldSelectedStore,
+    oldDiscoverStores,
+  ]);
 
   // 🆕 Store selection now uses NEW store as primary
-  // 🎯 TARGETED FIX: Replace handleStoreSelect in StoreSelector.tsx
-
-  // 🚨 FINAL FIX: Replace handleStoreSelect in StoreSelector.tsx
-  // The key is to REMOVE the usePlannerStore.getState().setSelectedStore(storeId) call
-
   const handleStoreSelect = (storeId: string) => {
-    console.log("🔍 DEBUG: handleStoreSelect called with:", storeId); // ← ADD THIS LINE
+    console.log("🔍 DEBUG: handleStoreSelect called with:", storeId);
 
     console.log("[StoreSelector] 🚨 FINAL FIX: Selecting store:", storeId);
 
@@ -144,41 +169,52 @@ useEffect(() => {
   };
 
   // 🔄 Sync hook location with BOTH stores (during transition)
+  const {
+    setUserLocation: newSetUserLocation,
+  } = newStoreLocation;
+
+  const {
+    setUserLocation: oldSetUserLocation,
+  } = oldPlannerStore;
+
   useEffect(() => {
-  if (hookLocation) {
-    console.log('[StoreSelector] 🆕 Setting location on NEW store (primary)');
-    newStoreLocation.setUserLocation(hookLocation);
+    if (hookLocation) {
+      console.log('[StoreSelector] 🆕 Setting location on NEW store (primary)');
+      newSetUserLocation(hookLocation);
 
-    // Keep old store in sync during transition
-    oldPlannerStore.setUserLocation({
-      latitude: hookLocation.latitude,
-      longitude: hookLocation.longitude,
-      address: hookLocation.address,
-      source: hookLocation.source,
-    });
+      // Keep old store in sync during transition
+      oldSetUserLocation({
+        latitude: hookLocation.latitude,
+        longitude: hookLocation.longitude,
+        address: hookLocation.address,
+        source: hookLocation.source,
+      });
 
-    setSortBy('distance');
-    setShowLocationPrompt(false);
-  }
-}, [
-    hookLocation?.latitude,
-    hookLocation?.longitude,
-    hookLocation?.address,
-    hookLocation?.source
-  ]); // ✅ Use primitive values only
+      setSortBy('distance');
+      setShowLocationPrompt(false);
+    }
+  }, [
+    hookLocation,
+    newSetUserLocation,
+    oldSetUserLocation,
+  ]);
 
   // 🆕 Check for existing location and auto-enable distance sorting (using new store)
   const hasLoadedStoredLocation = React.useRef(false);
+  const {
+    userLocation: newUserLocation,
+    setUserLocation: newSetUserLocationForStored,
+  } = newStoreLocation;
 
   useEffect(() => {
     if (hasLoadedStoredLocation.current) return;
 
     const existingLocation = locationService.getStoredLocation();
-    if (existingLocation && !newStoreLocation.userLocation) {
+    if (existingLocation && !newUserLocation) {
       console.log('[StoreSelector] 🆕 Loading stored location into NEW store');
       hasLoadedStoredLocation.current = true;
 
-      newStoreLocation.setUserLocation({
+      newSetUserLocationForStored({
         latitude: existingLocation.latitude,
         longitude: existingLocation.longitude,
         address: existingLocation.address,
@@ -186,7 +222,7 @@ useEffect(() => {
       });
       setSortBy('distance');
     }
-  }, []); // ✅ Empty array - run once on mount
+  }, [newUserLocation, newSetUserLocationForStored]);
 
   // Location handlers (unchanged)
   const handleLocationRequest = async () => {
