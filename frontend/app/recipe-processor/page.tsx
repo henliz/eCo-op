@@ -6,10 +6,10 @@ import Header from '@/components/layout/Header';
 import Footer from '@/components/layout/Footer';
 import { useAuth } from '@/contexts/AuthContext';
 import { useRecipeProcessor } from '@/hooks/useRecipeProcessor';
-import UploadZone from '@/components/custom-recipes/UploadZone';
-import WelcomeScreen from '@/components/custom-recipes/WelcomeScreen';
-import EnhancedRecipeDisplay from '@/components/custom-recipes/EnhancedRecipeDisplay';
-import PricingResultModal from '@/components/custom-recipes/PricingResultModal';
+import UploadZone from '@/components/custom-recipes/recipe-processor/UploadZone';
+import WelcomeScreen from '@/components/custom-recipes/recipe-processor/WelcomeScreen';
+import EnhancedRecipeDisplay from '@/components/custom-recipes/recipe-processor/EnhancedRecipeDisplay';
+import PricingResultModal from '@/components/custom-recipes/recipe-processor/PricingResultModal';
 import { Recipe, ParsedRecipeDto } from '@/types';
 
 export default function RecipeProcessorPage() {

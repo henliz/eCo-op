@@ -1,74 +1,38 @@
 'use client';
 
-import React, { useState, useRef, useCallback, useEffect } from 'react';
+import React, { useState, useCallback, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import { useAuth } from '@/contexts/AuthContext';
-import { Button } from '@/components/ui/button';
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { Input } from '@/components/ui/input';
-import { Label } from '@/components/ui/label';
-import { Textarea } from '@/components/ui/textarea';
 import { Badge } from '@/components/ui/badge';
 import { Alert, AlertDescription } from '@/components/ui/alert';
-import PdfViewer from '@/components/PDFviewer';
-import CameraModal from '@/components/custom-recipes/CameraModal';
-
-// Types
-interface RecipeIngredient {
-  name: string;
-  quantity: number;
-  unit: string;
-  type?: string;
-}
-
-interface UserRecipeDto {
-  id?: string;
-  name: string;
-  instructions: string[];
-  description?: string;
-  ownerId: string;
-  visibility: 'private' | 'public';
-  status: 'draft' | 'validated' | 'needs_investigation' | 'rejected' | 'test_data';
-  portions: number;
-  tags?: string[];
-  ingredients: RecipeIngredient[];
-  parsingNotes?: string[];
-  createdAt?: Date;
-  updatedAt?: Date;
-}
-
-interface ParseResponse {
-  success: boolean;
-  data?: any; // We'll ignore this
-  userRecipe?: UserRecipeDto;
-  message: string;
-  error?: string;
-}
-
-type UploadStep = 'upload' | 'preview' | 'edit' | 'saving' | 'success';
+import CameraModal from '@/components/custom-recipes/recipe-upload/CameraModal';
+import { UploadStep } from '@/components/custom-recipes/recipe-upload/UploadStep';
+import { PreviewStep } from '@/components/custom-recipes/recipe-upload/PreviewStep';
+import { EditStep } from '@/components/custom-recipes/recipe-upload/EditStep';
+import { SuccessStep } from '@/components/custom-recipes/recipe-upload/SuccessStep';
+import { useRecipeUpload } from '@/hooks/recipe-upload/useRecipeUpload';
+import { debugLog } from '@/utils/recipe-upload/fileUtils';
 
 export default function RecipeUploadPage() {
-  const { currentUser, makeAPICall } = useAuth();
+  const { currentUser } = useAuth();
   const router = useRouter();
   
-  // State management
-  const [currentStep, setCurrentStep] = useState<UploadStep>('upload');
-  const [selectedFile, setSelectedFile] = useState<File | null>(null);
   const [dragOver, setDragOver] = useState(false);
   const [showCamera, setShowCamera] = useState(false);
-  const [isProcessing, setIsProcessing] = useState(false);
-  const [isSaving, setIsSaving] = useState(false);
-  const [error, setError] = useState<string | null>(null);
-  const [parsedRecipe, setParsedRecipe] = useState<UserRecipeDto | null>(null);
-  const [editedRecipe, setEditedRecipe] = useState<UserRecipeDto | null>(null);
   
-  // Refs
-  const fileInputRef = useRef<HTMLInputElement>(null);
-
-  // Debug logging
-  const debugLog = (step: string, data?: any) => {
-    console.log(`[RecipeUpload] ${step}:`, data);
-  };
+  const {
+    currentStep,
+    selectedFile,
+    isProcessing,
+    isSaving,
+    error,
+    editedRecipe,
+    setEditedRecipe,
+    handleFileSelect,
+    parseRecipe,
+    saveRecipe,
+    resetToStart
+  } = useRecipeUpload();
 
   // Auth check - redirect if not authenticated
   useEffect(() => {
@@ -77,53 +41,6 @@ export default function RecipeUploadPage() {
       router.push('/login');
     }
   }, [currentUser, router]);
-
-  // File type detection
-  const detectFileType = (file: File): 'pdf' | 'image' | 'unsupported' => {
-    debugLog('Detecting file type', { 
-      name: file.name, 
-      type: file.type, 
-      size: file.size 
-    });
-
-    // Check by MIME type first
-    if (file.type === 'application/pdf') return 'pdf';
-    if (file.type.startsWith('image/')) return 'image';
-
-    // Fallback to extension
-    const extension = file.name.toLowerCase().split('.').pop();
-    if (extension === 'pdf') return 'pdf';
-    if (['jpg', 'jpeg', 'png', 'webp', 'gif', 'bmp'].includes(extension || '')) return 'image';
-
-    return 'unsupported';
-  };
-
-  // File selection handler
-  const handleFileSelect = useCallback((file: File | null) => {
-    debugLog('File selected', file);
-    setError(null);
-    
-    if (!file) {
-      setSelectedFile(null);
-      setCurrentStep('upload');
-      return;
-    }
-
-    const fileType = detectFileType(file);
-    if (fileType === 'unsupported') {
-      setError('Unsupported file type. Please upload a PDF or image file.');
-      return;
-    }
-
-    setSelectedFile(file);
-    setCurrentStep('preview');
-  }, []);
-
-  // File input change
-  const handleFileInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const file = e.target.files?.[0] || null;
-    handleFileSelect(file);
-  };
 
   // Drag and drop handlers
   const handleDrop = useCallback((e: React.DragEvent) => {
@@ -150,180 +67,11 @@ export default function RecipeUploadPage() {
     setShowCamera(false);
   }, [handleFileSelect]);
 
-  // Parse recipe from file
-  const parseRecipe = async () => {
-    if (!selectedFile || !currentUser) return;
-
-    debugLog('Starting parse', { fileName: selectedFile.name });
-    setIsProcessing(true);
-    setError(null);
-
-    try {
-      const fileType = detectFileType(selectedFile);
-      const endpoint = fileType === 'pdf' ? '/recipe-parser/parse' : '/recipe-parser/parse-image';
-      
-      const formData = new FormData();
-      if (fileType === 'pdf') {
-        formData.append('file', selectedFile);
-        formData.append('ownerId', currentUser.uid);
-        formData.append('visibility', 'private');
-        formData.append('status', 'draft');
-        formData.append('portions', '1');
-      } else {
-        formData.append('image', selectedFile);
-        formData.append('ownerId', currentUser.uid);
-      }
-
-      debugLog('Sending parse request', { endpoint, fileType });
-
-      const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL || 'http://localhost:3001'}${endpoint}`, {
-        method: 'POST',
-        headers: {
-          'Authorization': `Bearer ${localStorage.getItem('accessToken')}`
-        },
-        body: formData
-      });
-
-      const data: ParseResponse = await response.json();
-      debugLog('Parse response', data);
-
-      if (!response.ok) {
-        throw new Error(data.error || `HTTP ${response.status}`);
-      }
-
-      if (data.success && data.userRecipe) {
-        setParsedRecipe(data.userRecipe);
-        setEditedRecipe({ ...data.userRecipe });
-        setCurrentStep('edit');
-      } else {
-        throw new Error(data.error || 'Failed to parse recipe');
-      }
-
-    } catch (err: any) {
-      debugLog('Parse error', err);
-      setError(err.message || 'Failed to parse recipe');
-    } finally {
-      setIsProcessing(false);
-    }
-  };
-
-  // Update edited recipe
-  const updateEditedRecipe = (updates: Partial<UserRecipeDto>) => {
-    if (!editedRecipe) return;
-    
-    const updated = { ...editedRecipe, ...updates };
-    debugLog('Updating edited recipe', updates);
-    setEditedRecipe(updated);
-  };
-
-  // Update ingredient
-  const updateIngredient = (index: number, field: keyof RecipeIngredient, value: string | number) => {
-    if (!editedRecipe?.ingredients) return;
-
-    const newIngredients = [...editedRecipe.ingredients];
-    newIngredients[index] = {
-      ...newIngredients[index],
-      [field]: value
-    };
-
-    updateEditedRecipe({ ingredients: newIngredients });
-  };
-
-  // Add ingredient
-  const addIngredient = () => {
-    if (!editedRecipe) return;
-
-    const newIngredient: RecipeIngredient = {
-      name: '',
-      quantity: 0,
-      unit: '',
-      type: 'core'
-    };
-
-    updateEditedRecipe({
-      ingredients: [...(editedRecipe.ingredients || []), newIngredient]
-    });
-  };
-
-  // Remove ingredient
-  const removeIngredient = (index: number) => {
-    if (!editedRecipe?.ingredients) return;
-
-    const newIngredients = editedRecipe.ingredients.filter((_, i) => i !== index);
-    updateEditedRecipe({ ingredients: newIngredients });
-  };
-
-  // Update instruction
-  const updateInstruction = (index: number, value: string) => {
-    if (!editedRecipe?.instructions) return;
-
-    const newInstructions = [...editedRecipe.instructions];
-    newInstructions[index] = value;
-    updateEditedRecipe({ instructions: newInstructions });
-  };
-
-  // Add instruction
-  const addInstruction = () => {
-    if (!editedRecipe) return;
-
-    updateEditedRecipe({
-      instructions: [...(editedRecipe.instructions || []), '']
-    });
-  };
-
-  // Remove instruction
-  const removeInstruction = (index: number) => {
-    if (!editedRecipe?.instructions) return;
-
-    const newInstructions = editedRecipe.instructions.filter((_, i) => i !== index);
-    updateEditedRecipe({ instructions: newInstructions });
-  };
-
-  // Save recipe
-  const saveRecipe = async () => {
-    if (!editedRecipe || !currentUser) return;
-
-    debugLog('Saving recipe', editedRecipe);
-    setIsSaving(true);
-    setError(null);
-
-    try {
-      const response = await makeAPICall('/recipe-parser/save-recipe', 'POST', {
-        ...editedRecipe,
-        ownerId: currentUser.uid
-      }, true);
-
-      debugLog('Save response', response);
-
-      if (response.success) {
-        setCurrentStep('success');
-      } else {
-        throw new Error(response.error || 'Failed to save recipe');
-      }
-
-    } catch (err: any) {
-      debugLog('Save error', err);
-      setError(err.message || 'Failed to save recipe');
-    } finally {
-      setIsSaving(false);
-    }
-  };
-
-  // Reset to start
-  const resetToStart = () => {
-    debugLog('Resetting to start');
-    setSelectedFile(null);
-    setParsedRecipe(null);
-    setEditedRecipe(null);
-    setError(null);
-    setCurrentStep('upload');
+  // Enhanced reset function that also closes camera
+  const handleReset = useCallback(() => {
+    resetToStart();
     setShowCamera(false);
-  };
-
-  // Format file size
-  const formatFileSize = (bytes: number): string => {
-    return (bytes / 1024 / 1024).toFixed(2) + ' MB';
-  };
+  }, [resetToStart]);
 
   // Don't render if not authenticated
   if (!currentUser) {
@@ -362,337 +110,42 @@ export default function RecipeUploadPage() {
           </Alert>
         )}
 
-        {/* Step 1: Upload */}
+        {/* Step Components */}
         {currentStep === 'upload' && (
-          <Card>
-            <CardHeader>
-              <CardTitle>Upload Recipe Document</CardTitle>
-            </CardHeader>
-            <CardContent>
-              {/* File Drop Zone */}
-              <div
-                className={`
-                  relative border-2 border-dashed rounded-lg p-8 text-center transition-all duration-300
-                  ${dragOver 
-                    ? 'border-blue-400 bg-blue-50' 
-                    : 'border-gray-300 bg-white hover:border-gray-400'
-                  } cursor-pointer
-                `}
-                onDrop={handleDrop}
-                onDragOver={handleDragOver}
-                onDragLeave={handleDragLeave}
-                onClick={() => fileInputRef.current?.click()}
-              >
-                <input
-                  ref={fileInputRef}
-                  type="file"
-                  accept=".pdf,.jpg,.jpeg,.png,.webp"
-                  onChange={handleFileInputChange}
-                  className="hidden"
-                />
-                
-                <div className="space-y-4">
-                  <div className="text-4xl">📄</div>
-                  <div>
-                    <div className="font-semibold text-gray-800 mb-1">
-                      Drop files here or click to browse
-                    </div>
-                    <div className="text-sm text-gray-600">
-                      Supports PDF and image files
-                    </div>
-                  </div>
-                </div>
-              </div>
-
-              {/* Camera Section */}
-              <div className="mt-6 border-t pt-6">
-                <div className="text-center mb-4">
-                  <div className="font-semibold text-gray-800 mb-2">Or use your camera</div>
-                </div>
-
-                <div className="text-center">
-                  <Button 
-                    onClick={() => setShowCamera(true)} 
-                    className="mb-2 bg-blue-600 hover:bg-blue-700"
-                  >
-                    📸 Open Camera
-                  </Button>
-                </div>
-              </div>
-            </CardContent>
-          </Card>
+          <UploadStep
+            dragOver={dragOver}
+            onFileSelect={handleFileSelect}
+            onDragOver={handleDragOver}
+            onDragLeave={handleDragLeave}
+            onDrop={handleDrop}
+            onCameraClick={() => setShowCamera(true)}
+          />
         )}
 
-        {/* Step 2: Preview */}
         {currentStep === 'preview' && selectedFile && (
-          <Card>
-            <CardHeader>
-              <CardTitle className="flex items-center justify-between">
-                <span>Preview: {selectedFile.name}</span>
-                <div className="flex gap-2">
-                  <Button onClick={resetToStart} variant="outline">
-                    🔄 New Upload
-                  </Button>
-                  <Button 
-                    onClick={parseRecipe} 
-                    disabled={isProcessing}
-                    className="bg-blue-600 hover:bg-blue-700"
-                  >
-                    {isProcessing ? (
-                      <>
-                        <div className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin mr-2" />
-                        Processing...
-                      </>
-                    ) : (
-                      '🔍 Parse Recipe'
-                    )}
-                  </Button>
-                </div>
-              </CardTitle>
-            </CardHeader>
-            <CardContent>
-              <div className="mb-4 text-sm text-gray-600">
-                File size: {formatFileSize(selectedFile.size)}
-              </div>
-              
-              {/* File Preview */}
-              <div className="h-96 border rounded">
-                {detectFileType(selectedFile) === 'pdf' ? (
-                  <PdfViewer
-                    file={selectedFile}
-                    filename={selectedFile.name}
-                    height="100%"
-                    showCard={false}
-                  />
-                ) : (
-                  <div className="h-full flex items-center justify-center bg-gray-50">
-                    <img
-                      src={URL.createObjectURL(selectedFile)}
-                      alt="Preview"
-                      className="max-h-full max-w-full object-contain"
-                    />
-                  </div>
-                )}
-              </div>
-            </CardContent>
-          </Card>
+          <PreviewStep
+            selectedFile={selectedFile}
+            isProcessing={isProcessing}
+            onReset={handleReset}
+            onParse={parseRecipe}
+          />
         )}
 
-        {/* Step 3: Edit */}
         {currentStep === 'edit' && editedRecipe && (
-          <Card>
-            <CardHeader>
-              <CardTitle className="flex items-center justify-between">
-                <span>Edit Recipe Data</span>
-                <div className="flex gap-2">
-                  <Button onClick={resetToStart} variant="outline">
-                    🔄 Start Over
-                  </Button>
-                  <Button 
-                    onClick={saveRecipe} 
-                    disabled={isSaving}
-                    className="bg-green-600 hover:bg-green-700"
-                  >
-                    {isSaving ? (
-                      <>
-                        <div className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin mr-2" />
-                        Saving...
-                      </>
-                    ) : (
-                      '💾 Save Recipe'
-                    )}
-                  </Button>
-                </div>
-              </CardTitle>
-            </CardHeader>
-            <CardContent>
-              <div className="space-y-6">
-                {/* Basic Info */}
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                  <div>
-                    <Label htmlFor="name">Recipe Name</Label>
-                    <Input
-                      id="name"
-                      value={editedRecipe.name}
-                      onChange={(e) => updateEditedRecipe({ name: e.target.value })}
-                      placeholder="Enter recipe name"
-                    />
-                  </div>
-                  <div>
-                    <Label htmlFor="portions">Portions</Label>
-                    <Input
-                      id="portions"
-                      type="number"
-                      value={editedRecipe.portions}
-                      onChange={(e) => updateEditedRecipe({ portions: parseInt(e.target.value) || 1 })}
-                      min="1"
-                    />
-                  </div>
-                </div>
-
-                {/* Description */}
-                <div>
-                  <Label htmlFor="description">Description (Optional)</Label>
-                  <Textarea
-                    id="description"
-                    value={editedRecipe.description || ''}
-                    onChange={(e) => updateEditedRecipe({ description: e.target.value })}
-                    placeholder="Brief description of the recipe"
-                    rows={2}
-                  />
-                </div>
-
-                {/* Ingredients */}
-                <div>
-                  <div className="flex items-center justify-between mb-4">
-                    <Label className="text-lg font-semibold">Ingredients</Label>
-                    <Button onClick={addIngredient} size="sm" variant="outline">
-                      ➕ Add Ingredient
-                    </Button>
-                  </div>
-                  
-                  <div className="space-y-2">
-                    {editedRecipe.ingredients?.map((ingredient, index) => (
-                      <div key={index} className="grid grid-cols-12 gap-2 items-center p-2 border rounded">
-                        <div className="col-span-6">
-                          <Input
-                            value={ingredient.name}
-                            onChange={(e) => updateIngredient(index, 'name', e.target.value)}
-                            placeholder="Ingredient name"
-                            className="text-sm"
-                          />
-                        </div>
-                        <div className="col-span-2">
-                          <Input
-                            type="number"
-                            value={ingredient.quantity}
-                            onChange={(e) => updateIngredient(index, 'quantity', parseFloat(e.target.value) || 0)}
-                            placeholder="Qty"
-                            className="text-sm"
-                            step="0.1"
-                          />
-                        </div>
-                        <div className="col-span-3">
-                          <Input
-                            value={ingredient.unit}
-                            onChange={(e) => updateIngredient(index, 'unit', e.target.value)}
-                            placeholder="Unit"
-                            className="text-sm"
-                          />
-                        </div>
-                        <div className="col-span-1">
-                          <Button
-                            onClick={() => removeIngredient(index)}
-                            size="sm"
-                            variant="outline"
-                            className="text-red-600 hover:text-red-700 w-full p-1"
-                          >
-                            🗑️
-                          </Button>
-                        </div>
-                      </div>
-                    ))}
-                  </div>
-                </div>
-
-                {/* Instructions */}
-                <div>
-                  <div className="flex items-center justify-between mb-4">
-                    <Label className="text-lg font-semibold">Instructions</Label>
-                    <Button onClick={addInstruction} size="sm" variant="outline">
-                      ➕ Add Step
-                    </Button>
-                  </div>
-                  
-                  <div className="space-y-2">
-                    {editedRecipe.instructions?.map((instruction, index) => (
-                      <div key={index} className="flex gap-2 items-start">
-                        <div className="flex-shrink-0 w-8 h-8 bg-blue-100 rounded-full flex items-center justify-center text-sm font-medium mt-1">
-                          {index + 1}
-                        </div>
-                        <Textarea
-                          value={instruction}
-                          onChange={(e) => updateInstruction(index, e.target.value)}
-                          placeholder={`Step ${index + 1} instructions...`}
-                          className="flex-1"
-                          rows={2}
-                        />
-                        <Button
-                          onClick={() => removeInstruction(index)}
-                          size="sm"
-                          variant="outline"
-                          className="text-red-600 hover:text-red-700 mt-1"
-                        >
-                          🗑️
-                        </Button>
-                      </div>
-                    ))}
-                  </div>
-                </div>
-
-                {/* Tags */}
-                <div>
-                  <Label htmlFor="tags">Tags (comma separated)</Label>
-                  <Input
-                    id="tags"
-                    value={editedRecipe.tags?.join(', ') || ''}
-                    onChange={(e) => updateEditedRecipe({ 
-                      tags: e.target.value.split(',').map(tag => tag.trim()).filter(Boolean)
-                    })}
-                    placeholder="vegetarian, quick, easy, etc."
-                  />
-                </div>
-
-                {/* Settings */}
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-4 p-4 bg-gray-50 rounded-lg">
-                  <div>
-                    <Label htmlFor="visibility">Visibility</Label>
-                    <select
-                      id="visibility"
-                      value={editedRecipe.visibility}
-                      onChange={(e) => updateEditedRecipe({ visibility: e.target.value as 'private' | 'public' })}
-                      className="mt-1 block w-full rounded-md border border-gray-300 px-3 py-2 text-sm"
-                    >
-                      <option value="private">Private</option>
-                      <option value="public">Public</option>
-                    </select>
-                  </div>
-                  <div>
-                    <Label htmlFor="status">Status</Label>
-                    <select
-                      id="status"
-                      value={editedRecipe.status}
-                      onChange={(e) => updateEditedRecipe({ status: e.target.value as any })}
-                      className="mt-1 block w-full rounded-md border border-gray-300 px-3 py-2 text-sm"
-                    >
-                      <option value="draft">Draft</option>
-                      <option value="validated">Validated</option>
-                      <option value="needs_investigation">Needs Investigation</option>
-                    </select>
-                  </div>
-                </div>
-              </div>
-            </CardContent>
-          </Card>
+          <EditStep
+            editedRecipe={editedRecipe}
+            setEditedRecipe={setEditedRecipe}
+            isSaving={isSaving}
+            onReset={handleReset}
+            onSave={saveRecipe}
+          />
         )}
 
-        {/* Step 4: Success */}
         {currentStep === 'success' && (
-          <Card>
-            <CardContent className="text-center py-12">
-              <div className="text-6xl mb-4">✅</div>
-              <h2 className="text-2xl font-bold text-green-600 mb-2">Recipe Saved Successfully!</h2>
-              <p className="text-gray-600 mb-6">Your recipe has been saved to Firestore.</p>
-              <div className="flex justify-center gap-4">
-                <Button onClick={resetToStart} variant="outline">
-                  Upload Another Recipe
-                </Button>
-                <Button onClick={() => router.push('/dashboard')}>
-                  Go to Dashboard
-                </Button>
-              </div>
-            </CardContent>
-          </Card>
+          <SuccessStep
+            onReset={handleReset}
+            onGoToDashboard={() => router.push('/dashboard')}
+          />
         )}
 
         {/* Camera Modal */}
