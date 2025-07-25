@@ -11,6 +11,7 @@ import { Textarea } from '@/components/ui/textarea';
 import { Badge } from '@/components/ui/badge';
 import { Alert, AlertDescription } from '@/components/ui/alert';
 import PdfViewer from '@/components/PDFviewer';
+import CameraModal from '@/components/custom-recipes/CameraModal';
 
 // Types
 interface RecipeIngredient {
@@ -54,9 +55,7 @@ export default function RecipeUploadPage() {
   const [currentStep, setCurrentStep] = useState<UploadStep>('upload');
   const [selectedFile, setSelectedFile] = useState<File | null>(null);
   const [dragOver, setDragOver] = useState(false);
-  const [isUsingCamera, setIsUsingCamera] = useState(false);
-  const [cameraStream, setCameraStream] = useState<MediaStream | null>(null);
-  const [facingMode, setFacingMode] = useState<'user' | 'environment'>('environment');
+  const [showCamera, setShowCamera] = useState(false);
   const [isProcessing, setIsProcessing] = useState(false);
   const [isSaving, setIsSaving] = useState(false);
   const [error, setError] = useState<string | null>(null);
@@ -65,8 +64,6 @@ export default function RecipeUploadPage() {
   
   // Refs
   const fileInputRef = useRef<HTMLInputElement>(null);
-  const videoRef = useRef<HTMLVideoElement>(null);
-  const canvasRef = useRef<HTMLCanvasElement>(null);
 
   // Debug logging
   const debugLog = (step: string, data?: any) => {
@@ -80,15 +77,6 @@ export default function RecipeUploadPage() {
       router.push('/login');
     }
   }, [currentUser, router]);
-
-  // Cleanup camera stream on unmount
-  useEffect(() => {
-    return () => {
-      if (cameraStream) {
-        cameraStream.getTracks().forEach(track => track.stop());
-      }
-    };
-  }, [cameraStream]);
 
   // File type detection
   const detectFileType = (file: File): 'pdf' | 'image' | 'unsupported' => {
@@ -155,82 +143,12 @@ export default function RecipeUploadPage() {
     setDragOver(false);
   };
 
-  // Camera functions
-  const startCamera = async () => {
-    debugLog('Starting camera', { facingMode });
-    try {
-      setError(null);
-      
-      const constraints = {
-        video: {
-          facingMode: facingMode,
-          width: { ideal: 1920 },
-          height: { ideal: 1080 }
-        }
-      };
-
-      const stream = await navigator.mediaDevices.getUserMedia(constraints);
-      setCameraStream(stream);
-      setIsUsingCamera(true);
-      
-      if (videoRef.current) {
-        videoRef.current.srcObject = stream;
-      }
-    } catch (err) {
-      debugLog('Camera error', err);
-      setError('Failed to access camera. Please check permissions.');
-    }
-  };
-
-  const stopCamera = () => {
-    debugLog('Stopping camera');
-    if (cameraStream) {
-      cameraStream.getTracks().forEach(track => track.stop());
-      setCameraStream(null);
-    }
-    setIsUsingCamera(false);
-  };
-
-  const capturePhoto = () => {
-    debugLog('Capturing photo');
-    if (!videoRef.current || !canvasRef.current) return;
-
-    const video = videoRef.current;
-    const canvas = canvasRef.current;
-    const ctx = canvas.getContext('2d');
-
-    if (!ctx) return;
-
-    // Set canvas size to video dimensions
-    canvas.width = video.videoWidth;
-    canvas.height = video.videoHeight;
-
-    // Draw the video frame to canvas
-    ctx.drawImage(video, 0, 0);
-
-    // Convert to blob and create file
-    canvas.toBlob((blob) => {
-      if (blob) {
-        const file = new File([blob], `photo-${Date.now()}.jpg`, { type: 'image/jpeg' });
-        handleFileSelect(file);
-        stopCamera();
-      }
-    }, 'image/jpeg', 0.9);
-  };
-
-  const switchCamera = () => {
-    const newFacingMode = facingMode === 'user' ? 'environment' : 'user';
-    setFacingMode(newFacingMode);
-    
-    // Restart camera with new facing mode
-    if (isUsingCamera) {
-      stopCamera();
-      setTimeout(() => {
-        setFacingMode(newFacingMode);
-        startCamera();
-      }, 100);
-    }
-  };
+  // Handle camera capture
+  const handleCameraCapture = useCallback((file: File) => {
+    debugLog('Camera captured file', { fileName: file.name, size: file.size });
+    handleFileSelect(file);
+    setShowCamera(false);
+  }, [handleFileSelect]);
 
   // Parse recipe from file
   const parseRecipe = async () => {
@@ -399,7 +317,7 @@ export default function RecipeUploadPage() {
     setEditedRecipe(null);
     setError(null);
     setCurrentStep('upload');
-    stopCamera();
+    setShowCamera(false);
   };
 
   // Format file size
@@ -492,40 +410,14 @@ export default function RecipeUploadPage() {
                   <div className="font-semibold text-gray-800 mb-2">Or use your camera</div>
                 </div>
 
-                {!isUsingCamera ? (
-                  <div className="text-center">
-                    <Button onClick={startCamera} className="mb-2">
-                      📸 Start Camera
-                    </Button>
-                  </div>
-                ) : (
-                  <div className="space-y-4">
-                    {/* Camera Controls */}
-                    <div className="flex justify-center gap-2">
-                      <Button onClick={capturePhoto} variant="default">
-                        📸 Capture Photo
-                      </Button>
-                      <Button onClick={switchCamera} variant="outline">
-                        🔄 Switch Camera
-                      </Button>
-                      <Button onClick={stopCamera} variant="outline">
-                        ❌ Stop Camera
-                      </Button>
-                    </div>
-
-                    {/* Camera Preview */}
-                    <div className="relative max-w-md mx-auto">
-                      <video
-                        ref={videoRef}
-                        autoPlay
-                        playsInline
-                        muted
-                        className="w-full rounded-lg border"
-                      />
-                      <canvas ref={canvasRef} className="hidden" />
-                    </div>
-                  </div>
-                )}
+                <div className="text-center">
+                  <Button 
+                    onClick={() => setShowCamera(true)} 
+                    className="mb-2 bg-blue-600 hover:bg-blue-700"
+                  >
+                    📸 Open Camera
+                  </Button>
+                </div>
               </div>
             </CardContent>
           </Card>
@@ -802,6 +694,13 @@ export default function RecipeUploadPage() {
             </CardContent>
           </Card>
         )}
+
+        {/* Camera Modal */}
+        <CameraModal
+          isOpen={showCamera}
+          onClose={() => setShowCamera(false)}
+          onCapture={handleCameraCapture}
+        />
       </div>
     </div>
   );
