@@ -40,54 +40,139 @@ export default function CameraModal({
 
   // Start camera
   const startCamera = async () => {
-    debugLog('Starting camera', { facingMode });
+    debugLog('Starting camera', { facingMode, protocol: window.location.protocol });
     setIsLoading(true);
     setError(null);
 
     try {
+      // Check if mediaDevices is supported
+      if (!navigator.mediaDevices || !navigator.mediaDevices.getUserMedia) {
+        throw new Error('Camera not supported on this device');
+      }
+
+      // Check if we're in a secure context
+      const isSecureContext = window.isSecureContext || window.location.protocol === 'https:' || 
+                               window.location.hostname === 'localhost' || 
+                               window.location.hostname === '127.0.0.1';
+      
+      if (!isSecureContext) {
+        throw new Error('Camera requires HTTPS or localhost');
+      }
+
       // Stop any existing stream first
       if (cameraStream) {
         cameraStream.getTracks().forEach(track => track.stop());
         setCameraStream(null);
       }
 
-      const constraints = {
-        video: {
-          facingMode: facingMode,
-          width: { ideal: 1920, max: 1920 },
-          height: { ideal: 1080, max: 1080 }
-        }
-      };
+      // Start with simple constraints, then try complex ones
+      let constraints: MediaStreamConstraints = { video: true };
+      
+      try {
+        // Try with facingMode if supported
+        constraints = {
+          video: {
+            facingMode: facingMode,
+            width: { ideal: 1280, max: 1920 },
+            height: { ideal: 720, max: 1080 }
+          } as MediaTrackConstraints
+        };
+      } catch (e) {
+        debugLog('Using simple constraints fallback');
+      }
 
+      debugLog('Requesting camera with constraints', constraints);
       const stream = await navigator.mediaDevices.getUserMedia(constraints);
+      debugLog('Camera stream obtained', { tracks: stream.getTracks().length });
+      
       setCameraStream(stream);
 
       if (videoRef.current) {
         const video = videoRef.current;
         video.srcObject = stream;
 
-        const playVideo = () => {
-          video.play()
+        // Aggressive video loading approach
+        const ensureVideoPlays = () => {
+          debugLog('Ensuring video plays', { readyState: video.readyState });
+          
+          return video.play()
             .then(() => {
-              debugLog('Video playback started successfully');
+              debugLog('Video playback started successfully', {
+                videoWidth: video.videoWidth,
+                videoHeight: video.videoHeight,
+                readyState: video.readyState
+              });
               setIsLoading(false);
+              return true;
             })
             .catch((playError) => {
-              debugLog('Video play failed', playError);
-              setError('Failed to start video playback');
-              setIsLoading(false);
+              debugLog('Video play attempt failed', playError);
+              return false;
             });
         };
 
-        if (video.readyState >= 1) {
-          playVideo();
-        } else {
-          video.addEventListener('loadedmetadata', playVideo, { once: true });
+        // Try multiple approaches simultaneously
+        const playPromises = [];
+
+        // Approach 1: Immediate play if ready
+        if (video.readyState >= 2) {
+          playPromises.push(ensureVideoPlays());
+        }
+
+        // Approach 2: Wait for metadata
+        const metadataPromise = new Promise<boolean>((resolve) => {
+          const handler = () => {
+            debugLog('Metadata loaded, attempting play');
+            ensureVideoPlays().then(resolve);
+          };
+          video.addEventListener('loadedmetadata', handler, { once: true });
+          
+          // Timeout for this approach
+          setTimeout(() => resolve(false), 3000);
+        });
+        playPromises.push(metadataPromise);
+
+        // Approach 3: Force play after delay
+        const forcePlayPromise = new Promise<boolean>((resolve) => {
+          setTimeout(() => {
+            if (isLoading) {
+              debugLog('Force playing video after timeout');
+              ensureVideoPlays().then(resolve);
+            } else {
+              resolve(false);
+            }
+          }, 2000);
+        });
+        playPromises.push(forcePlayPromise);
+
+        // Use whichever approach succeeds first
+        const raceResult = await Promise.race(playPromises);
+        
+        if (!raceResult) {
+          // If all approaches failed, try one more time with basic constraints
+          debugLog('All play approaches failed, trying simple stream');
+          const simpleStream = await navigator.mediaDevices.getUserMedia({ video: true });
+          video.srcObject = simpleStream;
+          setCameraStream(simpleStream);
+          await ensureVideoPlays();
         }
       }
     } catch (err: unknown) {
       debugLog('Camera error', err);
-      setError('Failed to access camera. Please check permissions.');
+      const errorMessage = err instanceof Error ? err.message : 'Unknown camera error';
+      
+      // More specific error messages
+      if (errorMessage.includes('Permission denied') || errorMessage.includes('NotAllowedError')) {
+        setError('Camera permission denied. Please allow camera access and try again.');
+      } else if (errorMessage.includes('NotFoundError')) {
+        setError('No camera found on this device.');
+      } else if (errorMessage.includes('NotReadableError')) {
+        setError('Camera is already in use by another application.');
+      } else if (errorMessage.includes('requires HTTPS')) {
+        setError('Camera requires HTTPS or localhost. Please use https:// or run on localhost.');
+      } else {
+        setError(`Failed to access camera: ${errorMessage}`);
+      }
       setIsLoading(false);
     }
   };
@@ -221,6 +306,20 @@ export default function CameraModal({
       {/* Camera View */}
       {currentStep === 'camera' && (
         <div className="relative w-full h-full flex flex-col">
+          {/* Debug Info - Remove after fixing */}
+          {process.env.NODE_ENV === 'development' && (
+            <div className="absolute top-20 left-4 bg-red-500 text-white p-3 text-xs z-20 rounded max-w-sm">
+              <div><strong>Debug Info:</strong></div>
+              <div>Loading: {isLoading.toString()}</div>
+              <div>Error: {error || 'none'}</div>
+              <div>Stream: {cameraStream ? 'active' : 'none'}</div>
+              <div>Video ready: {videoRef.current?.readyState || 'not ready'}</div>
+              <div>Video src: {videoRef.current?.srcObject ? 'set' : 'none'}</div>
+              <div>Facing: {facingMode}</div>
+              <div>HTTPS: {window.location.protocol}</div>
+            </div>
+          )}
+
           {/* Video Container */}
           <div className="flex-1 relative overflow-hidden">
             {isLoading && (
@@ -236,6 +335,27 @@ export default function CameraModal({
                   <Button onClick={startCamera} variant="outline">
                     Try Again
                   </Button>
+                  {/* Simple constraints fallback button */}
+                  <Button 
+                    onClick={async () => {
+                      try {
+                        const simpleStream = await navigator.mediaDevices.getUserMedia({ video: true });
+                        setCameraStream(simpleStream);
+                        if (videoRef.current) {
+                          videoRef.current.srcObject = simpleStream;
+                          videoRef.current.play();
+                          setIsLoading(false);
+                          setError(null);
+                        }
+                      } catch (e) {
+                        debugLog('Simple constraints also failed', e);
+                      }
+                    }}
+                    variant="outline" 
+                    className="ml-2"
+                  >
+                    Try Simple Mode
+                  </Button>
                 </div>
               </div>
             )}
@@ -246,7 +366,28 @@ export default function CameraModal({
               autoPlay
               playsInline
               muted
-              onError={() => setError('Video display error occurred')}
+              controls={false}
+              preload="metadata"
+              onError={(e) => {
+                debugLog('Video element error', e);
+                setError('Video display error occurred');
+              }}
+              onLoadedMetadata={() => {
+                debugLog('Video metadata loaded');
+                if (isLoading && videoRef.current) {
+                  videoRef.current.play().then(() => {
+                    setIsLoading(false);
+                  });
+                }
+              }}
+              onCanPlay={() => {
+                debugLog('Video can play');
+                if (isLoading) setIsLoading(false);
+              }}
+              onPlaying={() => {
+                debugLog('Video is playing');
+                setIsLoading(false);
+              }}
             />
             
             <canvas ref={canvasRef} className="hidden" />
