@@ -18,17 +18,28 @@ export const PreviewStep: React.FC<PreviewStepProps> = ({
   onReset,
   onParse
 }) => {
+  // Debug handlers to ensure clicks are registered
+  const handleReset = () => {
+    console.log('Reset button clicked');
+    onReset();
+  };
+
+  const handleParse = () => {
+    console.log('Parse button clicked');
+    onParse();
+  };
+
   return (
     <Card>
       <CardHeader>
         <CardTitle className="flex items-center justify-between">
           <span>Preview: {selectedFile.name}</span>
           <div className="flex gap-2">
-            <Button onClick={onReset} variant="outline">
+            <Button onClick={handleReset} variant="outline">
               🔄 New Upload
             </Button>
             <Button 
-              onClick={onParse} 
+              onClick={handleParse} 
               disabled={isProcessing}
               className="bg-blue-600 hover:bg-blue-700"
             >
@@ -50,7 +61,7 @@ export const PreviewStep: React.FC<PreviewStepProps> = ({
         </div>
         
         {/* File Preview */}
-        <div className="h-96 border rounded">
+        <div className="h-96 border rounded overflow-hidden">
           {detectFileType(selectedFile) === 'pdf' ? (
             <PdfViewer
               file={selectedFile}
@@ -59,13 +70,14 @@ export const PreviewStep: React.FC<PreviewStepProps> = ({
               showCard={false}
             />
           ) : (
-            <div className="h-full flex items-center justify-center bg-gray-50">
+            <div className="h-full w-full relative bg-gray-50 flex items-center justify-center">
               <Image
                 src={URL.createObjectURL(selectedFile)}
                 alt="Preview"
-                className="max-h-full max-w-full object-contain"
                 fill
-                sizes="100vw"
+                className="object-contain"
+                sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
+                priority
               />
             </div>
           )}

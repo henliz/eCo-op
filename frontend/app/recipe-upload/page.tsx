@@ -42,6 +42,13 @@ export default function RecipeUploadPage() {
     }
   }, [currentUser, router]);
 
+  // Close camera automatically when step changes to preview
+  useEffect(() => {
+    if (currentStep === 'preview' && showCamera) {
+      setShowCamera(false);
+    }
+  }, [currentStep, showCamera]);
+
   // Drag and drop handlers
   const handleDrop = useCallback((e: React.DragEvent) => {
     e.preventDefault();
@@ -64,7 +71,7 @@ export default function RecipeUploadPage() {
   const handleCameraCapture = useCallback((file: File) => {
     debugLog('Camera captured file', { fileName: file.name, size: file.size });
     handleFileSelect(file);
-    setShowCamera(false);
+    // Camera will close automatically via useEffect when step changes
   }, [handleFileSelect]);
 
   // Enhanced reset function that also closes camera
