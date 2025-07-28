@@ -122,7 +122,7 @@ export default function CameraModal({
             resolve();
           };
 
-          video.onerror = (e) => {
+          video.onerror = () => {
             clearTimeout(timeout);
             reject(new Error('Video loading error'));
           };
@@ -273,7 +273,7 @@ export default function CameraModal({
         URL.revokeObjectURL(capturedImage);
       }
     };
-  }, []);
+  }, [capturedImage, stopCamera]);
 
   // Effect: Prevent body scroll when modal is open
   useEffect(() => {
