@@ -2,6 +2,8 @@
 
 import React, { useState, useRef, useEffect, useCallback } from 'react';
 import { Button } from '@/components/ui/button';
+import Image from 'next/image';
+// import { set } from 'date-fns';
 
 interface CameraModalProps {
   isOpen: boolean;
@@ -32,7 +34,7 @@ export default function CameraModal({
   const canvasRef = useRef<HTMLCanvasElement>(null);
 
   // Debug logging
-  const debugLog = (step: string, data?: any) => {
+  const debugLog = (step: string, data?: unknown) => {
     console.log(`[CameraModal] ${step}:`, data);
   };
 
@@ -83,7 +85,7 @@ export default function CameraModal({
           video.addEventListener('loadedmetadata', playVideo, { once: true });
         }
       }
-    } catch (err: any) {
+    } catch (err: unknown) {
       debugLog('Camera error', err);
       setError('Failed to access camera. Please check permissions.');
       setIsLoading(false);
@@ -91,16 +93,16 @@ export default function CameraModal({
   };
 
   // Stop camera
-  const stopCamera = () => {
+  const stopCamera = useCallback(()=> {
     debugLog('Stopping camera');
     if (cameraStream) {
       cameraStream.getTracks().forEach(track => track.stop());
       setCameraStream(null);
     }
-    if (videoRef.current) {
+    if (videoRef.current){
       videoRef.current.srcObject = null;
     }
-  };
+  }, [cameraStream]);
 
   // Switch camera
   const switchCamera = () => {
@@ -145,24 +147,6 @@ export default function CameraModal({
     }, 'image/jpeg', quality);
   }, [quality]);
 
-  // Confirm photo
-  const confirmPhoto = useCallback(() => {
-    if (capturedFile) {
-      onCapture(capturedFile);
-      handleClose();
-    }
-  }, [capturedFile, onCapture]);
-
-  // Retake photo
-  const retakePhoto = useCallback(() => {
-    if (capturedImage) {
-      URL.revokeObjectURL(capturedImage);
-    }
-    setCapturedImage(null);
-    setCapturedFile(null);
-    setCurrentStep('camera');
-  }, [capturedImage]);
-
   // Handle close
   const handleClose = useCallback(() => {
     stopCamera();
@@ -175,6 +159,24 @@ export default function CameraModal({
     setError(null);
     onClose();
   }, [stopCamera, capturedImage, onClose]);
+
+  // Confirm photo
+  const confirmPhoto = useCallback(() => {
+    if (capturedFile) {
+      onCapture(capturedFile);
+      handleClose();
+    }
+  }, [capturedFile, onCapture, handleClose]);
+
+  // Retake photo
+  const retakePhoto = useCallback(() => {
+    if (capturedImage) {
+      URL.revokeObjectURL(capturedImage);
+    }
+    setCapturedImage(null);
+    setCapturedFile(null);
+    setCurrentStep('camera');
+  }, [capturedImage]);
 
   // Effect: Start camera when modal opens
   useEffect(() => {
@@ -210,7 +212,7 @@ export default function CameraModal({
         URL.revokeObjectURL(capturedImage);
       }
     };
-  }, []);
+  }, [stopCamera, capturedImage]);
 
   if (!isOpen) return null;
 
@@ -294,10 +296,12 @@ export default function CameraModal({
         <div className="relative w-full h-full flex flex-col">
           {/* Image Container */}
           <div className="flex-1 relative overflow-hidden bg-black">
-            <img
+            <Image
               src={capturedImage}
               alt="Captured photo"
               className="w-full h-full object-contain"
+              fill
+              sizes="100vw"
             />
           </div>
 

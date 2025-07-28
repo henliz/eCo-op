@@ -216,7 +216,7 @@ export const EditStep: React.FC<EditStepProps> = ({
               <select
                 id="status"
                 value={editedRecipe.status}
-                onChange={(e) => updateEditedRecipe({ status: e.target.value as any })}
+                onChange={(e) => updateEditedRecipe({ status: e.target.value as 'draft' | 'validated' | 'needs_investigation' })}
                 className="mt-1 block w-full rounded-md border border-gray-300 px-3 py-2 text-sm"
               >
                 <option value="draft">Draft</option>

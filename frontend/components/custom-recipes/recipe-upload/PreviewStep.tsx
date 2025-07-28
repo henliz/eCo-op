@@ -3,6 +3,7 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import PdfViewer from '@/components/PDFviewer';
 import { detectFileType, formatFileSize } from '@/utils/recipe-upload/fileUtils';
+import Image from 'next/image';
 
 interface PreviewStepProps {
   selectedFile: File;
@@ -59,10 +60,12 @@ export const PreviewStep: React.FC<PreviewStepProps> = ({
             />
           ) : (
             <div className="h-full flex items-center justify-center bg-gray-50">
-              <img
+              <Image
                 src={URL.createObjectURL(selectedFile)}
                 alt="Preview"
                 className="max-h-full max-w-full object-contain"
+                fill
+                sizes="100vw"
               />
             </div>
           )}
