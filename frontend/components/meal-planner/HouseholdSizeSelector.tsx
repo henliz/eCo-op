@@ -2,7 +2,8 @@
 
 import React, { useEffect, useRef, useState } from 'react';
 import { Users } from 'lucide-react';
-import { usePlannerStore } from './usePlannerStore';
+import { usePlannerStores as usePlannerStore } from '@/stores/usePlannerStores';
+
 
 /**
  * HouseholdSizeSelector – hydration‑safe bumper‑car stick people 🤼‍♂️
@@ -17,10 +18,16 @@ import { usePlannerStore } from './usePlannerStore';
  */
 export function HouseholdSizeSelector() {
   // ─── Store state ───────────────────────────────────────────────────────────
-  const normalMealServings     = usePlannerStore(s => s.normalMealServings);
-  const setNormalMealServings  = usePlannerStore(s => s.setNormalMealServings);
-  const setRecipeMultiplier    = usePlannerStore(s => s.setRecipeMultiplier);
-  const meals                  = usePlannerStore(s => s.meals);
+  //const normalMealServings     = usePlannerStore(s => s.normalMealServings);
+  //const setNormalMealServings  = usePlannerStore(s => s.setNormalMealServings);
+  //const setRecipeMultiplier    = usePlannerStore(s => s.setRecipeMultiplier);
+  //const meals                  = usePlannerStore(s => s.meals);
+  const {
+    normalMealServings,
+    setNormalMealServings,
+    setRecipeMultiplier,
+    meals
+  } = usePlannerStore();
 
   // ─── Refs ──────────────────────────────────────────────────────────────────
   const prevSizeRef       = useRef(normalMealServings);

@@ -1,7 +1,7 @@
 'use client';
 
 import React, { useEffect, useMemo } from 'react';
-import { usePlannerStore, type Store } from './usePlannerStore';
+import { usePlannerStores as usePlannerStore, type Store, getPlannerStores } from '@/stores/usePlannerStores';
 import { StoreCard } from './StoreCard';
 import { MapPin, Navigation, Loader2, AlertCircle, Search, X } from 'lucide-react';
 import { locationService } from '@/lib/location';
@@ -138,18 +138,27 @@ export default function StoreSelector({ shouldNavigateToPlan }: StoreSelectorPro
     // Instead, update the state directly using setState
     console.log("[StoreSelector] 🚨 Bypassing setSelectedStore, using direct setState");
 
-    usePlannerStore.setState({
+    //usePlannerStore.setState({
+    //  selectedStore: storeId,
+    //  isLoading: true,
+    //  error: null,
+    //  isDataLoaded: false,
+    //  // Also sync the stores to prevent future validation issues
+    //  availableStores: newStoreLocation.availableStores
+    //});
+    getPlannerStores().setState({
       selectedStore: storeId,
       isLoading: true,
       error: null,
       isDataLoaded: false,
-      // Also sync the stores to prevent future validation issues
       availableStores: newStoreLocation.availableStores
     });
 
     // 3. Verify the state was actually updated
     setTimeout(() => {
-      const state = usePlannerStore.getState();
+      //const state = usePlannerStore.getState();
+      const state = getPlannerStores().getState();
+
       console.log("[StoreSelector] 🚨 State verification:", {
         selectedStore: state.selectedStore,
         isDataLoaded: state.isDataLoaded,
@@ -164,7 +173,9 @@ export default function StoreSelector({ shouldNavigateToPlan }: StoreSelectorPro
     // 5. Trigger fresh data fetch
     setTimeout(() => {
       console.log("[StoreSelector] 🚨 Triggering fetchMealData");
-      usePlannerStore.getState().fetchMealData();
+      //usePlannerStore.getState().fetchMealData();
+      getPlannerStores().fetchMealData();
+
     }, 100);
   };
 

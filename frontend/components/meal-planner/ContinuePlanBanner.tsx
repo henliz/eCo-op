@@ -1,6 +1,8 @@
 import React, { useEffect, useState } from 'react';
-import { usePlannerStore } from './usePlannerStore';
+import { usePlannerStores as usePlannerStore } from '@/stores/usePlannerStores';
+
 import { useStoreLocationStore } from '@/stores/useStoreLocationStore'; // ADD THIS
+
 
 import { useAuth } from '@/contexts/AuthContext';
 

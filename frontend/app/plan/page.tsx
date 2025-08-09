@@ -11,9 +11,7 @@ import { HouseholdSizeSelector } from '@/components/meal-planner/HouseholdSizeSe
 import { MealPlanScreen } from '@/components/meal-planner/MealPlanScreen';
 import { GroceryScreen } from '@/components/meal-planner/GroceryScreen';
 import { CookScreen } from '@/components/meal-planner/CookScreen';
-import { usePlannerStore } from '@/components/meal-planner/usePlannerStore';
-import { useStoreLocationStore } from '@/stores/useStoreLocationStore';
-
+import { usePlannerStores as usePlannerStore , getPlannerStores} from '@/stores/usePlannerStores';
 import LoadingScreen from '@/components/meal-planner/LoadingScreen';
 
 // Add these imports for testing
@@ -154,13 +152,11 @@ function SyncTestButtons() {
 }
 
 export default function MealPlannerPage() {
-  const { makeAPICall } = useAuth(); // Get the API function
+  const { makeAPICall, currentUser } = useAuth();
 
   // Expose makeAPICall to the store via window
   useEffect(() => {
     window.__plannerMakeAPICall = makeAPICall;
-
-    // Cleanup on unmount
     return () => {
       delete window.__plannerMakeAPICall;
     };
@@ -168,15 +164,9 @@ export default function MealPlannerPage() {
 
   const [view, setView] = useState<View>('store');
 
-  //const { selectedStore, isDataLoaded, isLoading } = usePlannerStore();
-
-  const newStoreLocation = useStoreLocationStore();
-  const oldPlannerStore = usePlannerStore();
-  const selectedStore = newStoreLocation.selectedStore || oldPlannerStore.selectedStore;
-  const isDataLoaded = oldPlannerStore.isDataLoaded; // Keep using old store for meal data
-  const isLoading = newStoreLocation.isLoading || oldPlannerStore.isLoading;
-
-
+  // USE ONLY THE ORCHESTRATOR STORE
+  const plannerStore = usePlannerStore();
+  const { selectedStore, isDataLoaded, isLoading } = plannerStore;
   const [showLoading, setShowLoading] = useState(false);
   const hasTransitionedToPlan = useRef(false);
 
@@ -203,22 +193,18 @@ export default function MealPlannerPage() {
   // Handle view changes and scroll to top when switching views
   const handleViewChange = (newView: View) => {
     if (isTabEnabled(newView)) {
-      // SAVE BEFORE SWITCHING TABS
-      const store = usePlannerStore.getState();
-      if (store.hasUnsavedChanges() && window.__plannerMakeAPICall) {
+      // SAVE BEFORE SWITCHING TABS - BUT ONLY IF AUTHENTICATED
+      const store = getPlannerStores();
+      if (store.hasUnsavedChanges() &&
+          window.__plannerMakeAPICall &&
+          currentUser) { // Add authentication check
         console.log(`[TabChange] Saving before switching to ${newView}`);
-        store.saveUserPlan(window.__plannerMakeAPICall).catch(error => {
+        store.saveUserPlan(window.__plannerMakeAPICall).catch((error: unknown) => {
           console.error('[TabChange] Save failed:', error);
         });
       }
-
-      // Then scroll to top
       scrollToTop();
-
-      // Set the view first
       setView(newView);
-
-
     }
   };
 
@@ -275,6 +261,26 @@ export default function MealPlannerPage() {
       scrollToTop();
     }
   }, [view, scrollToTop]);
+
+  //DEBUG
+  //useEffect(() => {
+  //  console.log('[DEBUG] Orchestrator auto-save setup should be running');
+
+    // Check if the individual stores have callbacks
+  //  const mealPlan = useMealPlanStore.getState();
+  //  const grocery = useGroceryStore.getState();
+
+  //  console.log('[DEBUG] MealPlan store onStateChange:', mealPlan.onStateChange);
+  //  console.log('[DEBUG] Grocery store onStateChange:', grocery.onStateChange);
+  //}, []);
+
+  // Add this temporary test in your MealPlannerPage component
+  //useEffect(() => {
+  //  console.log('Testing basic setTimeout...');
+  //  setTimeout(() => {
+  //    console.log('✅ Basic setTimeout works!');
+  //  }, 2000);
+  //}, []);
 
 return (
   <>

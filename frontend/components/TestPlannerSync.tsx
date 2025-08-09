@@ -2,7 +2,8 @@
 
 import React from 'react';
 import { usePlannerSync } from '@/hooks/usePlannerSync';
-import { usePlannerStore } from '@/components/meal-planner/usePlannerStore';
+import { usePlannerStores as usePlannerStore } from '@/stores/usePlannerStores';
+
 import { useAuth } from '@/contexts/AuthContext';
 
 export default function TestPlannerSync() {

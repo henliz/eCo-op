@@ -1,8 +1,8 @@
 // frontend/hooks/usePlannerSync.ts
 
-import { useEffect, useCallback } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import { useAuth } from '@/contexts/AuthContext';
-import { usePlannerStore } from '@/components/meal-planner/usePlannerStore';
+import { usePlannerStores as usePlannerStore } from '@/stores/usePlannerStores';
 
 // Create a makeAPICall function that mirrors your AuthContext logic
 const createAPICall = (accessToken: string | null) => {
@@ -55,7 +55,10 @@ export const usePlannerSync = () => {
     lastSyncError
   } = usePlannerStore();
 
-  // Create wrapper functions
+  // Prevent infinite loading
+  const [hasLoadedPlan, setHasLoadedPlan] = useState(false);
+
+  // Create wrapper functions with useCallback to prevent recreation
   const loadPlan = useCallback(async () => {
     if (!currentUser || !accessToken) return;
     const makeAPICall = createAPICall(accessToken);
@@ -74,12 +77,24 @@ export const usePlannerSync = () => {
     await deleteUserPlan(makeAPICall);
   }, [currentUser, accessToken, deleteUserPlan]);
 
-  // Auto-load user plan when they log in
+  // Auto-load user plan when they log in (only once)
   useEffect(() => {
-    if (currentUser?.uid && accessToken) {
-      loadPlan();
+    if (currentUser?.uid && accessToken && !hasLoadedPlan) {
+      console.log('[usePlannerSync] Auto-loading user plan for:', currentUser.email);
+      setHasLoadedPlan(true);
+      loadPlan().catch((error) => {
+        console.warn('[usePlannerSync] Auto-load failed (user might not have a saved plan):', error);
+        // Don't reset hasLoadedPlan on error - we still tried to load
+      });
     }
-  }, [currentUser?.uid, accessToken, loadPlan]);
+  }, [currentUser?.uid, accessToken, hasLoadedPlan]); // Removed loadPlan from dependencies
+
+  // Reset hasLoadedPlan when user changes (logout/login)
+  useEffect(() => {
+    if (!currentUser?.uid) {
+      setHasLoadedPlan(false);
+    }
+  }, [currentUser?.uid]);
 
   return {
     loadPlan,
@@ -89,5 +104,6 @@ export const usePlannerSync = () => {
     lastSyncError,
     isAuthenticated: !!currentUser,
     userId: currentUser?.uid,
+    hasLoadedPlan, // Expose this for debugging
   };
 };

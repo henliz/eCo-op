@@ -2,7 +2,8 @@
 
 import React, { useState, useEffect, useRef } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { type AggregatedItem, type IngredientTags } from './usePlannerStore';
+import { type AggregatedItem, type IngredientTags } from '@/stores/usePlannerStores';
+
 import { Tag, Home, ShoppingCart, ArrowDown, Check } from 'lucide-react';
 
 interface GroceryItemProps {
