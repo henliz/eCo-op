@@ -1,9 +1,8 @@
 'use client';
 
 import React, { useState } from 'react';
-import { type Recipe, type MealCategory } from './usePlannerStore';
-import { usePlannerStore } from './usePlannerStore';
-
+import { type Recipe, type MealCategory } from '@/stores/usePlannerStores';
+import { usePlannerStores as usePlannerStore } from '@/stores/usePlannerStores';
 import { Collapsible, CollapsibleTrigger, CollapsibleContent } from '@/components/ui/collapsible';
 import { ChevronDown, ChevronUp } from 'lucide-react';
 import { MealCard } from './MealCard';
@@ -17,13 +16,22 @@ export function MealPlanScreen() {
   });
 
   // UPDATED: Use simplified store - no more separate selection state
-  const meals               = usePlannerStore(s => s.meals);
-  const setRecipeMultiplier = usePlannerStore(s => s.setRecipeMultiplier);
-  const toggleMeal          = usePlannerStore(s => s.toggleMeal);
-  const mealSummary         = usePlannerStore(s => s.mealSummary);
-  const totals              = usePlannerStore(s => s.totals);
-  const isLoading           = usePlannerStore(s => s.isLoading);
-  const error               = usePlannerStore(s => s.error);
+  //const meals               = usePlannerStore(s => s.meals);
+  //const setRecipeMultiplier = usePlannerStore(s => s.setRecipeMultiplier);
+  //const toggleMeal          = usePlannerStore(s => s.toggleMeal);
+  //const mealSummary         = usePlannerStore(s => s.mealSummary);
+  //const totals              = usePlannerStore(s => s.totals);
+  //const isLoading           = usePlannerStore(s => s.isLoading);
+  //const error               = usePlannerStore(s => s.error);
+  const {
+    meals,
+    setRecipeMultiplier,
+    toggleMeal,
+    mealSummary,
+    totals,
+    isLoading,
+    error
+  } = usePlannerStore();
 
   const handleSectionToggle = (section: keyof MealCategory) => {
     setOpenSections(prev => ({

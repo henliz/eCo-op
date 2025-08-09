@@ -2,7 +2,9 @@
 
 import React, { useEffect, useMemo } from 'react';
 import Image from 'next/image';
-import { usePlannerStore, type Store } from '../meal-planner/usePlannerStore';
+//import { usePlannerStore, type Store } from '../meal-planner/usePlannerStore';
+import { usePlannerStores as usePlannerStore, type Store, getPlannerStores } from '@/stores/usePlannerStores';
+
 import { StoreCard } from '../meal-planner/StoreCard';
 import { MapPin, Navigation, Loader2, AlertCircle } from 'lucide-react';
 import { locationService } from '@/lib/location';
@@ -100,7 +102,8 @@ export default function StoreSelector({ shouldNavigateToPlan }: StoreSelectorPro
     setSelectedStore(storeId);
     shouldNavigateToPlan.current = true;
     setTimeout(() => {
-      usePlannerStore.getState().fetchMealData();
+      //usePlannerStore.getState().fetchMealData();
+      getPlannerStores().fetchMealData();
     }, 100);
   };
 

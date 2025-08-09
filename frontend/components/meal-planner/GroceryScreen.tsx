@@ -2,7 +2,8 @@
 
 import React, { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { usePlannerStore, type AggregatedItem } from './usePlannerStore';
+import { usePlannerStores as usePlannerStore, type AggregatedItem, getPlannerStores } from '@/stores/usePlannerStores';
+
 import { GroceryItem } from './GroceryItem';
 import { GroceryListPrintable } from './GroceryListPrintable';
 import { StoreCard } from './StoreCard'; // Import the StoreCard component
@@ -463,7 +464,8 @@ export function GroceryScreen() {
               name: selectedStoreInfo.name,
               location: selectedStoreInfo.location
             } : undefined}
-            selectedRecipes={usePlannerStore.getState().selectedRecipes()}
+            //selectedRecipes={usePlannerStore.getState().selectedRecipes()}
+            selectedRecipes={getPlannerStores().selectedRecipes()}
           />
         </div>
       </div>

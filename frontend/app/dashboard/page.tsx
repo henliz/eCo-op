@@ -7,8 +7,10 @@ import { Alert, AlertDescription } from '@/components/ui/alert';
 import Header from '@/components/layout/Header';
 import Footer from '@/components/layout/Footer';
 import { useAuth } from '@/contexts/AuthContext';
-import { usePlannerStore } from '../../components/meal-planner/usePlannerStore';
+//import { usePlannerStore } from '../../components/meal-planner/usePlannerStore';
+import { usePlannerStores as usePlannerStore } from '@/stores/usePlannerStores';
 import { useUserPreferencesStore } from '@/stores/useUserPreferencesStore';
+
 import {
   Home,
   User,
@@ -56,14 +58,21 @@ const DashboardPage: React.FC = () => {
   const { currentUser, loading: authLoading, makeAPICall } = useAuth();
 
   // Get real data from planner store
-  const loadUserPlan = usePlannerStore((s) => s.loadUserPlan);
-  const meals = usePlannerStore((s) => s.meals);
-  const selectedStore = usePlannerStore((s) => s.selectedStore);
-  const selectedRecipes = usePlannerStore((s) => s.selectedRecipes);
-  const mealSummary = usePlannerStore((s) => s.mealSummary);
-  const totals = usePlannerStore((s) => s.totals);
-  const [hasTriedToLoad, setHasTriedToLoad] = useState<boolean>(false);
-
+  //const loadUserPlan = usePlannerStore((s) => s.loadUserPlan);
+  //const meals = usePlannerStore((s) => s.meals);
+  //const selectedStore = usePlannerStore((s) => s.selectedStore);
+  //const selectedRecipes = usePlannerStore((s) => s.selectedRecipes);
+  //const mealSummary = usePlannerStore((s) => s.mealSummary);
+  //const totals = usePlannerStore((s) => s.totals);
+  //const [hasTriedToLoad, setHasTriedToLoad] = useState<boolean>(false);
+  const {
+    loadUserPlan,
+    meals,
+    selectedStore,
+    selectedRecipes,
+    mealSummary,
+    totals
+  } = usePlannerStore();
 
   // Add preferences store
   //const preferences = useUserPreferencesStore();
@@ -75,6 +84,7 @@ const DashboardPage: React.FC = () => {
   const [activeSection, setActiveSection] = useState<string>('overview');
   const [searchQuery, setSearchQuery] = useState<string>('');
   const [currentTime, setCurrentTime] = useState<Date>(new Date());
+  const [hasTriedToLoad, setHasTriedToLoad] = useState<boolean>(false);
 
   // Load user's saved meal plan when dashboard mounts
   useEffect(() => {

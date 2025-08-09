@@ -2,7 +2,8 @@
 
 import React from 'react';
 import Image from 'next/image';
-import { type Store } from './usePlannerStore';
+import { type Store } from '@/stores/usePlannerStores';
+
 import { format } from 'date-fns';
 
 interface StoreCardProps {
