@@ -182,16 +182,18 @@ interface MealPlanState {
   meals: MealCategory;
   normalMealServings: number;
 
-  // Loading states
+  // Loading states - now per meal type
   isDataLoaded: boolean;
   isLoading: boolean;
+  loadingMealTypes: Set<'breakfast' | 'lunch' | 'dinner'>; // Track which meal types are loading
   error: string | null;
 
   // Actions - Configuration
   setNormalMealServings: (servings: number) => void;
 
   // Actions - Data management
-  fetchMealData: (selectedStore: Store, makeAPICall: APICallFunction) => Promise<void>;
+  fetchMealData: (selectedStore: Store, makeAPICall: APICallFunction) => Promise<void>; // Keep for backward compatibility
+  fetchMealRecommendations: (mealType: 'breakfast' | 'lunch' | 'dinner', selectedStore: Store, makeAPICall: APICallFunction) => Promise<void>; // New action
   setMeals: (meals: MealCategory) => void;
   clearMealData: () => void;
 
@@ -203,6 +205,7 @@ interface MealPlanState {
   selectedRecipes: () => Recipe[];
   mealSummary: () => { breakfast: number; lunch: number; dinner: number; total: number };
   calculateInitialMultiplier: (servings: number) => number;
+  isMealTypeLoading: (mealType: 'breakfast' | 'lunch' | 'dinner') => boolean; // Check if specific meal type is loading
 
   // Event callbacks (for triggering saves in other stores)
   onStateChange?: () => void;
@@ -264,6 +267,7 @@ export const useMealPlanStore = create<MealPlanState>((set, get) => ({
   normalMealServings: 4,
   isDataLoaded: false,
   isLoading: false,
+  loadingMealTypes: new Set(),
   error: null,
   onStateChange: undefined,
 
@@ -277,6 +281,7 @@ export const useMealPlanStore = create<MealPlanState>((set, get) => ({
 
   // Data management actions
   fetchMealData: async (selectedStore, makeAPICall) => {
+    // Keep original behavior for backward compatibility - fetch all meal types
     const state = get();
     const logMessage = (msg: string) => console.log(`[MealPlanStore] ${msg}`);
 
@@ -344,6 +349,80 @@ export const useMealPlanStore = create<MealPlanState>((set, get) => ({
     }
   },
 
+  // NEW: Fetch recommendations for a specific meal type
+  fetchMealRecommendations: async (mealType, selectedStore, makeAPICall) => {
+    const state = get();
+    const logMessage = (msg: string) => console.log(`[MealPlanStore] ${msg}`);
+
+    // Check if this meal type is already loaded
+    if (state.meals[mealType].length > 0) {
+      logMessage(`${mealType} already has data, skipping fetch`);
+      return;
+    }
+
+    try {
+      logMessage(`Fetching recommendations for ${mealType} from ${selectedStore.name}`);
+
+      // Add this meal type to loading set
+      set(state => ({
+        loadingMealTypes: new Set([...state.loadingMealTypes, mealType]),
+        error: null
+      }));
+
+      const validUntilDate = new Date(selectedStore.validUntil);
+      const dataDate = new Date(validUntilDate);
+      dataDate.setDate(dataDate.getDate() - 7);
+      const date = dataDate.toISOString().split('T')[0];
+
+      const endpoint = `/meal-plans?store=${encodeURIComponent(selectedStore.name)}&location=${encodeURIComponent(selectedStore.location)}&date=${date}&mealType=${mealType}`;
+
+      logMessage(`Making authenticated API call for ${mealType}: ${endpoint}`);
+
+      const accessToken = localStorage.getItem('accessToken');
+      const isAuthenticated = !!(accessToken && accessToken !== 'null');
+      const apiResponse = await makeAPICall(endpoint, 'GET', null, isAuthenticated) as MealDataResponse;
+
+      if (!apiResponse.success) {
+        throw new Error(`API returned error for ${mealType}: ${apiResponse.error || 'Unknown error'}`);
+      }
+
+      const recipes: Recipe[] = (apiResponse.data || []).map((mealPlan) => transformMealPlanToRecipe(mealPlan, mealType));
+
+      logMessage(`Processed ${recipes.length} ${mealType} recipes`);
+
+      // Update only this meal type
+      set(state => {
+        const newLoadingMealTypes = new Set(state.loadingMealTypes);
+        newLoadingMealTypes.delete(mealType);
+
+        return {
+          meals: {
+            ...state.meals,
+            [mealType]: recipes
+          },
+          loadingMealTypes: newLoadingMealTypes,
+          error: null,
+          // Mark as data loaded if this was the first meal type loaded
+          isDataLoaded: state.isDataLoaded || recipes.length > 0
+        };
+      });
+
+      logMessage(`${mealType} recommendations fetch completed successfully`);
+
+    } catch (err) {
+      console.error(`Error fetching ${mealType} recommendations:`, err);
+      set(state => {
+        const newLoadingMealTypes = new Set(state.loadingMealTypes);
+        newLoadingMealTypes.delete(mealType);
+
+        return {
+          loadingMealTypes: newLoadingMealTypes,
+          error: err instanceof Error ? err.message : `Failed to load ${mealType} recommendations`
+        };
+      });
+    }
+  },
+
   setMeals: (meals) => {
     set({ meals });
   },
@@ -356,6 +435,7 @@ export const useMealPlanStore = create<MealPlanState>((set, get) => ({
         dinner: []
       },
       isDataLoaded: false,
+      loadingMealTypes: new Set(),
       error: null
     });
   },
@@ -454,5 +534,11 @@ export const useMealPlanStore = create<MealPlanState>((set, get) => ({
     const state = get();
     // Round up to nearest 0.5
     return roundUpToHalf(state.normalMealServings / servings);
+  },
+
+  // NEW: Check if specific meal type is loading
+  isMealTypeLoading: (mealType) => {
+    const state = get();
+    return state.loadingMealTypes.has(mealType);
   },
 }));

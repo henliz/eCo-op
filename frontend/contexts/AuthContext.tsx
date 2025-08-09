@@ -71,7 +71,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     setCurrentUser(userData);
     setUserPreferences({
       newFlyerNotifications: userData.newFlyerNotifications || false,
-      weeklyNotifications: userData.weeklyNotifications || false, // ADD THIS
+      weeklyNotifications: userData.weeklyNotifications || false,
       createdAt: new Date(userData.createdAt || new Date()),
       updatedAt: new Date(userData.updatedAt || new Date()),
     });
@@ -80,26 +80,43 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   };
 
   const makeAPICall = async (endpoint: string, method = 'GET', body?: any, useAuth = false) => {
+    // If auth is not required, just make the call without any auth logic
+    if (!useAuth) {
+      return await makeAuthenticatedRequest(endpoint, method, body, undefined);
+    }
+
+    // Auth is required - check if user is actually logged in
     let token = accessToken;
 
-    if (useAuth) {
-      if (!token || !isTokenValid(token)) {
-        console.log('Token invalid, refreshing...');
-        const newToken = await refreshFirebaseToken();
-        if (!newToken) {
-          clearAuthState();
-          throw new Error('Authentication expired. Please log in again.');
-        }
-        token = newToken;
-        setAccessToken(newToken);
-        localStorage.setItem('accessToken', newToken);
+    // If no token at all, user was never logged in - send request without auth
+    // The backend will handle this appropriately (different results for unauth users)
+    if (!token) {
+      console.log('No token available, making unauthenticated request');
+      return await makeAuthenticatedRequest(endpoint, method, body, undefined);
+    }
+
+    // User HAS a token, meaning they were logged in at some point
+    // We must maintain their authenticated session or fail clearly
+    if (!isTokenValid(token)) {
+      console.log('Token expired, attempting to refresh...');
+      const newToken = await refreshFirebaseToken();
+      if (!newToken) {
+        // User WAS logged in but session expired and can't be refreshed
+        // This is a real authentication failure - don't silently switch to unauth
+        clearAuthState();
+        throw new Error('Authentication expired. Please log in again.');
       }
+      token = newToken;
+      setAccessToken(newToken);
+      localStorage.setItem('accessToken', newToken);
     }
 
     try {
-      return await makeAuthenticatedRequest(endpoint, method, body, useAuth ? (token ?? undefined) : undefined);
+      return await makeAuthenticatedRequest(endpoint, method, body, token);
     } catch (error: any) {
       if (error.message.includes('401') || error.message.includes('403')) {
+        // Server rejected our token - session is truly expired
+        // This is a real authentication failure for a logged-in user
         clearAuthState();
         throw new Error('Authentication expired. Please log in again.');
       }
@@ -190,7 +207,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
         setCurrentUser(userData);
         setUserPreferences({
           newFlyerNotifications: userData.newFlyerNotifications || false,
-          weeklyNotifications: userData.weeklyNotifications || false, // ADD THIS
+          weeklyNotifications: userData.weeklyNotifications || false,
           createdAt: new Date(userData.createdAt),
           updatedAt: new Date(userData.updatedAt || new Date()),
         });
@@ -211,7 +228,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
         password,
         displayName: displayName || '',
         newFlyerNotifications: notifications,
-        weeklyNotifications: false, // ADD DEFAULT VALUE
+        weeklyNotifications: false,
       });
       if (!response.success) throw new Error(response.error || 'Registration failed');
     } catch (error: any) {
@@ -280,13 +297,13 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
           if (isTokenValid(storedToken)) {
             const user = JSON.parse(storedUser);
             setUserData(user, storedToken);
-            await refreshProfile();
+            //await refreshProfile();
           } else {
             const newToken = await refreshFirebaseToken();
             if (newToken) {
               const user = JSON.parse(storedUser);
               setUserData(user, newToken);
-              await refreshProfile();
+              //await refreshProfile();
             } else {
               clearAuthState();
             }

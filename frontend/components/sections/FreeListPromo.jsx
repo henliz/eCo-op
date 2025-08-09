@@ -3,21 +3,20 @@
 
 import Image from 'next/image';
 import { Card, CardContent } from '@/components/ui/card';
-import { Button } from '@/components/ui/button';
 import Link from 'next/link';
 
 
 export default function FreeListPromo() {
   return (
     /* top‑level section:
-       ▸  my‑40  = 10 rem top+bottom gap so it never hugs the hero
+       ▸  my‑40  = 10 rem top+bottom gap so it never hugs the hero
        ▸  container centers it like your other sections
        ▸  z‑20 lifts it above the hero background */
     <section className="relative z-20 container mx-auto my-20">
       <Card className="overflow-hidden shadow-lg">
         {/* gap‑8 adds breathing room between the image and the copy */}
         <div className="flex flex-col gap-8 md:flex-row">
-          {/* ── Left: perfectly square image (50 % width on desktop) ── */}
+          {/* ── Left: perfectly square image (50 % width on desktop) ── */}
           <div className="relative w-full aspect-square md:w-1/2">
             <Image
               src="/Savings_Dude.png"
@@ -36,7 +35,7 @@ export default function FreeListPromo() {
             </h2>
 
             <p className="text-lg text-gray-700">
-              Most families spend $350/week on groceries according to Canada’s Food Price Report.<small><br></br><br></br></small>
+              Most families spend $350/week on groceries according to Canada&apos;s Food Price Report.<small><br></br><br></br></small>
               Skrimp families spend only ~
               <span className="font-semibold text-emerald-600">$250</span>
               . </p> <p className="text-lg text-gray-700">

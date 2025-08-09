@@ -28,6 +28,7 @@ export interface PlannerStores {
   // Actions
   setNormalMealServings: (servings: number) => void;
   fetchMealData: () => Promise<void>;
+  fetchMealRecommendations: (mealType: 'breakfast' | 'lunch' | 'dinner') => Promise<void>;
   setMeals: (meals: MealCategory) => void;
   clearMealData: () => void;
   toggleMeal: (url: string) => void;
@@ -37,6 +38,7 @@ export interface PlannerStores {
   selectedRecipes: () => Recipe[];
   mealSummary: () => { breakfast: number; lunch: number; dinner: number; total: number };
   calculateInitialMultiplier: (servings: number) => number;
+  isMealTypeLoading: (mealType: 'breakfast' | 'lunch' | 'dinner') => boolean;
 
   // ===== GROCERY STORE =====
   // Data
@@ -206,12 +208,10 @@ export const usePlannerStores = (): PlannerStores => {
             return;
           }
 
-          // AUTHENTICATION CHECK: Test if user is authenticated before attempting save
-          try {
-            // Try a simple authenticated request to verify the user is still logged in
-            await makeAPICall('/auth/verify', 'GET', null, true);
-          } catch (authError) {
-            console.log('[PlannerStores] User not authenticated, skipping auto-save');
+          // Check if user is authenticated by checking for access token
+          const hasAccessToken = localStorage.getItem('accessToken');
+          if (!hasAccessToken) {
+            console.log('[PlannerStores] User not authenticated (no access token), skipping auto-save');
             return;
           }
 
@@ -345,6 +345,22 @@ export const usePlannerStores = (): PlannerStores => {
     }
 
     await mealPlan.fetchMealData(selectedStoreObj, makeAPICall);
+  }, [mealPlan, storeLocation]);
+
+  // NEW: Enhanced fetch meal recommendations
+  const enhancedFetchMealRecommendations = useCallback(async (mealType: 'breakfast' | 'lunch' | 'dinner') => {
+    const selectedStoreObj = storeLocation.getSelectedStore();
+    if (!selectedStoreObj) {
+      console.warn('[PlannerStores] No store selected for fetching meal recommendations');
+      return;
+    }
+
+    const makeAPICall = (window as any).__plannerMakeAPICall;
+    if (!makeAPICall) {
+      throw new Error('Authentication not available. Please log in.');
+    }
+
+    await mealPlan.fetchMealRecommendations(mealType, selectedStoreObj, makeAPICall);
   }, [mealPlan, storeLocation]);
 
   const enhancedSetSelectedStore = useCallback((storeId: string | null) => {
@@ -547,6 +563,7 @@ export const usePlannerStores = (): PlannerStores => {
     isLoading: mealPlan.isLoading,
     setNormalMealServings: mealPlan.setNormalMealServings,
     fetchMealData: enhancedFetchMealData,
+    fetchMealRecommendations: enhancedFetchMealRecommendations,
     setMeals: mealPlan.setMeals,
     clearMealData: mealPlan.clearMealData,
     toggleMeal: mealPlan.toggleMeal,
@@ -554,6 +571,7 @@ export const usePlannerStores = (): PlannerStores => {
     selectedRecipes: mealPlan.selectedRecipes,
     mealSummary: mealPlan.mealSummary,
     calculateInitialMultiplier: mealPlan.calculateInitialMultiplier,
+    isMealTypeLoading: mealPlan.isMealTypeLoading, // ADD THIS LINE
 
     // Grocery Store
     groceryCheckedItems: grocery.groceryCheckedItems,

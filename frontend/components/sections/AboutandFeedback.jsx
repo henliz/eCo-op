@@ -2,6 +2,7 @@
 'use client';
 
 import React from 'react';
+import Image from 'next/image';
 import { motion } from 'framer-motion';
 
 const sectionVariants = {
@@ -27,21 +28,23 @@ export default function AboutAndFeedback() {
         <div className="max-w-3xl mx-auto text-center px-4">
 
           <h2 className="text-4xl font-bold text-gray-900 mb-4">Our Story</h2>
-          <img
+          <Image
               src="/Henrietta_Headshot_small.jpg"
               alt="Henrietta, founder of SmartCart"
+              width={96}
+              height={96}
               className="mx-auto w-24 h-24 rounded-full border-2 border-[#4FD1C5] mb-6"
           />
           <p className="text-gray-700 leading-relaxed">
-            Hi, I’m Henrietta—full‑time student, part‑time coupon hunter, and now the founder of Skrimp.ai.
+            Hi, I&apos;m Henrietta—full‑time student, part‑time coupon hunter, and now the founder of Skrimp.ai.
             Between tuition hikes and rent that keeps climbing, I watched classmates skip meals and parents in the checkout line put groceries back on the shelf.
             Those moments hit hard, because I was making the same trade‑offs. So I cracked open my laptop (instead of another pack of instant noodles) and built
             an AI that scours every flyer in town, hunts the deepest weekly discounts, and turns them into balanced meals you can actually look forward to.
             </p>
             <p>
-            Here’s the magic: Skrimp starts with the deals → AI 'magics' you a meal plan that maximise those savings → builds a ready‑to‑shop list, complete with a running “cash you kept” counter.
+            Here&apos;s the magic: Skrimp starts with the deals → AI &apos;magics&apos; you a meal plan that maximise those savings → builds a ready‑to‑shop list, complete with a running &quot;cash you kept&quot; counter.
             Early testers are shaving $50‑plus off grocery bills—without sacrificing nutrition or flavour.
-            I’m still pulling all‑nighters for exams, but I’m just as committed to helping you keep more money in your pocket and good food on your table.
+            I&apos;m still pulling all‑nighters for exams, but I&apos;m just as committed to helping you keep more money in your pocket and good food on your table.
             Join me while we flip the script on grocery prices together.
             </p>
         </div>
@@ -62,13 +65,13 @@ export default function AboutAndFeedback() {
           {/* Left text column */}
           <div className="md:basis-1/2 space-y-1">
             <h3 className="text-3xl md:text-4xl font-bold text-gray-900">
-              We’re On A Mission—<br></br>Let’s Build This Together
+              We&apos;re On A Mission—<br></br>Let&apos;s Build This Together
             </h3>
             <p className="text-gray-700 leading-relaxed">
               Skrimp exists to help families eat well on a budget. Our AI has already
-              saved you an average of <span className="font-semibold">~30%</span> compared to the typical Canadian family’s grocery bill, but
+              saved you an average of <span className="font-semibold">~30%</span> compared to the typical Canadian family&apos;s grocery bill, but
               we want to do even more. <br></br><br></br>Tell us what recipes, features, or local deals
-              you’d love to see next week.
+              you&apos;d love to see next week.
             </p>
             <a
               href="https://docs.google.com/forms/d/e/1FAIpQLSeaWg3pAelFtLZTBslhFiI_wxldA6muBfeidd_eTpIYTs5ZQQ/viewform?usp=header"
@@ -78,13 +81,15 @@ export default function AboutAndFeedback() {
             >
               Feedback Form
             </a>
-          </div>  {/* <-- This closing tag was missing */}
+          </div>
 
           {/* Right image */}
           <div className="md:basis-1/2 flex justify-center">
-            <img
+            <Image
               src="/Feedback_img.png"
-              alt="We’d love your feedback"
+              alt="We'd love your feedback"
+              width={400}
+              height={300}
               className="w-full max-w-md rounded-2xl shadow-lg object-cover"
             />
           </div>
