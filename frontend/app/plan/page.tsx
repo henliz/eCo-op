@@ -152,7 +152,7 @@ function SyncTestButtons() {
 }
 
 export default function MealPlannerPage() {
-  const { makeAPICall } = useAuth();
+  const { makeAPICall, currentUser } = useAuth();
 
   // Expose makeAPICall to the store via window
   useEffect(() => {
@@ -193,22 +193,18 @@ export default function MealPlannerPage() {
   // Handle view changes and scroll to top when switching views
   const handleViewChange = (newView: View) => {
     if (isTabEnabled(newView)) {
-      // SAVE BEFORE SWITCHING TABS
-      const store = getPlannerStores(); // Remove .getState()
-      if (store.hasUnsavedChanges() && window.__plannerMakeAPICall) {
+      // SAVE BEFORE SWITCHING TABS - BUT ONLY IF AUTHENTICATED
+      const store = getPlannerStores();
+      if (store.hasUnsavedChanges() &&
+          window.__plannerMakeAPICall &&
+          currentUser) { // Add authentication check
         console.log(`[TabChange] Saving before switching to ${newView}`);
         store.saveUserPlan(window.__plannerMakeAPICall).catch((error: unknown) => {
           console.error('[TabChange] Save failed:', error);
         });
       }
-
-      // Then scroll to top
       scrollToTop();
-
-      // Set the view first
       setView(newView);
-
-
     }
   };
 

@@ -175,6 +175,9 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     } catch (error) {
       console.warn('Firebase logout failed:', error);
     }
+
+    // Single redirect at the end, after all logout attempts
+    window.location.href = '/';
   };
 
   const refreshProfile = async (): Promise<void> => {

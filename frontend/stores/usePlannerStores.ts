@@ -195,25 +195,55 @@ export const usePlannerStores = (): PlannerStores => {
       // Set new timeout using React ref (not Zustand state)
       saveTimeoutRef.current = setTimeout(async () => {
         try {
+          console.log('[PlannerStores] ⏰ React timeout executing auto-save...');
+
           const currentPlanData = getPlanData();
+
+          // Check if we have authentication available
+          const makeAPICall = (window as any).__plannerMakeAPICall;
+          if (!makeAPICall) {
+            console.log('[PlannerStores] No API call function available, skipping auto-save');
+            return;
+          }
+
+          // AUTHENTICATION CHECK: Test if user is authenticated before attempting save
+          try {
+            // Try a simple authenticated request to verify the user is still logged in
+            await makeAPICall('/auth/verify', 'GET', null, true);
+          } catch (authError) {
+            console.log('[PlannerStores] User not authenticated, skipping auto-save');
+            return;
+          }
 
           // Check if there are actually changes
           if (!planSync.hasUnsavedChanges(() => currentPlanData)) {
+            console.log('[PlannerStores] No changes detected, skipping auto-save');
             return;
           }
 
           // Validate minimum required data
           if (!currentPlanData.selectedStore) {
+            console.log('[PlannerStores] No store selected, skipping auto-save');
             return;
           }
 
+          console.log('[PlannerStores] Changes detected, executing auto-save...');
           await planSync.saveUserPlan(makeAPICall, () => currentPlanData);
+          console.log('[PlannerStores] Auto-save completed successfully');
 
         } catch (error) {
-        } finally {
-          saveTimeoutRef.current = null;
+          // Handle different types of errors gracefully
+          if (error instanceof Error) {
+            if (error.message.includes('Authentication') || error.message.includes('expired')) {
+              console.log('[PlannerStores] Auto-save skipped - user authentication expired');
+            } else {
+              console.error('[PlannerStores] Auto-save failed:', error.message);
+            }
+          } else {
+            console.error('[PlannerStores] Auto-save failed with unknown error:', error);
+          }
         }
-      }, 10000); // 10 second delay
+      }, 10000);
     };
 
     // Set up auto-save callbacks in individual stores
