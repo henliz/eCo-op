@@ -1,6 +1,7 @@
 "use client";
 
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useEffect, useRef, useState, useCallback } from 'react';
+import Image from 'next/image';
 import Link from 'next/link';
 
 const Hero = () => {
@@ -10,9 +11,74 @@ const Hero = () => {
   const [activeTab, setActiveTab] = useState(0);
   const [transitioning, setTransitioning] = useState(false);
 
-
   const tabs = ["add-items", "compare", "optimize", "save"];
   const tabLabels = ["📋 Set", "🥪 Plan", "💸 Shop", "🍳 Cook"];
+
+  // Function to handle smooth tab transitions - moved outside useEffect and memoized
+  const transitionToTab = useCallback((newTabIndex) => {
+    if (transitioning) return;
+    setTransitioning(true);
+
+    // Prepare next video but keep it hidden
+    const nextVideo = videoRefs.current[newTabIndex];
+    const nextContainer = videoContainerRefs.current[newTabIndex];
+
+    if (nextVideo) {
+      nextVideo.currentTime = 0; // Reset next video to start
+      nextVideo.pause(); // Make sure it's paused until we're ready
+    }
+
+    // Update tab indicators immediately (this won't cause flickering)
+    document.querySelectorAll('.tab').forEach((t, i) => {
+      if (i === newTabIndex) {
+        t.classList.add('active');
+      } else {
+        t.classList.remove('active');
+      }
+    });
+
+    // First, make both videos visible with the next one having opacity 0
+    if (nextContainer) {
+      nextContainer.style.opacity = '0';
+      nextContainer.style.display = 'block';
+    }
+
+    // Brief delay to ensure the display change has taken effect
+    setTimeout(() => {
+      // Start the crossfade
+      if (nextContainer) {
+        nextContainer.style.opacity = '1';
+      }
+
+      const currentContainer = videoContainerRefs.current[activeTab];
+      if (currentContainer) {
+        currentContainer.style.opacity = '0';
+      }
+
+      // Start playing the new video
+      if (nextVideo) {
+        nextVideo.play().catch(e => console.log("Video play error:", e));
+      }
+
+      // After the fade completes
+      setTimeout(() => {
+        // Hide the old container completely
+        if (currentContainer) {
+          currentContainer.style.display = 'none';
+        }
+
+        // Pause the old video
+        const currentVideo = videoRefs.current[activeTab];
+        if (currentVideo) {
+          currentVideo.pause();
+        }
+
+        // Update the state
+        setActiveTab(newTabIndex);
+        setTransitioning(false);
+      }, 300); // Duration of the crossfade
+    }, 50);
+  }, [transitioning, activeTab]);
 
   useEffect(() => {
     // Force font loading - applying Montserrat Alternates explicitly
@@ -85,73 +151,7 @@ const Hero = () => {
         }
       });
     };
-  }, [activeTab, transitioning]);
-
-  // Function to handle smooth tab transitions - only affecting the video content
-  const transitionToTab = (newTabIndex) => {
-    if (transitioning) return;
-    setTransitioning(true);
-
-    // Prepare next video but keep it hidden
-    const nextVideo = videoRefs.current[newTabIndex];
-    const nextContainer = videoContainerRefs.current[newTabIndex];
-
-    if (nextVideo) {
-      nextVideo.currentTime = 0; // Reset next video to start
-      nextVideo.pause(); // Make sure it's paused until we're ready
-    }
-
-    // Update tab indicators immediately (this won't cause flickering)
-    document.querySelectorAll('.tab').forEach((t, i) => {
-      if (i === newTabIndex) {
-        t.classList.add('active');
-      } else {
-        t.classList.remove('active');
-      }
-    });
-
-    // First, make both videos visible with the next one having opacity 0
-    if (nextContainer) {
-      nextContainer.style.opacity = '0';
-      nextContainer.style.display = 'block';
-    }
-
-    // Brief delay to ensure the display change has taken effect
-    setTimeout(() => {
-      // Start the crossfade
-      if (nextContainer) {
-        nextContainer.style.opacity = '1';
-      }
-
-      const currentContainer = videoContainerRefs.current[activeTab];
-      if (currentContainer) {
-        currentContainer.style.opacity = '0';
-      }
-
-      // Start playing the new video
-      if (nextVideo) {
-        nextVideo.play().catch(e => console.log("Video play error:", e));
-      }
-
-      // After the fade completes
-      setTimeout(() => {
-        // Hide the old container completely
-        if (currentContainer) {
-          currentContainer.style.display = 'none';
-        }
-
-        // Pause the old video
-        const currentVideo = videoRefs.current[activeTab];
-        if (currentVideo) {
-          currentVideo.pause();
-        }
-
-        // Update the state
-        setActiveTab(newTabIndex);
-        setTransitioning(false);
-      }, 300); // Duration of the crossfade
-    }, 50);
-  };
+  }, [activeTab, transitioning, transitionToTab]);
 
   return (
     <>
@@ -292,12 +292,6 @@ const Hero = () => {
           animation-direction: alternate;
           animation-timing-function: ease-in-out;
           opacity: 0.6;
-        }
-
-        .side-image img {
-          width: 100%;
-          height: 100%;
-          object-fit: contain;
         }
 
         .left-image {
@@ -743,12 +737,6 @@ const Hero = () => {
           margin: 0 1rem;
         }
 
-        .logo-image {
-          max-height: 40px;
-          max-width: 120px;
-          object-fit: contain;
-        }
-
         /* Button pulse animation - Updated for peach orange */
         @keyframes pulse {
           0% {
@@ -776,8 +764,24 @@ const Hero = () => {
       <div className="wrapper">
         {/* Side Images - Positioned outside the content flow */}
         <div className="side-images">
-          <div className="side-image left-image"><img src="/HeroSide1.png" alt="Description of Img1" /></div>
-          <div className="side-image right-image"><img src="/HeroSide2.png" alt="Description of Img2" /></div>
+          <div className="side-image left-image">
+            <Image
+              src="/HeroSide1.png"
+              alt="Description of Img1"
+              width={350}
+              height={350}
+              style={{ width: '100%', height: '100%', objectFit: 'contain' }}
+            />
+          </div>
+          <div className="side-image right-image">
+            <Image
+              src="/HeroSide2.png"
+              alt="Description of Img2"
+              width={350}
+              height={350}
+              style={{ width: '100%', height: '100%', objectFit: 'contain' }}
+            />
+          </div>
         </div>
 
         <div className="container">
@@ -792,7 +796,7 @@ const Hero = () => {
 
             {/* Main Text with GUARANTEED Montserrat Alternates */}
             <h1 className="montserrat-alt-heading">
-              Let's make the cost of living feel <span className="highlight">livable</span>
+              Let&apos;s make the cost of living feel <span className="highlight">livable</span>
             </h1>
 
             <p className="sub-heading">
@@ -803,7 +807,7 @@ const Hero = () => {
             <Link href="/plan" passHref>
               <button ref={buttonRef} className="cta-button pulse">
                 <span>
-                  Start saving— it's free!
+                  Start saving— it&apos;s free!
                   <svg
                     className="cta-button-icon"
                     width="16"
@@ -867,31 +871,31 @@ const Hero = () => {
               <h2 className="logos-heading">Supported Grocery Stores</h2>
               <div className="logos-container">
                 <div className="logo-item">
-                  <img src="/Logo_NoFrills.png" alt="No Frills" className="logo-image"/>
+                  <Image src="/Logo_NoFrills.png" alt="No Frills" width={120} height={40} style={{ maxHeight: '40px', maxWidth: '120px', objectFit: 'contain' }} />
                 </div>
                 <div className="logo-item">
-                  <img src="/Logo_Walmart.png" alt="Walmart" className="logo-image"/>
+                  <Image src="/Logo_Walmart.png" alt="Walmart" width={120} height={40} style={{ maxHeight: '40px', maxWidth: '120px', objectFit: 'contain' }} />
                 </div>
                 <div className="logo-item">
-                  <img src="/Logo_Zehrs.png" alt="Zehrs" className="logo-image"/>
+                  <Image src="/Logo_Zehrs.png" alt="Zehrs" width={120} height={40} style={{ maxHeight: '40px', maxWidth: '120px', objectFit: 'contain' }} />
                 </div>
                 <div className="logo-item">
-                  <img src="/Logo_FoodBasics.png" alt="Food Basics" className="logo-image"/>
+                  <Image src="/Logo_FoodBasics.png" alt="Food Basics" width={120} height={40} style={{ maxHeight: '40px', maxWidth: '120px', objectFit: 'contain' }} />
                 </div>
                 <div className="logo-item">
-                  <img src="/Logo_FarmBoy.png" alt="FarmBoy" className="logo-image"/>
+                  <Image src="/Logo_FarmBoy.png" alt="FarmBoy" width={120} height={40} style={{ maxHeight: '40px', maxWidth: '120px', objectFit: 'contain' }} />
                 </div>
                 <div className="logo-item">
-                  <img src="/Logo_Sobeys.png" alt="Sobeys" className="logo-image"/>
+                  <Image src="/Logo_Sobeys.png" alt="Sobeys" width={120} height={40} style={{ maxHeight: '40px', maxWidth: '120px', objectFit: 'contain' }} />
                 </div>
                 <div className="logo-item">
-                  <img src="/Logo_Metro.png" alt="Metro" className="logo-image"/>
+                  <Image src="/Logo_Metro.png" alt="Metro" width={120} height={40} style={{ maxHeight: '40px', maxWidth: '120px', objectFit: 'contain' }} />
                 </div>
                 <div className="logo-item">
-                  <img src="/Logo_FreshCo.png" alt="FreshCo" className="logo-image"/>
+                  <Image src="/Logo_FreshCo.png" alt="FreshCo" width={120} height={40} style={{ maxHeight: '40px', maxWidth: '120px', objectFit: 'contain' }} />
                 </div>
                 <div className="logo-item">
-                  <img src="/Logo_RealCanadianSuperstore.png" alt="FreshCo" className="logo-image"/>
+                  <Image src="/Logo_RealCanadianSuperstore.png" alt="Real Canadian Superstore" width={120} height={40} style={{ maxHeight: '40px', maxWidth: '120px', objectFit: 'contain' }} />
                 </div>
               </div>
             </div>

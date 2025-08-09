@@ -4,8 +4,94 @@ import React, { useState } from 'react';
 import { type Recipe, type MealCategory } from '@/stores/usePlannerStores';
 import { usePlannerStores as usePlannerStore } from '@/stores/usePlannerStores';
 import { Collapsible, CollapsibleTrigger, CollapsibleContent } from '@/components/ui/collapsible';
-import { ChevronDown, ChevronUp } from 'lucide-react';
+import { ChevronDown, ChevronUp, Coffee, Utensils, ChefHat } from 'lucide-react';
 import { MealCard } from './MealCard';
+
+// Inline RecommendationCard component
+interface RecommendationCardProps {
+  mealType: 'breakfast' | 'lunch' | 'dinner';
+  onRecommend: () => void;
+  isLoading?: boolean;
+}
+
+const mealTypeConfig = {
+  breakfast: {
+    icon: Coffee,
+    title: 'Recommend 10 Breakfasts',
+    description: 'Get personalized breakfast recommendations based on your store and preferences',
+    color: 'text-orange-600',
+    bgColor: 'bg-orange-50',
+    borderColor: 'border-orange-200',
+    hoverColor: 'hover:bg-orange-100'
+  },
+  lunch: {
+    icon: Utensils,
+    title: 'Recommend 10 Lunches',
+    description: 'Discover lunch options perfect for your household size and budget',
+    color: 'text-green-600',
+    bgColor: 'bg-green-50',
+    borderColor: 'border-green-200',
+    hoverColor: 'hover:bg-green-100'
+  },
+  dinner: {
+    icon: ChefHat,
+    title: 'Recommend 10 Dinners',
+    description: 'Find delicious dinner recipes with current deals and savings',
+    color: 'text-blue-600',
+    bgColor: 'bg-blue-50',
+    borderColor: 'border-blue-200',
+    hoverColor: 'hover:bg-blue-100'
+  }
+};
+
+function RecommendationCard({ mealType, onRecommend, isLoading = false }: RecommendationCardProps) {
+  const config = mealTypeConfig[mealType];
+  const Icon = config.icon;
+
+  return (
+    <div
+      className={`
+        relative w-full flex flex-col items-center justify-center text-center 
+        min-h-[10rem] max-h-[10rem] overflow-hidden 
+        cursor-pointer transition-all duration-200
+        border-2 border-dashed rounded-lg
+        ${config.bgColor} ${config.borderColor} ${config.hoverColor}
+        ${isLoading ? 'opacity-75 cursor-not-allowed' : ''}
+      `}
+      onClick={isLoading ? undefined : onRecommend}
+    >
+      {/* Loading overlay */}
+      {isLoading && (
+        <div className="absolute inset-0 flex items-center justify-center bg-white/80 z-10">
+          <div className="flex flex-col items-center gap-2">
+            <div className="animate-spin rounded-full h-6 w-6 border-b-2 border-current"></div>
+            <span className="text-xs text-gray-600">Loading...</span>
+          </div>
+        </div>
+      )}
+
+      {/* Icon */}
+      <div className={`${config.color} mb-3`}>
+        <Icon className="w-8 h-8 mx-auto" />
+      </div>
+
+      {/* Title */}
+      <h3 className={`text-sm sm:text-base font-semibold mb-2 leading-snug ${config.color}`}>
+        {config.title}
+      </h3>
+
+      {/* Description */}
+      <p className="text-xs text-gray-600 leading-snug px-2">
+        {config.description}
+      </p>
+
+      {/* Call to action hint */}
+      <div className={`mt-2 text-xs font-medium ${config.color}`}>
+        Click to get recommendations →
+      </div>
+    </div>
+  );
+}
 
 export function MealPlanScreen() {
   // Lift collapsible state up to the parent component
@@ -16,13 +102,6 @@ export function MealPlanScreen() {
   });
 
   // UPDATED: Use simplified store - no more separate selection state
-  //const meals               = usePlannerStore(s => s.meals);
-  //const setRecipeMultiplier = usePlannerStore(s => s.setRecipeMultiplier);
-  //const toggleMeal          = usePlannerStore(s => s.toggleMeal);
-  //const mealSummary         = usePlannerStore(s => s.mealSummary);
-  //const totals              = usePlannerStore(s => s.totals);
-  //const isLoading           = usePlannerStore(s => s.isLoading);
-  //const error               = usePlannerStore(s => s.error);
   const {
     meals,
     setRecipeMultiplier,
@@ -30,7 +109,10 @@ export function MealPlanScreen() {
     mealSummary,
     totals,
     isLoading,
-    error
+    error,
+    fetchMealRecommendations,
+    isMealTypeLoading,
+    getSelectedStore
   } = usePlannerStore();
 
   const handleSectionToggle = (section: keyof MealCategory) => {
@@ -38,6 +120,26 @@ export function MealPlanScreen() {
       ...prev,
       [section]: !prev[section]
     }));
+  };
+
+  const handleRecommendMealType = async (mealType: 'breakfast' | 'lunch' | 'dinner') => {
+    const selectedStore = getSelectedStore();
+    if (!selectedStore) {
+      console.error('No store selected for fetching recommendations');
+      return;
+    }
+
+    //const makeAPICall = (window as any).__plannerMakeAPICall;
+    //if (!makeAPICall) {
+    //  console.error('API call function not available');
+    //  return;
+    //}
+
+    try {
+      await fetchMealRecommendations(mealType);
+    } catch (error) {
+      console.error(`Failed to fetch ${mealType} recommendations:`, error);
+    }
   };
 
   const MealSection = ({
@@ -50,6 +152,7 @@ export function MealPlanScreen() {
     mealType: keyof MealCategory;
   }) => {
     const summary = mealSummary();
+    const isLoading = isMealTypeLoading(mealType);
 
     // UPDATED: Calculate totals from recipe objects directly
     const sectionSaleTotal = recipes
@@ -98,35 +201,48 @@ export function MealPlanScreen() {
         </CollapsibleTrigger>
 
         <CollapsibleContent>
-          <div className="grid grid-cols-2 md:grid-cols-2 lg:grid-cols-3 gap-1 pt-3">
-            {recipes.map((recipe, idx) => (
-              <MealCard
-                key={recipe.url + idx}
-                recipe={recipe}
-                isSelected={recipe.isSelected}      // ← Use recipe.isSelected directly
-                multiplier={recipe.multiplier}      // ← Use recipe.multiplier directly
-                onToggle={toggleMeal}
-                onMultiplierChange={setRecipeMultiplier}
-              />
-            ))}
-
-            {/* Recipe suggestion card */}
-            <div className="bg-blue-50 rounded-lg p-3 border-2 border-dashed border-blue-200 flex flex-col items-center justify-center text-center min-h-[10rem] max-h-[10rem] overflow-hidden cursor-pointer hover:bg-blue-100 transition-colors">
-              <div className="text-blue-600 mb-2">
-                <svg className="w-6 h-6 mx-auto" fill="currentColor" viewBox="0 0 20 20">
-                  <path fillRule="evenodd" d="M10 3a1 1 0 011 1v5h5a1 1 0 110 2h-5v5a1 1 0 11-2 0v-5H4a1 1 0 110-2h5V4a1 1 0 011-1z" clipRule="evenodd" />
-                </svg>
+          <div className="pt-3">
+            {/* Show recommendation card if no recipes, otherwise show recipe grid */}
+            {recipes.length === 0 ? (
+              <div className="grid grid-cols-2 md:grid-cols-2 lg:grid-cols-3 gap-1">
+                <RecommendationCard
+                  mealType={mealType}
+                  onRecommend={() => handleRecommendMealType(mealType)}
+                  isLoading={isLoading}
+                />
               </div>
-              <p className="text-xs sm:text-sm text-gray-700 font-semibold mb-1 leading-snug">
-                Have a favourite recipe you&apos;d like to see included?
-              </p>
-              <p className="text-xs text-gray-600 leading-snug">
-                Please <a href="mailto:info@skrimp.ai?subject=Recipe Suggestion"
-                   className="text-blue-600 hover:underline">
-                  email us
-                </a> at info@skrimp.ai
-              </p>
-            </div>
+            ) : (
+              <div className="grid grid-cols-2 md:grid-cols-2 lg:grid-cols-3 gap-1">
+                {recipes.map((recipe, idx) => (
+                  <MealCard
+                    key={recipe.url + idx}
+                    recipe={recipe}
+                    isSelected={recipe.isSelected}      // ← Use recipe.isSelected directly
+                    multiplier={recipe.multiplier}      // ← Use recipe.multiplier directly
+                    onToggle={toggleMeal}
+                    onMultiplierChange={setRecipeMultiplier}
+                  />
+                ))}
+
+                {/* Recipe suggestion card - only show if we have recipes */}
+                <div className="bg-blue-50 rounded-lg p-3 border-2 border-dashed border-blue-200 flex flex-col items-center justify-center text-center min-h-[10rem] max-h-[10rem] overflow-hidden cursor-pointer hover:bg-blue-100 transition-colors">
+                  <div className="text-blue-600 mb-2">
+                    <svg className="w-6 h-6 mx-auto" fill="currentColor" viewBox="0 0 20 20">
+                      <path fillRule="evenodd" d="M10 3a1 1 0 011 1v5h5a1 1 0 110 2h-5v5a1 1 0 11-2 0v-5H4a1 1 0 110-2h5V4a1 1 0 011-1z" clipRule="evenodd" />
+                    </svg>
+                  </div>
+                  <p className="text-xs sm:text-sm text-gray-700 font-semibold mb-1 leading-snug">
+                    Have a favourite recipe you&apos;d like to see included?
+                  </p>
+                  <p className="text-xs text-gray-600 leading-snug">
+                    Please <a href="mailto:info@skrimp.ai?subject=Recipe Suggestion"
+                       className="text-blue-600 hover:underline">
+                      email us
+                    </a> at info@skrimp.ai
+                  </p>
+                </div>
+              </div>
+            )}
           </div>
         </CollapsibleContent>
       </Collapsible>

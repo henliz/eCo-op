@@ -174,9 +174,8 @@ export default function MealPlannerPage() {
   const shouldNavigateToPlan = useRef(false);
 
   // Tabs are only enabled when a store is selected and data is loaded
-  // (except for the Store tab which is always enabled)
   const isTabEnabled = (tabId: View) =>
-    tabId === 'store' || (!!selectedStore && isDataLoaded);
+    tabId === 'store' || !!selectedStore;
 
   // Enhanced scroll to top function that ensures consistent behavior
   const scrollToTop = useCallback(() => {
@@ -237,7 +236,7 @@ export default function MealPlannerPage() {
   // Modified auto-switch to show loading screen when store is selected
   useEffect(() => {
     // If we're on the store tab and data is loaded, and we've been flagged to navigate
-    if (selectedStore && isDataLoaded && !isLoading && view === 'store' && shouldNavigateToPlan.current) {
+    if (selectedStore && view === 'store' && shouldNavigateToPlan.current) {
       console.log("Store selected, showing loading screen");
 
       // Reset the flag so we don't keep triggering this

@@ -1,6 +1,7 @@
 'use client';
 
 import React, { useState, useEffect } from 'react';
+import Image from 'next/image';
 import { motion } from 'framer-motion';
 
 const containerVariants = {
@@ -57,16 +58,18 @@ export default function EmailSignupBanner() {
       variants={containerVariants}
     >
       <div className="max-w-[1200px] mx-auto px-4 scroll-mt-24" id="contact">
-        {/* make this the first “child” so it inherits staggerChildren */}
+        {/* make this the first "child" so it inherits staggerChildren */}
         <motion.div
           className="bg-[#4FD1C5] rounded-2xl p-8 flex flex-col md:flex-row items-center gap-6"
           variants={childVariants}
         >
           {/* 1) Image */}
           <motion.div variants={childVariants} className="flex-shrink-0">
-            <img
+            <Image
               src="/CTA_img.png"
               alt="Bag of groceries"
+              width={160}
+              height={160}
               className="w-40 h-auto rounded-lg"
             />
           </motion.div>
@@ -77,10 +80,10 @@ export default function EmailSignupBanner() {
             variants={childVariants}
           >
             <h2 className="text-3xl font-bold text-white">
-              Get Next Week’s Meal Plan &amp; Groceries <span>🛒</span>
+              Get Next Week&apos;s Meal Plan &amp; Groceries <span>🛒</span>
             </h2>
             <p className="text-teal-50">
-              Drop your email and we’ll send you a complete, AI‑powered meal
+              Drop your email and we&apos;ll send you a complete, AI‑powered meal
               plan plus a smart grocery list—absolutely free—every Friday.
             </p>
           </motion.div>

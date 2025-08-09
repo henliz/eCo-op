@@ -1,6 +1,7 @@
 'use client';
 
 import React from "react";
+import Image from "next/image";
 import Link from "next/link";
 import { motion } from "framer-motion";
 
@@ -18,7 +19,7 @@ export default function MealPlan() {
           This is What Your Meal Plan Could Look Like
         </h2>
         <p className="section-subtitle">
-          Based on local grocery deals and prior meals we've served
+          Based on local grocery deals and prior meals we&apos;ve served
         </p>
 
         <div className="meal-carousel">
@@ -26,35 +27,65 @@ export default function MealPlan() {
             {/* First set of meals */}
             <div className="meal-card">
               <div className="meal-image">
-                <img src="/Meal1.png" alt="Ground Beef Tacos" />
+                <Image
+                  src="/Meal1.png"
+                  alt="Ground Beef Tacos"
+                  width={300}
+                  height={200}
+                  style={{ width: '100%', height: 'auto' }}
+                />
               </div>
               <h3>Ground Beef Tacos</h3>
             </div>
 
             <div className="meal-card">
               <div className="meal-image">
-                <img src="/Meal2.png" alt="Pork Stir Fry" />
+                <Image
+                  src="/Meal2.png"
+                  alt="Pork Stir Fry"
+                  width={300}
+                  height={200}
+                  style={{ width: '100%', height: 'auto' }}
+                />
               </div>
               <h3>Pork Stir Fry</h3>
             </div>
 
             <div className="meal-card">
               <div className="meal-image">
-                <img src="/Meal3.png" alt="Tilapia and Veggies" />
+                <Image
+                  src="/Meal3.png"
+                  alt="Tilapia and Veggies"
+                  width={300}
+                  height={200}
+                  style={{ width: '100%', height: 'auto' }}
+                />
               </div>
               <h3>Tilapia and Veggies</h3>
             </div>
 
             <div className="meal-card">
               <div className="meal-image">
-                <img src="/Meal4.png" alt="Kale Soup and Toast" />
+                <Image
+                  src="/Meal4.png"
+                  alt="Kale Soup and Toast"
+                  width={300}
+                  height={200}
+                  style={{ width: '100%', height: 'auto' }}
+                />
               </div>
               <h3>Kale Soup and Toast</h3>
             </div>
 
             <div className="meal-card">
               <div className="meal-image">
-                <img src="/Meal5.png" alt="Egg Salad Sandwich" />
+                <Image
+                  src="/Meal5.png"
+                  alt="Egg Salad Sandwich"
+                  width={300}
+                  height={200}
+                  style={{ width: '100%', height: 'auto' }}
+                />
               </div>
               <h3>Egg Salad Sandwich</h3>
             </div>
@@ -62,35 +93,65 @@ export default function MealPlan() {
             {/* Duplicate meals for seamless looping */}
             <div className="meal-card">
               <div className="meal-image">
-                <img src="/Meal1.png" alt="Ground Beef Tacos" />
+                <Image
+                  src="/Meal1.png"
+                  alt="Ground Beef Tacos"
+                  width={300}
+                  height={200}
+                  style={{ width: '100%', height: 'auto' }}
+                />
               </div>
               <h3>Ground Beef Tacos</h3>
             </div>
 
             <div className="meal-card">
               <div className="meal-image">
-                <img src="/Meal2.png" alt="Pork Stir Fry" />
+                <Image
+                  src="/Meal2.png"
+                  alt="Pork Stir Fry"
+                  width={300}
+                  height={200}
+                  style={{ width: '100%', height: 'auto' }}
+                />
               </div>
               <h3>Pork Stir Fry</h3>
             </div>
 
             <div className="meal-card">
               <div className="meal-image">
-                <img src="/Meal3.png" alt="Tilapia and Veggies" />
+                <Image
+                  src="/Meal3.png"
+                  alt="Tilapia and Veggies"
+                  width={300}
+                  height={200}
+                  style={{ width: '100%', height: 'auto' }}
+                />
               </div>
               <h3>Tilapia and Veggies</h3>
             </div>
 
             <div className="meal-card">
               <div className="meal-image">
-                <img src="/Meal4.png" alt="Kale Soup and Toast" />
+                <Image
+                  src="/Meal4.png"
+                  alt="Kale Soup and Toast"
+                  width={300}
+                  height={200}
+                  style={{ width: '100%', height: 'auto' }}
+                />
               </div>
               <h3>Kale Soup and Toast</h3>
             </div>
 
             <div className="meal-card">
               <div className="meal-image">
-                <img src="/Meal5.png" alt="Egg Salad Sandwich" />
+                <Image
+                  src="/Meal5.png"
+                  alt="Egg Salad Sandwich"
+                  width={300}
+                  height={200}
+                  style={{ width: '100%', height: 'auto' }}
+                />
               </div>
               <h3>Egg Salad Sandwich</h3>
             </div>
@@ -99,7 +160,7 @@ export default function MealPlan() {
 
         <div className="view-all-meals">
           <Link href="/plan">
-            <button className="btn-primary">View This Week's Menu</button>
+            <button className="btn-primary">View This Week&apos;s Menu</button>
           </Link>
         </div>
       </div>
