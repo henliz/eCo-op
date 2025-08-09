@@ -6,6 +6,8 @@ import { usePlannerStores as usePlannerStore } from '@/stores/usePlannerStores';
 import { Collapsible, CollapsibleTrigger, CollapsibleContent } from '@/components/ui/collapsible';
 import { ChevronDown, ChevronUp, Coffee, Utensils, ChefHat } from 'lucide-react';
 import { MealCard } from './MealCard';
+import { CustomRecipeCard } from './CustomRecipeCard';
+
 
 // Inline RecommendationCard component
 interface RecommendationCardProps {
@@ -202,13 +204,21 @@ export function MealPlanScreen() {
 
         <CollapsibleContent>
           <div className="pt-3">
-            {/* Show recommendation card if no recipes, otherwise show recipe grid */}
+            {/* Show recommendation cards if no recipes, otherwise show recipe grid */}
             {recipes.length === 0 ? (
               <div className="grid grid-cols-2 md:grid-cols-2 lg:grid-cols-3 gap-1">
                 <RecommendationCard
                   mealType={mealType}
                   onRecommend={() => handleRecommendMealType(mealType)}
                   isLoading={isLoading}
+                />
+                <CustomRecipeCard
+                  mealType={mealType}
+                  onCustomSelect={() => {
+                    // TODO: Implement custom recipe selection
+                    console.log(`Custom recipe selection for ${mealType} - Coming soon!`);
+                  }}
+                  isComingSoon={true}
                 />
               </div>
             ) : (
@@ -217,30 +227,22 @@ export function MealPlanScreen() {
                   <MealCard
                     key={recipe.url + idx}
                     recipe={recipe}
-                    isSelected={recipe.isSelected}      // ← Use recipe.isSelected directly
-                    multiplier={recipe.multiplier}      // ← Use recipe.multiplier directly
+                    isSelected={recipe.isSelected}
+                    multiplier={recipe.multiplier}
                     onToggle={toggleMeal}
                     onMultiplierChange={setRecipeMultiplier}
                   />
                 ))}
 
-                {/* Recipe suggestion card - only show if we have recipes */}
-                <div className="bg-blue-50 rounded-lg p-3 border-2 border-dashed border-blue-200 flex flex-col items-center justify-center text-center min-h-[10rem] max-h-[10rem] overflow-hidden cursor-pointer hover:bg-blue-100 transition-colors">
-                  <div className="text-blue-600 mb-2">
-                    <svg className="w-6 h-6 mx-auto" fill="currentColor" viewBox="0 0 20 20">
-                      <path fillRule="evenodd" d="M10 3a1 1 0 011 1v5h5a1 1 0 110 2h-5v5a1 1 0 11-2 0v-5H4a1 1 0 110-2h5V4a1 1 0 011-1z" clipRule="evenodd" />
-                    </svg>
-                  </div>
-                  <p className="text-xs sm:text-sm text-gray-700 font-semibold mb-1 leading-snug">
-                    Have a favourite recipe you&apos;d like to see included?
-                  </p>
-                  <p className="text-xs text-gray-600 leading-snug">
-                    Please <a href="mailto:info@skrimp.ai?subject=Recipe Suggestion"
-                       className="text-blue-600 hover:underline">
-                      email us
-                    </a> at info@skrimp.ai
-                  </p>
-                </div>
+                {/* Custom recipe addition card - only show if we have recipes */}
+                <CustomRecipeCard
+                  mealType={mealType}
+                  onCustomSelect={() => {
+                    // TODO: Implement custom recipe selection
+                    console.log(`Custom recipe selection for ${mealType} - Coming soon!`);
+                  }}
+                  isComingSoon={true}
+                />
               </div>
             )}
           </div>
