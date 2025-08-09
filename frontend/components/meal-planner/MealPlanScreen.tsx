@@ -251,6 +251,7 @@ export function MealPlanScreen() {
     );
   };
 
+
   if (isLoading) {
     return <div className="p-8 text-center">Loading meal plan...</div>;
   }
