@@ -60,3 +60,30 @@ export interface PricingResult {
   missingIngredients?: any[];
   canRetry?: boolean;
 }
+
+
+export interface UserRecipeDto {
+  id?: string;
+  name: string;
+  instructions: string[];
+  description?: string;
+  ownerId: string;
+  visibility: 'private' | 'public';
+  status: 'draft' | 'validated' | 'needs_investigation' | 'rejected' | 'test_data';
+  portions: number;
+  tags?: string[];
+  ingredients: RecipeIngredient[];
+  parsingNotes?: string[];
+  createdAt?: Date;
+  updatedAt?: Date;
+}
+
+export interface ParseResponse {
+  success: boolean;
+  data?: any; // We'll ignore this
+  userRecipe?: UserRecipeDto;
+  message: string;
+  error?: string;
+}
+
+export type UploadStep = 'upload' | 'preview' | 'edit' | 'saving' | 'success';
