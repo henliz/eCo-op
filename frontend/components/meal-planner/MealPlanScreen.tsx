@@ -7,6 +7,7 @@ import { Collapsible, CollapsibleTrigger, CollapsibleContent } from '@/component
 import { ChevronDown, ChevronUp, Coffee, Utensils, ChefHat } from 'lucide-react';
 import { MealCard } from './MealCard';
 import { CustomRecipeCard } from './CustomRecipeCard';
+import { PricedRecipeBrowser } from './PricedRecipeBrowser';
 
 
 // Inline RecommendationCard component
@@ -103,6 +104,15 @@ export function MealPlanScreen() {
     dinner: true
   });
 
+  // NEW: State for priced recipe browser
+  const [showPricedBrowser, setShowPricedBrowser] = useState<{
+    show: boolean;
+    mealType: 'breakfast' | 'lunch' | 'dinner' | null;
+  }>({
+    show: false,
+    mealType: null
+  });
+
   // UPDATED: Use simplified store - no more separate selection state
   const {
     meals,
@@ -131,17 +141,27 @@ export function MealPlanScreen() {
       return;
     }
 
-    //const makeAPICall = (window as any).__plannerMakeAPICall;
-    //if (!makeAPICall) {
-    //  console.error('API call function not available');
-    //  return;
-    //}
-
     try {
       await fetchMealRecommendations(mealType);
     } catch (error) {
       console.error(`Failed to fetch ${mealType} recommendations:`, error);
     }
+  };
+
+  // NEW: Handle opening the priced recipe browser
+  const handleOpenPricedBrowser = (mealType: 'breakfast' | 'lunch' | 'dinner') => {
+    setShowPricedBrowser({
+      show: true,
+      mealType: mealType
+    });
+  };
+
+  // NEW: Handle closing the priced recipe browser
+  const handleClosePricedBrowser = () => {
+    setShowPricedBrowser({
+      show: false,
+      mealType: null
+    });
   };
 
   const MealSection = ({
@@ -214,11 +234,8 @@ export function MealPlanScreen() {
                 />
                 <CustomRecipeCard
                   mealType={mealType}
-                  onCustomSelect={() => {
-                    // TODO: Implement custom recipe selection
-                    console.log(`Custom recipe selection for ${mealType} - Coming soon!`);
-                  }}
-                  isComingSoon={true}
+                  onCustomSelect={() => handleOpenPricedBrowser(mealType)}
+                  isComingSoon={false} // UPDATED: No longer coming soon!
                 />
               </div>
             ) : (
@@ -237,11 +254,8 @@ export function MealPlanScreen() {
                 {/* Custom recipe addition card - only show if we have recipes */}
                 <CustomRecipeCard
                   mealType={mealType}
-                  onCustomSelect={() => {
-                    // TODO: Implement custom recipe selection
-                    console.log(`Custom recipe selection for ${mealType} - Coming soon!`);
-                  }}
-                  isComingSoon={true}
+                  onCustomSelect={() => handleOpenPricedBrowser(mealType)}
+                  isComingSoon={false} // UPDATED: No longer coming soon!
                 />
               </div>
             )}
@@ -251,6 +265,20 @@ export function MealPlanScreen() {
     );
   };
 
+  // NEW: Show priced recipe browser if open
+  if (showPricedBrowser.show && showPricedBrowser.mealType) {
+    return (
+      <div className="fixed inset-0 bg-black bg-opacity-50 z-50 flex items-center justify-center p-4">
+        <div className="bg-white rounded-lg shadow-xl max-w-6xl w-full max-h-[90vh] overflow-hidden">
+          <PricedRecipeBrowser
+            mealType={showPricedBrowser.mealType}
+            onClose={handleClosePricedBrowser}
+            className="max-h-[90vh] overflow-y-auto"
+          />
+        </div>
+      </div>
+    );
+  }
 
   if (isLoading) {
     return <div className="p-8 text-center">Loading meal plan...</div>;
