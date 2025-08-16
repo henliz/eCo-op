@@ -1,6 +1,7 @@
 'use client';
 
 import React, { useState, useEffect, useRef, useCallback } from 'react';
+import { useSearchParams } from 'next/navigation';
 import { motion } from 'framer-motion';
 import { AuthDebugPanel } from '@/components/AuthDebugPanel';
 import Header from '@/components/layout/Header';
@@ -29,26 +30,66 @@ declare global {
   }
 }
 
-type View = 'store' | 'plan' | 'groceries' | 'cook' | 'loading'; // Add loading as a view type
+type View = 'set' | 'plan' | 'shop' | 'cook' | 'loading'; // Add loading as a view type
 
 const tabs: { label: string; value: View }[] = [
-  { label: '1-Set', value: 'store' },
+  { label: '1-Set', value: 'set' },
   { label: '2-Plan', value: 'plan' },
-  { label: '3-Shop', value: 'groceries' },
+  { label: '3-Shop', value: 'shop' },
   { label: '4-Cook', value: 'cook' },
 ];
 
 // Contextual helper text for each step
 const instructions: Record<Exclude<View, 'loading'>, React.ReactNode> = {
-  store: 'Please select a store and set your household size to continue.',
+  set: 'Please select a store and set your household size to continue.',
   plan: 'Select recipes by clicking on them. Deals tally flyer items where $ savings are advertised.',
-  groceries: (
+  shop: (
     <span>
       Pink items are used in very small quantities.<br></br>Click <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="inline-block align-text-bottom mx-0.5"><path d="m3 9 9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path><polyline points="9 22 9 12 15 12 15 22"></polyline></svg> for any you already have at home. <br></br>Use <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="inline-block align-text-bottom mx-0.5"><circle cx="8" cy="21" r="1"></circle><circle cx="19" cy="21" r="1"></circle><path d="M2.05 2.05h2l2.66 12.42a2 2 0 0 0 2 1.58h9.78a2 2 0 0 0 1.95-1.57l1.65-7.43H5.12"></path></svg> when you add items to your cart.
     </span>
   ),
   cook: 'Click on a recipe to see the cooking instructions.',
 };
+
+// Smart tab selection logic
+function getSmartDefaultTab(plannerData: ReturnType<typeof usePlannerStore>): View {
+  const { selectedStore, normalMealServings, selectedRecipes, groceryTotals } = plannerData;
+
+  console.log('🧠 Smart tab selection - analyzing user state:', {
+    hasStore: !!selectedStore,
+    hasHousehold: !!normalMealServings,
+    mealCount: selectedRecipes().length,
+    groceryData: groceryTotals()
+  });
+
+  // 1️⃣ Missing basics → 'set'
+  if (!selectedStore || !normalMealServings) {
+    console.log('→ Directing to SET tab (missing store or household size)');
+    return 'set';
+  }
+
+  const mealCount = selectedRecipes().length;
+
+  // 2️⃣ No meals selected → 'plan'
+  if (mealCount === 0) {
+    console.log('→ Directing to PLAN tab (no meals selected)');
+    return 'plan';
+  }
+
+  // Get grocery progress to check if ingredients are acquired
+  const groceryData = groceryTotals();
+
+  // 3️⃣ All ingredients acquired → 'cook'
+  const allAcquired = groceryData.uncheckedItems === 0;
+  if (allAcquired) {
+    console.log('→ Directing to COOK tab (all ingredients acquired)');
+    return 'cook';
+  }
+
+  // 4️⃣ Has meals but ingredients needed → 'shop'
+  console.log('→ Directing to SHOP tab (has meals, needs shopping)');
+  return 'shop';
+}
 
 // Development sync test component
 function SyncTestButtons() {
@@ -153,6 +194,7 @@ function SyncTestButtons() {
 
 export default function MealPlannerPage() {
   const { makeAPICall, currentUser } = useAuth();
+  const searchParams = useSearchParams();
 
   // Expose makeAPICall to the store via window
   useEffect(() => {
@@ -162,20 +204,54 @@ export default function MealPlannerPage() {
     };
   }, [makeAPICall]);
 
-  const [view, setView] = useState<View>('store');
-
   // USE ONLY THE ORCHESTRATOR STORE
   const plannerStore = usePlannerStore();
   const { selectedStore, isDataLoaded, isLoading } = plannerStore;
   const [showLoading, setShowLoading] = useState(false);
   const hasTransitionedToPlan = useRef(false);
 
+  // Initialize view state but don't set it yet - we'll determine it after data loads
+  const [view, setView] = useState<View>('set'); // Default fallback
+  const [initialTabSet, setInitialTabSet] = useState(false);
+
   // Keep track of when we need to navigate to Plan
   const shouldNavigateToPlan = useRef(false);
 
+  // Check URL parameter immediately on mount (don't wait for data)
+  useEffect(() => {
+    if (!initialTabSet) {
+      const urlTab = searchParams.get('tab') as View;
+
+      if (urlTab && ['set', 'plan', 'shop', 'cook'].includes(urlTab)) {
+        console.log('🎯 URL parameter detected immediately, using:', urlTab);
+        setView(urlTab);
+        setInitialTabSet(true);
+        return; // Exit early, don't run smart selection
+      }
+    }
+  }, [searchParams, initialTabSet]);
+
+  // Smart tab selection - only runs if no URL parameter was found
+  useEffect(() => {
+    // Only run smart selection when:
+    // 1. We haven't set the initial tab yet
+    // 2. Data is loaded (so we have accurate state)
+    // 3. We're not currently loading
+    if (!initialTabSet && isDataLoaded && !isLoading) {
+      console.log('🧠 Running smart tab selection (no URL parameter found)...');
+
+      // Run smart selection since no URL parameter was provided
+      const selectedTab = getSmartDefaultTab(plannerStore);
+
+      console.log('✅ Setting smart-selected tab to:', selectedTab);
+      setView(selectedTab);
+      setInitialTabSet(true);
+    }
+  }, [initialTabSet, isDataLoaded, isLoading, plannerStore]);
+
   // Tabs are only enabled when a store is selected and data is loaded
   const isTabEnabled = (tabId: View) =>
-    tabId === 'store' || !!selectedStore;
+    tabId === 'set' || !!selectedStore;
 
   // Enhanced scroll to top function that ensures consistent behavior
   const scrollToTop = useCallback(() => {
@@ -235,8 +311,8 @@ export default function MealPlannerPage() {
 
   // Modified auto-switch to show loading screen when store is selected
   useEffect(() => {
-    // If we're on the store tab and data is loaded, and we've been flagged to navigate
-    if (selectedStore && view === 'store' && shouldNavigateToPlan.current) {
+    // If we're on the set tab and data is loaded, and we've been flagged to navigate
+    if (selectedStore && view === 'set' && shouldNavigateToPlan.current) {
       console.log("Store selected, showing loading screen");
 
       // Reset the flag so we don't keep triggering this
@@ -253,33 +329,13 @@ export default function MealPlannerPage() {
     }
   }, [selectedStore, isDataLoaded, isLoading, view]);
 
-  // Add an effect to ensure scroll to top specifically when switching to groceries view
+  // Add an effect to ensure scroll to top specifically when switching to shop view
   useEffect(() => {
-    if (view === 'groceries') {
-      // Ensure we're at the top when the groceries view is active
+    if (view === 'shop') {
+      // Ensure we're at the top when the shop view is active
       scrollToTop();
     }
   }, [view, scrollToTop]);
-
-  //DEBUG
-  //useEffect(() => {
-  //  console.log('[DEBUG] Orchestrator auto-save setup should be running');
-
-    // Check if the individual stores have callbacks
-  //  const mealPlan = useMealPlanStore.getState();
-  //  const grocery = useGroceryStore.getState();
-
-  //  console.log('[DEBUG] MealPlan store onStateChange:', mealPlan.onStateChange);
-  //  console.log('[DEBUG] Grocery store onStateChange:', grocery.onStateChange);
-  //}, []);
-
-  // Add this temporary test in your MealPlannerPage component
-  //useEffect(() => {
-  //  console.log('Testing basic setTimeout...');
-  //  setTimeout(() => {
-  //    console.log('✅ Basic setTimeout works!');
-  //  }, 2000);
-  //}, []);
 
 return (
   <>
@@ -300,7 +356,7 @@ return (
     {/* Sticky tabs section - positioned right below the header */}
     <div className="sticky top-14 left-0 right-0 z-40">
       <div className="container mx-auto p-1">
-        {/* --- 4‑step selector --- */}
+        {/* --- 4-step selector --- */}
         <div className="relative mx-auto mt-0 mb-1 w-full max-w-md h-12">
           <div className="absolute inset-0 bg-teal-100 rounded-full"/>
           <div className="absolute inset-0 flex">
@@ -361,7 +417,7 @@ return (
       </div>
 
       {/* --- Content panels --- */}
-      {view === 'store' && (
+      {view === 'set' && (
         <>
           <ContinuePlanBanner onContinue={() => handleViewChange('plan')} />
           <HouseholdSizeSelector />
@@ -369,7 +425,7 @@ return (
         </>
       )}
       {view === 'plan' && <MealPlanScreen />}
-      {view === 'groceries' && <GroceryScreen />}
+      {view === 'shop' && <GroceryScreen />}
       {view === 'cook' && <CookScreen />}
     </div>
 

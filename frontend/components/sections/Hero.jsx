@@ -8,6 +8,7 @@ const Hero = () => {
   const videoRefs = useRef([]);
   const videoContainerRefs = useRef([]);
   const buttonRef = useRef(null);
+  const loginButtonRef = useRef(null);
   const [activeTab, setActiveTab] = useState(0);
   const [transitioning, setTransitioning] = useState(false);
 
@@ -116,7 +117,7 @@ const Hero = () => {
       });
     });
 
-    // Add button click animation
+    // Add button click animations
     const button = buttonRef.current;
     if (button) {
       button.addEventListener('mousedown', () => {
@@ -129,6 +130,22 @@ const Hero = () => {
 
       button.addEventListener('mouseleave', () => {
         button.classList.remove('cta-button-clicked');
+      });
+    }
+
+    // Add login button click animations
+    const loginButton = loginButtonRef.current;
+    if (loginButton) {
+      loginButton.addEventListener('mousedown', () => {
+        loginButton.classList.add('login-button-clicked');
+      });
+
+      loginButton.addEventListener('mouseup', () => {
+        loginButton.classList.remove('login-button-clicked');
+      });
+
+      loginButton.addEventListener('mouseleave', () => {
+        loginButton.classList.remove('login-button-clicked');
       });
     }
 
@@ -513,8 +530,17 @@ const Hero = () => {
           }
         }
 
-        /* Bright Attention-Grabbing CTA Button */
-        .cta-button {
+        /* Button Container */
+        .buttons-container {
+          display: flex;
+          flex-direction: column;
+          align-items: center;
+          gap: 1rem;
+          margin-bottom: 3rem;
+        }
+
+        /* Login Button - Bright Attention-Grabbing with Pulse */
+        .login-button {
           background: linear-gradient(45deg, #FF9A7B, #FFB299);
           color: white;
           border: none;
@@ -524,7 +550,6 @@ const Hero = () => {
           font-weight: 700;
           cursor: pointer;
           transition: all 0.3s ease;
-          margin-bottom: 3rem;
           box-shadow: 0 8px 25px rgba(255, 154, 123, 0.4);
           border: 2px solid rgba(255, 255, 255, 0.3);
           position: relative;
@@ -533,7 +558,7 @@ const Hero = () => {
           letter-spacing: 0.3px;
         }
 
-        .cta-button::before {
+        .login-button::before {
           content: '';
           position: absolute;
           top: 0;
@@ -547,18 +572,85 @@ const Hero = () => {
           transition: transform 0.5s ease;
         }
 
+        .login-button:hover::before {
+          transform: scaleX(1);
+        }
+
+        .login-button:hover {
+          transform: translateY(-3px) scale(1.05);
+          box-shadow: 0 12px 35px rgba(255, 154, 123, 0.6);
+        }
+
+        .login-button-clicked {
+          transform: translateY(2px) !important;
+          box-shadow: 0 2px 10px rgba(255, 183, 153, 0.2) !important;
+          transition: all 0.1s ease !important;
+        }
+
+        .login-button span {
+          position: relative;
+          z-index: 2;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+        }
+
+        .login-button-icon {
+          margin-right: 8px;
+          transition: transform 0.3s ease;
+        }
+
+        .login-button:hover .login-button-icon {
+          transform: translateX(-2px);
+        }
+
+        /* Demo Button - Professional and Clean */
+        .cta-button {
+          background: transparent;
+          color: #00a2a2;
+          border: 2px solid #00a2a2;
+          padding: 0.8rem 2rem;
+          border-radius: 50px;
+          font-size: 1rem;
+          font-weight: 600;
+          cursor: pointer;
+          transition: all 0.3s ease;
+          position: relative;
+          overflow: hidden;
+          z-index: 1;
+          letter-spacing: 0.3px;
+          background-color: rgba(255, 255, 255, 0.8);
+          backdrop-filter: blur(10px);
+          -webkit-backdrop-filter: blur(10px);
+        }
+
+        .cta-button::before {
+          content: '';
+          position: absolute;
+          top: 0;
+          left: 0;
+          width: 100%;
+          height: 100%;
+          background: #00a2a2;
+          z-index: -1;
+          transform: scaleX(0);
+          transform-origin: 0 50%;
+          transition: transform 0.3s ease;
+        }
+
         .cta-button:hover::before {
           transform: scaleX(1);
         }
 
         .cta-button:hover {
-          transform: translateY(-3px) scale(1.05);
-          box-shadow: 0 12px 35px rgba(255, 154, 123, 0.6);
+          color: white;
+          transform: translateY(-2px);
+          box-shadow: 0 8px 25px rgba(0, 162, 162, 0.3);
         }
 
         .cta-button-clicked {
-          transform: translateY(2px) !important;
-          box-shadow: 0 2px 10px rgba(255, 183, 153, 0.2) !important;
+          transform: translateY(1px) !important;
+          box-shadow: 0 2px 10px rgba(0, 162, 162, 0.2) !important;
           transition: all 0.1s ease !important;
         }
 
@@ -577,6 +669,20 @@ const Hero = () => {
 
         .cta-button:hover .cta-button-icon {
           transform: translateX(4px);
+        }
+
+        /* Mobile responsive buttons */
+        @media (max-width: 768px) {
+          .buttons-container {
+            width: 100%;
+            padding: 0 1rem;
+          }
+
+          .login-button,
+          .cta-button {
+            width: 100%;
+            max-width: 300px;
+          }
         }
 
         /* Demo Tabs - Responsive */
@@ -803,30 +909,58 @@ const Hero = () => {
               Skrimp is your personal AI sous chef, helping you plan meals and save money.
             </p>
 
-            {/* Animated CTA Button with Link */}
-            <Link href="/plan" passHref>
-              <button ref={buttonRef} className="cta-button pulse">
-                <span>
-                  Start saving— it&apos;s free!
-                  <svg
-                    className="cta-button-icon"
-                    width="16"
-                    height="16"
-                    viewBox="0 0 24 24"
-                    fill="none"
-                    xmlns="http://www.w3.org/2000/svg"
-                  >
-                    <path
-                      d="M5 12H19M19 12L12 5M19 12L12 19"
-                      stroke="white"
-                      strokeWidth="2"
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                    />
-                  </svg>
-                </span>
-              </button>
-            </Link>
+            {/* Buttons Container */}
+            <div className="buttons-container">
+              {/* Login Button - Now with pulse animation */}
+              <Link href="/login" passHref>
+                <button ref={loginButtonRef} className="login-button pulse">
+                  <span>
+                    <svg
+                      className="login-button-icon"
+                      width="16"
+                      height="16"
+                      viewBox="0 0 24 24"
+                      fill="none"
+                      xmlns="http://www.w3.org/2000/svg"
+                    >
+                      <path
+                        d="M15 3H19C19.5304 3 20.0391 3.21071 20.4142 3.58579C20.7893 3.96086 21 4.46957 21 5V19C21 19.5304 20.7893 20.0391 20.4142 20.4142C20.0391 20.7893 19.5304 21 19 21H15M10 17L15 12L10 7M15 12H3"
+                        stroke="white"
+                        strokeWidth="2"
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                      />
+                    </svg>
+                    Already have an account? Sign In
+                  </span>
+                </button>
+              </Link>
+
+              {/* Demo Button - Now clean and professional */}
+              <Link href="/plan" passHref>
+                <button ref={buttonRef} className="cta-button">
+                  <span>
+                    Try a live demo— it&apos;s free!
+                    <svg
+                      className="cta-button-icon"
+                      width="16"
+                      height="16"
+                      viewBox="0 0 24 24"
+                      fill="none"
+                      xmlns="http://www.w3.org/2000/svg"
+                    >
+                      <path
+                        d="M5 12H19M19 12L12 5M19 12L12 19"
+                        stroke="currentColor"
+                        strokeWidth="2"
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                      />
+                    </svg>
+                  </span>
+                </button>
+              </Link>
+            </div>
 
             {/* Demo Tabs - With seamless video transitions */}
             <div className="demo-container">
