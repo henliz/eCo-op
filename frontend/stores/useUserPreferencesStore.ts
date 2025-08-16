@@ -1,12 +1,14 @@
 import { create } from 'zustand';
 
-// NEW: Add subscription limits interfaces (simple)
+// UPDATED: Add subscription limits interfaces with new browse fields
 export interface SubscriptionLimitsData {
   tier: "free" | "premium";
   limits: {
     personalRecipes: number;        // -1 = unlimited
     ingredientExclusions: number;   // -1 = unlimited
     bannedRecipes: number;          // -1 = unlimited
+    recipeBrowseLimit: number;      // NEW: -1 = unlimited
+    recipeBrowseSearch: boolean;    // NEW: search capability
   };
   usage: {
     personalRecipesCount: number;
@@ -452,3 +454,4 @@ export const useUserPreferencesStore = create<UserPreferencesState>((set, get) =
     };
   },
 }));
+

@@ -4,13 +4,13 @@ import { BookOpen, Plus } from 'lucide-react';
 interface CustomRecipeCardProps {
   mealType: 'breakfast' | 'lunch' | 'dinner';
   onCustomSelect?: () => void;
-  isComingSoon?: boolean;
+  isComingSoon?: boolean; // Keep for backward compatibility, but default to false
 }
 
 const mealTypeConfig = {
   breakfast: {
     title: 'Add Custom Breakfasts',
-    description: 'Browse and select from our complete breakfast recipe library',
+    description: 'Browse priced breakfast recipes from your selected store',
     color: 'text-orange-600',
     bgColor: 'bg-orange-50',
     borderColor: 'border-orange-200',
@@ -18,7 +18,7 @@ const mealTypeConfig = {
   },
   lunch: {
     title: 'Add Custom Lunches',
-    description: 'Choose your favorite lunch recipes from our complete collection',
+    description: 'Browse priced lunch recipes from your selected store',
     color: 'text-green-600',
     bgColor: 'bg-green-50',
     borderColor: 'border-green-200',
@@ -26,7 +26,7 @@ const mealTypeConfig = {
   },
   dinner: {
     title: 'Add Custom Dinners',
-    description: 'Hand-pick dinner recipes from our master recipe database',
+    description: 'Browse priced dinner recipes from your selected store',
     color: 'text-blue-600',
     bgColor: 'bg-blue-50',
     borderColor: 'border-blue-200',
@@ -34,7 +34,7 @@ const mealTypeConfig = {
   }
 };
 
-export function CustomRecipeCard({ mealType, onCustomSelect, isComingSoon = true }: CustomRecipeCardProps) {
+export function CustomRecipeCard({ mealType, onCustomSelect, isComingSoon = false }: CustomRecipeCardProps) {
   const config = mealTypeConfig[mealType];
 
   return (
@@ -49,7 +49,7 @@ export function CustomRecipeCard({ mealType, onCustomSelect, isComingSoon = true
       `}
       onClick={isComingSoon ? undefined : onCustomSelect}
     >
-      {/* Coming Soon Badge */}
+      {/* Coming Soon Badge - only show if explicitly set */}
       {isComingSoon && (
         <div className="absolute top-2 right-2 z-10">
           <span className="px-2 py-1 bg-gray-500 text-white text-xs font-medium rounded-full">
