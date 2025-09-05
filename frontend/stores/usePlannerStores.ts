@@ -1,7 +1,9 @@
 import { useMemo, useEffect, useCallback, useRef } from 'react';
 import { useMealPlanStore, type Recipe, type MealCategory, type Ingredient } from './useMealPlanStore';
 import { useGroceryStore, type AggregatedItem, type Totals, type IngredientTags } from './useGroceryStore';
-import { useStoreLocationStore, type Store, type UserLocation, type StoreLocation } from './useStoreLocationStore';
+//import { useStoreLocationStore, type Store, type UserLocation, type StoreLocation } from './useStoreLocationStore';
+import { useStoreLocationStore, type Store, type UserLocation, type StoreLocation } from "@/stores";
+
 import { useUserPreferencesStore } from './useUserPreferencesStore';
 import { usePlanSyncStore, type PlanData } from './usePlanSyncStore';
 
@@ -365,6 +367,7 @@ export const usePlannerStores = (): PlannerStores => {
 
   const enhancedSetSelectedStore = useCallback((storeId: string | null) => {
     // Clear meal data when changing stores
+    console.log('DASHBOARD: About to call clearMealData')
     mealPlan.clearMealData();
 
     // Set the store

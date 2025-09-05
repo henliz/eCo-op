@@ -1,4 +1,26 @@
+"use client";
 import { create } from 'zustand';
+
+// --- RUNTIME SANITY CHECK (dev only) ---------------------------------
+if (typeof window !== 'undefined' && process.env.NODE_ENV !== 'production') {
+  // Count how many times this module has been evaluated in the browser
+  // @ts-ignore
+  window.__slsLoads = (window.__slsLoads ?? 0) + 1;
+  // @ts-ignore
+  if (window.__slsLoads > 1) {
+    console.warn('[StoreLocationStore] loaded more than once — check import paths');
+  }
+}
+// ---------------------------------------------------------------------
+
+// --- INSTANCE PROBE (dev only) --------------------------------------
+if (typeof window !== "undefined" && process.env.NODE_ENV !== "production") {
+  // @ts-ignore
+  window.__slsUUID = window.__slsUUID || Math.random().toString(36).slice(2);
+  // @ts-ignore
+  console.log("[StoreLocationStore] instance:", window.__slsUUID, performance.getEntriesByType?.("navigation")?.[0]?.type);
+}
+// ---------------
 
 // Import types from your existing code
 export interface Store {
@@ -137,24 +159,53 @@ export const useStoreLocationStore = create<StoreLocationState>((set, get) => ({
   isLoading: false,
   error: null,
 
+
   // Store management actions
+  //setSelectedStore: (storeId) => {
+  //  console.log('[StoreLocationStore] setSelectedStore called with:', storeId);
+  //  console.log('[StoreLocationStore] Current selectedStore before change:', get().selectedStore);
+
+  //  const state = get();
+
+  //  if (storeId) {
+  //    const store = state.availableStores.find(s => s.id === storeId);
+  //    if (!store || !store.isAvailable) {
+  //      console.log('[StoreLocationStore] Store not found or unavailable:', storeId);
+  //      set({ error: 'Selected store is not available' });
+  //      return;
+  //    }
+  //  }
+
+  //  set({
+  //    selectedStore: storeId,
+  //    error: null
+  //  });
+
+  //  console.log('[StoreLocationStore] selectedStore after change:', get().selectedStore);
+  //},
+
   setSelectedStore: (storeId) => {
+    if (storeId === null) {
+      // Trace who called this
+      // eslint-disable-next-line no-new
+      new Error("[StoreLocationStore] setSelectedStore(null) called").stack
+        ?.split("\n")
+        .slice(0, 8)
+        .forEach((l) => console.warn(l));
+    }
+
     const state = get();
 
     if (storeId) {
-      const store = state.availableStores.find(s => s.id === storeId);
+      const store = state.availableStores.find((s) => s.id === storeId);
       if (!store || !store.isAvailable) {
-        set({ error: 'Selected store is not available' });
+        set({ error: "Selected store is not available" });
         return;
       }
     }
 
-    set({
-      selectedStore: storeId,
-      error: null
-    });
+    set({ selectedStore: storeId, error: null });
   },
-
   discoverStores: async () => {
     const logMessage = (msg: string) => console.log(`[StoreLocationStore] ${msg}`);
     logMessage('Discovering available stores...');
@@ -320,7 +371,14 @@ export const useStoreLocationStore = create<StoreLocationState>((set, get) => ({
   // Query methods
   getSelectedStore: () => {
     const state = get();
-    return state.availableStores.find(s => s.id === state.selectedStore) || null;
+    const result = state.availableStores.find(s => s.id === state.selectedStore) || null;
+    console.log('[StoreLocationStore] getSelectedStore called:', {
+      selectedStoreId: state.selectedStore,
+      availableStoresCount: state.availableStores.length,
+      resultFound: !!result,
+      resultId: result?.id || 'null'
+    });
+    return result;
   },
 
   getAvailableStores: () => {

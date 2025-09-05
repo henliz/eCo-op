@@ -1,15 +1,15 @@
 // app/dashboard/page.tsx
 'use client';
 
-import React, { useState, useCallback } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Button } from '@/components/ui/button';
 import Header from '@/components/layout/Header';
 import Footer from '@/components/layout/Footer';
 import { useAuth } from '@/contexts/AuthContext';
 
 // Import custom hooks
-import { useDashboardData } from '@/hooks/useDashboardData';
 import { usePreferences } from '@/hooks/usePreferences';
+import { useAppDataLoader } from '@/hooks/useAppDataLoader';
 
 // Import components
 import { WelcomeSection } from '@/components/dashboard/WelcomeSection';
@@ -19,7 +19,7 @@ import { PreferencesOverview } from '@/components/dashboard/PreferencesOverview'
 import { RecipeLibrary } from '@/components/dashboard/RecipeLibrary';
 
 // Import planner stores
-import { usePlannerStores } from '@/stores/usePlannerStores';
+import { usePlannerStores } from "@/stores/usePlannerStores"; // adjust path if different
 
 import {
   Home,
@@ -43,24 +43,40 @@ const DashboardPage: React.FC = () => {
   const [activeSection, setActiveSection] = useState<string>('overview');
   const [currentTime] = useState<Date>(new Date());
 
-  // Custom hooks for data
-  const { hasData, meals, selectedStore, mealSummary, totals } = useDashboardData();
-  const { summary, preferencesData, subscriptionTier } = usePreferences(); // Get subscription tier from usePreferences
+  // Centralized data loading
+  const { loadData, isLoaded, isLoading, hasError } = useAppDataLoader();
 
-  // Get additional data for preferences card
-  const { getSelectedStore, normalMealServings, clearMealData } = usePlannerStores();
+  useEffect(() => {
+    console.log('[Dashboard] Loading state changed:', { isLoaded, isLoading, hasError });
+  }, [isLoaded, isLoading, hasError]);
 
-  // Get the actual store object instead of just the ID
+  useEffect(() => {
+    if (currentUser && !isLoaded) {
+      console.log('[Dashboard] Triggering loadData auto');
+      loadData('auto');
+    }
+  }, [currentUser, isLoaded, loadData]);
+
+
+  // Get all data from centralized stores
+  const {
+    meals,
+    mealSummary,
+    totals,
+    getSelectedStore,
+    normalMealServings,
+  } = usePlannerStores();
+
   const selectedStoreObject = getSelectedStore();
 
-  // Handler for starting a new plan
-  const handleStartNewPlan = useCallback(() => {
-    // Clear meal data but keep household size and store
-    clearMealData();
+  // Calculate hasData directly here
+  const hasData = Boolean(
+    selectedStoreObject ||
+    (meals && ((meals.breakfast?.length || 0) + (meals.lunch?.length || 0) + (meals.dinner?.length || 0)) > 0)
+  );
 
-    // Navigate to plan tab
-    window.location.href = '/plan?tab=plan';
-  }, [clearMealData]);
+  const { summary, preferencesData, subscriptionTier } = usePreferences();
+
 
   // Helper functions
   const getGreeting = (): string => {
@@ -107,7 +123,6 @@ const DashboardPage: React.FC = () => {
             selectedStore={selectedStoreObject || undefined}
             totals={totals}
             mealSummary={mealSummary}
-            onStartNewPlan={handleStartNewPlan}
           />
           <ShoppingList
             hasData={hasData}
@@ -142,14 +157,14 @@ const DashboardPage: React.FC = () => {
                 <span className="text-sm font-medium text-gray-800">{normalMealServings || 2} people</span>
               </div>
 
-              {/* Local Store */}
+              {/* Local Store - FIXED LOGIC */}
               <div className="flex justify-between items-start">
                 <span className="text-sm text-gray-600">Local Store:</span>
                 <div className="text-right">
-                  {selectedStore ? (
+                  {selectedStoreObject ? (
                     <>
-                      <span className="text-sm font-medium text-gray-800">{selectedStore ? selectedStoreObject?.name || 'Store Selected' : 'None selected'}</span>
-                      <div className="text-xs text-gray-500">{selectedStoreObject?.location || ''}</div>
+                      <span className="text-sm font-medium text-gray-800">{selectedStoreObject.name}</span>
+                      <div className="text-xs text-gray-500">{selectedStoreObject.location}</div>
                     </>
                   ) : (
                     <span className="text-sm font-medium text-gray-800">None selected</span>

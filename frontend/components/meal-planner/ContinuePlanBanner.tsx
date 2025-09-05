@@ -1,77 +1,45 @@
-import React, { useEffect, useState } from 'react';
+//import React, { useEffect } from 'react';
 import { usePlannerStores as usePlannerStore } from '@/stores/usePlannerStores';
+//import { useStoreLocationStore } from '@/stores/useStoreLocationStore';
+import { useStoreLocationStore } from "@/stores";
 
-import { useStoreLocationStore } from '@/stores/useStoreLocationStore'; // ADD THIS
-
-
-import { useAuth } from '@/contexts/AuthContext';
+//import { useAuth } from '@/contexts/AuthContext';
+import { useAppDataLoader } from '@/hooks/useAppDataLoader';
 
 interface ContinuePlanProps {
   onContinue: () => void; // Callback to jump to plan tab
 }
 
 export const ContinuePlanBanner: React.FC<ContinuePlanProps> = ({ onContinue }) => {
-  const { makeAPICall, currentUser } = useAuth(); // Add currentUser
+  console.log('BANNER: Component mounting/rendering');
+
+  //const { currentUser } = useAuth();
+  //const { loadData, isLoaded } = useAppDataLoader();
+  const { isLoaded } = useAppDataLoader();
 
   const { availableStores: newAvailableStores } = useStoreLocationStore();
 
   const {
-    loadUserPlan,
     selectedStore,
     normalMealServings,
     lastSynced,
     planId,
-    availableStores: oldAvailableStores, // Keep for fallback
+    availableStores: oldAvailableStores,
     isSyncing,
-    selectedRecipes  // ← Move this here with other store hooks
+    selectedRecipes
   } = usePlannerStore();
 
   const availableStores = newAvailableStores.length > 0 ? newAvailableStores : oldAvailableStores;
 
-  const [hasAttemptedLoad, setHasAttemptedLoad] = useState(false);
-  const [loadComplete, setLoadComplete] = useState(false);
-  const [loadError, setLoadError] = useState<string | null>(null);
-
-  // Check if plan is already loaded, or attempt to load
-  useEffect(() => {
-    const checkOrLoad = async () => {
-      if (!hasAttemptedLoad) {
-        setHasAttemptedLoad(true);
-
-        // First check if we already have a plan loaded
-        const currentlyHasValidPlan = planId && selectedStore && lastSynced;
-
-        if (currentlyHasValidPlan) {
-          console.log('[ContinuePlan] Plan already loaded, skipping load attempt');
-          setLoadComplete(true);
-          return;
-        }
-
-        // Only attempt to load if we don't have a plan, we have makeAPICall, AND we have a current user
-        if (makeAPICall && currentUser) {
-          try {
-            console.log('[ContinuePlan] Attempting to load user plan...');
-            await loadUserPlan(makeAPICall);
-            console.log('[ContinuePlan] Load completed successfully');
-            setLoadComplete(true);
-          } catch (error) {
-            console.log('[ContinuePlan] No existing plan found or load failed:', error);
-            setLoadError('No plan found');
-            setLoadComplete(true);
-          }
-        } else {
-          // No makeAPICall available or no current user, just mark as complete
-          console.log('[ContinuePlan] No makeAPICall or currentUser available, marking as complete');
-          setLoadComplete(true);
-        }
-      }
-    };
-
-    checkOrLoad();
-  }, [makeAPICall, currentUser, hasAttemptedLoad, loadUserPlan, planId, selectedStore, lastSynced]);
+  // Use centralized loader
+  //useEffect(() => {
+  //  if (currentUser && !isLoaded) {
+  //    loadData('auto');
+  //  }
+  //}, [currentUser, isLoaded, loadData]);
 
   // Don't render anything until load attempt is complete
-  if (!loadComplete || isSyncing) {
+  if (!isLoaded || isSyncing) {
     return (
       <div className="bg-white rounded-xl py-4 px-5 mb-1 shadow-sm">
         <div className="flex items-center">
@@ -83,7 +51,6 @@ export const ContinuePlanBanner: React.FC<ContinuePlanProps> = ({ onContinue }) 
   }
 
   // Now check if we have a valid plan (after load is complete)
-  // A plan is "continuable" if we have a store, recent sync, and some meal data
   const recipes = selectedRecipes();
   const hasValidPlan = selectedStore && lastSynced && recipes.length > 0;
 
@@ -92,24 +59,13 @@ export const ContinuePlanBanner: React.FC<ContinuePlanProps> = ({ onContinue }) 
     ? availableStores.find(s => s.id === selectedStore)
     : null;
 
-  console.log('[ContinuePlan] DEBUG - Store lookup:', {
+  console.log('[ContinuePlan] Current state:', {
+    hasValidPlan,
+    planId,
     selectedStore,
-    availableStoresCount: availableStores.length,
-    first5Stores: availableStores.slice(0, 5).map(s => ({
-      id: s.id,
-      name: s.name,
-      location: s.location
-    })),
-    // Try to find partial matches
-    partialMatches: availableStores.filter(s =>
-      s.id.includes('Zehrs') ||
-      s.name.includes('Zehrs') ||
-      s.location.includes('180 Holiday')
-    ).map(s => ({
-      id: s.id,
-      name: s.name,
-      location: s.location
-    }))
+    lastSynced,
+    storeInfo: storeInfo?.name,
+    recipesCount: recipes.length
   });
 
   // Format the last sync date
@@ -125,18 +81,6 @@ export const ContinuePlanBanner: React.FC<ContinuePlanProps> = ({ onContinue }) 
     console.log('[ContinuePlan] Continuing with existing plan');
     onContinue(); // Jump to plan tab
   };
-
-  // Log the current state for debugging
-  console.log('[ContinuePlan] Current state:', {
-    hasValidPlan,
-    planId,
-    selectedStore,
-    lastSynced,
-    storeInfo: storeInfo?.name,
-    loadComplete,
-    loadError,
-    recipesCount: recipes.length
-  });
 
   if (hasValidPlan && storeInfo) {
     return (
@@ -160,7 +104,7 @@ export const ContinuePlanBanner: React.FC<ContinuePlanProps> = ({ onContinue }) 
                 Your Last Plan
               </h3>
               <div className="bg-teal-100 w-10 h-10 flex items-center justify-center rounded-lg">
-                <span className="text-lg">📋</span>
+                <span className="text-lg">🗂️</span>
               </div>
             </div>
 
@@ -210,7 +154,7 @@ export const ContinuePlanBanner: React.FC<ContinuePlanProps> = ({ onContinue }) 
               No Current Plan
             </h3>
             <div className="bg-gray-100 w-10 h-10 flex items-center justify-center rounded-lg">
-              <span className="text-lg opacity-50">📋</span>
+              <span className="text-lg opacity-50">🗂️</span>
             </div>
           </div>
 
@@ -226,7 +170,7 @@ export const ContinuePlanBanner: React.FC<ContinuePlanProps> = ({ onContinue }) 
             disabled
             className="w-full bg-gray-200 text-gray-400 font-medium py-2.5 px-4 rounded-lg cursor-not-allowed flex items-center justify-center"
           >
-            <span className="mr-2 opacity-50">📋</span>
+            <span className="mr-2 opacity-50">🗂️</span>
             Continue this plan
           </button>
         </div>

@@ -8,7 +8,9 @@ import { locationService } from '@/lib/location';
 import { useLocation } from '@/hooks/useLocation';
 
 // 🆕 New store is now primary
-import { useStoreLocationStore } from '@/stores/useStoreLocationStore';
+//import { useStoreLocationStore } from '@/stores/useStoreLocationStore';
+import { useStoreLocationStore } from "@/stores";
+
 
 type ExtendedStore = Store & {
   location_name?: string;
