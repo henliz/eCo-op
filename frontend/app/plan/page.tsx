@@ -11,7 +11,7 @@ import { HouseholdSizeSelector } from '@/components/meal-planner/HouseholdSizeSe
 import { MealPlanScreen } from '@/components/meal-planner/MealPlanScreen';
 import { GroceryScreen } from '@/components/meal-planner/GroceryScreen';
 import { CookScreen } from '@/components/meal-planner/CookScreen';
-import { usePlannerStores as usePlannerStore , getPlannerStores} from '@/stores';
+import { usePlannerStores as usePlannerStore } from '@/stores';
 import LoadingScreen from '@/components/meal-planner/LoadingScreen';
 import { useAppDataLoader } from '@/hooks/useAppDataLoader';
 import { useAuth } from '@/contexts/AuthContext';
@@ -204,14 +204,11 @@ export default function MealPlannerPage() {
   const handleViewChange = (newView: View) => {
     if (isTabEnabled(newView)) {
       // SAVE BEFORE SWITCHING TABS - BUT ONLY IF AUTHENTICATED
-      const store = getPlannerStores();
-      if (store.hasUnsavedChanges() &&
+      if (plannerStore.hasUnsavedChanges() &&
           window.__plannerMakeAPICall &&
           currentUser) { // Add authentication check
         console.log(`[TabChange] Saving before switching to ${newView}`);
-        store.saveUserPlan(window.__plannerMakeAPICall).catch((error: unknown) => {
-          console.error('[TabChange] Save failed:', error);
-        });
+        void plannerStore.saveUserPlan(window.__plannerMakeAPICall);
       }
       scrollToTop();
       setView(newView);
