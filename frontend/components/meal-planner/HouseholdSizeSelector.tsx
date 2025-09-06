@@ -2,7 +2,7 @@
 
 import React, { useEffect, useRef, useState } from 'react';
 import { Users } from 'lucide-react';
-import { usePlannerStores as usePlannerStore } from '@/stores/usePlannerStores';
+import { usePlannerStores as usePlannerStore } from '@/stores';
 
 
 /**

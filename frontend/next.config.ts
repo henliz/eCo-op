@@ -5,6 +5,7 @@ const nextConfig = {
   //   ↓  delete these two lines
   // basePath: "/eCo-op",
   // assetPrefix: "/eCo-op/",
+  //  reactStrictMode: false, // Temporarily disable
 };
 
 export default nextConfig;

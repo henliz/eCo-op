@@ -1,7 +1,11 @@
+"use client";
 import React from 'react';
 import { Button } from '@/components/ui/button';
 import { Edit3, Calendar, ChefHat, RefreshCw } from 'lucide-react';
-import type { Store } from '@/stores/useStoreLocationStore';
+import type { Store } from "@/stores";
+import { useRouter } from "next/navigation";
+import { useStoreLocationStore } from "@/stores";
+
 
 interface Recipe {
   name: string;
@@ -26,14 +30,26 @@ interface WeeklyPlanProps {
   selectedStore?: Store;
   totals?: () => { totalSavings: number; saleTotal: number };
   mealSummary?: () => { total: number };
-  onStartNewPlan?: () => void; // Add callback for starting new plan
 }
 
 export const WeeklyPlan: React.FC<WeeklyPlanProps> = ({
   hasData,
   meals,
-  onStartNewPlan
 }) => {
+
+  const router = useRouter();
+  // Read current selection directly from the store (ids survive across pages on soft nav)
+  const { selectedStore: selectedStoreId } = useStoreLocationStore.getState();
+
+  function goToPlanner(mode: "new" | "edit") {
+    const qs = new URLSearchParams({
+          tab: "plan",
+       mode, // let /plan know if it's a new plan vs edit
+       ...(selectedStoreId ? { storeId: selectedStoreId } : {}),
+     });
+     router.push(`/plan?${qs.toString()}`);
+   }
+
   if (!hasData) {
     return (
       <div className="bg-white/80 backdrop-blur-sm rounded-2xl shadow-lg border border-white/20 p-6 hover:shadow-xl transition-all duration-300">
@@ -49,7 +65,7 @@ export const WeeklyPlan: React.FC<WeeklyPlanProps> = ({
           <p className="text-gray-600 mb-4">Start planning to see your meals here</p>
           <Button
             className="bg-gradient-to-r from-green-500 to-blue-500 hover:from-green-600 hover:to-blue-600 text-white px-6 py-2 rounded-xl transition-all duration-300"
-            onClick={() => window.location.href = '/plan'}
+            onClick={() => goToPlanner("new")}
           >
             Start Planning
           </Button>
@@ -65,30 +81,32 @@ export const WeeklyPlan: React.FC<WeeklyPlanProps> = ({
 
   return (
     <div className="bg-white/80 backdrop-blur-sm rounded-2xl shadow-lg border border-white/20 p-6 hover:shadow-xl transition-all duration-300">
-      <div className="flex items-center justify-between mb-6">
-        <div className="flex items-center gap-3">
-          <div className="w-10 h-10 bg-gradient-to-r from-green-400 to-blue-400 rounded-xl flex items-center justify-center">
-            <ChefHat size={20} className="text-white" />
+      <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-3 mb-6">
+        <div className="flex items-center gap-3 min-w-0">
+          <div
+              className="w-10 h-10 bg-gradient-to-r from-green-400 to-blue-400 rounded-xl flex items-center justify-center">
+            <ChefHat size={20} className="text-white"/>
           </div>
-          <h2 className="text-xl font-semibold text-gray-800">Planned Meals</h2>
+          <h2 className="text-xl sm:text-xl font-semibold text-gray-800">Planned Meals</h2>
         </div>
-        <div className="flex gap-2">
+        <div className="flex flex-col sm:flex-row gap-2 w-full sm:w-auto sm:ml-3 sm:shrink-0">
           <Button
-            variant="outline"
-            size="sm"
-            className="hover:bg-green-50 transition-colors"
-            onClick={onStartNewPlan}
+              variant="outline"
+              size="sm"
+              className="w-full sm:w-auto whitespace-nowrap hover:bg-green-50 transition-colors"
+              onClick={() => goToPlanner("new")}
+
           >
-            <RefreshCw size={16} className="mr-2" />
+            <RefreshCw size={16} className="mr-2"/>
             New Plan
           </Button>
           <Button
-            variant="outline"
-            size="sm"
-            className="hover:bg-blue-50 transition-colors"
-            onClick={() => window.location.href = '/plan?tab=plan'}
+              variant="outline"
+              size="sm"
+              className="w-full sm:w-auto whitespace-nowrap hover:bg-blue-50 transition-colors"
+              onClick={() => goToPlanner("edit")}
           >
-            <Edit3 size={16} className="mr-2" />
+            <Edit3 size={16} className="mr-2"/>
             Edit Plan
           </Button>
         </div>

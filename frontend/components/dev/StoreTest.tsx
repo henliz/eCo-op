@@ -1,5 +1,7 @@
 'use client';
-import { useStoreLocationStore } from '@/stores/useStoreLocationStore';
+//import { useStoreLocationStore } from '@/stores/useStoreLocationStore';
+import { useStoreLocationStore } from "@/stores";
+
 import { useUserPreferencesStore } from '@/stores/useUserPreferencesStore';
 
 export const StoreTest = () => {

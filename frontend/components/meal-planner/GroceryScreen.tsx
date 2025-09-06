@@ -1,28 +1,14 @@
 'use client';
 
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useMemo } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { usePlannerStores as usePlannerStore, type AggregatedItem, getPlannerStores } from '@/stores/usePlannerStores';
+import { usePlannerStores as usePlannerStore, type AggregatedItem } from '@/stores';
 
 import { GroceryItem } from './GroceryItem';
 import { GroceryListPrintable } from './GroceryListPrintable';
 import { StoreCard } from './StoreCard'; // Import the StoreCard component
-
-// Based on the project structure in eCo-op.json
-// - frontend/components/icons/CategoryIcons
-// - frontend/components/meal-planner/GroceryScreen.tsx
 import CategoryIcons from '../icons/CategoryIcons';
 
-// In case the above import fails, try another approach
-// let CategoryIcons;
-// try {
-//   // Using dynamic import() is not possible in this context, so we'll use a try/catch pattern
-//   CategoryIcons = require('../../icons/CategoryIcons').default;
-//   console.log('CategoryIcons import succeeded:', CategoryIcons);
-// } catch (error) {
-//   console.error('CategoryIcons import failed:', error.message);
-//   CategoryIcons = null;
-// }
 
 /* -------------------------------- types -------------------------------- */
 interface GroceryTotals {
@@ -39,6 +25,7 @@ export function GroceryScreen() {
     setIngredientTags,
     selectedStore,
     availableStores,
+    selectedRecipes,
   } = usePlannerStore();
 
   // State to track expanded categories - initialize as empty object
@@ -48,7 +35,10 @@ export function GroceryScreen() {
   const [animatingItemId, setAnimatingItemId] = useState<string | null>(null);
 
   // Get grocery items directly from store rather than managing as state
-  const groceryItems = Array.from(aggregatedIngredients().values());
+  const groceryItems = useMemo(
+    () => Array.from(aggregatedIngredients().values()),
+    [aggregatedIngredients]
+  );
 
   // Get selected store information
   const selectedStoreInfo = availableStores.find(store => store.id === selectedStore);
@@ -60,35 +50,26 @@ export function GroceryScreen() {
     return item.tags?.importance === 'core' || item.neededFraction * 100 >= 25;
   };
 
-  // Group items by category
-  const categorizedItems = groceryItems.reduce((acc, item) => {
-    // Skip ignored items and items with "free" source
-    if (item.tags?.status === 'ignored' || item.source === 'free') return acc;
-
-    // Get the category from the item, or use "Other" if not defined
-    const category = item.category || "other";
-
-    if (!acc[category]) {
-      acc[category] = [];
+  // Group & sort items by category (memoized)
+  const categorizedItems = useMemo(() => {
+    const acc: Record<string, AggregatedItem[]> = {};
+    for (const item of groceryItems) {
+      if (item.tags?.status === 'ignored' || item.source === 'free') continue;
+      const category = item.category || 'other';
+      (acc[category] ||= []).push(item);
     }
-
-    acc[category].push(item);
+    for (const key of Object.keys(acc)) acc[key].sort(sortLogic());
     return acc;
-  }, {} as Record<string, AggregatedItem[]>);
-
-  // Sort items within each category
-  Object.keys(categorizedItems).forEach(category => {
-    categorizedItems[category].sort(sortLogic());
-  });
+  }, [groceryItems]);
 
   // Get sorted category keys with "Other" at the end
-  const sortedCategories = Object.keys(categorizedItems).sort((a, b) => {
-    // Always put "Other" at the end
-    if (a === "other") return 1;
-    if (b === "other") return -1;
-    // Otherwise sort alphabetically
-    return a.localeCompare(b);
-  });
+  const sortedCategories = useMemo(() => {
+    return Object.keys(categorizedItems).sort((a, b) => {
+      if (a === 'other') return 1;
+      if (b === 'other') return -1;
+      return a.localeCompare(b);
+    });
+  }, [categorizedItems]);
 
   // Initialize expanded state for all categories if not already set
   useEffect(() => {
@@ -464,8 +445,7 @@ export function GroceryScreen() {
               name: selectedStoreInfo.name,
               location: selectedStoreInfo.location
             } : undefined}
-            //selectedRecipes={usePlannerStore.getState().selectedRecipes()}
-            selectedRecipes={getPlannerStores().selectedRecipes()}
+            selectedRecipes={selectedRecipes()}
           />
         </div>
       </div>

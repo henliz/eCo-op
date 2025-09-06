@@ -2,7 +2,7 @@
 
 import React, { useState, useEffect, useRef } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { type AggregatedItem, type IngredientTags } from '@/stores/usePlannerStores';
+import { type AggregatedItem, type IngredientTags } from '@/stores';
 
 import { Tag, Home, ShoppingCart, ArrowDown, Check } from 'lucide-react';
 

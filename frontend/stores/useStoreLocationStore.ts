@@ -1,4 +1,6 @@
+"use client";
 import { create } from 'zustand';
+
 
 // Import types from your existing code
 export interface Store {
@@ -63,6 +65,8 @@ interface StoreLocationState {
   // Loading states
   isLoading: boolean;
   error: string | null;
+  // Internal: guards duplicate loads
+  _discovering: boolean;
 
   // Actions - Store management
   setSelectedStore: (storeId: string | null) => void;
@@ -136,33 +140,26 @@ export const useStoreLocationStore = create<StoreLocationState>((set, get) => ({
   isLocationLoading: false,
   isLoading: false,
   error: null,
+  _discovering: false,
 
-  // Store management actions
   setSelectedStore: (storeId) => {
-    const state = get();
-
+    const { selectedStore, availableStores } = get();
+    // Idempotent: no-op if unchanged
+    if (selectedStore === storeId) return;
     if (storeId) {
-      const store = state.availableStores.find(s => s.id === storeId);
-      if (!store || !store.isAvailable) {
-        set({ error: 'Selected store is not available' });
-        return;
-      }
+      const exists = availableStores.some(s => s.id === storeId && s.isAvailable);
+      if (!exists) { set({ error: "Selected store is not available" }); return; }
     }
-
-    set({
-      selectedStore: storeId,
-      error: null
-    });
+    set({ selectedStore: storeId, error: null });
   },
 
   discoverStores: async () => {
-    const logMessage = (msg: string) => console.log(`[StoreLocationStore] ${msg}`);
-    logMessage('Discovering available stores...');
-
-    set({ isLoading: true, error: null });
+    // de-dupe in-flight calls or skip if already loaded
+    const { _discovering, isStoresLoaded } = get();
+    if (_discovering || isStoresLoaded) return;
+    set({ _discovering: true, isLoading: true, error: null });
 
     try {
-      logMessage('Fetching store index from API...');
 
       const response = await fetch('https://api.skrimp.ai/meal-plans/stores/index');
 
@@ -183,11 +180,6 @@ export const useStoreLocationStore = create<StoreLocationState>((set, get) => ({
         throw new Error('Store index data is not in the expected format');
       }
 
-      logMessage(`Found ${storesArray.length} stores`);
-
-      const currentDate = new Date();
-      currentDate.setHours(0, 0, 0, 0);
-
       // Process stores
       const stores: Store[] = storesArray.map((storeInfo: StoreIndexItem) => {
         const validUntil = new Date(storeInfo.validUntil);
@@ -197,7 +189,7 @@ export const useStoreLocationStore = create<StoreLocationState>((set, get) => ({
         let lat = storeInfo.lat;
         let lng = storeInfo.lng;
 
-        if (!lat || !lng) {
+        if (lat == null || lng == null) {
           const coords = parseCoordinates(storeInfo.coordinates || '');
           if (coords) {
             lat = coords.latitude;
@@ -223,18 +215,15 @@ export const useStoreLocationStore = create<StoreLocationState>((set, get) => ({
       // Sort by name
       stores.sort((a, b) => a.name.localeCompare(b.name));
 
-      const availableCount = stores.filter(s => s.isAvailable).length;
-      logMessage(`Successfully processed ${stores.length} stores (${availableCount} available)`);
-
       set({
         availableStores: stores,
         isLoading: false,
         isStoresLoaded: true,
         error: null,
+        _discovering: false,
       });
 
     } catch (err) {
-      console.error("Error discovering stores:", err);
       const errorMessage = err instanceof Error ? err.message : 'Failed to discover stores';
 
       set({
@@ -242,13 +231,14 @@ export const useStoreLocationStore = create<StoreLocationState>((set, get) => ({
         error: errorMessage,
         isStoresLoaded: false,
         availableStores: [],
+        _discovering: false,
       });
     }
   },
 
   refreshStores: async () => {
     // Force refresh by clearing the loaded flag and re-discovering
-    set({ isStoresLoaded: false });
+    set({ isStoresLoaded: false, isLoading: true, error: null });
     await get().discoverStores();
   },
 
@@ -304,16 +294,13 @@ export const useStoreLocationStore = create<StoreLocationState>((set, get) => ({
     if (!store) return;
 
     try {
-      // Note: You'll need to implement your geocoding logic here
-      // This is a placeholder that matches your existing pattern
-      console.log(`[StoreLocationStore] Geocoding address for ${storeId}: ${address}`);
 
       // TODO: Implement actual geocoding
       // const response = await fetch(`your-geocoding-endpoint`);
       // Update store with location data
 
     } catch (error) {
-      console.error('Failed to geocode store address:', error);
+      // swallow; optional: set({ locationError: 'Failed to geocode' })
     }
   },
 
@@ -338,3 +325,9 @@ export const useStoreLocationStore = create<StoreLocationState>((set, get) => ({
     return get().availableStores.find(s => s.id === storeId) || null;
   },
 }));
+
+export const selectIsStoresLoaded = (s: StoreLocationState) => s.isStoresLoaded;
+export const selectSelectedStoreId = (s: StoreLocationState) => s.selectedStore;
+export const selectAvailableStores = (s: StoreLocationState) => s.availableStores;
+export const selectSelectedStore = (s: StoreLocationState) =>
+  s.availableStores.find(st => st.id === s.selectedStore) ?? null;

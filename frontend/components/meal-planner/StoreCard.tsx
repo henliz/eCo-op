@@ -2,7 +2,7 @@
 
 import React from 'react';
 import Image from 'next/image';
-import { type Store } from '@/stores/usePlannerStores';
+import { type Store } from '@/stores';
 
 import { format } from 'date-fns';
 

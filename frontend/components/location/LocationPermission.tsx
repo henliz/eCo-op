@@ -2,8 +2,7 @@
 
 import React, { useEffect, useMemo } from 'react';
 import Image from 'next/image';
-//import { usePlannerStore, type Store } from '../meal-planner/usePlannerStore';
-import { usePlannerStores as usePlannerStore, type Store, getPlannerStores } from '@/stores/usePlannerStores';
+import { usePlannerStores as usePlannerStore, type Store, useStoreLocationStore } from '@/stores';
 
 import { StoreCard } from '../meal-planner/StoreCard';
 import { MapPin, Navigation, Loader2, AlertCircle } from 'lucide-react';
@@ -27,13 +26,17 @@ export default function StoreSelector({ shouldNavigateToPlan }: StoreSelectorPro
   const {
     selectedStore,
     setSelectedStore,
-    isLoading,
+    isLoading: plannerLoading, // meal-plan loading
     availableStores,
     isStoresLoaded,
     discoverStores,
     userLocation,
     setUserLocation,
+    fetchMealData,
   } = usePlannerStore();
+
+  // store-discovery loading (from store-location slice)
+  const { isLoading: storesLoading } = useStoreLocationStore();
 
   // Location hook for permissions and geocoding
   const {
@@ -61,10 +64,10 @@ export default function StoreSelector({ shouldNavigateToPlan }: StoreSelectorPro
 
   // Discover stores on component mount
   useEffect(() => {
-    if (!isStoresLoaded && !isLoading) {
+    if (!isStoresLoaded && !storesLoading) {
       discoverStores();
     }
-  }, [isStoresLoaded, isLoading, discoverStores]);
+  }, [isStoresLoaded, storesLoading, discoverStores]);
 
   // Check for existing location on mount
   useEffect(() => {
@@ -98,12 +101,10 @@ export default function StoreSelector({ shouldNavigateToPlan }: StoreSelectorPro
   }, [hookLocation, setUserLocation]);
 
   const handleStoreSelect = (storeId: string) => {
-    console.log("Selected store:", storeId);
     setSelectedStore(storeId);
     shouldNavigateToPlan.current = true;
     setTimeout(() => {
-      //usePlannerStore.getState().fetchMealData();
-      getPlannerStores().fetchMealData();
+      void fetchMealData();
     }, 100);
   };
 
@@ -224,7 +225,7 @@ export default function StoreSelector({ shouldNavigateToPlan }: StoreSelectorPro
       </div>
 
       {/* Loading state */}
-      {isLoading && !isStoresLoaded ? (
+      {storesLoading && !isStoresLoaded ? (
         <div className="flex justify-center my-4">
           <div className="animate-spin rounded-full h-8 w-8 border-t-2 border-b-2 border-blue-600"></div>
           <p className="ml-3 text-gray-600">Discovering available stores...</p>
@@ -544,7 +545,7 @@ export default function StoreSelector({ shouldNavigateToPlan }: StoreSelectorPro
       )}
 
       {/* Loading indicator for store data */}
-      {isLoading && selectedStore && (
+      {plannerLoading && selectedStore && (
         <div className="flex justify-center mt-4 mb-2">
           <div className="animate-spin rounded-full h-8 w-8 border-t-2 border-b-2 border-blue-600"></div>
           <p className="ml-3 text-gray-600">Loading meal deals for {availableStores.find(s => s.id === selectedStore)?.name}...</p>

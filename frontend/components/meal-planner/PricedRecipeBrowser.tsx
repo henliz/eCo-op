@@ -3,7 +3,7 @@
 import { useState, useEffect, useCallback } from 'react';
 import { Search, X, Plus, Check, Users, DollarSign, Loader2, ChefHat, Tag } from 'lucide-react';
 import { useAuth } from '@/contexts/AuthContext';
-import { usePlannerStores } from '@/stores/usePlannerStores';
+import { usePlannerStores } from '@/stores';
 
 // Use the same Recipe interface from the meal plan store
 interface PricedRecipeFromAPI {

@@ -3,7 +3,6 @@
 import React, { useState, useEffect, useRef, useCallback } from 'react';
 import { useSearchParams } from 'next/navigation';
 import { motion } from 'framer-motion';
-import { AuthDebugPanel } from '@/components/AuthDebugPanel';
 import Header from '@/components/layout/Header';
 import Footer from '@/components/layout/Footer';
 import { ContinuePlanBanner } from '@/components/meal-planner/ContinuePlanBanner';
@@ -12,12 +11,12 @@ import { HouseholdSizeSelector } from '@/components/meal-planner/HouseholdSizeSe
 import { MealPlanScreen } from '@/components/meal-planner/MealPlanScreen';
 import { GroceryScreen } from '@/components/meal-planner/GroceryScreen';
 import { CookScreen } from '@/components/meal-planner/CookScreen';
-import { usePlannerStores as usePlannerStore , getPlannerStores} from '@/stores/usePlannerStores';
+import { usePlannerStores as usePlannerStore } from '@/stores';
 import LoadingScreen from '@/components/meal-planner/LoadingScreen';
-
-// Add these imports for testing
-import { usePlannerSync } from '@/hooks/usePlannerSync';
+import { useAppDataLoader } from '@/hooks/useAppDataLoader';
 import { useAuth } from '@/contexts/AuthContext';
+import { useStoreLocationStore } from "@/stores";
+
 
 declare global {
   interface Window {
@@ -52,149 +51,79 @@ const instructions: Record<Exclude<View, 'loading'>, React.ReactNode> = {
 };
 
 // Smart tab selection logic
-function getSmartDefaultTab(plannerData: ReturnType<typeof usePlannerStore>): View {
-  const { selectedStore, normalMealServings, selectedRecipes, groceryTotals } = plannerData;
+function getSmartDefaultTab(args: {
+  hasStore: boolean;
+  normalMealServings?: number;
+  mealCount: number;
+  uncheckedItems: number;
+}): View {
 
-  console.log('🧠 Smart tab selection - analyzing user state:', {
-    hasStore: !!selectedStore,
-    hasHousehold: !!normalMealServings,
-    mealCount: selectedRecipes().length,
-    groceryData: groceryTotals()
-  });
-
-  // 1️⃣ Missing basics → 'set'
-  if (!selectedStore || !normalMealServings) {
-    console.log('→ Directing to SET tab (missing store or household size)');
-    return 'set';
-  }
-
-  const mealCount = selectedRecipes().length;
-
-  // 2️⃣ No meals selected → 'plan'
-  if (mealCount === 0) {
-    console.log('→ Directing to PLAN tab (no meals selected)');
-    return 'plan';
-  }
-
-  // Get grocery progress to check if ingredients are acquired
-  const groceryData = groceryTotals();
-
-  // 3️⃣ All ingredients acquired → 'cook'
-  const allAcquired = groceryData.uncheckedItems === 0;
-  if (allAcquired) {
-    console.log('→ Directing to COOK tab (all ingredients acquired)');
-    return 'cook';
-  }
-
-  // 4️⃣ Has meals but ingredients needed → 'shop'
-  console.log('→ Directing to SHOP tab (has meals, needs shopping)');
-  return 'shop';
-}
-
-// Development sync test component
-function SyncTestButtons() {
-  const { currentUser } = useAuth();
-  const {
-    loadPlan,
-    savePlan,
-    deletePlan,
-    isSyncing,
-    lastSyncError,
-    isAuthenticated
-  } = usePlannerSync();
-
-  const {
-    normalMealServings,
-    selectedStore,
-    selectedRecipes,
-    planId,
-    version,
-    setNormalMealServings
-  } = usePlannerStore();
-
-  // Only show in development
-  if (process.env.NODE_ENV !== 'development') {
-    return null;
-  }
-
-  const API_BASE_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:3001';
-
-  const handleAddTestData = () => {
-    setNormalMealServings(6);
-    // Note: We can't easily add test meals here since they need to exist in the store
-    // But changing household size is enough to test the sync
-  };
-
-  const handleClearData = () => {
-    setNormalMealServings(4);
-  };
-
-  if (!isAuthenticated) {
-    return (
-      <div className="fixed bottom-4 left-4 right-4 bg-red-100 border border-red-300 rounded-lg p-2 text-xs">
-        <p className="text-red-700">Dev: Please log in to test sync</p>
-      </div>
-    );
-  }
-
-  return (
-    <div className="fixed bottom-4 left-4 right-4 bg-blue-50 border border-blue-300 rounded-lg p-3 text-xs z-30">
-      <div className="mb-2">
-        <strong>Dev Sync Test</strong> | API: {API_BASE_URL} | User: {currentUser?.email}
-      </div>
-
-      <div className="mb-2 text-xs">
-        Household: {normalMealServings} | Store: {selectedStore || 'None'} | Meals: {selectedRecipes().length} | Plan: {planId ? `v${version}` : 'None'}
-      </div>
-
-      <div className="flex flex-wrap gap-1">
-        <button
-          onClick={handleAddTestData}
-          className="px-2 py-1 bg-blue-500 text-white rounded text-xs hover:bg-blue-600"
-        >
-          Test Data
-        </button>
-        <button
-          onClick={handleClearData}
-          className="px-2 py-1 bg-gray-500 text-white rounded text-xs hover:bg-gray-600"
-        >
-          Clear
-        </button>
-        <button
-          onClick={loadPlan}
-          disabled={isSyncing}
-          className="px-2 py-1 bg-green-500 text-white rounded text-xs hover:bg-green-600 disabled:opacity-50"
-        >
-          {isSyncing ? 'Loading...' : 'Load'}
-        </button>
-        <button
-          onClick={savePlan}
-          disabled={isSyncing}
-          className="px-2 py-1 bg-purple-500 text-white rounded text-xs hover:bg-purple-600 disabled:opacity-50"
-        >
-          {isSyncing ? 'Saving...' : 'Save'}
-        </button>
-        <button
-          onClick={deletePlan}
-          disabled={isSyncing}
-          className="px-2 py-1 bg-red-500 text-white rounded text-xs hover:bg-red-600 disabled:opacity-50"
-        >
-          {isSyncing ? 'Deleting...' : 'Delete'}
-        </button>
-      </div>
-
-      {lastSyncError && (
-        <div className="mt-2 p-1 bg-red-100 border border-red-200 rounded text-red-700">
-          Error: {lastSyncError}
-        </div>
-      )}
-    </div>
-  );
+  const { hasStore, normalMealServings, mealCount, uncheckedItems } = args;
+  if (!hasStore || !normalMealServings) return 'set';
+  if (mealCount === 0) return 'plan';
+  const allAcquired = uncheckedItems === 0;
+  return allAcquired ? 'cook' : 'shop';
 }
 
 export default function MealPlannerPage() {
+
   const { makeAPICall, currentUser } = useAuth();
   const searchParams = useSearchParams();
+  const { loadData, isLoaded } = useAppDataLoader();
+  const plannerStore = usePlannerStore();
+  const { getSelectedStore, isDataLoaded, isLoading, clearMealData } = plannerStore;
+
+  const selectedStoreObject = getSelectedStore();
+  // Ensure we clear only once even if effects re-run
+  const clearedForNewRef = useRef(false);
+  // Get the clearer from the planner stores hook
+
+  // --- NEW: pull store state & actions
+  const {
+    isStoresLoaded,
+    discoverStores,
+    setSelectedStore,
+  } = useStoreLocationStore();
+
+  useEffect(() => {
+    // --- NEW: honor ?mode=new to avoid loading a saved plan
+      const mode = searchParams.get('mode');
+      if (currentUser && !isLoaded && mode !== 'new') {
+        loadData('auto');
+      }
+  }, [currentUser, isLoaded, loadData, searchParams]);
+
+  // --- NEW: if mode=new, clear any existing plan once
+  useEffect(() => {
+    const mode = searchParams.get('mode'); // ← correct variable name
+    if (mode === 'new' && !clearedForNewRef.current) {
+      try {
+        clearMealData(); // ← use the hook method
+        clearedForNewRef.current = true;
+        const hasStore = !!selectedStoreObject;
+        const hasServings = !!plannerStore.normalMealServings;
+        setView(hasStore && hasServings ? 'plan' : 'set');
+        setInitialTabSet(true); // block smart chooser
+      } catch (e) {
+        console.warn('[Planner] clearMealData failed:', e);
+      }
+    }
+  }, [searchParams, clearMealData, selectedStoreObject, plannerStore]);
+
+  // --- NEW: ensure the store index exists on hard loads / direct visits
+  useEffect(() => {
+    if (!isStoresLoaded) {
+      void discoverStores();
+    }
+  }, [isStoresLoaded, discoverStores]);
+
+  // --- NEW: set the store from the URL once stores are available
+  useEffect(() => {
+    const id = searchParams.get('storeId');
+    if (id && isStoresLoaded && id !== selectedStoreObject?.id) {
+      setSelectedStore(id);
+    }
+  }, [searchParams, isStoresLoaded, setSelectedStore, selectedStoreObject?.id]);
 
   // Expose makeAPICall to the store via window
   useEffect(() => {
@@ -204,9 +133,6 @@ export default function MealPlannerPage() {
     };
   }, [makeAPICall]);
 
-  // USE ONLY THE ORCHESTRATOR STORE
-  const plannerStore = usePlannerStore();
-  const { selectedStore, isDataLoaded, isLoading } = plannerStore;
   const [showLoading, setShowLoading] = useState(false);
   const hasTransitionedToPlan = useRef(false);
 
@@ -223,60 +149,66 @@ export default function MealPlannerPage() {
       const urlTab = searchParams.get('tab') as View;
 
       if (urlTab && ['set', 'plan', 'shop', 'cook'].includes(urlTab)) {
-        console.log('🎯 URL parameter detected immediately, using:', urlTab);
-        setView(urlTab);
-        setInitialTabSet(true);
-        return; // Exit early, don't run smart selection
+         const hasStore = !!selectedStoreObject;
+         const hasServings = !!plannerStore.normalMealServings;
+         const needsSetup = !hasStore || !hasServings;
+         const coerced = (urlTab !== 'set' && needsSetup) ? 'set' : urlTab;
+         setView(coerced as View);
+         setInitialTabSet(true);
+         return;
       }
     }
-  }, [searchParams, initialTabSet]);
+  }, [searchParams, initialTabSet, selectedStoreObject, plannerStore]);
 
-  // Smart tab selection - only runs if no URL parameter was found
+  const urlTab = (searchParams.get('tab') || '').toLowerCase();
+  const hasUrlTab = urlTab === 'set' || urlTab === 'plan' || urlTab === 'shop' || urlTab === 'cook';
+  const mode = (searchParams.get('mode') || '').toLowerCase();
+
+  const mealCount = plannerStore.selectedRecipes().length;
+  const uncheckedItems = plannerStore.groceryTotals().uncheckedItems;
   useEffect(() => {
-    // Only run smart selection when:
-    // 1. We haven't set the initial tab yet
-    // 2. Data is loaded (so we have accurate state)
-    // 3. We're not currently loading
+    if (hasUrlTab || mode === 'new') return; // <-- hard stop: do not override explicit URL or new-plan flow
     if (!initialTabSet && isDataLoaded && !isLoading) {
-      console.log('🧠 Running smart tab selection (no URL parameter found)...');
-
-      // Run smart selection since no URL parameter was provided
-      const selectedTab = getSmartDefaultTab(plannerStore);
-
-      console.log('✅ Setting smart-selected tab to:', selectedTab);
+      const selectedTab = getSmartDefaultTab({
+        hasStore: !!selectedStoreObject,
+        normalMealServings: plannerStore.normalMealServings,
+        mealCount,
+        uncheckedItems,
+      });
       setView(selectedTab);
       setInitialTabSet(true);
     }
-  }, [initialTabSet, isDataLoaded, isLoading, plannerStore]);
+  }, [
+    hasUrlTab,
+    mode,
+    initialTabSet,
+    isDataLoaded,
+    isLoading,
+    selectedStoreObject,
+    plannerStore,
+    plannerStore.normalMealServings,
+    mealCount,
+    uncheckedItems,
+  ]);
 
   // Tabs are only enabled when a store is selected and data is loaded
   const isTabEnabled = (tabId: View) =>
-    tabId === 'set' || !!selectedStore;
+    tabId === 'set' || !!selectedStoreObject;
 
   // Enhanced scroll to top function that ensures consistent behavior
   const scrollToTop = useCallback(() => {
-    // First try the smooth scroll
     window.scrollTo({ top: 0, behavior: 'smooth' });
-
-    // As a fallback, also set a timeout to ensure the scroll happens
-    // This helps in cases where the smooth scroll might be interrupted
-    setTimeout(() => {
-      window.scrollTo({ top: 0, behavior: 'auto' });
-    }, 100);
   }, []);
 
   // Handle view changes and scroll to top when switching views
   const handleViewChange = (newView: View) => {
     if (isTabEnabled(newView)) {
       // SAVE BEFORE SWITCHING TABS - BUT ONLY IF AUTHENTICATED
-      const store = getPlannerStores();
-      if (store.hasUnsavedChanges() &&
+      if (plannerStore.hasUnsavedChanges() &&
           window.__plannerMakeAPICall &&
           currentUser) { // Add authentication check
         console.log(`[TabChange] Saving before switching to ${newView}`);
-        store.saveUserPlan(window.__plannerMakeAPICall).catch((error: unknown) => {
-          console.error('[TabChange] Save failed:', error);
-        });
+        void plannerStore.saveUserPlan(window.__plannerMakeAPICall);
       }
       scrollToTop();
       setView(newView);
@@ -287,7 +219,6 @@ export default function MealPlannerPage() {
   const handleLoadingProgress = useCallback((progress: number) => {
     // When we reach 40% and haven't transitioned yet, switch to plan view in the background
     if (progress >= 40 && !hasTransitionedToPlan.current) {
-      console.log("Loading reached 40%, switching to plan view in background");
       hasTransitionedToPlan.current = true;
 
       // Use setTimeout to avoid React's "Cannot update a component while rendering a different component" error
@@ -299,7 +230,6 @@ export default function MealPlannerPage() {
 
   // Track when loading animation completes
   const handleLoadingComplete = useCallback(() => {
-    console.log("Loading complete callback triggered");
 
     // Start the fade out of the loading screen
     setTimeout(() => {
@@ -311,36 +241,22 @@ export default function MealPlannerPage() {
 
   // Modified auto-switch to show loading screen when store is selected
   useEffect(() => {
-    // If we're on the set tab and data is loaded, and we've been flagged to navigate
-    if (selectedStore && view === 'set' && shouldNavigateToPlan.current) {
-      console.log("Store selected, showing loading screen");
-
-      // Reset the flag so we don't keep triggering this
+    if (selectedStoreObject && view === 'set' && shouldNavigateToPlan.current) {
       shouldNavigateToPlan.current = false;
-
-      // Reset transition flag for the new loading screen
       hasTransitionedToPlan.current = false;
-
-      // First show the loading screen overlay
       setShowLoading(true);
-
-      // AFTER a tiny delay, set the view to plan behind the loading screen
-      // The switch to 'plan' will happen at 40% progress via the handleLoadingProgress callback
     }
-  }, [selectedStore, isDataLoaded, isLoading, view]);
+  }, [selectedStoreObject, view]); // Minimal dependencies
 
   // Add an effect to ensure scroll to top specifically when switching to shop view
   useEffect(() => {
     if (view === 'shop') {
-      // Ensure we're at the top when the shop view is active
       scrollToTop();
     }
   }, [view, scrollToTop]);
 
 return (
   <>
-    {/* ADD THIS LINE RIGHT HERE */}
-    <AuthDebugPanel />
 
     {/* Loading screen overlay - always in DOM but conditionally visible */}
     <div
@@ -434,8 +350,6 @@ return (
       <Footer />
     </div>
 
-    {/* Development sync test buttons - only visible in development */}
-    <SyncTestButtons />
   </>
 ); // Closing parenthesis for return statement
 }

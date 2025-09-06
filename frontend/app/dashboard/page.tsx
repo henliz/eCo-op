@@ -1,15 +1,16 @@
 // app/dashboard/page.tsx
 'use client';
 
-import React, { useState, useCallback } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Button } from '@/components/ui/button';
 import Header from '@/components/layout/Header';
 import Footer from '@/components/layout/Footer';
 import { useAuth } from '@/contexts/AuthContext';
+import { useRouter } from 'next/navigation';
 
 // Import custom hooks
-import { useDashboardData } from '@/hooks/useDashboardData';
 import { usePreferences } from '@/hooks/usePreferences';
+import { useAppDataLoader } from '@/hooks/useAppDataLoader';
 
 // Import components
 import { WelcomeSection } from '@/components/dashboard/WelcomeSection';
@@ -19,7 +20,7 @@ import { PreferencesOverview } from '@/components/dashboard/PreferencesOverview'
 import { RecipeLibrary } from '@/components/dashboard/RecipeLibrary';
 
 // Import planner stores
-import { usePlannerStores } from '@/stores/usePlannerStores';
+import { usePlannerStores } from "@/stores/usePlannerStores";
 
 import {
   Home,
@@ -39,28 +40,40 @@ const menuItems = [
 ];
 
 const DashboardPage: React.FC = () => {
+  const router = useRouter();
   const { currentUser, loading: authLoading } = useAuth();
   const [activeSection, setActiveSection] = useState<string>('overview');
-  const [currentTime] = useState<Date>(new Date());
+  const currentTime = new Date();
 
-  // Custom hooks for data
-  const { hasData, meals, selectedStore, mealSummary, totals } = useDashboardData();
-  const { summary, preferencesData, subscriptionTier } = usePreferences(); // Get subscription tier from usePreferences
+  // Centralized data loading
+  const { loadData, isLoaded } = useAppDataLoader();
 
-  // Get additional data for preferences card
-  const { getSelectedStore, normalMealServings, clearMealData } = usePlannerStores();
+  useEffect(() => {
+    if (currentUser && !isLoaded) {
+      loadData('auto');
+    }
+  }, [currentUser, isLoaded, loadData]);
 
-  // Get the actual store object instead of just the ID
+
+  // Get all data from centralized stores
+  const {
+    meals,
+    mealSummary,
+    totals,
+    getSelectedStore,
+    normalMealServings,
+  } = usePlannerStores();
+
   const selectedStoreObject = getSelectedStore();
 
-  // Handler for starting a new plan
-  const handleStartNewPlan = useCallback(() => {
-    // Clear meal data but keep household size and store
-    clearMealData();
+  // Calculate hasData directly here
+  const hasData = Boolean(
+    selectedStoreObject ||
+    (meals && ((meals.breakfast?.length || 0) + (meals.lunch?.length || 0) + (meals.dinner?.length || 0)) > 0)
+  );
 
-    // Navigate to plan tab
-    window.location.href = '/plan?tab=plan';
-  }, [clearMealData]);
+  const { summary, preferencesData, subscriptionTier } = usePreferences();
+
 
   // Helper functions
   const getGreeting = (): string => {
@@ -107,7 +120,6 @@ const DashboardPage: React.FC = () => {
             selectedStore={selectedStoreObject || undefined}
             totals={totals}
             mealSummary={mealSummary}
-            onStartNewPlan={handleStartNewPlan}
           />
           <ShoppingList
             hasData={hasData}
@@ -146,10 +158,10 @@ const DashboardPage: React.FC = () => {
               <div className="flex justify-between items-start">
                 <span className="text-sm text-gray-600">Local Store:</span>
                 <div className="text-right">
-                  {selectedStore ? (
+                  {selectedStoreObject ? (
                     <>
-                      <span className="text-sm font-medium text-gray-800">{selectedStore ? selectedStoreObject?.name || 'Store Selected' : 'None selected'}</span>
-                      <div className="text-xs text-gray-500">{selectedStoreObject?.location || ''}</div>
+                      <span className="text-sm font-medium text-gray-800">{selectedStoreObject.name}</span>
+                      <div className="text-xs text-gray-500">{selectedStoreObject.location}</div>
                     </>
                   ) : (
                     <span className="text-sm font-medium text-gray-800">None selected</span>
@@ -269,7 +281,7 @@ const DashboardPage: React.FC = () => {
     return (
       <>
         <Header />
-        <div className="min-h-screen bg-gradient-to-br from-green-50 via-blue-50 to-purple-50 flex items-center justify-center">
+        <div className="min-h-screen overflow-x-hidden bg-gradient-to-br from-green-50 via-blue-50 to-purple-50 flex items-center justify-center">
           <div className="text-center">
             <div className="w-12 h-12 border-4 border-green-400 border-t-transparent rounded-full animate-spin mx-auto mb-4" />
             <p className="text-gray-600 text-lg">Loading your kitchen...</p>
@@ -285,14 +297,15 @@ const DashboardPage: React.FC = () => {
     return (
       <>
         <Header />
-        <div className="min-h-screen bg-gradient-to-br from-green-50 via-blue-50 to-purple-50 flex items-center justify-center p-4">
+        <div className="min-h-screen overflow-x-hidden bg-gradient-to-br from-green-50 via-blue-50 to-purple-50 flex items-center justify-center p-4">
           <div className="text-center bg-white/80 backdrop-blur-sm rounded-3xl shadow-xl p-8 max-w-md">
             <div className="text-6xl mb-4">🔒</div>
             <h1 className="text-2xl font-bold text-gray-800 mb-4">Access Required</h1>
             <p className="text-gray-600 mb-6">Please log in to access your personal dashboard</p>
             <Button
               className="bg-gradient-to-r from-green-500 to-blue-500 hover:from-green-600 hover:to-blue-600 text-white px-8 py-3 rounded-xl transition-all duration-300 transform hover:scale-105"
-              onClick={() => window.location.href = '/login'}
+              onClick={() => router.push('/login')}
+
             >
               Log In
             </Button>
@@ -307,14 +320,16 @@ const DashboardPage: React.FC = () => {
     <>
       <Header />
 
-      <div className="min-h-screen bg-gradient-to-br from-green-50 via-blue-50 to-purple-50">
+      <div className="min-h-screen overflow-x-hidden bg-gradient-to-br from-green-50 via-blue-50 to-purple-50">
         <div className="flex">
+
           {/* Desktop Sidebar */}
-          <div className="hidden lg:block w-64 bg-white/80 backdrop-blur-sm shadow-lg border-r border-white/20 min-h-screen">
+          <div className="hidden lg:block w-64 bg-white/80 backdrop-blur-sm shadow-lg border-r border-white/20 min-h-screen overflow-x-clip">
             <div className="p-6">
               <div className="flex items-center gap-3 mb-8">
-                <div className="w-10 h-10 bg-gradient-to-r from-green-400 to-blue-400 rounded-xl flex items-center justify-center">
-                  <ChefHat size={20} className="text-white" />
+                <div
+                    className="w-10 h-10 bg-gradient-to-r from-green-400 to-blue-400 rounded-xl flex items-center justify-center">
+                  <ChefHat size={20} className="text-white"/>
                 </div>
                 <h2 className="text-xl font-bold text-gray-800">Dashboard</h2>
               </div>
@@ -323,18 +338,18 @@ const DashboardPage: React.FC = () => {
                 {menuItems.map((item) => {
                   const Icon = item.icon;
                   return (
-                    <button
-                      key={item.id}
-                      onClick={() => setActiveSection(item.id)}
-                      className={`w-full flex items-center gap-3 px-4 py-3 rounded-xl transition-all duration-300 text-left ${
-                        activeSection === item.id
-                          ? 'bg-gradient-to-r from-blue-500 to-purple-500 text-white shadow-lg transform scale-105'
-                          : 'text-gray-700 hover:bg-gray-50 hover:scale-102'
-                      }`}
-                    >
-                      <Icon size={20} className={activeSection === item.id ? 'text-white' : item.color} />
-                      <span className="font-medium">{item.label}</span>
-                    </button>
+                      <button
+                          key={item.id}
+                          onClick={() => setActiveSection(item.id)}
+                          className={`w-full flex items-center gap-3 px-4 py-3 rounded-xl transition-all duration-300 text-left ${
+                              activeSection === item.id
+                                  ? 'bg-gradient-to-r from-blue-500 to-purple-500 text-white shadow-lg transform scale-105'
+                                  : 'text-gray-700 hover:bg-gray-50 hover:scale-[1.02]'
+                          }`}
+                      >
+                        <Icon size={20} className={activeSection === item.id ? 'text-white' : item.color}/>
+                        <span className="font-medium">{item.label}</span>
+                      </button>
                   );
                 })}
               </nav>
@@ -342,38 +357,42 @@ const DashboardPage: React.FC = () => {
           </div>
 
           {/* Main Content */}
-          <div className="flex-1 p-4 lg:p-8 pb-20 lg:pb-8 relative z-0">
-            <div className="max-w-6xl mx-auto">
-              {renderActiveSection()}
+          <div className="flex-1">
+            <div className="container mx-auto p-1">
+              <div className="pt-4 lg:pt-8 pb-10 lg:pb-4 px-0 sm:px-0 lg:px-6 relative z-0">
+                <div className="max-w-7xl mx-auto">
+                  {renderActiveSection()}
+                </div>
+              </div>
             </div>
           </div>
         </div>
 
         {/* Mobile Bottom Navigation */}
-        <div className="lg:hidden fixed bottom-0 left-0 right-0 bg-white/95 backdrop-blur-md border-t border-white/20 px-4 py-2">
+        <div className="lg:hidden fixed bottom-0 left-0 right-0 bg-white/95 backdrop-blur-md border-t border-white/20 px-4 py-2 overflow-x-clip">
           <div className="flex justify-around">
             {menuItems.map((item) => {
               const Icon = item.icon;
               return (
-                <button
-                  key={item.id}
-                  onClick={() => setActiveSection(item.id)}
-                  className={`flex flex-col items-center py-2 px-3 rounded-xl transition-all duration-300 ${
-                    activeSection === item.id
-                      ? 'bg-gradient-to-r from-blue-500 to-purple-500 text-white transform scale-110'
-                      : 'text-gray-600'
-                  }`}
-                >
-                  <Icon size={20} className={activeSection === item.id ? 'text-white' : item.color} />
-                  <span className="text-xs font-medium mt-1">{item.label}</span>
-                </button>
+                  <button
+                      key={item.id}
+                      onClick={() => setActiveSection(item.id)}
+                      className={`flex flex-col items-center py-2 px-3 rounded-xl transition-all duration-300 ${
+                          activeSection === item.id
+                              ? 'bg-gradient-to-r from-blue-500 to-purple-500 text-white ring-2 ring-offset-2 ring-orange-400 shadow-md'
+                              : 'text-gray-600'
+                      }`}
+                  >
+                    <Icon size={20} className={activeSection === item.id ? 'text-white' : item.color}/>
+                    <span className="text-xs font-medium mt-1">{item.label}</span>
+                  </button>
               );
             })}
           </div>
         </div>
       </div>
 
-      <Footer />
+      <Footer/>
     </>
   );
 };
