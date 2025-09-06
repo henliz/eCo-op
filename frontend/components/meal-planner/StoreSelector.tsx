@@ -1,7 +1,8 @@
 'use client';
 
 import React, { useEffect, useMemo } from 'react';
-import { usePlannerStores as usePlannerStore, type Store, getPlannerStores } from '@/stores/usePlannerStores';
+import { usePlannerStores as usePlannerStore, type Store } from '@/stores';
+
 import { StoreCard } from './StoreCard';
 import { MapPin, Navigation, Loader2, AlertCircle, Search, X } from 'lucide-react';
 import { locationService } from '@/lib/location';
@@ -28,19 +29,13 @@ interface StoreSelectorProps {
 export default function StoreSelector({ shouldNavigateToPlan }: StoreSelectorProps) {
   // 🔄 PHASE 2: New store is PRIMARY, old store is FALLBACK
   const newStoreLocation = useStoreLocationStore();
-  const oldPlannerStore = usePlannerStore();
-
-  // Get clearMealData from the orchestrator at the top level
   const { clearMealData } = usePlannerStore();
 
-  // 🆕 Use new store as primary data source
-  const selectedStore = newStoreLocation.selectedStore || oldPlannerStore.selectedStore;
-  const availableStores = newStoreLocation.availableStores.length > 0
-    ? newStoreLocation.availableStores
-    : oldPlannerStore.availableStores;
-  const isLoading = newStoreLocation.isLoading || oldPlannerStore.isLoading;
-  const isStoresLoaded = newStoreLocation.isStoresLoaded || oldPlannerStore.isStoresLoaded;
-  const userLocation = newStoreLocation.userLocation || oldPlannerStore.userLocation;
+  const selectedStore   = newStoreLocation.selectedStore;
+  const availableStores = newStoreLocation.availableStores;
+  const isLoading       = newStoreLocation.isLoading;
+  const isStoresLoaded  = newStoreLocation.isStoresLoaded;
+  const userLocation    = newStoreLocation.userLocation;
 
   // Location hook for permissions and geocoding (unchanged)
   const {
@@ -67,137 +62,42 @@ export default function StoreSelector({ shouldNavigateToPlan }: StoreSelectorPro
   const {
     isStoresLoaded: newIsStoresLoaded,
     isLoading: newIsLoading,
-    error: newError,
-    availableStores: newAvailableStores,
-    selectedStore: newSelectedStore,
     discoverStores: newDiscoverStores,
-    setSelectedStore: newSetSelectedStore,
   } = newStoreLocation;
 
-  const {
-    isStoresLoaded: oldIsStoresLoaded,
-    isLoading: oldIsLoading,
-    selectedStore: oldSelectedStore,
-    discoverStores: oldDiscoverStores,
-  } = oldPlannerStore;
-
   useEffect(() => {
-    // Prevent multiple discoveries
     if (hasInitiatedDiscovery.current) {
       return;
     }
-
-    const discoverStores = async () => {
-      console.log('[StoreSelector] 🆕 Auto-discovering stores with NEW store as primary...');
-
-      // Mark that we've started discovery
+    const run = async () => {
       hasInitiatedDiscovery.current = true;
-
-      // Try new store first (primary)
       if (!newIsStoresLoaded && !newIsLoading) {
-        console.log('[StoreSelector] 🆕 Using NEW store for discovery (primary)');
         await newDiscoverStores();
-
-        // Sync old store to new store's selection if it exists
-        if (oldSelectedStore && !newSelectedStore) {
-          newSetSelectedStore(oldSelectedStore);
-        }
-      }
-
-      // Fallback to old store only if new store completely fails
-      if (!oldIsStoresLoaded && !oldIsLoading &&
-          newAvailableStores.length === 0 && newError) {
-        console.log('[StoreSelector] ⚠️ NEW store failed, fallback to OLD store');
-        await oldDiscoverStores();
       }
     };
+    if (!newIsStoresLoaded) run();
+  }, [newIsStoresLoaded, newIsLoading, newDiscoverStores]);
 
-    // Only run if we haven't loaded stores yet
-    if (!newIsStoresLoaded && !oldIsStoresLoaded) {
-      discoverStores();
-    }
-  }, [
-    newIsStoresLoaded,
-    newIsLoading,
-    newError,
-    newAvailableStores.length,
-    newSelectedStore,
-    newDiscoverStores,
-    newSetSelectedStore,
-    oldIsStoresLoaded,
-    oldIsLoading,
-    oldSelectedStore,
-    oldDiscoverStores,
-  ]);
 
   // 🆕 Store selection now uses NEW store as primary
   const handleStoreSelect = (storeId: string) => {
-    console.log("🔍 DEBUG: handleStoreSelect called with:", storeId);
-
-    console.log("[StoreSelector] 🚨 FINAL FIX: Selecting store:", storeId);
-
-    // 1. Update new store first (primary)
-    newStoreLocation.setSelectedStore(storeId);
-
-    // 2. Clear existing meal data when switching stores
-    clearMealData();
-
-    // 3. Update the state directly using setState
-    console.log("[StoreSelector] 🚨 Bypassing setSelectedStore, using direct setState");
-
-    getPlannerStores().setState({
-      selectedStore: storeId,
-      isLoading: false,
-      error: null,
-      availableStores: newStoreLocation.availableStores
-    });
-
-    // 4. Verify the state was actually updated
-    setTimeout(() => {
-      const state = getPlannerStores().getState();
-
-      console.log("[StoreSelector] 🚨 State verification:", {
-        selectedStore: state.selectedStore,
-        isDataLoaded: state.isDataLoaded,
-        error: state.error,
-        availableStoresCount: state.availableStores.length
-      });
-    }, 10);
-
-    // 5. Keep existing meal plan navigation logic
-    shouldNavigateToPlan.current = true;
-
+    clearMealData();                    // reset recipes/grocery cache
+    newStoreLocation.setSelectedStore(storeId); // idempotent in new store
+    shouldNavigateToPlan.current = true;        // let Planner show loading → plan
   };
 
   // 🔄 Sync hook location with BOTH stores (during transition)
-  const {
-    setUserLocation: newSetUserLocation,
-  } = newStoreLocation;
-
-  const {
-    setUserLocation: oldSetUserLocation,
-  } = oldPlannerStore;
+  const { setUserLocation: newSetUserLocation } = newStoreLocation;
 
   useEffect(() => {
     if (hookLocation) {
-      console.log('[StoreSelector] 🆕 Setting location on NEW store (primary)');
       newSetUserLocation(hookLocation);
-
-      // Keep old store in sync during transition
-      oldSetUserLocation({
-        latitude: hookLocation.latitude,
-        longitude: hookLocation.longitude,
-        address: hookLocation.address,
-        source: hookLocation.source,
-      });
-
       setSortBy('distance');
       setShowLocationPrompt(false);
     }
   }, [
     hookLocation,
     newSetUserLocation,
-    oldSetUserLocation,
   ]);
 
   // 🆕 Check for existing location and auto-enable distance sorting (using new store)
@@ -212,9 +112,7 @@ export default function StoreSelector({ shouldNavigateToPlan }: StoreSelectorPro
 
     const existingLocation = locationService.getStoredLocation();
     if (existingLocation && !newUserLocation) {
-      console.log('[StoreSelector] 🆕 Loading stored location into NEW store');
       hasLoadedStoredLocation.current = true;
-
       newSetUserLocationForStored({
         latitude: existingLocation.latitude,
         longitude: existingLocation.longitude,
@@ -266,7 +164,9 @@ export default function StoreSelector({ shouldNavigateToPlan }: StoreSelectorPro
     carousel.addEventListener('scroll', handleScroll);
 
     // Initialize scroll position to the middle section
-    carousel.scrollLeft = (storeChains.length + 1) * (64 + 12);
+    requestAnimationFrame(() => {
+      carousel.scrollLeft = (storeChains.length + 1) * (64 + 12);
+    });
 
     return () => carousel.removeEventListener('scroll', handleScroll);
   }, [storeChains.length]);
@@ -383,32 +283,8 @@ export default function StoreSelector({ shouldNavigateToPlan }: StoreSelectorPro
     return filtered;
   }, [storesWithDistance, searchTerm, selectedChain, sortBy, userLocation]);
 
-  // 🔍 Debug comparison during migration
-  useEffect(() => {
-    if (process.env.NODE_ENV === 'development') {
-      console.log('[StoreSelector] 🆕 NEW store primary comparison:', {
-        newStores: newStoreLocation.availableStores.length,
-        oldStores: oldPlannerStore.availableStores.length,
-        newSelected: newStoreLocation.selectedStore,
-        oldSelected: oldPlannerStore.selectedStore,
-        dataSource: newStoreLocation.availableStores.length > 0 ? 'NEW' : 'OLD',
-        match: newStoreLocation.availableStores.length === oldPlannerStore.availableStores.length
-      });
-    }
-  }, [newStoreLocation.availableStores.length, oldPlannerStore.availableStores.length,
-      newStoreLocation.selectedStore, oldPlannerStore.selectedStore]);
-
   return (
     <div className="bg-white rounded-xl shadow-sm overflow-hidden">
-      {/* 🔍 Migration Debug Bar (dev only) - Updated for Phase 2 */}
-      {process.env.NODE_ENV === 'development' && (
-        <div className="px-4 py-2 bg-green-50 border-b border-green-200 text-xs">
-          <strong>🆕 Phase 2 - NEW Store Primary:</strong> NEW: {newStoreLocation.availableStores.length} stores,
-          OLD: {oldPlannerStore.availableStores.length} stores,
-          Source: {newStoreLocation.availableStores.length > 0 ? 'NEW STORE' : 'OLD STORE'},
-          Selected: {selectedStore || 'None'}
-        </div>
-      )}
 
       {/* Mobile Header - UNCHANGED */}
       <div className="px-4 py-3 border-b border-gray-100">

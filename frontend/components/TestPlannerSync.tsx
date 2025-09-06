@@ -2,7 +2,7 @@
 
 import React from 'react';
 import { usePlannerSync } from '@/hooks/usePlannerSync';
-import { usePlannerStores as usePlannerStore } from '@/stores/usePlannerStores';
+import { usePlannerStores as usePlannerStore } from '@/stores';
 
 import { useAuth } from '@/contexts/AuthContext';
 

@@ -1,7 +1,7 @@
 // frontend/hooks/useAppDataLoader.ts
 import { useState, useCallback } from 'react';
 import { useAuth } from '@/contexts/AuthContext';
-import { usePlannerStores } from '@/stores/usePlannerStores';
+import { usePlannerStores } from '@/stores';
 
 export const useAppDataLoader = () => {
   const { makeAPICall } = useAuth();

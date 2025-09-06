@@ -1,8 +1,8 @@
 'use client';
 
 import React, { useState } from 'react';
-import { type Recipe, type MealCategory } from '@/stores/usePlannerStores';
-import { usePlannerStores as usePlannerStore } from '@/stores/usePlannerStores';
+import { type Recipe, type MealCategory } from '@/stores';
+import { usePlannerStores as usePlannerStore } from '@/stores';
 import { Collapsible, CollapsibleTrigger, CollapsibleContent } from '@/components/ui/collapsible';
 import { ChevronDown, ChevronUp, Coffee, Utensils, ChefHat } from 'lucide-react';
 import { MealCard } from './MealCard';

@@ -3,7 +3,7 @@
 import React from 'react';
 import { Button } from '@/components/ui/button';
 import { PrinterIcon } from 'lucide-react';
-import { type AggregatedItem } from '@/stores/usePlannerStores';
+import { type AggregatedItem } from '@/stores';
 
 
 interface GroceryTotals {

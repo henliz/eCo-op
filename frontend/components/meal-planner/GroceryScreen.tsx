@@ -2,7 +2,7 @@
 
 import React, { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { usePlannerStores as usePlannerStore, type AggregatedItem, getPlannerStores } from '@/stores/usePlannerStores';
+import { usePlannerStores as usePlannerStore, type AggregatedItem, getPlannerStores } from '@/stores';
 
 import { GroceryItem } from './GroceryItem';
 import { GroceryListPrintable } from './GroceryListPrintable';

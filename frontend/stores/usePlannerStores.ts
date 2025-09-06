@@ -1,9 +1,8 @@
+'use client';
 import { useMemo, useEffect, useCallback, useRef } from 'react';
 import { useMealPlanStore, type Recipe, type MealCategory, type Ingredient } from './useMealPlanStore';
 import { useGroceryStore, type AggregatedItem, type Totals, type IngredientTags } from './useGroceryStore';
-//import { useStoreLocationStore, type Store, type UserLocation, type StoreLocation } from './useStoreLocationStore';
 import { useStoreLocationStore, type Store, type UserLocation, type StoreLocation } from "@/stores";
-
 import { useUserPreferencesStore } from './useUserPreferencesStore';
 import { usePlanSyncStore, type PlanData } from './usePlanSyncStore';
 
@@ -17,6 +16,67 @@ type APICallFunction = (
   body?: unknown,
   requireAuth?: boolean
 ) => Promise<unknown>;
+
+type MealPlanLike = {
+  meals: {
+    breakfast: Recipe[];
+    lunch: Recipe[];
+    dinner: Recipe[];
+  };
+  normalMealServings: number;
+};
+
+type GroceryLike = {
+  // either method or raw Set is fine; we’ll handle both
+  getCheckedItemsArray?: () => string[];
+  groceryCheckedItems?: Set<string>;
+  ingredientTags: Record<string, IngredientTags>;
+};
+
+// ---- Shared builder to keep PlanData consistent everywhere ----
+const buildPlanData = (
+  mealPlan: MealPlanLike,
+  grocery: GroceryLike,
+  selectedStore: string | null
+): PlanData => {
+  const allRecipes = [
+    ...mealPlan.meals.breakfast,
+    ...mealPlan.meals.lunch,
+    ...mealPlan.meals.dinner,
+  ].map((r) => ({
+    url: r.url,
+    name: r.name,
+    img: r.img,
+    salePrice: r.salePrice,
+    regularPrice: r.regularPrice,
+    totalSavings: r.totalSavings,
+    servings: r.servings,
+    flyerItemsCount: r.flyerItemsCount,
+    ingredients: r.ingredients,
+    isSelected: r.isSelected,
+    multiplier: r.multiplier,
+    store: r.store,
+    location: r.location,
+    validFromDate: r.validFromDate,
+    validToDate: r.validToDate,
+    mealType: r.mealType,
+    date: r.date,
+    pricingContext: r.pricingContext,
+  }));
+
+  const checked =
+    typeof grocery.getCheckedItemsArray === 'function'
+      ? grocery.getCheckedItemsArray()
+      : Array.from(grocery.groceryCheckedItems ?? []);
+
+  return {
+    householdSize: mealPlan.normalMealServings,
+    selectedStore,
+    allRecipes,
+    groceryCheckedItems: checked,
+    ingredientTags: grocery.ingredientTags,
+  };
+};
 
 // Combined interface that maintains backward compatibility
 export interface PlannerStores {
@@ -128,6 +188,7 @@ export interface PlannerStores {
   hasLoadablePlan: () => boolean;
 }
 
+
 export const usePlannerStores = (): PlannerStores => {
   // Initialize all stores
   const mealPlan = useMealPlanStore();
@@ -137,7 +198,7 @@ export const usePlannerStores = (): PlannerStores => {
   const planSync = usePlanSyncStore();
 
   // Move timeout management to React component (not Zustand store)
-  const saveTimeoutRef = useRef<NodeJS.Timeout | null>(null);
+  const saveTimeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
   const baselineSetRef = useRef<boolean>(false); // Prevent infinite baseline creation
 
   // ===== SETUP CROSS-STORE COMMUNICATION =====
@@ -145,43 +206,6 @@ export const usePlannerStores = (): PlannerStores => {
   // Setup auto-save callbacks
   useEffect(() => {
     // Create the data getter function for plan sync
-    const getPlanData = (): PlanData => {
-      const selectedRecipes = mealPlan.selectedRecipes();
-
-      // Extract ALL recipes with their selection state (like the original)
-      const allRecipes = [
-        ...mealPlan.meals.breakfast,
-        ...mealPlan.meals.lunch,
-        ...mealPlan.meals.dinner
-      ].map(recipe => ({
-        url: recipe.url,
-        name: recipe.name,
-        img: recipe.img,
-        salePrice: recipe.salePrice,
-        regularPrice: recipe.regularPrice,
-        totalSavings: recipe.totalSavings,
-        servings: recipe.servings,
-        flyerItemsCount: recipe.flyerItemsCount,
-        ingredients: recipe.ingredients,
-        isSelected: recipe.isSelected,
-        multiplier: recipe.multiplier,
-        store: recipe.store,
-        location: recipe.location,
-        validFromDate: recipe.validFromDate,
-        validToDate: recipe.validToDate,
-        mealType: recipe.mealType,
-        date: recipe.date,
-        pricingContext: recipe.pricingContext
-      }));
-
-      return {
-        householdSize: mealPlan.normalMealServings,
-        selectedStore: storeLocation.selectedStore,
-        allRecipes,
-        groceryCheckedItems: grocery.getCheckedItemsArray(),
-        ingredientTags: grocery.ingredientTags,
-      };
-    };
 
     // Create the auto-save function with React-managed timeout
     const triggerAutoSave = () => {
@@ -199,51 +223,26 @@ export const usePlannerStores = (): PlannerStores => {
       // Set new timeout using React ref (not Zustand state)
       saveTimeoutRef.current = setTimeout(async () => {
         try {
-          console.log('[PlannerStores] ⏰ React timeout executing auto-save...');
-
-          const currentPlanData = getPlanData();
+          const currentPlanData = buildPlanData(mealPlan, grocery, storeLocation.selectedStore);
 
           // Check if we have authentication available
           const makeAPICall = (window as any).__plannerMakeAPICall;
-          if (!makeAPICall) {
-            console.log('[PlannerStores] No API call function available, skipping auto-save');
-            return;
-          }
+          if (!makeAPICall) return;
 
           // Check if user is authenticated by checking for access token
           const hasAccessToken = localStorage.getItem('accessToken');
-          if (!hasAccessToken) {
-            console.log('[PlannerStores] User not authenticated (no access token), skipping auto-save');
-            return;
-          }
+          if (!hasAccessToken) return;
 
           // Check if there are actually changes
-          if (!planSync.hasUnsavedChanges(() => currentPlanData)) {
-            console.log('[PlannerStores] No changes detected, skipping auto-save');
-            return;
-          }
+          if (!planSync.hasUnsavedChanges(() => currentPlanData)) return;
 
           // Validate minimum required data
-          if (!currentPlanData.selectedStore) {
-            console.log('[PlannerStores] No store selected, skipping auto-save');
-            return;
-          }
+          if (!currentPlanData.selectedStore) return;
 
-          console.log('[PlannerStores] Changes detected, executing auto-save...');
           await planSync.saveUserPlan(makeAPICall, () => currentPlanData);
-          console.log('[PlannerStores] Auto-save completed successfully');
 
-        } catch (error) {
-          // Handle different types of errors gracefully
-          if (error instanceof Error) {
-            if (error.message.includes('Authentication') || error.message.includes('expired')) {
-              console.log('[PlannerStores] Auto-save skipped - user authentication expired');
-            } else {
-              console.error('[PlannerStores] Auto-save failed:', error.message);
-            }
-          } else {
-            console.error('[PlannerStores] Auto-save failed with unknown error:', error);
-          }
+        } catch {
+          // silently ignore; next autosave will retry
         }
       }, 10000);
     };
@@ -266,47 +265,14 @@ export const usePlannerStores = (): PlannerStores => {
 
   // CREATE INITIAL BASELINE - Separate useEffect to avoid infinite loops
   useEffect(() => {
-    if (storeLocation.selectedStore &&
-        mealPlan.meals.breakfast.length > 0 &&
-        !baselineSetRef.current) {
+    const totalRecipes =
+      mealPlan.meals.breakfast.length +
+      mealPlan.meals.lunch.length +
+      mealPlan.meals.dinner.length;
+    if (storeLocation.selectedStore && totalRecipes > 0 && !baselineSetRef.current) {
 
       // Create the data getter function for baseline
-      const getPlanData = (): PlanData => {
-        const allRecipes = [
-          ...mealPlan.meals.breakfast,
-          ...mealPlan.meals.lunch,
-          ...mealPlan.meals.dinner
-        ].map(recipe => ({
-          url: recipe.url,
-          name: recipe.name,
-          img: recipe.img,
-          salePrice: recipe.salePrice,
-          regularPrice: recipe.regularPrice,
-          totalSavings: recipe.totalSavings,
-          servings: recipe.servings,
-          flyerItemsCount: recipe.flyerItemsCount,
-          ingredients: recipe.ingredients,
-          isSelected: recipe.isSelected,
-          multiplier: recipe.multiplier,
-          store: recipe.store,
-          location: recipe.location,
-          validFromDate: recipe.validFromDate,
-          validToDate: recipe.validToDate,
-          mealType: recipe.mealType,
-          date: recipe.date,
-          pricingContext: recipe.pricingContext
-        }));
-
-        return {
-          householdSize: mealPlan.normalMealServings,
-          selectedStore: storeLocation.selectedStore,
-          allRecipes,
-          groceryCheckedItems: grocery.getCheckedItemsArray(),
-          ingredientTags: grocery.ingredientTags,
-        };
-      };
-
-      const initialData = getPlanData();
+      const initialData = buildPlanData(mealPlan, grocery, storeLocation.selectedStore);
       const initialSnapshot = planSync.createStateSnapshot(initialData);
 
       // Mark that we've set the baseline to prevent infinite loops
@@ -315,7 +281,13 @@ export const usePlannerStores = (): PlannerStores => {
       // Use the Zustand store's setState method
       (usePlanSyncStore as any).setState({ lastSavedState: initialSnapshot });
     }
-  }, [storeLocation.selectedStore, mealPlan.meals.breakfast.length]); // Only depend on store and data existence
+
+  }, [
+   storeLocation.selectedStore,
+   mealPlan.meals.breakfast.length,
+   mealPlan.meals.lunch.length,
+   mealPlan.meals.dinner.length,
+  ]);
 
   // ===== CROSS-STORE COMPUTED VALUES =====
 
@@ -337,7 +309,9 @@ export const usePlannerStores = (): PlannerStores => {
   const enhancedFetchMealData = useCallback(async () => {
     const selectedStoreObj = storeLocation.getSelectedStore();
     if (!selectedStoreObj) {
-      console.warn('[PlannerStores] No store selected for fetching meal data');
+      if (process.env.NODE_ENV !== 'production') {
+        console.warn('[PlannerStores] No store selected for fetching meal data');
+      }
       return;
     }
 
@@ -353,7 +327,9 @@ export const usePlannerStores = (): PlannerStores => {
   const enhancedFetchMealRecommendations = useCallback(async (mealType: 'breakfast' | 'lunch' | 'dinner') => {
     const selectedStoreObj = storeLocation.getSelectedStore();
     if (!selectedStoreObj) {
-      console.warn('[PlannerStores] No store selected for fetching meal recommendations');
+      if (process.env.NODE_ENV !== 'production') {
+        console.warn('[PlannerStores] No store selected for fetching meal recommendations');
+      }
       return;
     }
 
@@ -367,7 +343,6 @@ export const usePlannerStores = (): PlannerStores => {
 
   const enhancedSetSelectedStore = useCallback((storeId: string | null) => {
     // Clear meal data when changing stores
-    console.log('DASHBOARD: About to call clearMealData')
     mealPlan.clearMealData();
 
     // Set the store
@@ -425,41 +400,7 @@ export const usePlannerStores = (): PlannerStores => {
   }, [planSync, mealPlan, storeLocation, grocery]);
 
   const enhancedSaveUserPlan = useCallback(async (makeAPICall: APICallFunction) => {
-    const getPlanData = (): PlanData => {
-      const allRecipes = [
-        ...mealPlan.meals.breakfast,
-        ...mealPlan.meals.lunch,
-        ...mealPlan.meals.dinner
-      ].map(recipe => ({
-        url: recipe.url,
-        name: recipe.name,
-        img: recipe.img,
-        salePrice: recipe.salePrice,
-        regularPrice: recipe.regularPrice,
-        totalSavings: recipe.totalSavings,
-        servings: recipe.servings,
-        flyerItemsCount: recipe.flyerItemsCount,
-        ingredients: recipe.ingredients,
-        isSelected: recipe.isSelected,
-        multiplier: recipe.multiplier,
-        store: recipe.store,
-        location: recipe.location,
-        validFromDate: recipe.validFromDate,
-        validToDate: recipe.validToDate,
-        mealType: recipe.mealType,
-        date: recipe.date,
-        pricingContext: recipe.pricingContext
-      }));
-
-      return {
-        householdSize: mealPlan.normalMealServings,
-        selectedStore: storeLocation.selectedStore,
-        allRecipes,
-        groceryCheckedItems: grocery.getCheckedItemsArray(),
-        ingredientTags: grocery.ingredientTags,
-      };
-    };
-
+    const getPlanData = (): PlanData => buildPlanData(mealPlan, grocery, storeLocation.selectedStore);
     await planSync.saveUserPlan(makeAPICall, getPlanData);
   }, [planSync, mealPlan, storeLocation, grocery]);
 
@@ -470,80 +411,13 @@ export const usePlannerStores = (): PlannerStores => {
       return;
     }
 
-    const getPlanData = (): PlanData => {
-      const allRecipes = [
-        ...mealPlan.meals.breakfast,
-        ...mealPlan.meals.lunch,
-        ...mealPlan.meals.dinner
-      ].map(recipe => ({
-        url: recipe.url,
-        name: recipe.name,
-        img: recipe.img,
-        salePrice: recipe.salePrice,
-        regularPrice: recipe.regularPrice,
-        totalSavings: recipe.totalSavings,
-        servings: recipe.servings,
-        flyerItemsCount: recipe.flyerItemsCount,
-        ingredients: recipe.ingredients,
-        isSelected: recipe.isSelected,
-        multiplier: recipe.multiplier,
-        store: recipe.store,
-        location: recipe.location,
-        validFromDate: recipe.validFromDate,
-        validToDate: recipe.validToDate,
-        mealType: recipe.mealType,
-        date: recipe.date,
-        pricingContext: recipe.pricingContext
-      }));
-
-      return {
-        householdSize: mealPlan.normalMealServings,
-        selectedStore: storeLocation.selectedStore,
-        allRecipes,
-        groceryCheckedItems: grocery.getCheckedItemsArray(),
-        ingredientTags: grocery.ingredientTags,
-      };
-    };
+    const getPlanData = (): PlanData => buildPlanData(mealPlan, grocery, storeLocation.selectedStore);
 
     planSync.debouncedSave(getPlanData, makeAPICall);
   }, [planSync, mealPlan, storeLocation, grocery]);
 
   const enhancedHasUnsavedChanges = useCallback(() => {
-    const getPlanData = (): PlanData => {
-      const allRecipes = [
-        ...mealPlan.meals.breakfast,
-        ...mealPlan.meals.lunch,
-        ...mealPlan.meals.dinner
-      ].map(recipe => ({
-        url: recipe.url,
-        name: recipe.name,
-        img: recipe.img,
-        salePrice: recipe.salePrice,
-        regularPrice: recipe.regularPrice,
-        totalSavings: recipe.totalSavings,
-        servings: recipe.servings,
-        flyerItemsCount: recipe.flyerItemsCount,
-        ingredients: recipe.ingredients,
-        isSelected: recipe.isSelected,
-        multiplier: recipe.multiplier,
-        store: recipe.store,
-        location: recipe.location,
-        validFromDate: recipe.validFromDate,
-        validToDate: recipe.validToDate,
-        mealType: recipe.mealType,
-        date: recipe.date,
-        pricingContext: recipe.pricingContext
-      }));
-
-      return {
-        householdSize: mealPlan.normalMealServings,
-        selectedStore: storeLocation.selectedStore,
-        allRecipes,
-        groceryCheckedItems: grocery.getCheckedItemsArray(),
-        ingredientTags: grocery.ingredientTags,
-      };
-    };
-
+    const getPlanData = (): PlanData => buildPlanData(mealPlan, grocery, storeLocation.selectedStore);
     return planSync.hasUnsavedChanges(getPlanData);
   }, [planSync, mealPlan, storeLocation, grocery]);
 
@@ -574,7 +448,7 @@ export const usePlannerStores = (): PlannerStores => {
     selectedRecipes: mealPlan.selectedRecipes,
     mealSummary: mealPlan.mealSummary,
     calculateInitialMultiplier: mealPlan.calculateInitialMultiplier,
-    isMealTypeLoading: mealPlan.isMealTypeLoading, // ADD THIS LINE
+    isMealTypeLoading: mealPlan.isMealTypeLoading,
 
     // Grocery Store
     groceryCheckedItems: grocery.groceryCheckedItems,
@@ -649,80 +523,12 @@ export const getPlannerStores = () => {
 
   // Create enhanced action functions that coordinate between stores
   const enhancedSaveUserPlan = async (makeAPICall: APICallFunction) => {
-    const getPlanData = (): PlanData => {
-      const allRecipes = [
-        ...mealPlan.meals.breakfast,
-        ...mealPlan.meals.lunch,
-        ...mealPlan.meals.dinner
-      ].map(recipe => ({
-        url: recipe.url,
-        name: recipe.name,
-        img: recipe.img,
-        salePrice: recipe.salePrice,
-        regularPrice: recipe.regularPrice,
-        totalSavings: recipe.totalSavings,
-        servings: recipe.servings,
-        flyerItemsCount: recipe.flyerItemsCount,
-        ingredients: recipe.ingredients,
-        isSelected: recipe.isSelected,
-        multiplier: recipe.multiplier,
-        store: recipe.store,
-        location: recipe.location,
-        validFromDate: recipe.validFromDate,
-        validToDate: recipe.validToDate,
-        mealType: recipe.mealType,
-        date: recipe.date,
-        pricingContext: recipe.pricingContext
-      }));
-
-      return {
-        householdSize: mealPlan.normalMealServings,
-        selectedStore: storeLocation.selectedStore,
-        allRecipes,
-        groceryCheckedItems: Array.from(grocery.groceryCheckedItems),
-        ingredientTags: grocery.ingredientTags,
-      };
-    };
-
+    const getPlanData = (): PlanData => buildPlanData(mealPlan, grocery, storeLocation.selectedStore);
     await planSync.saveUserPlan(makeAPICall, getPlanData);
   };
 
   const enhancedHasUnsavedChanges = () => {
-    const getPlanData = (): PlanData => {
-      const allRecipes = [
-        ...mealPlan.meals.breakfast,
-        ...mealPlan.meals.lunch,
-        ...mealPlan.meals.dinner
-      ].map(recipe => ({
-        url: recipe.url,
-        name: recipe.name,
-        img: recipe.img,
-        salePrice: recipe.salePrice,
-        regularPrice: recipe.regularPrice,
-        totalSavings: recipe.totalSavings,
-        servings: recipe.servings,
-        flyerItemsCount: recipe.flyerItemsCount,
-        ingredients: recipe.ingredients,
-        isSelected: recipe.isSelected,
-        multiplier: recipe.multiplier,
-        store: recipe.store,
-        location: recipe.location,
-        validFromDate: recipe.validFromDate,
-        validToDate: recipe.validToDate,
-        mealType: recipe.mealType,
-        date: recipe.date,
-        pricingContext: recipe.pricingContext
-      }));
-
-      return {
-        householdSize: mealPlan.normalMealServings,
-        selectedStore: storeLocation.selectedStore,
-        allRecipes,
-        groceryCheckedItems: Array.from(grocery.groceryCheckedItems),
-        ingredientTags: grocery.ingredientTags,
-      };
-    };
-
+    const getPlanData = (): PlanData => buildPlanData(mealPlan, grocery, storeLocation.selectedStore);
     return planSync.hasUnsavedChanges(getPlanData);
   };
 
@@ -769,7 +575,8 @@ export const getPlannerStores = () => {
     fetchMealData: async () => {
       const selectedStore = storeLocation.getSelectedStore();
       if (selectedStore) {
-        const makeAPICall = (window as any).__plannerMakeAPICall;
+        const makeAPICall = typeof window !== 'undefined' ? (window as any).__plannerMakeAPICall : undefined;
+        if (!makeAPICall) return;
         await mealPlan.fetchMealData(selectedStore, makeAPICall);
       }
     },

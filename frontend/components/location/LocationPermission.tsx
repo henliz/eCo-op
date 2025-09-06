@@ -3,7 +3,7 @@
 import React, { useEffect, useMemo } from 'react';
 import Image from 'next/image';
 //import { usePlannerStore, type Store } from '../meal-planner/usePlannerStore';
-import { usePlannerStores as usePlannerStore, type Store, getPlannerStores } from '@/stores/usePlannerStores';
+import { usePlannerStores as usePlannerStore, type Store, getPlannerStores } from '@/stores';
 
 import { StoreCard } from '../meal-planner/StoreCard';
 import { MapPin, Navigation, Loader2, AlertCircle } from 'lucide-react';

@@ -1,9 +1,5 @@
-//import React, { useEffect } from 'react';
-import { usePlannerStores as usePlannerStore } from '@/stores/usePlannerStores';
-//import { useStoreLocationStore } from '@/stores/useStoreLocationStore';
+import { usePlannerStores as usePlannerStore } from '@/stores';
 import { useStoreLocationStore } from "@/stores";
-
-//import { useAuth } from '@/contexts/AuthContext';
 import { useAppDataLoader } from '@/hooks/useAppDataLoader';
 
 interface ContinuePlanProps {
@@ -13,8 +9,6 @@ interface ContinuePlanProps {
 export const ContinuePlanBanner: React.FC<ContinuePlanProps> = ({ onContinue }) => {
   console.log('BANNER: Component mounting/rendering');
 
-  //const { currentUser } = useAuth();
-  //const { loadData, isLoaded } = useAppDataLoader();
   const { isLoaded } = useAppDataLoader();
 
   const { availableStores: newAvailableStores } = useStoreLocationStore();
@@ -30,13 +24,6 @@ export const ContinuePlanBanner: React.FC<ContinuePlanProps> = ({ onContinue }) 
   } = usePlannerStore();
 
   const availableStores = newAvailableStores.length > 0 ? newAvailableStores : oldAvailableStores;
-
-  // Use centralized loader
-  //useEffect(() => {
-  //  if (currentUser && !isLoaded) {
-  //    loadData('auto');
-  //  }
-  //}, [currentUser, isLoaded, loadData]);
 
   // Don't render anything until load attempt is complete
   if (!isLoaded || isSyncing) {

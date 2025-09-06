@@ -2,7 +2,7 @@
 
 import { useState, useEffect, useCallback } from 'react';
 import { useAuth } from '@/contexts/AuthContext';
-import { usePlannerStores as usePlannerStore } from '@/stores/usePlannerStores';
+import { usePlannerStores as usePlannerStore } from '@/stores';
 
 // Create a makeAPICall function that mirrors your AuthContext logic
 const createAPICall = (accessToken: string | null) => {
