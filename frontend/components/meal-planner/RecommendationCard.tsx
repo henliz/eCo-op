@@ -1,7 +1,7 @@
 'use client';
 
 import React from 'react';
-import { ChefHat, Coffee, Utensils, Sparkles } from 'lucide-react';
+import { Sparkles } from 'lucide-react';
 
 interface RecommendationCardProps {
   mealType: 'breakfast' | 'lunch' | 'dinner';
@@ -11,7 +11,7 @@ interface RecommendationCardProps {
 
 const mealTypeConfig = {
   breakfast: {
-    icon: Coffee,
+    iconSrc: '/Robo_Chef.png',
     title: 'Smart Load',
     color: 'text-amber-700',
     gradientFrom: 'from-yellow-200/40',
@@ -24,7 +24,7 @@ const mealTypeConfig = {
     loadingText: 'text-amber-700'
   },
   lunch: {
-    icon: Utensils,
+    iconSrc: '/Robo_Plan.png',
     title: 'Smart Load',
     color: 'text-teal-700',
     gradientFrom: 'from-emerald-200/40',
@@ -37,7 +37,7 @@ const mealTypeConfig = {
     loadingText: 'text-teal-700'
   },
   dinner: {
-    icon: ChefHat,
+    iconSrc: '/Robo_Research.png',
     title: 'Smart Load',
     color: 'text-orange-700',
     gradientFrom: 'from-orange-200/40',
@@ -53,7 +53,6 @@ const mealTypeConfig = {
 
 export function RecommendationCard({ mealType, onRecommend, isLoading = false }: RecommendationCardProps) {
   const config = mealTypeConfig[mealType];
-  const Icon = config.icon;
 
   return (
     <>
@@ -130,15 +129,19 @@ export function RecommendationCard({ mealType, onRecommend, isLoading = false }:
         )}
 
         {/* Icon with sparkles overlay */}
-        <div className={`${config.color} mb-3 relative z-10 ${isLoading ? 'opacity-0' : 'opacity-100'} transition-opacity duration-300`}>
+        <div className={`mb-3 relative z-10 ${isLoading ? 'opacity-0' : 'opacity-100'} transition-opacity duration-300`}>
           <div className="relative group-hover:scale-110 transition-transform duration-300">
-            <Icon className="w-8 h-8 mx-auto" />
+            <img
+              src={config.iconSrc}
+              alt={`${mealType} icon`}
+              className="w-15 h-15 mx-auto"
+            />
             <Sparkles className="w-4 h-4 absolute -bottom-2 -right-2 bg-white/90 rounded-full p-0.5 group-hover:rotate-12 transition-transform duration-300 backdrop-blur-sm" />
           </div>
         </div>
 
         {/* Title - Much Bigger */}
-        <h3 className={`text-xl sm:text-2xl font-bold mb-3 leading-tight ${config.color} group-hover:scale-105 transition-transform duration-300 relative z-10 ${isLoading ? 'opacity-0' : 'opacity-100'} transition-opacity duration-300`}>
+        <h3 className={`text-xl sm:text-2xl font-bold mb-1 leading-tight ${config.color} group-hover:scale-105 transition-transform duration-300 relative z-10 ${isLoading ? 'opacity-0' : 'opacity-100'} transition-opacity duration-300`}>
           {config.title}
         </h3>
 
@@ -148,6 +151,7 @@ export function RecommendationCard({ mealType, onRecommend, isLoading = false }:
           bg-white/30 backdrop-blur-sm border border-current/20
           hover:bg-white/50 hover:border-current/40 hover:shadow-lg
           transition-all duration-300 group-hover:scale-105
+          -mt-2
           ${isLoading ? 'opacity-0' : 'opacity-100'}
         `}>
           Recommend best 10 deals →
