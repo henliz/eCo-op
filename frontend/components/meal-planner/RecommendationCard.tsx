@@ -2,6 +2,7 @@
 
 import React from 'react';
 import { Sparkles } from 'lucide-react';
+import Image from 'next/image';
 
 interface RecommendationCardProps {
   mealType: 'breakfast' | 'lunch' | 'dinner';
@@ -131,10 +132,13 @@ export function RecommendationCard({ mealType, onRecommend, isLoading = false }:
         {/* Icon with sparkles overlay */}
         <div className={`mb-3 relative z-10 ${isLoading ? 'opacity-0' : 'opacity-100'} transition-opacity duration-300`}>
           <div className="relative group-hover:scale-110 transition-transform duration-300">
-            <img
-              src={config.iconSrc}
+            <Image
+              src={config.iconSrc}           // '/Robo_Chef.png', '/Robo_Plan.png', '/Robo_Research.png'
               alt={`${mealType} icon`}
-              className="w-15 h-15 mx-auto"
+              width={60}
+              height={60}
+              className="w-15 h-15 mx-auto"  // keep your tailwind sizing if desired
+              priority={false}
             />
             <Sparkles className="w-4 h-4 absolute -bottom-2 -right-2 bg-white/90 rounded-full p-0.5 group-hover:rotate-12 transition-transform duration-300 backdrop-blur-sm" />
           </div>

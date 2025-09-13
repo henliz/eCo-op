@@ -133,37 +133,41 @@ const OurStorySection = () => {
               <div className="lg:col-span-2 flex justify-center lg:justify-start">
                 <div className="relative group animate-float" style={{ perspective: '1000px' }}>
                   <div
-                    className="relative w-64 h-80 transition-all duration-700 hover:scale-105"
-                    style={{
-                      transformStyle: 'preserve-3d',
-                      transform: isFlipped ? 'rotateY(180deg)' : 'rotateY(0deg)',
-                    }}
+                      className="relative w-64 h-80 transition-all duration-700 hover:scale-105"
+                      style={{
+                        transformStyle: 'preserve-3d',
+                        transform: isFlipped ? 'rotateY(180deg)' : 'rotateY(0deg)',
+                      }}
                   >
                     {/* Front of card - Photo */}
                     <div
-                      className="absolute inset-0 w-full h-full rounded-2xl overflow-hidden shadow-xl"
-                      style={{ backfaceVisibility: 'hidden' }}
+                        className="absolute inset-0 w-full h-full rounded-2xl overflow-hidden shadow-xl"
+                        style={{backfaceVisibility: 'hidden'}}
                     >
-                      <img
-                        src="/HenriettaFounder.jpg"
-                        alt="Henrietta, founder of Skrimp.ai"
-                        className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"
+                      <Image
+                          src="/HenriettaFounder.jpg"
+                          alt="Henrietta, founder of Skrimp.ai"
+                          width={256}          // matches w-64
+                          height={320}         // matches h-80
+                          className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"
+                          priority             // optional: improves LCP for above-the-fold
                       />
-                      <div className="absolute inset-0 bg-gradient-to-t from-teal-600/30 to-transparent transition-opacity duration-300 group-hover:from-teal-600/40" />
+                      <div
+                          className="absolute inset-0 bg-gradient-to-t from-teal-600/30 to-transparent transition-opacity duration-300 group-hover:from-teal-600/40"/>
                     </div>
 
                     {/* Back of card - Stats */}
                     <div
-                      className="absolute inset-0 w-full h-full rounded-2xl bg-gradient-to-br from-teal-500 to-blue-600 shadow-xl p-4 flex flex-col justify-center"
-                      style={{ backfaceVisibility: 'hidden', transform: 'rotateY(180deg)' }}
+                        className="absolute inset-0 w-full h-full rounded-2xl bg-gradient-to-br from-teal-500 to-blue-600 shadow-xl p-4 flex flex-col justify-center"
+                        style={{backfaceVisibility: 'hidden', transform: 'rotateY(180deg)'}}
                     >
                       <h4 className="text-white text-lg font-bold mb-4 text-center">Quick Stats</h4>
                       <div className="space-y-2">
                         {aboutStats.map((stat, index) => (
-                          <div key={index} className="flex justify-between items-center text-white text-sm">
-                            <span className="text-white/80">{stat.label}:</span>
-                            <span className="font-semibold">{stat.value}</span>
-                          </div>
+                            <div key={index} className="flex justify-between items-center text-white text-sm">
+                              <span className="text-white/80">{stat.label}:</span>
+                              <span className="font-semibold">{stat.value}</span>
+                            </div>
                         ))}
                       </div>
                       <div className="mt-4 text-center">
@@ -176,13 +180,13 @@ const OurStorySection = () => {
 
                   {/* Interactive flip button */}
                   <button
-                    onClick={handleFlipCard}
-                    className="absolute -bottom-3 -right-3 bg-white rounded-full p-3 shadow-lg hover:shadow-xl transition-all duration-300 transform hover:scale-110 z-10"
-                    type="button"
+                      onClick={handleFlipCard}
+                      className="absolute -bottom-3 -right-3 bg-white rounded-full p-3 shadow-lg hover:shadow-xl transition-all duration-300 transform hover:scale-110 z-10"
+                      type="button"
                   >
                     <div
-                      className="w-6 h-6 bg-gradient-to-r from-teal-500 to-blue-500 rounded-full transition-transform duration-500 hover:rotate-45"
-                      style={{ transform: isFlipped ? 'rotate(180deg)' : 'rotate(0deg)' }}
+                        className="w-6 h-6 bg-gradient-to-r from-teal-500 to-blue-500 rounded-full transition-transform duration-500 hover:rotate-45"
+                        style={{transform: isFlipped ? 'rotate(180deg)' : 'rotate(0deg)'}}
                     />
                   </button>
                 </div>
