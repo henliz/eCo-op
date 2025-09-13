@@ -1,7 +1,8 @@
 'use client';
 
 import React, { useState, useEffect, useRef, useCallback } from 'react';
-import { useSearchParams } from 'next/navigation';
+import { useRouter, useSearchParams } from 'next/navigation';
+
 import { motion } from 'framer-motion';
 import Header from '@/components/layout/Header';
 import Footer from '@/components/layout/Footer';
@@ -69,9 +70,11 @@ export default function MealPlannerPage() {
 
   const { makeAPICall, currentUser } = useAuth();
   const searchParams = useSearchParams();
+  const router = useRouter();
   const { loadData, isLoaded } = useAppDataLoader();
   const plannerStore = usePlannerStore();
   const { getSelectedStore, isDataLoaded, isLoading, clearMealData } = plannerStore;
+  const appliedUrlStoreRef = useRef(false);
 
   const selectedStoreObject = getSelectedStore();
   // Ensure we clear only once even if effects re-run
@@ -118,12 +121,29 @@ export default function MealPlannerPage() {
   }, [isStoresLoaded, discoverStores]);
 
   // --- NEW: set the store from the URL once stores are available
+  //useEffect(() => {
+  //  const id = searchParams.get('storeId');
+  //  if (id && isStoresLoaded && id !== selectedStoreObject?.id) {
+  //    setSelectedStore(id);
+  //  }
+  //
+  //}, [searchParams, isStoresLoaded, setSelectedStore, selectedStoreObject?.id]);
+
   useEffect(() => {
     const id = searchParams.get('storeId');
-    if (id && isStoresLoaded && id !== selectedStoreObject?.id) {
+    const mode = searchParams.get('mode');
+
+    if (
+      !appliedUrlStoreRef.current &&
+      isStoresLoaded &&
+      id &&
+      !selectedStoreObject && // don’t clobber a local pick
+      mode !== 'new'          // optional: skip in new-plan mode
+    ) {
       setSelectedStore(id);
+      appliedUrlStoreRef.current = true;
     }
-  }, [searchParams, isStoresLoaded, setSelectedStore, selectedStoreObject?.id]);
+  }, [searchParams, isStoresLoaded, setSelectedStore, selectedStoreObject]);
 
   // Expose makeAPICall to the store via window
   useEffect(() => {
@@ -132,6 +152,16 @@ export default function MealPlannerPage() {
       delete window.__plannerMakeAPICall;
     };
   }, [makeAPICall]);
+
+  useEffect(() => {
+    if (!shouldNavigateToPlan.current || !selectedStoreObject?.id) return;
+
+    const params = new URLSearchParams(searchParams?.toString() ?? '');
+    params.set('storeId', selectedStoreObject.id);
+    params.set('tab', 'plan'); // optional but matches your flow
+    router.replace(`/plan?${params.toString()}`);
+
+  }, [selectedStoreObject?.id, searchParams, router]);
 
   const [showLoading, setShowLoading] = useState(false);
   const hasTransitionedToPlan = useRef(false);

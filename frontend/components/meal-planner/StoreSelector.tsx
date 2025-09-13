@@ -12,7 +12,6 @@ import { useLocation } from '@/hooks/useLocation';
 //import { useStoreLocationStore } from '@/stores/useStoreLocationStore';
 import { useStoreLocationStore } from "@/stores";
 
-
 type ExtendedStore = Store & {
   location_name?: string;
   city?: string;
